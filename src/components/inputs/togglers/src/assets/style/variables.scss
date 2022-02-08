@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Open+Sans:wght@400;500;700&family=Raleway:wght@400;500;700&display=swap');
+
+$primary: #5855fa;
+$secondary: #e4ecf7;
+$success: #66CB9F;
+$warning: #FFD363;
+$danger: #FB3337;
+$info: #3385FF;
+$dark: #272937;
+$base-white: #FFFFFF;
+$main-colors: (
+        'primary': $primary,
+        'secondary': $secondary,
+        'success': $success,
+        'warning': $warning,
+        'danger': $danger,
+        'info': $info,
+        'dark': $dark,
+);
+
+// grey colors
+$gray-100:#F7FAFC;
+$gray-200:#EDF2F7;
+$gray-300:#E2E8F0;
+$gray-400:#CBD5E0;
+$gray-500:#A0AEC0;
+$gray-600:#718096;
+$gray-700:#4A5568;
+$gray-800:#2D3748;
+
+// accent colors
+$default-accent:#0066FF; // Переименовал на default, чтобы в альтернативной цветовой схеме не получилась переменная "primary-secondary"
+$pressed-accent:#005CE4;
+$hover-accent:#3385FF;
+$accent-opacity-5:#80B3FF;
+$accent-opacity-3:#B3D2FF;
+$accent-opacity-1:#E5F0FF;
+
+// secondary colors
+$default-secondary:#DEEBFC; // Добавил цвета для альтернативного цветовой схемы кнопки, т.к. дизайнеры всё поменяли
+$pressed-secondary:#76ACFB;
+$hover-secondary:#A6C8FA;
+
+//box-shadow
+$shadow-sm: 0px 0px 1px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
+$shadow-default: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 4px 20px -2px rgba(50, 50, 71, 0.08);
+$shadow-lg: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 10px 16px rgba(20, 37, 63, 0.06);
+$shadow-xl:0px 0px 1px rgba(12, 26, 75, 0.1), 0px 20px 24px rgba(20, 37, 63, 0.06);
+$shadow-2xl: 0px 0px 1px rgba(12, 26, 75, 0.2), 0px 30px 40px rgba(20, 37, 63, 0.1);
+
+//border-radius
+$all-sides-square: 0px;
+$all-sides-small: 4px;
+$all-sides-large: 8px;
+$all-sides-xl: 12px;
+$all-sides-2xl: 16px;
+$all-sides-pill: 100px;
+
+$left-side-small: 4px 0 0 4px;
+$left-side-large: 8px 0px 0px 8px;
+$left-side-xl: 12px 0 0 12px;
+$left-side-2xl: 16px 0 0 16px;
+$left-side-pill: 100px 0 0 100px;
+
+$right-side-small: 0 4px 4px 0;
+$right-side-large: 0 8px 8px 0;
+$right-side-xl: 0 12px 12px 0;
+$right-side-2xl: 0 16px 16px 0;
+$right-side-pill: 0 100px 100px 0;
+
+$top-side-small: 4px 4px 0 0;
+$top-side-large: 8px 8px 0 0;
+$top-side-xl: 12px 12px 0 0;
+$top-side-2xl: 16px 16px 0 0;
+$top-side-pill: 100px 100px 0 0;
+
+$bottom-side-small: 0 0 4px 4px;
+$bottom-side-large: 0 0 8px 8px;
+$bottom-side-xl: 0 0 12px 12px;
+$bottom-side-2xl: 0 0 16px 16px;
+$bottom-side-pill: 0 0 100px 100px;
+
+// fonts
+$medium-font-weight: 500;
+$regular-font-weight: 400;
+$bold-font-weight: 700;
+
+$raleway-font: 'Raleway', sans-serif;
+$inter-font: 'Inter', sans-serif;
+$open-sans-font: 'Open Sans', sans-serif;
+
+//text styles
+$h1-font-size: 36px;
+$h1-font-style: bold;
+
+$h2-font-size: 32px;
+$h2-font-style: bold;
+
+$h3-font-size: 24px;
+$h3-font-style: bold;
+
+$h4-font-size: 18px;
+$h4-font-style: bold;
+
+$h5-font-size: 16px;
+$h5-font-style: bold;
+
+$h6-font-size: 14px;
+$h6-font-style: bold;
+
+$h7-font-size: 12px;
+$h7-font-style: bold;
+
+$p1-font-size: 24px;
+$p1-font-style: medium;
+
+$p2-font-size: 18px;
+$p2-font-style: medium;
+
+$p3-font-size: 16px;
+$p3-font-style: medium;
+
+$p4-font-size: 14px;
+$p4-font-style: regular;
+
+$p5-font-size: 14px;
+$p5-font-style: medium;
+
+$p6-font-size: 12px;
+$p6-font-style: regular;
+
+$p7-font-size: 12px;
+$p7-font-style: medium;
+
+$p8-font-size: 12px;
+$p8-font-style: bold;
