@@ -40,10 +40,8 @@
 
 <script lang="ts" setup>
 import { defineEmits, defineProps, toRefs, ref, computed } from "vue";
-//@ts-ignore
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-//@ts-ignore
-import { variables, getFont, getFontWeight } from "@/helpers/config";
+import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
 
 const emit = defineEmits<{ (e: "update:modelValue", page: number): void }>();
 
@@ -108,7 +106,7 @@ const getVars = computed(() => ({
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables";
+@import "src/assets/navigation/variables";
 
 .pagination {
   display: flex;

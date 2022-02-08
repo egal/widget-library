@@ -23,7 +23,7 @@
   </label>
 </template>
 <script>
-import togglersComputedMixin from "@/helpers/togglersComputedMixin";
+import togglersComputedMixin from "src/helpers/togglersComputedMixin";
 
 export default {
   name: "ECheckbox",
@@ -62,8 +62,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/togglers/variables";
-@import "../../assets/togglers/checkboxMixin";
+@import "src/assets/togglers/variables";
+@import "src/assets/togglers/checkboxMixin";
 
 .e-checkbox {
   &--left {

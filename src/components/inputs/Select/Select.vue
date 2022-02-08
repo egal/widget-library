@@ -1,15 +1,15 @@
 <template>
   <div
-    class="select"
-    :class="[`select--${size}`, { 'select--error': showError && (error || errorMessage) }]"
-    :style="getStyleVars"
+      class="select"
+      :class="[`select--${size}`, { 'select--error': showError && (error || errorMessage) }]"
+      :style="getStyleVars"
   >
     <div class="select-label">{{ label }}</div>
     <div
-      class="select-container"
-      :class="{ focus: showDropdown, filled: filled && !showDropdown && !error && !errorMessage }"
-      @click="showDropdown = !showDropdown"
-      v-click-outside="close"
+        class="select-container"
+        :class="{ focus: showDropdown, filled: filled && !showDropdown && !error && !errorMessage }"
+        @click="showDropdown = !showDropdown"
+        v-click-outside="close"
     >
       <div class="select-container__values">
         <div class="placeholder" v-show="!filled">
@@ -23,11 +23,11 @@
       </div>
       <div class="select-container__clear" v-if="showClearButton">
         <ClearButton
-          :error="showError && (errorMessage || error)"
-          :size="size"
-          :filled="filled && !error && !errorMessage"
-          :style-config="styleConfig"
-          @delete="clearSelected"
+            :error="showError && (errorMessage || error)"
+            :size="size"
+            :filled="filled && !error && !errorMessage"
+            :style-config="styleConfig"
+            @delete="clearSelected"
         />
       </div>
       <div class="select-container__arrow" v-else>
@@ -37,16 +37,16 @@
 
     <div class="select-dropdown">
       <Dropdown
-        class="dropdown-component"
-        v-show="showDropdown"
-        :value="selectModel"
-        :options="options"
-        :size="size"
-        :searchable="searchable"
-        :grouped="grouped"
-        :style-config="dropdownStyleConfig"
-        @select="selectOption"
-        @click.native.stop
+          class="dropdown-component"
+          v-show="showDropdown"
+          :value="selectModel"
+          :options="options"
+          :size="size"
+          :searchable="searchable"
+          :grouped="grouped"
+          :style-config="dropdownStyleConfig"
+          @select="selectOption"
+          @click.native.stop
       />
     </div>
   </div>
@@ -54,12 +54,11 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import Dropdown from '@/components/Dropdown/Dropdown'
-import ClearButton from '@/components/ClearButton/ClearButton'
+import Dropdown from 'src/components/inputs/Dropdown/Dropdown'
+import ClearButton from 'src/components/inputs/ClearButton/ClearButton'
 import vClickOutside from 'click-outside-vue3'
-import { validate } from '@/assets/scripts/validators'
-import variables from '@/assets/styles/variables.scss'
-
+import { validate } from 'src/helpers/validators'
+import variables from 'src/assets/inputs/variables.scss'
 export default {
   name: 'Select',
   directives: {
@@ -156,18 +155,18 @@ export default {
         '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
         '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray400,
         '--placeholder-font-size': this.styleConfig?.placeholderFontSize || variables.p6FontSize,
-        '--background-color': this.styleConfig?.bacckgroundColor || variables.baseWhite,
+        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
         '--label-color': this.styleConfig?.labelColor || variables.gray500,
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--label-font-size': this.styleConfig?.labelFontSize || variables.p6FontSize,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.primaryAccent,
         '--filled-background-color':
-          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
+            this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
         '--filled-font-color': this.styleConfig?.filledBackgroundColor || variables.info,
         '--error-color': this.styleConfig?.errorColor || variables.danger,
         '--arrow-color': this.styleConfig?.arrowColor || variables.gray400,
@@ -190,7 +189,6 @@ export default {
       }
       this.selectModel = option
     },
-
     /**
      * Delete option if we have this option and return true, otherwise return false
      * @param option
@@ -198,7 +196,7 @@ export default {
      */
     deleteOption(option) {
       let index = this.selectModel.findIndex(
-        (item) => item[this.shownKey] === option[this.shownKey],
+          (item) => item[this.shownKey] === option[this.shownKey],
       )
       if (index !== -1) {
         this.selectModel.splice(index, 1)
@@ -225,13 +223,17 @@ export default {
       },
       deep: true,
     },
+    modelValue: {
+      handler(value) {
+        this.selectModel = value
+      },
+      deep: true,
+    },
   },
 }
 </script>
-
 <style scoped lang="scss">
-@import 'src/assets/styles/variables';
-
+@import 'src/assets/inputs/variables';
 .select {
   display: flex;
   flex-direction: column;
@@ -252,7 +254,6 @@ export default {
     align-items: center;
     padding: 0 12px;
     box-sizing: border-box;
-
     border: 1px solid var(--border-color);
     background-color: var(--background-color);
     border-radius: var(--border-radius);
@@ -303,22 +304,18 @@ export default {
       }
     }
   }
-
   &--error {
     .select-container {
       border-color: var(--error-color);
       color: var(--error-color);
     }
   }
-
   &--lg {
     .select-container {
       height: 46px;
-
       .selected {
         font-size: 12px;
       }
-
       &__arrow {
         .bi {
           width: 17px;
@@ -326,7 +323,6 @@ export default {
         }
       }
     }
-
     .select-label {
       font-size: 14px;
     }
@@ -337,7 +333,6 @@ export default {
       .selected {
         font-size: 12px;
       }
-
       &__arrow {
         .bi {
           width: 12px;
@@ -349,15 +344,12 @@ export default {
   &--sm {
     .select-container {
       height: 26px;
-
       .placeholder {
         font-size: 10px;
       }
-
       .selected {
         font-size: 10px;
       }
-
       &__arrow {
         .bi {
           width: 10px;

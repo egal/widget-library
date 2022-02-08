@@ -15,9 +15,7 @@
 
 <script lang="ts" setup>
 import { defineProps, toRefs, computed } from "vue";
-//@ts-ignore
-import { getFont, getFontWeight } from "@/helpers/config";
-//@ts-ignore
+import { getFont, getFontWeight } from "src/helpers/configPersonality";
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
 
 type Props = {
@@ -43,7 +41,7 @@ const getVars = computed(() => ({
 </script>
 
 <style lang="scss" scoped>
-@import "variables";
+@import "src/assets/navigation/variables";
 
 .tag {
   display: flex;

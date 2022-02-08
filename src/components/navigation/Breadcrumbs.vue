@@ -16,10 +16,8 @@
 <script lang="ts" setup>
 import { reactive, watchEffect, toRefs, defineProps, computed } from "vue";
 import { useRouter } from "vue-router";
-//@ts-ignore
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-//@ts-ignore
-import { variables, getFont, getFontWeight } from "@/helpers/config";
+import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
 
 type Props = {
   size?: "sm" | "md" | "lg";
@@ -75,7 +73,7 @@ const getVars = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-@import "../assets/scss/variables";
+@import "src/assets/navigation/variables";
 
 .breadcrumbs {
   font-family: var(--font);

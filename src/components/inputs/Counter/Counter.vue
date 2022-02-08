@@ -18,7 +18,7 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import variables from '@/assets/styles/variables.scss'
+import variables from '../assets/inputs/variables.scss'
 
 export default {
   name: 'Counter',
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'src/assets/styles/variables';
+@import 'src/assets/inputs/variables';
 .counter {
   display: flex;
   flex-direction: column;

@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { defineProps, toRefs, computed } from "vue";
 //@ts-ignore
-import { variables, getFont, getFontWeight } from "@/helpers/config";
+import { variables, getFont, getFontWeight } from "@/helpers/configPersonality";
 
 type Props = {
   imgUrl?: string;
@@ -70,7 +70,7 @@ const getShortName = computed(() =>
 </script>
 
 <style scoped lang="scss">
-@import "variables";
+@import "src/assets/navigation/variables";
 
 .avatar {
   position: relative;

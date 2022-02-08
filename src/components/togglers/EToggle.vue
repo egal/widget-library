@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import togglersComputedMixin from "@/helpers/togglersComputedMixin";
+import togglersComputedMixin from "src/helpers/togglersComputedMixin";
 
 export default {
   name: "EToggle",
@@ -63,8 +63,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/togglers/variables";
-@import "../../assets/togglers/toggleMixin";
+@import "src/assets/togglers/variables";
+@import "src/assets/togglers/toggleMixin";
 
 .e-toggle {
   &--left {

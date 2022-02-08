@@ -103,8 +103,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/togglers/variables";
-@import "../../assets/togglers/buttonMixin";
+@import "src/assets/togglers/variables";
+@import "src/assets/togglers/buttonMixin";
 
 .egal-button {
   @include button();

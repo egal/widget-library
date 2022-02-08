@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import togglersComputedMixin from "@/helpers/togglersComputedMixin";
+import togglersComputedMixin from "src/helpers/togglersComputedMixin";
 
 export default {
   name: "ERadio",
@@ -71,8 +71,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/togglers/variables";
-@import "../../assets/togglers/radioMixin";
+@import "src/assets/togglers/variables";
+@import "src/assets/togglers/radioMixin";
 
 .e-radio {
   &--left {

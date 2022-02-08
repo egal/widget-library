@@ -6,7 +6,7 @@
     <Breadcrumbs />
     <router-view />
   </div>
-  <FileUploader />
+  <FileUploader :model-value="files" @on:delete="getFiles" multiple :max-files="100" />
   <avatar
       darken
       shape="square"
@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import FileUploader from '@/components/FileUploader/FileUploader.vue'
+import FileUploader from '@/components/inputs/FileUploader/FileUploader.vue'
 import Pagination from "@/components/navigation/Pagination.vue";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs.vue";
 import NavbarVertical from "@/components/navigation/NavbarVertical.vue";
@@ -75,19 +75,28 @@ import ToasterContainer from "@/components/toaster/ToasterContainer.vue";
 import Avatar from "@/components/personality/Avatar.vue";
 import Tag from "@/components/personality/Tag.vue";
 import Tooltip from "@/components/personality/Tooltip.vue";
-import EButton from "@/components/EButton";
-import ECheckbox from "@/components/ECheckbox";
-import ERadio from "@/components/ERadio";
-import EToggle from "@/components/EToggle";
+import EButton from "@/components/togglers/EButton.vue";
+import ECheckbox from "@/components/togglers/ECheckbox.vue";
+import ERadio from "@/components/togglers/ERadio.vue";
+import EToggle from "@/components/togglers/EToggle.vue";
 export default defineComponent({
   name: 'App',
-  components: { FileUploader, ToasterContainer,     EButton,
+  components: { FileUploader, ToasterContainer,EButton,
     ECheckbox,
     ERadio,
-    EToggle },
+    EToggle,
+    Pagination,
+    Breadcrumbs,
+    NavbarVertical,
+    NavbarHorizontal,
+    Avatar,
+    Tag,
+    Tooltip
+  },
   data() {
     return {
       checked: false,
+      files: [],
       options: [
         {
           name: 'Second option',
@@ -180,7 +189,9 @@ export default defineComponent({
       ],
     }
   },
-
+  mounted(){
+    this.getFiles()
+  },
   methods: {
     showToaster(): void {
       this.$toaster.info({
@@ -205,6 +216,16 @@ export default defineComponent({
     showRadio(ev) {
       console.log(ev);
     },
+    getFiles() {
+      fetch('http://127.0.0.1:88/core/Document/getItems', {
+        method: 'GET',
+      })
+          .then((response) => response.json())
+          .then((data) => {
+            this.files = data.action_result.data.items
+          })
+    },
+
   },
 })
 </script>

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import variables from '@/assets/styles/variables.scss'
+import variables from '../assets/inputs/variables.scss'
 
 export default {
   name: 'ClearButton',
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'src/assets/styles/variables';
+@import 'src/assets/inputs/variables';
 
 .mask-icon-container {
   display: flex;

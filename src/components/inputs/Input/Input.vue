@@ -1,9 +1,15 @@
 <template>
   <div class="input" :class="`input--${size}`" :style="getStyleVars">
-    <label class="input-label" :for="id" v-if="label">{{ label }}</label>
+    <label
+        class="input-label"
+        :class="{ 'input-label--required': required }"
+        :for="id"
+        v-if="label"
+    >{{ label }}</label
+    >
     <div
-      class="input-container"
-      :class="{
+        class="input-container"
+        :class="{
         search: type === 'search',
         success: !error && !errorMessage && newValue && showSuccess,
         error: (errorMessage || error) && showError,
@@ -18,55 +24,55 @@
       }"
     >
       <input
-        :id="id"
-        :type="type === 'search' ? 'text' : newType"
-        :placeholder="placeholder"
-        :value="newValue"
-        :maxlength="inputMaxLength"
-        :disabled="disabled"
-        :readonly="readonly"
-        :class="[iconLeft ? 'has-icon-left' : '', iconRight || clearable ? 'has-icon-right' : '']"
-        v-model="newValue"
-        @input="inputHandler"
-        autocomplete="off"
-        @keydown="(event) => $emit('keydown', event)"
-        @keydown.up="increaseValue"
-        @keydown.down="decreaseValue"
+          :id="id"
+          :type="type === 'search' ? 'text' : newType"
+          :placeholder="placeholder"
+          :value="newValue"
+          :maxlength="inputMaxLength"
+          :disabled="disabled"
+          :readonly="readonly"
+          :class="[iconLeft ? 'has-icon-left' : '', iconRight || clearable ? 'has-icon-right' : '']"
+          v-model="newValue"
+          @input="inputHandler"
+          autocomplete="off"
+          @keydown="(event) => $emit('keydown', event)"
+          @keydown.up="increaseValue"
+          @keydown.down="decreaseValue"
       />
       <b-icon
-        :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
-        :icon="iconLeft"
-        v-if="iconLeft"
+          :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
+          :icon="iconLeft"
+          v-if="iconLeft"
       />
       <b-icon
-        :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
-        :icon="iconRight"
-        v-if="iconRight"
+          :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
+          :icon="iconRight"
+          v-if="iconRight"
       />
       <b-icon
-        class="icon icon--password"
-        :icon="passwordShown ? 'eye' : 'eye-fill'"
-        v-if="newValue && type === 'password'"
-        @click.stop="showPassword"
+          class="icon icon--password"
+          :icon="passwordShown ? 'eye' : 'eye-fill'"
+          v-if="newValue && type === 'password'"
+          @click.stop="showPassword"
       />
       <div class="arrow-icons" v-if="type === 'number' && showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
         <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
       </div>
       <ClearButton
-        class="subtract-button"
-        :error="(!!error || !!errorMessage) && showError"
-        @delete=";(newValue = ''), $emit('update:modelValue', '')"
-        v-show="clearable && newValue && type !== 'number' && type !== 'search'"
-        :size="size"
-        :success="!error && !errorMessage && newValue && showSuccess"
-        :filled="!error && !errorMessage && newValue && !showSuccess && showFilled"
-        :style-config="styleConfig"
+          class="subtract-button"
+          :error="(!!error || !!errorMessage) && showError"
+          @delete=";(newValue = ''), $emit('update:modelValue', '')"
+          v-show="clearable && newValue && type !== 'number' && type !== 'search'"
+          :size="size"
+          :success="!error && !errorMessage && newValue && showSuccess"
+          :filled="!error && !errorMessage && newValue && !showSuccess && showFilled"
+          :style-config="styleConfig"
       />
     </div>
     <p
-      :class="['helper-text', (errorMessage || error) && showError ? 'helper-text--error' : '']"
-      v-if="errorMessage || error || helperText"
+        :class="['helper-text', (errorMessage || error) && showError ? 'helper-text--error' : '']"
+        v-if="errorMessage || error || helperText"
     >
       {{ showError ? errorMessage || error || helperText : helperText }}
     </p>
@@ -75,10 +81,9 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import ClearButton from '@/components/ClearButton/ClearButton'
-import { validate } from '@/assets/scripts/validators'
-import variables from '@/assets/styles/variables.scss'
-
+import ClearButton from 'src/components/inputs/ClearButton/ClearButton'
+import { validate } from 'src/helpers/validators'
+import variables from 'src/assets/inputs/variables.scss'
 export default {
   name: 'Input',
   components: {
@@ -96,15 +101,15 @@ export default {
     },
     placeholder: {
       type: String,
-      default: null,
+      default: '',
     },
     label: {
       type: String,
-      default: null,
+      default: '',
     },
     error: {
       type: String,
-      default: null,
+      default: '',
     },
     showSuccess: {
       type: Boolean,
@@ -149,20 +154,16 @@ export default {
       type: Boolean,
       default: false,
     },
-    integer: {
-      type: Boolean,
-      default: false,
-    },
     showArrows: {
       type: Boolean,
       default: true,
     },
     min: {
-      type: [Number, String],
+      type: Number,
       default: undefined,
     },
     max: {
-      type: [Number, String],
+      type: Number,
       default: undefined,
     },
     inputMaxLength: {
@@ -198,22 +199,22 @@ export default {
         '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
         '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray400,
         '--placeholder-disabled-color':
-          this.styleConfig?.placeholderDisabledColor || variables.gray400,
+            this.styleConfig?.placeholderDisabledColor || variables.gray400,
         '--label-color': this.styleConfig?.labelColor || variables.gray500,
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--helper-text-font-size': this.styleConfig?.helperTextFontSize || variables.p6FontSize,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--background-color': this.styleConfig?.bachgroundColor || variables.baseWhite,
+        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
         '--background-disabled-color':
-          this.styleConfig?.bachgroundDisabledColor || variables.gray200,
+            this.styleConfig?.backgroundDisabledColor || variables.gray200,
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
         '--filled-background-color':
-          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
-        '--filled-font-color': this.styleConfig?.filledBackgroundColor || variables.info,
+            this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
+        '--filled-font-color': this.styleConfig?.filledFontColor || variables.info,
         '--search-background-color': this.styleConfig?.searchBackgroundColor || variables.gray100,
         '--icon-color': this.styleConfig?.iconColor || variables.gray400,
         '--error-color': this.styleConfig?.errorColor || variables.danger,
@@ -231,13 +232,12 @@ export default {
         this.newValue = this.cutLetterSymbols(this.newValue)
         this.checkMinMaxValidity(this.newValue)
       }
-      if (this.validators) {
+      if (this.validators?.length) {
         this.errorMessage = validate(this.validators, this.newValue)
         this.$emit('error', this.errorMessage)
       }
       this.$emit('update:modelValue', this.newValue)
     },
-
     /**
      * Shows the password when you click on the icon
      */
@@ -245,7 +245,6 @@ export default {
       this.passwordShown = !this.passwordShown
       this.newType = this.newType === 'password' ? 'text' : 'password'
     },
-
     /**
      * Replaces commas with dots and removes all characters except numbers
      * @param word
@@ -254,12 +253,11 @@ export default {
     cutLetterSymbols(word) {
       word = word.replace(',', '.')
       return word
-        .replace(/[^0-9.]/g, '')
-        .replace('.', 'x')
-        .replace(/\./g, '')
-        .replace('x', '.')
+          .replace(/[^0-9.]/g, '')
+          .replace('.', 'x')
+          .replace(/\./g, '')
+          .replace('x', '.')
     },
-
     checkMinMaxValidity(value) {
       if (this.max) {
         if (Number(this.max) < Number(value)) {
@@ -272,7 +270,6 @@ export default {
         }
       }
     },
-
     /**
      * Increases the number by 1
      */
@@ -290,7 +287,6 @@ export default {
         }
       }
     },
-
     /**
      * Decreases the number by 1
      */
@@ -309,30 +305,30 @@ export default {
       }
     },
   },
+  watch: {
+    modelValue(value) {
+      this.newValue = value || this.type === 'number' ? 0 : ''
+    },
+  },
 }
 </script>
-
 <style scoped lang="scss">
-@import 'src/assets/styles/variables';
-
+@import 'src/assets/inputs/variables';
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
 }
-
 .input {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   font-family: var(--font-family);
-
   &--lg {
     .input-label {
       font-size: 14px;
@@ -341,17 +337,14 @@ input[type='number'] {
       height: 46px;
       font-size: 16px;
     }
-
     .subtract-button {
       bottom: 14px;
     }
-
     .icon {
       top: 14px;
       width: 16px;
       height: 16px;
     }
-
     .has-icon {
       &-left {
         padding-left: 40px;
@@ -360,7 +353,6 @@ input[type='number'] {
         padding-right: 40px;
       }
     }
-
     .arrow-icons {
       top: 13px;
       .bi {
@@ -377,17 +369,14 @@ input[type='number'] {
       height: 36px;
       font-size: 14px;
     }
-
     .subtract-button {
       bottom: 10px;
     }
-
     .icon {
       top: 11px;
       width: 14px;
       height: 14px;
     }
-
     .has-icon {
       &-left {
         padding-left: 40px;
@@ -396,7 +385,6 @@ input[type='number'] {
         padding-right: 40px;
       }
     }
-
     .arrow-icons {
       top: 10px;
       .bi {
@@ -413,17 +401,14 @@ input[type='number'] {
       height: 26px;
       font-size: 10px;
     }
-
     .subtract-button {
       bottom: 7px;
     }
-
     .icon {
       width: 10px;
       height: 10px;
       top: 8px;
     }
-
     .has-icon {
       &-left {
         padding-left: 30px;
@@ -432,7 +417,6 @@ input[type='number'] {
         padding-right: 30px;
       }
     }
-
     .arrow-icons {
       top: 7px;
       .bi {
@@ -442,13 +426,11 @@ input[type='number'] {
     }
   }
 }
-
 .input-label {
   display: block;
   font-weight: var(--label-font-weight);
   color: var(--label-color);
   margin-bottom: 6px;
-
   &--required::before {
     content: '*';
     margin-right: 5px;
@@ -458,7 +440,6 @@ input[type='number'] {
 .input-container {
   position: relative;
   width: 100%;
-
   input {
     color: var(--value-color);
     width: 100%;
@@ -468,30 +449,24 @@ input[type='number'] {
     border-radius: var(--border-radius);
     font-weight: var(--value-font-weight);
     padding: 0 16px;
-
     &::placeholder {
       color: var(--placeholder-color);
     }
-
     &:focus {
       border: 1px solid var(--focus-border-color);
       outline: none;
     }
-
     &:disabled {
       background: var(--backgroud-disabled-color);
-
       &::placeholder {
         color: var(--placeholder-disabled-color);
       }
     }
-
     &:disabled + .icon,
     &:disabled + .icon + .icon {
       color: var(--icon-color);
     }
   }
-
   .icon {
     &--left {
       left: 16px;
@@ -521,31 +496,26 @@ input[type='number'] {
     flex-flow: column nowrap;
     position: absolute;
     user-select: none;
-
     .icon {
       cursor: pointer;
       color: var(--icon-color);
     }
   }
 }
-
 .helper-text {
   font-size: var(--helper-text-font-size);
   color: var(--helper-text-color);
   margin-top: 6px;
   margin-bottom: 0;
   max-width: fit-content;
-
   &--error {
     color: var(--error-color);
   }
 }
-
 .filled {
   input {
     background-color: var(--filled-background-color);
     color: var(--filled-font-color);
-
     &:focus {
       background-color: var(--background-color);
       color: var(--value-color);
@@ -555,11 +525,9 @@ input[type='number'] {
     color: var(--filled-font-color);
   }
 }
-
 .search {
   input {
     background-color: var(--search-background-color);
-
     &:focus {
       background-color: var(--background-color);
     }
@@ -580,11 +548,9 @@ input[type='number'] {
     color: var(--error-color);
   }
 }
-
 .error + .helper-text {
   color: var(--error-color);
 }
-
 .success {
   input {
     border-color: var(--success-color);
@@ -593,7 +559,6 @@ input[type='number'] {
       border-color: var(--success-color);
     }
   }
-
   .bi {
     color: var(--success-color);
   }
@@ -601,7 +566,6 @@ input[type='number'] {
     color: var(--success-color);
   }
 }
-
 .success + .helper-text {
   color: var(--success-color);
 }

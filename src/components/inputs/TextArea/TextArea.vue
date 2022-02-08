@@ -1,15 +1,15 @@
 <template>
   <div
-    class="textarea"
-    :class="[`textarea--${size}`, { 'textarea--error': errorMessage || error }]"
-    :style="getStyleVars"
+      class="textarea"
+      :class="[`textarea--${size}`, { 'textarea--error': errorMessage || error }]"
+      :style="getStyleVars"
   >
     <div class="textarea-label" v-if="label">{{ label }}</div>
     <textarea
-      @input="inputHandler"
-      v-model="newValue"
-      :disabled="disabled"
-      :placeholder="placeholder"
+        @input="inputHandler"
+        v-model="newValue"
+        :disabled="disabled"
+        :placeholder="placeholder"
     />
     <div class="textarea-helper-text" v-if="helperText || error || errorMessage">
       {{ error || errorMessage || helperText }}
@@ -18,9 +18,8 @@
 </template>
 
 <script>
-import { validate } from '@/assets/scripts/validators'
-import variables from '@/assets/styles/variables.scss'
-
+import { validate } from 'src/helpers/validators'
+import variables from 'src/assets/inputs/variables.scss'
 export default {
   name: 'TextArea',
   components: {},
@@ -69,12 +68,12 @@ export default {
         '--value-color': this.styleConfig?.valueColor || variables.gray500,
         '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
         '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray500,
-        '--background-color': this.styleConfig?.bacckgroundColor || variables.baseWhite,
+        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
         '--label-color': this.styleConfig?.labelColor || variables.gray800,
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || variables.allSidesLarge,
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
@@ -93,17 +92,20 @@ export default {
     inputHandler() {
       if (this.validators.length) {
         this.errorMessage = validate(this.validators, this.newValue)
-        this.$emit('error')
+        this.$emit('error', this.errorMessage)
       }
       this.$emit('update:modelValue', this.newValue)
     },
   },
+  watch: {
+    modelValue(value) {
+      this.newValue = value
+    },
+  },
 }
 </script>
-
 <style scoped lang="scss">
-@import 'src/assets/styles/variables';
-
+@import 'src/assets/inputs/variables';
 .textarea {
   display: flex;
   flex-direction: column;
@@ -122,36 +124,29 @@ export default {
     padding: 12px;
     color: var(--value-color);
     font-weight: var(--value-font-weight);
-
     &::placeholder {
       color: var(--placeholder-color);
     }
-
     &:focus:enabled {
       border-color: var(--focus-border-color);
     }
-
     &:focus-visible:enabled {
       border: 1px solid var(--focus-border-color);
       outline: none;
     }
   }
-
   &-helper-text {
     color: var(--helper-text-color);
     font-weight: var(--helper-text-font-weight);
     margin-top: 8px;
   }
-
   &--error {
     textarea {
       border-color: var(--error-color);
       color: var(--error-color);
-
       &:focus:enabled {
         border-color: var(--error-color);
       }
-
       &:focus-visible:enabled {
         border-color: var(--error-color);
       }
@@ -160,7 +155,6 @@ export default {
       color: var(--error-color);
     }
   }
-
   &--lg {
     .textarea-label {
       font-size: 14px;
@@ -170,12 +164,10 @@ export default {
       min-height: 160px;
       font-size: 14px;
       line-height: 21px;
-
       &::placeholder {
         font-size: 14px;
       }
     }
-
     .textarea-helper-text {
       font-size: 14px;
     }
@@ -184,18 +176,15 @@ export default {
     .textarea-label {
       font-size: 12px;
     }
-
     textarea {
       min-width: 250px;
       min-height: 110px;
       font-size: 12px;
       line-height: 14px;
-
       &::placeholder {
         font-size: 12px;
       }
     }
-
     .textarea-helper-text {
       font-size: 12px;
     }
@@ -205,18 +194,15 @@ export default {
       font-size: 12px;
       margin-bottom: 4px;
     }
-
     textarea {
       min-width: 158px;
       min-height: 74px;
       font-size: 10px;
       line-height: 12px;
-
       &::placeholder {
         font-size: 10px;
       }
     }
-
     .textarea-helper-text {
       font-size: 10px;
       margin-top: 4px;

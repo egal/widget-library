@@ -36,8 +36,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import Timer from "@/helpers/timer.ts";
-import eventBus from "@/helpers/eventBus.ts";
+import Timer from "src/helpers/timer.ts";
+import eventBus from "src/helpers/eventBus.ts";
 
 export default defineComponent({
   name: "ToasterMessage",
@@ -134,8 +134,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "~@/assets/variables.scss";
-@import "~@/assets/toastMixin.scss";
+@import "src/assets/toaster/variables.scss";
+@import "src/assets/toaster/toastMixin.scss";
 
 .toast {
   $ctx: &;

@@ -59,10 +59,8 @@ import {
   ref,
   onMounted,
 } from "vue";
-//@ts-ignore
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-//@ts-ignore
-import { variables, getFont, getFontWeight } from "@/helpers/config";
+import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
 
 type Link = {
   name: string;
@@ -108,7 +106,7 @@ const getVars = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-@import "../assets/scss/variables";
+@import "src/assets/navigation/variables";
 
 .navbar {
   padding: 24px;

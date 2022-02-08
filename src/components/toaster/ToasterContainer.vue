@@ -19,10 +19,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import eventBus from "@/helpers/eventBus";
-import { Toast, ToastParams } from "@/types";
+import eventBus from "src/helpers/eventBus";
+import { Toast, ToastParams } from "./index";
 
-import ToasterMessage from "@/components/Toaster/ToasterMessage.vue";
+import ToasterMessage from "./ToasterMessage.vue";
 
 export default defineComponent({
   name: "ToasterContainer",

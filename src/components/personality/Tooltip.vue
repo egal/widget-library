@@ -16,10 +16,7 @@
 
 <script lang="ts" setup>
 import { defineProps, toRefs, computed } from "vue";
-//@ts-ignore
-import { getFont, getFontWeight } from "@/helpers/configNavigation.js";
-
-//@ts-ignore
+import { getFont, getFontWeight } from "src/helpers/configNavigation.js";
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
 
 type Props = {
@@ -41,7 +38,7 @@ const getVars = computed(() => ({
 </script>
 
 <style lang="scss" scoped>
-@import "variables";
+@import "src/assets/navigation/variables";
 
 .tooltip {
   position: relative;
