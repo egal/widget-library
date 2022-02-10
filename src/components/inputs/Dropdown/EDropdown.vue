@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import Input from '../Input/Input'
-import variables from '../assets/inputs/variables.scss'
+import Input from '../Input/EInput'
+import variables from '@/assets/variables.scss'
 export default {
-  name: 'Dropdown',
+  name: 'EDropdown',
   components: { Input },
   props: {
     size: {
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import 'src/assets/inputs/variables';
+@import 'src/assets/variables';
 
 ::-webkit-scrollbar {
   width: 4px;

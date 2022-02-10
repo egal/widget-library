@@ -1,10 +1,7 @@
 <template>
   <label
     class="e-radio"
-    :class="[
-      `e-radio--${size}`,
-      radioRight ? 'e-radio--right' : 'e-radio--left',
-    ]"
+    :class="[`e-radio--${size}`, radioRight ? 'e-radio--right' : 'e-radio--left']"
   >
     <input
       type="radio"
@@ -26,10 +23,10 @@
 </template>
 
 <script>
-import togglersComputedMixin from "src/helpers/togglersComputedMixin";
+import togglersComputedMixin from '@/helpers/togglersComputedMixin'
 
 export default {
-  name: "ERadio",
+  name: 'ERadio',
   mixins: [togglersComputedMixin],
   props: {
     name: {
@@ -48,7 +45,7 @@ export default {
     },
     size: {
       type: String,
-      default: "md",
+      default: 'md',
     },
     radioRight: {
       type: Boolean,
@@ -57,29 +54,29 @@ export default {
     labelStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
     inputStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/togglers/variables";
-@import "src/assets/togglers/radioMixin";
+@import 'src/assets/variables';
+@import 'src/assets/togglers/radioMixin';
 
 .e-radio {
   &--left {
-    @include radio($pseudo-element: "before");
+    @include radio($pseudo-element: 'before');
   }
   &--right {
-    @include radio($pseudo-element: "after");
+    @include radio($pseudo-element: 'after');
   }
 
   &--sm {

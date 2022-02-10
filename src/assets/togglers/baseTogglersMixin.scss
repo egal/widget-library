@@ -1,16 +1,15 @@
-@import 'variables';
+@import 'src/assets/variables';
 
 // Селекторы состояний чекбокса
-$selector-input-hover: ".input:not(:disabled):not(:checked) + .text:hover";
-$selector-text-hover: ".input:not(:disabled) + .text:hover";
-$selector-active: ".input:not(:disabled):not(:checked) + .text:active";
-$selector-active-checked: ".input:not(:disabled):checked + .text:active";
-$selector-checked: ".input:checked + .text";
-$selector-disabled: ".input:disabled + .text";
-$selector-disabled-checked: ".input:checked:disabled + .text";
+$selector-input-hover: '.input:not(:disabled):not(:checked) + .text:hover';
+$selector-text-hover: '.input:not(:disabled) + .text:hover';
+$selector-active: '.input:not(:disabled):not(:checked) + .text:active';
+$selector-active-checked: '.input:not(:disabled):checked + .text:active';
+$selector-checked: '.input:checked + .text';
+$selector-disabled: '.input:disabled + .text';
+$selector-disabled-checked: '.input:checked:disabled + .text';
 
 @mixin baseTogglerMixin($pseudo-element: 'before') {
-
   // CSS переменные используются для кастомизации инпута
   // (используются только в наследниках!)
   --input-border-color: #{$gray-300};
@@ -46,7 +45,7 @@ $selector-disabled-checked: ".input:checked:disabled + .text";
 
     &::#{$pseudo-element} {
       display: inline-block;
-      content: "";
+      content: '';
       width: 1.3em;
       height: 1.3em;
       transition: 0.1s;

@@ -1,10 +1,7 @@
 <template>
   <label
     class="e-checkbox"
-    :class="[
-      `e-checkbox--${size}`,
-      checkboxRight ? 'e-checkbox--right' : 'e-checkbox--left',
-    ]"
+    :class="[`e-checkbox--${size}`, checkboxRight ? 'e-checkbox--right' : 'e-checkbox--left']"
   >
     <input
       type="checkbox"
@@ -23,10 +20,10 @@
   </label>
 </template>
 <script>
-import togglersComputedMixin from "src/helpers/togglersComputedMixin";
+import togglersComputedMixin from '@/helpers/togglersComputedMixin'
 
 export default {
-  name: "ECheckbox",
+  name: 'ECheckbox',
   mixins: [togglersComputedMixin],
   props: {
     checked: {
@@ -39,7 +36,7 @@ export default {
     },
     size: {
       type: String,
-      default: "md",
+      default: 'md',
     },
     checkboxRight: {
       type: Boolean,
@@ -48,29 +45,29 @@ export default {
     labelStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
     inputStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/togglers/variables";
-@import "src/assets/togglers/checkboxMixin";
+@import 'src/assets/variables';
+@import 'src/assets/togglers/checkboxMixin';
 
 .e-checkbox {
   &--left {
-    @include checkbox($pseudo-element: "before");
+    @include checkbox($pseudo-element: 'before');
   }
   &--right {
-    @include checkbox($pseudo-element: "after");
+    @include checkbox($pseudo-element: 'after');
   }
 
   &--sm {

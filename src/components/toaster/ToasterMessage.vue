@@ -34,13 +34,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import Timer from "src/helpers/timer.ts";
-import eventBus from "src/helpers/eventBus.ts";
+import { defineComponent } from 'vue'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import Timer from '@/helpers/timer.ts'
+import eventBus from '@/helpers/eventBus.ts'
 
 export default defineComponent({
-  name: "ToasterMessage",
+  name: 'ToasterMessage',
   components: { BootstrapIcon },
   props: {
     id: {
@@ -78,12 +78,12 @@ export default defineComponent({
       type: String,
     },
   },
-  emits: ["close"],
+  emits: ['close'],
   data() {
     return {
       active: false,
       timer: new Timer(this.duration),
-    };
+    }
   },
   computed: {
     /**
@@ -93,19 +93,19 @@ export default defineComponent({
      */
     paddingBottom(): string {
       if (this.flat) {
-        return "";
+        return ''
       }
 
-      return this.primaryAction || this.secondaryAction ? "16px" : "24px";
+      return this.primaryAction || this.secondaryAction ? '16px' : '24px'
     },
   },
   mounted() {
     if (this.primaryAction || this.secondaryAction) {
-      eventBus.$emit("toast-added", this.id);
+      eventBus.$emit('toast-added', this.id)
     }
 
-    this.timer.onTimerEnd = this.close;
-    this.timer.start();
+    this.timer.onTimerEnd = this.close
+    this.timer.start()
   },
   methods: {
     /**
@@ -114,11 +114,11 @@ export default defineComponent({
      * чтобы отписаться от слушателей кнопок.
      */
     close(): void {
-      this.timer.stop();
-      this.$emit("close", this.id);
+      this.timer.stop()
+      this.$emit('close', this.id)
 
       if (this.primaryAction || this.secondaryAction) {
-        eventBus.$emit("toast-closed", this.id);
+        eventBus.$emit('toast-closed', this.id)
       }
     },
 
@@ -127,33 +127,33 @@ export default defineComponent({
      * @param button - Тип кнопки (primary\secondary)
      */
     emitActionEvent(button: string): void {
-      eventBus.$emit(`${this.id}-${button}-action-event`);
+      eventBus.$emit(`${this.id}-${button}-action-event`)
     },
   },
-});
+})
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/toaster/variables.scss";
-@import "src/assets/toaster/toastMixin.scss";
+@import 'src/assets/variables';
+@import 'src/assets/toaster/toastMixin.scss';
 
 .toast {
   $ctx: &;
 
   &--light {
     &--info {
-      @include toast($variant: "light", $type: "info", $ctx: $ctx);
+      @include toast($variant: 'light', $type: 'info', $ctx: $ctx);
     }
     &--danger {
-      @include toast($variant: "light", $type: "danger", $ctx: $ctx);
+      @include toast($variant: 'light', $type: 'danger', $ctx: $ctx);
     }
   }
   &--dark {
     &--info {
-      @include toast($variant: "dark", $type: "info", $ctx: $ctx);
+      @include toast($variant: 'dark', $type: 'info', $ctx: $ctx);
     }
     &--danger {
-      @include toast($variant: "dark", $type: "danger", $ctx: $ctx);
+      @include toast($variant: 'dark', $type: 'danger', $ctx: $ctx);
     }
   }
   &--flat {

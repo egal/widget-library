@@ -14,34 +14,33 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, toRefs, computed } from "vue";
-import { getFont, getFontWeight } from "src/helpers/configPersonality";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
+import { toRefs, computed } from 'vue'
+import { getFont, getFontWeight } from '@/helpers/configPersonality'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 
 type Props = {
-  size?: "sm" | "md" | "lg";
-  shape?: "square" | "circle";
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  icon?: string;
-  crossIcon?: boolean;
-  componentStyle?: "light" | "normal";
-  textStyle?: "light" | "normal";
-};
+  size?: 'sm' | 'md' | 'lg'
+  shape?: 'square' | 'circle'
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  icon?: string
+  crossIcon?: boolean
+  componentStyle?: 'light' | 'normal'
+  textStyle?: 'light' | 'normal'
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { size, shape, font, weight, icon, crossIcon, componentStyle } =
-  toRefs(props);
+const { size, shape, font, weight, icon, crossIcon, componentStyle } = toRefs(props)
 
 const getVars = computed(() => ({
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .tag {
   display: flex;

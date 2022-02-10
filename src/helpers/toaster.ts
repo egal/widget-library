@@ -1,5 +1,5 @@
-import eventBus from "@/helpers/eventBus.ts";
-import { ToastParams } from "@/types";
+import eventBus from '@/helpers/eventBus.ts'
+import { ToastParams } from '@/components/toaster/index.ts'
 
 /**
  * Управляющий класс, отвечающий за вызов тостов определённых типов и обработку
@@ -12,17 +12,14 @@ export default class Toaster {
    */
   info(params: ToastParams): any {
     if (params.primaryAction || params.secondaryAction) {
-      this.initToastIdListener(
-        params.primaryActionCallback!,
-        params.secondaryActionCallback
-      );
-      this.initToastClosedListener();
+      this.initToastIdListener(params.primaryActionCallback!, params.secondaryActionCallback)
+      this.initToastClosedListener()
     }
 
-    eventBus.$emit("show", {
-      type: "info",
+    eventBus.$emit('show', {
+      type: 'info',
       ...params,
-    });
+    })
   }
 
   /**
@@ -31,17 +28,14 @@ export default class Toaster {
    */
   danger(params: ToastParams): void {
     if (params.primaryAction || params.secondaryAction) {
-      this.initToastIdListener(
-        params.primaryActionCallback!,
-        params.secondaryActionCallback
-      );
-      this.initToastClosedListener();
+      this.initToastIdListener(params.primaryActionCallback!, params.secondaryActionCallback)
+      this.initToastClosedListener()
     }
 
-    eventBus.$emit("show", {
-      type: "danger",
+    eventBus.$emit('show', {
+      type: 'danger',
       ...params,
-    });
+    })
   }
 
   /**
@@ -55,16 +49,12 @@ export default class Toaster {
    */
   protected initToastIdListener(
     primaryActionCallback: Function,
-    secondaryActionCallback?: Function
+    secondaryActionCallback?: Function,
   ): void {
-    eventBus.$off("toast-added");
-    eventBus.$on("toast-added", (id: string) => {
-      this.initActionListener(
-        id,
-        primaryActionCallback,
-        secondaryActionCallback
-      );
-    });
+    eventBus.$off('toast-added')
+    eventBus.$on('toast-added', (id: string) => {
+      this.initActionListener(id, primaryActionCallback, secondaryActionCallback)
+    })
   }
 
   /**
@@ -73,8 +63,8 @@ export default class Toaster {
    * @protected
    */
   protected initToastClosedListener(): void {
-    eventBus.$off("toast-closed");
-    eventBus.$on("toast-closed", this.disableActionListener);
+    eventBus.$off('toast-closed')
+    eventBus.$on('toast-closed', this.disableActionListener)
   }
 
   /**
@@ -90,12 +80,12 @@ export default class Toaster {
   protected initActionListener(
     id: string,
     primaryActionCallback: Function,
-    secondaryActionCallback?: Function
+    secondaryActionCallback?: Function,
   ): void {
-    eventBus.$on(`${id}-primary-action-event`, primaryActionCallback);
+    eventBus.$on(`${id}-primary-action-event`, primaryActionCallback)
 
     if (secondaryActionCallback) {
-      eventBus.$on(`${id}-secondary-action-event`, secondaryActionCallback);
+      eventBus.$on(`${id}-secondary-action-event`, secondaryActionCallback)
     }
   }
 
@@ -105,7 +95,7 @@ export default class Toaster {
    * @protected
    */
   protected disableActionListener(id: string): void {
-    eventBus.$off(`${id}-primary-action-event`);
-    eventBus.$off(`${id}-secondary-action-event`);
+    eventBus.$off(`${id}-primary-action-event`)
+    eventBus.$off(`${id}-secondary-action-event`)
   }
 }

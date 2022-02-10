@@ -1,5 +1,4 @@
-@import 'variables';
-
+@import 'src/assets/variables';
 
 @mixin button($radius: 6px, $font-size: $h7-font-size, $padding: 12px 20px, $soft-colors: false) {
   display: inline-flex;

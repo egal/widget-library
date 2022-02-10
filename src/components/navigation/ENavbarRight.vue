@@ -20,7 +20,7 @@
         alt="logo"
       />
       <BootstrapIcon
-        @click="(active = false), (isTransiring = true)"
+        @click=";(active = false), (isTransiring = true)"
         class="navbar__logo-group__chevron"
         :class="{ '--hidden': !active }"
         icon="chevron-left"
@@ -35,10 +35,7 @@
         :key="link.to"
       >
         <li
-          :class="[
-            isActive && 'router-link-active',
-            isExactActive && 'router-link-exact-active',
-          ]"
+          :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
         >
           <a :href="href" @click="navigate"
             ><BootstrapIcon icon="circle" />
@@ -51,62 +48,55 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  toRefs,
-  defineProps,
-  defineExpose,
-  computed,
-  ref,
-  onMounted,
-} from "vue";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
+import { toRefs, computed, ref, onMounted } from 'vue'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
 type Link = {
-  name: string;
-  to: string;
-};
+  name: string
+  to: string
+}
 
 type Props = {
-  logo: string;
-  smallLogo: string;
-  links: Link[];
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  color?: string;
-  activeColor?: string;
-  chevronColor?: string;
-};
+  logo: string
+  smallLogo: string
+  links: Link[]
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  color?: string
+  activeColor?: string
+  chevronColor?: string
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { font, weight, color, activeColor, chevronColor, links } = toRefs(props);
+const { font, weight, color, activeColor, chevronColor, links } = toRefs(props)
 
-const active = ref(false);
+const active = ref(false)
 
-const isTransiring = ref(false);
+const isTransiring = ref(false)
 
-const navbar = ref<HTMLElement>(null as any);
+const navbar = ref<HTMLElement>(null as any)
 
-defineExpose({ navbar });
+defineExpose({ navbar })
 
 onMounted(() => {
-  navbar.value?.addEventListener("transitionend", () => {
-    isTransiring.value = false;
-  });
-});
+  navbar.value?.addEventListener('transitionend', () => {
+    isTransiring.value = false
+  })
+})
 
 const getVars = computed(() => ({
-  "--chevron-color": chevronColor?.value || variables.gray500,
-  "--active-color": activeColor?.value || variables.primaryAccent,
-  "--color": color?.value || variables.gray800,
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--chevron-color': chevronColor?.value || variables.gray500,
+  '--active-color': activeColor?.value || variables.primaryAccent,
+  '--color': color?.value || variables.gray800,
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .navbar {
   padding: 24px;
@@ -172,7 +162,7 @@ const getVars = computed(() => ({
       &::after {
         position: absolute;
         display: block;
-        content: "";
+        content: '';
         left: -24px;
         top: 50%;
         width: 2px;

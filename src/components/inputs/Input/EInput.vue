@@ -1,15 +1,15 @@
 <template>
   <div class="input" :class="`input--${size}`" :style="getStyleVars">
     <label
-        class="input-label"
-        :class="{ 'input-label--required': required }"
-        :for="id"
-        v-if="label"
-    >{{ label }}</label
+      class="input-label"
+      :class="{ 'input-label--required': required }"
+      :for="id"
+      v-if="label"
+      >{{ label }}</label
     >
     <div
-        class="input-container"
-        :class="{
+      class="input-container"
+      :class="{
         search: type === 'search',
         success: !error && !errorMessage && newValue && showSuccess,
         error: (errorMessage || error) && showError,
@@ -24,55 +24,55 @@
       }"
     >
       <input
-          :id="id"
-          :type="type === 'search' ? 'text' : newType"
-          :placeholder="placeholder"
-          :value="newValue"
-          :maxlength="inputMaxLength"
-          :disabled="disabled"
-          :readonly="readonly"
-          :class="[iconLeft ? 'has-icon-left' : '', iconRight || clearable ? 'has-icon-right' : '']"
-          v-model="newValue"
-          @input="inputHandler"
-          autocomplete="off"
-          @keydown="(event) => $emit('keydown', event)"
-          @keydown.up="increaseValue"
-          @keydown.down="decreaseValue"
+        :id="id"
+        :type="type === 'search' ? 'text' : newType"
+        :placeholder="placeholder"
+        :value="newValue"
+        :maxlength="inputMaxLength"
+        :disabled="disabled"
+        :readonly="readonly"
+        :class="[iconLeft ? 'has-icon-left' : '', iconRight || clearable ? 'has-icon-right' : '']"
+        v-model="newValue"
+        @input="inputHandler"
+        autocomplete="off"
+        @keydown="(event) => $emit('keydown', event)"
+        @keydown.up="increaseValue"
+        @keydown.down="decreaseValue"
       />
       <b-icon
-          :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
-          :icon="iconLeft"
-          v-if="iconLeft"
+        :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
+        :icon="iconLeft"
+        v-if="iconLeft"
       />
       <b-icon
-          :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
-          :icon="iconRight"
-          v-if="iconRight"
+        :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
+        :icon="iconRight"
+        v-if="iconRight"
       />
       <b-icon
-          class="icon icon--password"
-          :icon="passwordShown ? 'eye' : 'eye-fill'"
-          v-if="newValue && type === 'password'"
-          @click.stop="showPassword"
+        class="icon icon--password"
+        :icon="passwordShown ? 'eye' : 'eye-fill'"
+        v-if="newValue && type === 'password'"
+        @click.stop="showPassword"
       />
       <div class="arrow-icons" v-if="type === 'number' && showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
         <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
       </div>
-      <ClearButton
-          class="subtract-button"
-          :error="(!!error || !!errorMessage) && showError"
-          @delete=";(newValue = ''), $emit('update:modelValue', '')"
-          v-show="clearable && newValue && type !== 'number' && type !== 'search'"
-          :size="size"
-          :success="!error && !errorMessage && newValue && showSuccess"
-          :filled="!error && !errorMessage && newValue && !showSuccess && showFilled"
-          :style-config="styleConfig"
+      <EClearButton
+        class="subtract-button"
+        :error="(!!error || !!errorMessage) && showError"
+        @delete=";(newValue = ''), $emit('update:modelValue', '')"
+        v-show="clearable && newValue && type !== 'number' && type !== 'search'"
+        :size="size"
+        :success="!error && !errorMessage && newValue && showSuccess"
+        :filled="!error && !errorMessage && newValue && !showSuccess && showFilled"
+        :style-config="styleConfig"
       />
     </div>
     <p
-        :class="['helper-text', (errorMessage || error) && showError ? 'helper-text--error' : '']"
-        v-if="errorMessage || error || helperText"
+      :class="['helper-text', (errorMessage || error) && showError ? 'helper-text--error' : '']"
+      v-if="errorMessage || error || helperText"
     >
       {{ showError ? errorMessage || error || helperText : helperText }}
     </p>
@@ -81,13 +81,13 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import ClearButton from 'src/components/inputs/ClearButton/ClearButton'
-import { validate } from 'src/helpers/validators'
-import variables from 'src/assets/inputs/variables.scss'
+import EClearButton from '@/components/inputs/ClearButton/EClearButton'
+import { validate } from '@/helpers/validators'
+import variables from '@/assets/variables.scss'
 export default {
-  name: 'Input',
+  name: 'EInput',
   components: {
-    ClearButton,
+    EClearButton,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -199,21 +199,21 @@ export default {
         '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
         '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray400,
         '--placeholder-disabled-color':
-            this.styleConfig?.placeholderDisabledColor || variables.gray400,
+          this.styleConfig?.placeholderDisabledColor || variables.gray400,
         '--label-color': this.styleConfig?.labelColor || variables.gray500,
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--helper-text-font-size': this.styleConfig?.helperTextFontSize || variables.p6FontSize,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
         '--background-disabled-color':
-            this.styleConfig?.backgroundDisabledColor || variables.gray200,
+          this.styleConfig?.backgroundDisabledColor || variables.gray200,
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
         '--filled-background-color':
-            this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
+          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
         '--filled-font-color': this.styleConfig?.filledFontColor || variables.info,
         '--search-background-color': this.styleConfig?.searchBackgroundColor || variables.gray100,
         '--icon-color': this.styleConfig?.iconColor || variables.gray400,
@@ -253,10 +253,10 @@ export default {
     cutLetterSymbols(word) {
       word = word.replace(',', '.')
       return word
-          .replace(/[^0-9.]/g, '')
-          .replace('.', 'x')
-          .replace(/\./g, '')
-          .replace('x', '.')
+        .replace(/[^0-9.]/g, '')
+        .replace('.', 'x')
+        .replace(/\./g, '')
+        .replace('x', '.')
     },
     checkMinMaxValidity(value) {
       if (this.max) {
@@ -313,7 +313,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import 'src/assets/inputs/variables';
+@import 'src/assets/variables';
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

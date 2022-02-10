@@ -1,15 +1,15 @@
 <template>
   <div
-      class="select"
-      :class="[`select--${size}`, { 'select--error': showError && (error || errorMessage) }]"
-      :style="getStyleVars"
+    class="select"
+    :class="[`select--${size}`, { 'select--error': showError && (error || errorMessage) }]"
+    :style="getStyleVars"
   >
     <div class="select-label">{{ label }}</div>
     <div
-        class="select-container"
-        :class="{ focus: showDropdown, filled: filled && !showDropdown && !error && !errorMessage }"
-        @click="showDropdown = !showDropdown"
-        v-click-outside="close"
+      class="select-container"
+      :class="{ focus: showDropdown, filled: filled && !showDropdown && !error && !errorMessage }"
+      @click="showDropdown = !showDropdown"
+      v-click-outside="close"
     >
       <div class="select-container__values">
         <div class="placeholder" v-show="!filled">
@@ -22,12 +22,12 @@
         <div class="selected" v-else>{{ selectModel[shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
-        <ClearButton
-            :error="showError && (errorMessage || error)"
-            :size="size"
-            :filled="filled && !error && !errorMessage"
-            :style-config="styleConfig"
-            @delete="clearSelected"
+        <EClearButton
+          :error="showError && (errorMessage || error)"
+          :size="size"
+          :filled="filled && !error && !errorMessage"
+          :style-config="styleConfig"
+          @delete="clearSelected"
         />
       </div>
       <div class="select-container__arrow" v-else>
@@ -36,17 +36,17 @@
     </div>
 
     <div class="select-dropdown">
-      <Dropdown
-          class="dropdown-component"
-          v-show="showDropdown"
-          :value="selectModel"
-          :options="options"
-          :size="size"
-          :searchable="searchable"
-          :grouped="grouped"
-          :style-config="dropdownStyleConfig"
-          @select="selectOption"
-          @click.native.stop
+      <EDropdown
+        class="dropdown-component"
+        v-show="showDropdown"
+        :value="selectModel"
+        :options="options"
+        :size="size"
+        :searchable="searchable"
+        :grouped="grouped"
+        :style-config="dropdownStyleConfig"
+        @select="selectOption"
+        @click.native.stop
       />
     </div>
   </div>
@@ -54,19 +54,19 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import Dropdown from 'src/components/inputs/Dropdown/Dropdown'
-import ClearButton from 'src/components/inputs/ClearButton/ClearButton'
+import EDropdown from '@/components/inputs/Dropdown/EDropdown'
+import EClearButton from '@/components/inputs/ClearButton/EClearButton'
 import vClickOutside from 'click-outside-vue3'
-import { validate } from 'src/helpers/validators'
-import variables from 'src/assets/inputs/variables.scss'
+import { validate } from '@/helpers/validators'
+import variables from '@/assets/variables.scss'
 export default {
-  name: 'Select',
+  name: 'ESelect',
   directives: {
     clickOutside: vClickOutside.directive,
   },
   components: {
-    ClearButton,
-    Dropdown,
+    EClearButton,
+    EDropdown,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -161,12 +161,12 @@ export default {
         '--label-font-size': this.styleConfig?.labelFontSize || variables.p6FontSize,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.primaryAccent,
         '--filled-background-color':
-            this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
+          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
         '--filled-font-color': this.styleConfig?.filledBackgroundColor || variables.info,
         '--error-color': this.styleConfig?.errorColor || variables.danger,
         '--arrow-color': this.styleConfig?.arrowColor || variables.gray400,
@@ -196,7 +196,7 @@ export default {
      */
     deleteOption(option) {
       let index = this.selectModel.findIndex(
-          (item) => item[this.shownKey] === option[this.shownKey],
+        (item) => item[this.shownKey] === option[this.shownKey],
       )
       if (index !== -1) {
         this.selectModel.splice(index, 1)
@@ -233,7 +233,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import 'src/assets/inputs/variables';
+@import 'src/assets/variables';
 .select {
   display: flex;
   flex-direction: column;

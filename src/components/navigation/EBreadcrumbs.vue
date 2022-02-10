@@ -1,9 +1,7 @@
 <template>
   <div :class="`breadcrumbs --size-${size || 'md'}`" :style="getVars">
     <template v-for="(link, i) in parsedLinks" :key="link.to">
-      <router-link class="breadcrumbs__link" :to="link.to">{{
-        link.name
-      }}</router-link>
+      <router-link class="breadcrumbs__link" :to="link.to">{{ link.name }}</router-link>
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
@@ -14,66 +12,65 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, watchEffect, toRefs, defineProps, computed } from "vue";
-import { useRouter } from "vue-router";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
+import { reactive, watchEffect, toRefs, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
 type Props = {
-  size?: "sm" | "md" | "lg";
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  color?: string;
-  chevronColor?: string;
-  activeColor?: string;
-};
+  size?: 'sm' | 'md' | 'lg'
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  color?: string
+  chevronColor?: string
+  activeColor?: string
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { size, font, weight, color, chevronColor, activeColor } = toRefs(props);
+const { size, font, weight, color, chevronColor, activeColor } = toRefs(props)
 
-const router = useRouter();
+const router = useRouter()
 
 type ParsedLink = {
-  to: string;
-  name?: string;
-};
+  to: string
+  name?: string
+}
 
-const parsedLinks = reactive([] as ParsedLink[]);
+const parsedLinks = reactive([] as ParsedLink[])
 
 watchEffect(() => {
-  parsedLinks.splice(0, parsedLinks.length + 1);
+  parsedLinks.splice(0, parsedLinks.length + 1)
   parsedLinks.push(
     ...router.currentRoute.value.fullPath
-      .split("/")
+      .split('/')
       .reduce<Array<Array<string>>>(
         (acc, value, index) => (
           (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
         ),
-        []
+        [],
       )
-      .map((el) => el.join("/"))
+      .map((el) => el.join('/'))
       .map((el) => el)
       .filter((el) => !!el)
       .map((to) => ({
         to,
-        name: router.getRoutes().filter(({ path }) => path === to)[0]
-          .name as string,
-      }))
-  );
-});
+        name: router.getRoutes().filter(({ path }) => path === to)[0].name as string,
+      })),
+  )
+})
 
 const getVars = computed(() => ({
-  "--chevron-color": chevronColor?.value || variables.gray500,
-  "--active-color": activeColor?.value || variables.gray800,
-  "--color": color?.value || variables.primaryAccent,
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--chevron-color': chevronColor?.value || variables.gray500,
+  '--active-color': activeColor?.value || variables.gray800,
+  '--color': color?.value || variables.primaryAccent,
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .breadcrumbs {
   font-family: var(--font);
@@ -97,7 +94,7 @@ const getVars = computed(() => ({
 
     &:not(.router-link-exact-active)::after {
       position: absolute;
-      content: "";
+      content: '';
       opacity: 0;
       display: block;
       width: calc(100% + 6px);

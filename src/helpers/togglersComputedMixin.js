@@ -7,7 +7,7 @@ export default {
      * @returns {boolean}
      */
     hasSlotData() {
-      return !this.$slots?.default;
+      return !this.$slots?.default
     },
 
     /**
@@ -16,7 +16,7 @@ export default {
      * @returns {object}
      */
     mergedCustomStyles() {
-      return Object.assign({}, this.labelStyle, this.inputStyleVariables);
+      return Object.assign({}, this.labelStyle, this.inputStyleVariables)
     },
 
     /**
@@ -25,25 +25,17 @@ export default {
      */
     inputStyleVariables() {
       return {
-        "--input-border-color": this.inputStyle.borderColor || null,
-        "--input-background-color": this.inputStyle.backgroundColor || null,
-        "--input-border-color-hover":
-          this.inputStyle.hover?.borderColor || null,
-        "--input-background-color-hover":
-          this.inputStyle.hover?.backgroundColor || null,
-        "--input-border-color-active":
-          this.inputStyle.active?.borderColor || null,
-        "--input-background-color-active":
-          this.inputStyle.active?.backgroundColor || null,
-        "--input-border-color-checked":
-          this.inputStyle.checked?.borderColor || null,
-        "--input-background-color-checked":
-          this.inputStyle.checked?.backgroundColor || null,
-        "--input-border-color-disabled":
-          this.inputStyle.disabled?.borderColor || null,
-        "--input-background-color-disabled":
-          this.inputStyle.disabled?.backgroundColor || null,
-      };
+        '--input-border-color': this.inputStyle.borderColor || null,
+        '--input-background-color': this.inputStyle.backgroundColor || null,
+        '--input-border-color-hover': this.inputStyle.hover?.borderColor || null,
+        '--input-background-color-hover': this.inputStyle.hover?.backgroundColor || null,
+        '--input-border-color-active': this.inputStyle.active?.borderColor || null,
+        '--input-background-color-active': this.inputStyle.active?.backgroundColor || null,
+        '--input-border-color-checked': this.inputStyle.checked?.borderColor || null,
+        '--input-background-color-checked': this.inputStyle.checked?.backgroundColor || null,
+        '--input-border-color-disabled': this.inputStyle.disabled?.borderColor || null,
+        '--input-background-color-disabled': this.inputStyle.disabled?.backgroundColor || null,
+      }
     },
   },
-};
+}

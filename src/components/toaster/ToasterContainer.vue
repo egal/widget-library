@@ -1,11 +1,6 @@
 <template>
   <teleport to="body">
-    <transition-group
-      class="toaster"
-      :class="`toaster--${position}`"
-      name="toaster"
-      tag="div"
-    >
+    <transition-group class="toaster" :class="`toaster--${position}`" name="toaster" tag="div">
       <ToasterMessage
         class="toaster__toast"
         v-for="toast in toasts"
@@ -18,28 +13,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import eventBus from "src/helpers/eventBus";
-import { Toast, ToastParams } from "./index";
+import { defineComponent } from 'vue'
+import eventBus from '@/helpers/eventBus'
+import { Toast, ToastParams } from './index'
 
-import ToasterMessage from "./ToasterMessage.vue";
+import ToasterMessage from './ToasterMessage.vue'
 
 export default defineComponent({
-  name: "ToasterContainer",
+  name: 'ToasterContainer',
   components: {
     ToasterMessage,
   },
   props: {
     position: {
       type: String,
-      default: "top-right",
+      default: 'top-right',
       validator: (value: string): boolean => {
         return (
-          value === "top-right" ||
-          value === "top-left" ||
-          value === "bottom-right" ||
-          value === "bottom-left"
-        );
+          value === 'top-right' ||
+          value === 'top-left' ||
+          value === 'bottom-right' ||
+          value === 'bottom-left'
+        )
       },
     },
     reversed: {
@@ -52,27 +47,27 @@ export default defineComponent({
     },
     globalVariant: {
       type: String,
-      default: "light",
+      default: 'light',
       validator: (value: string): boolean => {
-        return value === "light" || value === "dark";
+        return value === 'light' || value === 'dark'
       },
     },
     globalInfoTitle: {
       type: String,
-      default: "Information",
+      default: 'Information',
     },
     globalInfoIcon: {
       type: String,
-      default: "info-circle",
+      default: 'info-circle',
       validator: (value: string) => !!value,
     },
     globalDangerTitle: {
       type: String,
-      default: "Danger",
+      default: 'Danger',
     },
     globalDangerIcon: {
       type: String,
-      default: "exclamation-triangle",
+      default: 'exclamation-triangle',
       validator: (value: string) => !!value,
     },
     globalFlat: {
@@ -84,13 +79,13 @@ export default defineComponent({
     return {
       toasts: [] as Toast[],
       toastsCounter: 0, // нужно для установки уникально ID
-    };
+    }
   },
   mounted() {
-    eventBus.$on("show", this.addToast);
+    eventBus.$on('show', this.addToast)
   },
   beforeUnmount() {
-    eventBus.$off("show");
+    eventBus.$off('show')
   },
   methods: {
     /**
@@ -100,9 +95,9 @@ export default defineComponent({
      * @param params - Параметры тоста, установленные при его вызове.
      */
     addToast(params: ToastParams): void {
-      const toast = this.formToast(params);
-      this.reversed ? this.toasts.unshift(toast) : this.toasts.push(toast);
-      this.toastsCounter++;
+      const toast = this.formToast(params)
+      this.reversed ? this.toasts.unshift(toast) : this.toasts.push(toast)
+      this.toastsCounter++
     },
 
     /**
@@ -116,15 +111,8 @@ export default defineComponent({
       return {
         id: `toast-${this.toastsCounter}`,
         title:
-          params.title ??
-          (params.type === "info"
-            ? this.globalInfoTitle
-            : this.globalDangerTitle),
-        icon:
-          params.icon ??
-          (params.type === "info"
-            ? this.globalInfoIcon
-            : this.globalDangerIcon),
+          params.title ?? (params.type === 'info' ? this.globalInfoTitle : this.globalDangerTitle),
+        icon: params.icon ?? (params.type === 'info' ? this.globalInfoIcon : this.globalDangerIcon),
         variant: params.variant || this.globalVariant,
         message: params.message,
         type: params.type,
@@ -132,7 +120,7 @@ export default defineComponent({
         secondaryAction: params.secondaryAction,
         flat: params.flat ?? this.globalFlat,
         duration: Number(this.duration),
-      };
+      }
     },
 
     /**
@@ -142,16 +130,16 @@ export default defineComponent({
      * @param toastId - ID тоста.
      */
     closeToast(toastId: string): void {
-      const toastIndex = this.toasts.findIndex((toast) => toast.id === toastId);
-      this.toasts.splice(toastIndex, 1);
-      eventBus.$emit("toast-closed", toastId);
+      const toastIndex = this.toasts.findIndex((toast) => toast.id === toastId)
+      this.toasts.splice(toastIndex, 1)
+      eventBus.$emit('toast-closed', toastId)
 
       if (!this.toasts.length) {
-        this.toastsCounter = 0;
+        this.toastsCounter = 0
       }
     },
   },
-});
+})
 </script>
 
 <style scoped lang="scss">

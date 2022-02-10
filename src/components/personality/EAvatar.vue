@@ -1,8 +1,8 @@
 <template>
   <div
-    :class="`avatar ${isOnline ? '--online' : ''} --shape-${
-      shape || 'circle'
-    } --size-${size || 'md'}`"
+    :class="`avatar ${isOnline ? '--online' : ''} --shape-${shape || 'circle'} --size-${
+      size || 'md'
+    }`"
     :style="getVars"
   >
     <img v-if="imgUrl" :src="imgUrl" :alt="name" class="avatar__img" />
@@ -17,26 +17,26 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, toRefs, computed } from "vue";
+import { toRefs, computed } from 'vue'
 //@ts-ignore
-import { variables, getFont, getFontWeight } from "@/helpers/configPersonality";
+import { variables, getFont, getFontWeight } from '@/helpers/configPersonality'
 
 type Props = {
-  imgUrl?: string;
-  name?: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
-  shape?: "square" | "circle";
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  color?: string;
-  bgColor?: string;
-  darken?: boolean;
-  borderColor?: string;
-  isOnline?: boolean;
-  isNameRequired?: boolean;
-};
+  imgUrl?: string
+  name?: string
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+  shape?: 'square' | 'circle'
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  color?: string
+  bgColor?: string
+  darken?: boolean
+  borderColor?: string
+  isOnline?: boolean
+  isNameRequired?: boolean
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const {
   imgUrl,
@@ -50,27 +50,27 @@ const {
   borderColor,
   isOnline,
   isNameRequired,
-} = toRefs(props);
+} = toRefs(props)
 
 const getVars = computed(() => ({
-  "--bg-color": bgColor?.value || variables.gray700,
-  "--border-color": borderColor?.value || variables.baseWhite,
-  "--color": color?.value || variables.baseWhite,
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--bg-color': bgColor?.value || variables.gray700,
+  '--border-color': borderColor?.value || variables.baseWhite,
+  '--color': color?.value || variables.baseWhite,
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 
 const getShortName = computed(() =>
   name?.value
-    ?.split(" ")
+    ?.split(' ')
     .filter((el, i, arr) => i === 0 || i === arr.length - 1)
-    .reduce((acc, el) => (acc += el[0]), "")
-    .toUpperCase()
-);
+    .reduce((acc, el) => (acc += el[0]), '')
+    .toUpperCase(),
+)
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .avatar {
   position: relative;
@@ -80,7 +80,7 @@ const getShortName = computed(() =>
   z-index: 0;
 
   &::after {
-    content: "";
+    content: '';
     display: none;
     position: absolute;
     border-radius: 50%;
@@ -227,7 +227,7 @@ const getShortName = computed(() =>
       }
 
       .avatar__name {
-        font-size: $p9-font-size;
+        font-size: $p8-font-size;
       }
     }
   }

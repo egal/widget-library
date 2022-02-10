@@ -1,8 +1,6 @@
 <template>
   <div
-    :class="`tooltip --size-${size || 'md'} --style-${
-      componentStyle || 'normal'
-    }`"
+    :class="`tooltip --size-${size || 'md'} --style-${componentStyle || 'normal'}`"
     :style="getVars"
   >
     <div class="tooltip__icon">
@@ -15,30 +13,30 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, toRefs, computed } from "vue";
-import { getFont, getFontWeight } from "src/helpers/configNavigation.js";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
+import { toRefs, computed } from 'vue'
+import { getFont, getFontWeight } from '@/helpers/configNavigation.js'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 
 type Props = {
-  position?: "left" | "right" | "top" | "bottom";
-  size?: "sm" | "md" | "lg";
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  componentStyle?: "light" | "normal";
-};
+  position?: 'left' | 'right' | 'top' | 'bottom'
+  size?: 'sm' | 'md' | 'lg'
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  componentStyle?: 'light' | 'normal'
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { size, font, weight, componentStyle, position } = toRefs(props);
+const { size, font, weight, componentStyle, position } = toRefs(props)
 
 const getVars = computed(() => ({
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .tooltip {
   position: relative;

@@ -5,15 +5,15 @@
       <icon icon="upload" />
       <span class="drop-label">Drop file here or</span>
       <file-upload
-          :accept="accept.length ? accept.join() : ''"
-          :multiple="multiple"
-          :disabled="disabled"
-          ref="inputFile"
-          :drop="true"
-          :maximum="maxFiles"
-          :size="maxSize"
-          @input-file="fileHandler"
-          v-show="multiple || !newFiles.length"
+        :accept="accept.length ? accept.join() : ''"
+        :multiple="multiple"
+        :disabled="disabled"
+        ref="inputFile"
+        :drop="true"
+        :maximum="maxFiles"
+        :size="maxSize"
+        @input-file="fileHandler"
+        v-show="multiple || !newFiles.length"
       >
         <span class="browse-label">Browse file</span>
       </file-upload>
@@ -37,10 +37,10 @@
 <script>
 import VueUploadComponent from 'vue-upload-component'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import variables from '@/assets/inputs/variables.scss'
+import variables from '@/assets/variables.scss'
 import { validate } from '@/helpers/validators'
 export default {
-  name: 'FileUploader',
+  name: 'EFileUploader',
   components: {
     FileUpload: VueUploadComponent,
     Icon: BootstrapIcon,
@@ -120,18 +120,18 @@ export default {
         '--file-border-radius': this.styleConfig?.fileBorderRadius || variables.allSidesSmall,
         '--file-icon-color': this.styleConfig?.fileIconColor || variables.gray500,
         '--file-name-font-weight':
-            this.styleConfig?.fileNameFontWeight || variables.mediumFontWeight,
+          this.styleConfig?.fileNameFontWeight || variables.mediumFontWeight,
         '--file-name-font-size': this.styleConfig?.fileNameFontSize || variables.p6FontSize,
         '--file-name-color': this.styleConfig?.fileNameColor || variables.gray800,
         '--file-size-font-weight':
-            this.styleConfig?.fileSizeFontWeight || variables.mediumFontWeight,
+          this.styleConfig?.fileSizeFontWeight || variables.mediumFontWeight,
         '--file-size-color': this.styleConfig?.fileSizeColor || variables.gray500,
         '--label-color': this.styleConfig?.labelColor || variables.gray700,
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--label-font-size': this.styleConfig?.labelFontSize || variables.p5FontSize,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-            this.styleConfig?.helperTextFontWeight || variables.mediumFontWeight,
+          this.styleConfig?.helperTextFontWeight || variables.mediumFontWeight,
         '--helper-text-font-size': this.styleConfig?.helperTextFontSize || variables.p6FontSize,
         '--border-color': this.styleConfig?.borderColor || variables.gray400,
         '--border-radius': this.styleConfig?.borderRadius || variables.allSidesSmall,
@@ -139,9 +139,9 @@ export default {
         '--drop-label-color': this.styleConfig?.dropLabelColor || variables.gray600,
         '--browse-label-color': this.styleConfig?.browseLabelColor || variables.info,
         '--uploader-labels-font-weight':
-            this.styleConfig?.uploaderLabelsFontWeight || variables.mediumFontWeight,
+          this.styleConfig?.uploaderLabelsFontWeight || variables.mediumFontWeight,
         '--uploader-labels-font-size':
-            this.styleConfig?.uploderLabelsFontSize || variables.p5FontSize,
+          this.styleConfig?.uploderLabelsFontSize || variables.p5FontSize,
       }
     },
   },
@@ -163,12 +163,12 @@ export default {
      */
     deleteFile(fileId) {
       fetch(`${this.domain}/${this.microservice}/${this.model}/delete/${fileId}`)
-          .then(() => {
-            this.$emit('on:delete', fileId)
-          })
-          .catch((error) => {
-            this.$emit('error:delete', error)
-          })
+        .then(() => {
+          this.$emit('on:delete', fileId)
+        })
+        .catch((error) => {
+          this.$emit('error:delete', error)
+        })
     },
     /**
      * Get file size in B, KB, MB or GB
@@ -196,13 +196,13 @@ export default {
           }),
           headers: { 'Content-Type': 'application/json' },
         })
-            .then((response) => response.json())
-            .then((data) => {
-              resolve(data.action_result.data)
-            })
-            .catch((error) => {
-              reject(this.$emit('error:upload', error))
-            })
+          .then((response) => response.json())
+          .then((data) => {
+            resolve(data.action_result.data)
+          })
+          .catch((error) => {
+            reject(this.$emit('error:upload', error))
+          })
       })
     },
     /**
@@ -259,14 +259,14 @@ export default {
           }),
           headers: { 'Content-Type': 'application/json' },
         })
-            .then((response) => response.json())
-            .then((data) => {
-              resolve(data.action_result.data.path)
-            })
-            .catch((error) => {
-              reject(error)
-              this.$emit('error:upload', error)
-            })
+          .then((response) => response.json())
+          .then((data) => {
+            resolve(data.action_result.data.path)
+          })
+          .catch((error) => {
+            reject(error)
+            this.$emit('error:upload', error)
+          })
       })
     },
     /**
@@ -289,23 +289,23 @@ export default {
             }),
             headers: { 'Content-Type': 'application/json' },
           })
-              .then((resp) => resp.json())
-              .then((response) => {
-                if (response.action_error || response.error_message) {
-                  reject(response.action_error || response.error_message)
-                  return
-                }
-                if (index < chunks.length - 1) {
-                  index++
-                  upload(self, index)
-                  return
-                }
-                resolve()
-              })
-              .catch((error) => {
-                this.$emit('error:upload', error)
-                reject(error)
-              })
+            .then((resp) => resp.json())
+            .then((response) => {
+              if (response.action_error || response.error_message) {
+                reject(response.action_error || response.error_message)
+                return
+              }
+              if (index < chunks.length - 1) {
+                index++
+                upload(self, index)
+                return
+              }
+              resolve()
+            })
+            .catch((error) => {
+              this.$emit('error:upload', error)
+              reject(error)
+            })
         }
       })
     },
@@ -324,12 +324,12 @@ export default {
           }),
           headers: { 'Content-Type': 'application/json' },
         })
-            .then((response) => response.json())
-            .then((data) => resolve(data.action_result.data.path))
-            .catch((error) => {
-              this.$emit('error:upload', error)
-              reject(error)
-            })
+          .then((response) => response.json())
+          .then((data) => resolve(data.action_result.data.path))
+          .catch((error) => {
+            this.$emit('error:upload', error)
+            reject(error)
+          })
       })
     },
     /**
@@ -347,15 +347,15 @@ export default {
           }),
           headers: { 'Content-Type': 'application/json' },
         })
-            .then((response) => response.json())
-            .then((data) => {
-              this.$emit('on:upload', data.action_result.data.id)
-              resolve(data.action_result.data.id)
-            })
-            .catch((error) => {
-              this.$emit('error:upload', error)
-              reject(error)
-            })
+          .then((response) => response.json())
+          .then((data) => {
+            this.$emit('on:upload', data.action_result.data.id)
+            resolve(data.action_result.data.id)
+          })
+          .catch((error) => {
+            this.$emit('error:upload', error)
+            reject(error)
+          })
       })
     },
     /**
@@ -373,13 +373,13 @@ export default {
       this.createUploadPath(file.name).then((createPathResponse) => {
         this.createChunks(file).then((chunks) => {
           this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
-              () => {
-                this.completeChunksUpload(createPathResponse.upload_id, createPathResponse.path).then(
-                    (path) => {
-                      this.createFile(path)
-                    },
-                )
-              },
+            () => {
+              this.completeChunksUpload(createPathResponse.upload_id, createPathResponse.path).then(
+                (path) => {
+                  this.createFile(path)
+                },
+              )
+            },
           )
         })
       })
@@ -396,7 +396,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import 'src/assets/inputs/variables';
+@import 'src/assets/variables';
 .file-uploader {
   display: flex;
   flex-direction: column;
@@ -436,7 +436,7 @@ export default {
     .browse-label {
       color: var(--browse-label-color);
     }
-    /deep/ label {
+    ::v-deep label {
       cursor: pointer;
     }
   }

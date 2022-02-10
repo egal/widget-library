@@ -1,8 +1,6 @@
 <template>
   <div
-    :class="`pagination --size-${size || 'md'} --style-${
-      componentStyle || 'normal'
-    }`"
+    :class="`pagination --size-${size || 'md'} --style-${componentStyle || 'normal'}`"
     :style="getVars"
   >
     <div class="pagination__left-arrow">
@@ -20,9 +18,7 @@
         </li>
         <li
           v-else-if="[2, numberOfPages - 1].includes(page)"
-          @click="
-            setPage(page > currentPage ? currentPage + 3 : currentPage - 3)
-          "
+          @click="setPage(page > currentPage ? currentPage + 3 : currentPage - 3)"
         >
           ...
         </li>
@@ -30,37 +26,34 @@
     </ul>
     <div class="pagination__right-arrow">
       <p>{{ rightArrowLabel }}</p>
-      <BootstrapIcon
-        icon="chevron-right"
-        class="pagination__right-arrow-icon"
-      />
+      <BootstrapIcon icon="chevron-right" class="pagination__right-arrow-icon" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, toRefs, ref, computed } from "vue";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
+import { toRefs, ref, computed } from 'vue'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
-const emit = defineEmits<{ (e: "update:modelValue", page: number): void }>();
+const emit = defineEmits<{ (e: 'update:modelValue', page: number): void }>()
 
 type Props = {
-  numberOfPages: number;
-  modelValue: number;
-  leftArrowLabel?: string;
-  rightArrowLabel?: string;
-  size?: "sm" | "md" | "lg";
-  componentStyle?: "normal" | "light";
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  color?: string;
-  activeColor?: string;
-  activeBackgroundColor?: string;
-  borderColor?: string;
-};
+  numberOfPages: number
+  modelValue: number
+  leftArrowLabel?: string
+  rightArrowLabel?: string
+  size?: 'sm' | 'md' | 'lg'
+  componentStyle?: 'normal' | 'light'
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  color?: string
+  activeColor?: string
+  activeBackgroundColor?: string
+  borderColor?: string
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const {
   numberOfPages,
@@ -75,38 +68,34 @@ const {
   activeColor,
   activeBackgroundColor,
   borderColor,
-} = toRefs(props);
+} = toRefs(props)
 
-const currentPage = ref(modelValue.value);
+const currentPage = ref(modelValue.value)
 
 const setPage = (page: number): void => {
-  currentPage.value = page;
-  emit("update:modelValue", page);
-};
+  currentPage.value = page
+  emit('update:modelValue', page)
+}
 
 const isInPageGroup = (page: number): boolean =>
-  [currentPage.value - 1, currentPage.value, currentPage.value + 1].includes(
-    page
-  ) ||
+  [currentPage.value - 1, currentPage.value, currentPage.value + 1].includes(page) ||
   (currentPage.value < 4 && page <= 4) ||
-  (currentPage.value > numberOfPages.value - 3 &&
-    page >= numberOfPages.value - 3) ||
+  (currentPage.value > numberOfPages.value - 3 && page >= numberOfPages.value - 3) ||
   page === 1 ||
-  page === numberOfPages.value;
+  page === numberOfPages.value
 
 const getVars = computed(() => ({
-  "--border-color": borderColor?.value || variables.gray300,
-  "--color": color?.value || variables.gray600,
-  "--active-color": activeColor?.value || variables.primaryAccent,
-  "--active-background-color":
-    activeBackgroundColor?.value || variables.accentOpacity1,
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--border-color': borderColor?.value || variables.gray300,
+  '--color': color?.value || variables.gray600,
+  '--active-color': activeColor?.value || variables.primaryAccent,
+  '--active-background-color': activeBackgroundColor?.value || variables.accentOpacity1,
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .pagination {
   display: flex;
@@ -160,7 +149,7 @@ const getVars = computed(() => ({
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 50%;
       width: 1px;

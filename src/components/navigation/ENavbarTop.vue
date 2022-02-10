@@ -12,10 +12,7 @@
         :key="link.to"
       >
         <li
-          :class="[
-            isActive && 'router-link-active',
-            isExactActive && 'router-link-exact-active',
-          ]"
+          :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
         >
           <a :href="href" @click="navigate"
             ><BootstrapIcon icon="circle" />
@@ -29,38 +26,38 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, defineProps, computed, ref } from "vue";
-import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-import { variables, getFont, getFontWeight } from "../../helpers/configNavigation";
+import { toRefs, computed } from 'vue'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
 type Link = {
-  name: string;
-  to: string;
-};
+  name: string
+  to: string
+}
 
 type Props = {
-  logo: string;
-  links: Link[];
-  font?: "Inter" | "Open Sans" | "Raleway";
-  weight?: "medium" | "regular" | "bold";
-  color?: string;
-  activeColor?: string;
-};
+  logo: string
+  links: Link[]
+  font?: 'Inter' | 'Open Sans' | 'Raleway'
+  weight?: 'medium' | 'regular' | 'bold'
+  color?: string
+  activeColor?: string
+}
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { font, weight, color, activeColor, logo, links } = toRefs(props);
+const { font, weight, color, activeColor, logo, links } = toRefs(props)
 
 const getVars = computed(() => ({
-  "--active-color": activeColor?.value || variables.primaryAccent,
-  "--color": color?.value || variables.gray800,
-  "--font": getFont(font?.value),
-  "--font-weight": getFontWeight(weight?.value),
-}));
+  '--active-color': activeColor?.value || variables.primaryAccent,
+  '--color': color?.value || variables.gray800,
+  '--font': getFont(font?.value),
+  '--font-weight': getFontWeight(weight?.value),
+}))
 </script>
 
 <style lang="scss" scoped>
-@import "src/assets/navigation/variables";
+@import 'src/assets/variables';
 
 .navbar {
   display: flex;
@@ -102,7 +99,7 @@ const getVars = computed(() => ({
         &::after {
           position: absolute;
           display: block;
-          content: "";
+          content: '';
           left: 50%;
           bottom: 0;
           width: calc(100% + 6px);

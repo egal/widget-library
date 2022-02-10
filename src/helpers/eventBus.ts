@@ -1,5 +1,5 @@
-import { TinyEmitter } from "tiny-emitter";
-const emitter = new TinyEmitter();
+import { TinyEmitter } from 'tiny-emitter'
+const emitter = new TinyEmitter()
 
 export default {
   // @ts-ignore
@@ -8,4 +8,4 @@ export default {
   $emit: (...args: any[]) => emitter.emit(...args),
   // @ts-ignore
   $off: (...args: any[]) => emitter.off(...args),
-};
+}

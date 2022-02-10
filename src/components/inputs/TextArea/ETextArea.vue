@@ -1,15 +1,15 @@
 <template>
   <div
-      class="textarea"
-      :class="[`textarea--${size}`, { 'textarea--error': errorMessage || error }]"
-      :style="getStyleVars"
+    class="textarea"
+    :class="[`textarea--${size}`, { 'textarea--error': errorMessage || error }]"
+    :style="getStyleVars"
   >
     <div class="textarea-label" v-if="label">{{ label }}</div>
     <textarea
-        @input="inputHandler"
-        v-model="newValue"
-        :disabled="disabled"
-        :placeholder="placeholder"
+      @input="inputHandler"
+      v-model="newValue"
+      :disabled="disabled"
+      :placeholder="placeholder"
     />
     <div class="textarea-helper-text" v-if="helperText || error || errorMessage">
       {{ error || errorMessage || helperText }}
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import { validate } from 'src/helpers/validators'
-import variables from 'src/assets/inputs/variables.scss'
+import { validate } from '@/helpers/validators'
+import variables from '@/assets/variables.scss'
 export default {
-  name: 'TextArea',
+  name: 'ETextArea',
   components: {},
   props: {
     label: {
@@ -73,7 +73,7 @@ export default {
         '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
         '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
         '--helper-text-font-weight':
-            this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
+          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
         '--border-color': this.styleConfig?.borderColor || variables.gray200,
         '--border-radius': this.styleConfig?.borderRadius || variables.allSidesLarge,
         '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
@@ -105,7 +105,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-@import 'src/assets/inputs/variables';
+@import 'src/assets/variables';
 .textarea {
   display: flex;
   flex-direction: column;

@@ -1,4 +1,4 @@
-@import 'variables';
+@import 'src/assets/variables';
 @import 'baseTogglersMixin';
 
 @mixin checkbox($pseudo-element: 'before') {
@@ -23,12 +23,11 @@
   #{$selector-checked}::#{$pseudo-element} {
     border-color: var(--input-border-color-checked);
     background-color: var(--input-background-color-checked);
-    background-image: url("~@/assets/icons/check-lg.svg");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='9' height='7' viewBox='0 0 9 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.32315 0.71967C7.61604 0.426777 8.09091 0.426777 8.38381 0.71967C8.67311 1.00897 8.67666 1.47582 8.39445 1.76947L4.40225 6.75973C4.39649 6.76693 4.39033 6.77381 4.38381 6.78033C4.09092 7.07322 3.61604 7.07322 3.32315 6.78033L0.676701 4.13388C0.383808 3.84099 0.383808 3.36612 0.676701 3.07322C0.969594 2.78033 1.44447 2.78033 1.73736 3.07322L3.83088 5.16674L7.30326 0.742105C7.30943 0.734235 7.31607 0.726743 7.32315 0.71967Z' fill='%23F7FAFC'/%3e%3c/svg%3e ");
   }
   #{$selector-disabled}::#{$pseudo-element} {
     border-color: var(--input-border-color-disabled);
-    background-image: url("~@/assets/icons/dash-lg.svg");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='8' height='2' viewBox='0 0 8 2' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 1C0 0.723858 0.223858 0.5 0.5 0.5H7.5C7.77614 0.5 8 0.723858 8 1C8 1.27614 7.77614 1.5 7.5 1.5H0.5C0.223858 1.5 0 1.27614 0 1Z' fill='%23E2E8F0'/%3e%3c/svg%3e");
     background-size: 50%;
   }
 }
-

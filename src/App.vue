@@ -8,11 +8,11 @@
   </div>
   <FileUploader :model-value="files" @on:delete="getFiles" multiple :max-files="100" />
   <avatar
-      darken
-      shape="square"
-      size="xxl"
-      name="Jonh Doe"
-      img-url="https://picsum.photos/200/300"
+    darken
+    shape="square"
+    size="xxl"
+    name="Jonh Doe"
+    img-url="https://picsum.photos/200/300"
   />
   <tag icon="star" cross-icon>Badge</tag>
   <tooltip>Some text here</tooltip>
@@ -22,66 +22,52 @@
     <ToasterContainer />
   </div>
   <div class="container">
-    <e-button class="test" rounded left-icon="chat" right-icon="chat"
-    >Button</e-button
-    >
+    <e-button class="test" rounded left-icon="chat" right-icon="chat">Button</e-button>
     <e-checkbox size="md" @change="test" checkbox-right>Checkbox</e-checkbox>
     <div class="radio-container">
       <e-radio
-          class="radio"
-          name="default"
-          @change="showRadio"
-          value="1"
-          :input-style="{ hover: { borderColor: 'black' } }"
-          radio-right
-          disabled
-      >Radio 2</e-radio
+        class="radio"
+        name="default"
+        @change="showRadio"
+        value="1"
+        :input-style="{ hover: { borderColor: 'black' } }"
+        radio-right
+        disabled
+        >Radio 2</e-radio
       >
-      <e-radio
-          class="radio"
-          name="default"
-          @change="showRadio"
-          value="2"
-          size="sm"
-      >Radio 1</e-radio
+      <e-radio class="radio" name="default" @change="showRadio" value="2" size="sm"
+        >Radio 1</e-radio
       >
-      <e-radio
-          class="radio"
-          name="default"
-          @change="showRadio"
-          value="3"
-          size="lg"
-      >Radio 3</e-radio
+      <e-radio class="radio" name="default" @change="showRadio" value="3" size="lg"
+        >Radio 3</e-radio
       >
     </div>
-    <e-toggle
-        class="toggle"
-        size="lg"
-        :input-style="{ backgroundColor: 'green' }"
-    >Toggle</e-toggle
-    >
+    <e-toggle class="toggle" size="lg" :input-style="{ backgroundColor: 'green' }">Toggle</e-toggle>
     <e-toggle class="toggle" disabled>Toggle</e-toggle>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import FileUploader from '@/components/inputs/FileUploader/FileUploader.vue'
-import Pagination from "@/components/navigation/Pagination.vue";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs.vue";
-import NavbarVertical from "@/components/navigation/NavbarVertical.vue";
-import NavbarHorizontal from "@/components/navigation/NavbarHorizontal.vue";
-import ToasterContainer from "@/components/toaster/ToasterContainer.vue";
-import Avatar from "@/components/personality/Avatar.vue";
-import Tag from "@/components/personality/Tag.vue";
-import Tooltip from "@/components/personality/Tooltip.vue";
-import EButton from "@/components/togglers/EButton.vue";
-import ECheckbox from "@/components/togglers/ECheckbox.vue";
-import ERadio from "@/components/togglers/ERadio.vue";
-import EToggle from "@/components/togglers/EToggle.vue";
+import FileUploader from '@/components/inputs/FileUploader/EFileUploader.vue'
+import Pagination from '@/components/navigation/EPagination.vue'
+import Breadcrumbs from '@/components/navigation/EBreadcrumbs.vue'
+import NavbarVertical from '@/components/navigation/ENavbarRight.vue'
+import NavbarHorizontal from '@/components/navigation/ENavbarTop.vue'
+import ToasterContainer from '@/components/toaster/ToasterContainer.vue'
+import Avatar from '@/components/personality/EAvatar.vue'
+import Tag from '@/components/personality/ETag.vue'
+import Tooltip from '@/components/personality/ETooltip.vue'
+import EButton from '@/components/togglers/EButton.vue'
+import ECheckbox from '@/components/togglers/ECheckbox.vue'
+import ERadio from '@/components/togglers/ERadio.vue'
+import EToggle from '@/components/togglers/EToggle.vue'
 export default defineComponent({
   name: 'App',
-  components: { FileUploader, ToasterContainer,EButton,
+  components: {
+    FileUploader,
+    ToasterContainer,
+    EButton,
     ECheckbox,
     ERadio,
     EToggle,
@@ -91,7 +77,7 @@ export default defineComponent({
     NavbarHorizontal,
     Avatar,
     Tag,
-    Tooltip
+    Tooltip,
   },
   data() {
     return {
@@ -189,43 +175,42 @@ export default defineComponent({
       ],
     }
   },
-  mounted(){
+  mounted() {
     this.getFiles()
   },
   methods: {
     showToaster(): void {
       this.$toaster.info({
-        message: "message",
-        primaryAction: "action",
-      });
+        message: 'message',
+        primaryAction: 'action',
+      })
     },
     showDanger(): void {
       this.$toaster.danger({
-        message: "message",
-        variant: "dark",
+        message: 'message',
+        variant: 'dark',
         flat: true,
-        primaryAction: "action",
+        primaryAction: 'action',
         primaryActionCallback: () => {
-          console.log("action danger primary");
+          console.log('action danger primary')
         },
-      });
+      })
     },
     test(ev) {
-      console.log(ev);
+      console.log(ev)
     },
     showRadio(ev) {
-      console.log(ev);
+      console.log(ev)
     },
     getFiles() {
       fetch('http://127.0.0.1:88/core/Document/getItems', {
         method: 'GET',
       })
-          .then((response) => response.json())
-          .then((data) => {
-            this.files = data.action_result.data.items
-          })
+        .then((response) => response.json())
+        .then((data) => {
+          this.files = data.action_result.data.items
+        })
     },
-
   },
 })
 </script>

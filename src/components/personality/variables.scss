@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Open+Sans:wght@400;500;700&family=Raleway:wght@400;500;700&display=swap');
 
-
 $primary: #5855fa;
 $secondary: #e4ecf7;
-$success: #66CB9F;
-$warning: #FFD363;
-$danger: #FB3337;
-$info: #3385FF;
+$success: #66cb9f;
+$warning: #ffd363;
+$danger: #fb3337;
+$info: #3385ff;
 $dark: #272937;
-$base-white: #FFFFFF;
+$base-white: #ffffff;
 $main-colors: (
   'primary': $primary,
   'secondary': $secondary,
@@ -20,28 +19,28 @@ $main-colors: (
 );
 
 // grey colors
-$gray-100:#F7FAFC;
-$gray-200:#EDF2F7;
-$gray-300:#E2E8F0;
-$gray-400:#CBD5E0;
-$gray-500:#A0AEC0;
-$gray-600:#718096;
-$gray-700:#4A5568;
-$gray-800:#2D3748;
+$gray-100: #f7fafc;
+$gray-200: #edf2f7;
+$gray-300: #e2e8f0;
+$gray-400: #cbd5e0;
+$gray-500: #a0aec0;
+$gray-600: #718096;
+$gray-700: #4a5568;
+$gray-800: #2d3748;
 
 // accent colors
-$pressed-accent:#005CE4;
-$primary-accent:#0066FF;
-$hover-accent:#3385FF;
-$accent-opacity-5:#80B3FF;
-$accent-opacity-3:#B3D2FF;
-$accent-opacity-1:#E5F0FF;
+$pressed-accent: #005ce4;
+$primary-accent: #0066ff;
+$hover-accent: #3385ff;
+$accent-opacity-5: #80b3ff;
+$accent-opacity-3: #b3d2ff;
+$accent-opacity-1: #e5f0ff;
 
 //box-shadow
 $shadow-sm: 0px 0px 1px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
 $shadow-default: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 4px 20px -2px rgba(50, 50, 71, 0.08);
 $shadow-lg: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 10px 16px rgba(20, 37, 63, 0.06);
-$shadow-xl:0px 0px 1px rgba(12, 26, 75, 0.1), 0px 20px 24px rgba(20, 37, 63, 0.06);
+$shadow-xl: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 20px 24px rgba(20, 37, 63, 0.06);
 $shadow-2xl: 0px 0px 1px rgba(12, 26, 75, 0.2), 0px 30px 40px rgba(20, 37, 63, 0.1);
 
 //border-radius

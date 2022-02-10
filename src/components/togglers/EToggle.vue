@@ -1,10 +1,7 @@
 <template>
   <label
     class="e-toggle"
-    :class="[
-      `e-toggle--${size}`,
-      toggleRight ? 'e-toggle--right' : 'e-toggle--left',
-    ]"
+    :class="[`e-toggle--${size}`, toggleRight ? 'e-toggle--right' : 'e-toggle--left']"
   >
     <input
       type="checkbox"
@@ -24,10 +21,10 @@
 </template>
 
 <script>
-import togglersComputedMixin from "src/helpers/togglersComputedMixin";
+import togglersComputedMixin from '@/helpers/togglersComputedMixin'
 
 export default {
-  name: "EToggle",
+  name: 'EToggle',
   mixins: [togglersComputedMixin],
   props: {
     active: {
@@ -40,7 +37,7 @@ export default {
     },
     size: {
       type: String,
-      default: "md",
+      default: 'md',
     },
     toggleRight: {
       type: Boolean,
@@ -49,29 +46,29 @@ export default {
     labelStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
     inputStyle: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       },
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/togglers/variables";
-@import "src/assets/togglers/toggleMixin";
+@import 'src/assets/variables';
+@import 'src/assets/togglers/toggleMixin';
 
 .e-toggle {
   &--left {
-    @include toggle($pseudo-element: "before");
+    @include toggle($pseudo-element: 'before');
   }
   &--right {
-    @include toggle($pseudo-element: "left");
+    @include toggle($pseudo-element: 'left');
   }
 
   &--sm {
