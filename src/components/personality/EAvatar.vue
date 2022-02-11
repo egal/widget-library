@@ -16,57 +16,81 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { toRefs, computed } from 'vue'
-//@ts-ignore
-import { variables, getFont, getFontWeight } from '@/helpers/configPersonality'
-
-type Props = {
-  imgUrl?: string
-  name?: string
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
-  shape?: 'square' | 'circle'
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  color?: string
-  bgColor?: string
-  darken?: boolean
-  borderColor?: string
-  isOnline?: boolean
-  isNameRequired?: boolean
+<script>
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+export default {
+  name: 'EAvatar',
+  components: { BootstrapIcon },
+  props: {
+    font: {
+      type: String,
+      default: 'Open Sans',
+    },
+    weight: {
+      type: String,
+      default: 'bold',
+    },
+    color: {
+      type: String,
+      default: '',
+    },
+    bgColor: {
+      type: String,
+      default: '',
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: String,
+      default: 'md',
+    },
+    shape: {
+      type: String,
+      default: 'circle',
+    },
+    imgUrl: {
+      type: String,
+      default: '',
+    },
+    darken: {
+      type: Boolean,
+      default: false,
+    },
+    borderColor: {
+      type: String,
+      default: '#fff',
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
+    isNameRequired: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--bg-color': this.bgColor || '#4a5568',
+        '--border-color': this.borderColor || '#fff',
+        '--color': this.color || '#fff',
+        '--font': this.font,
+        '--font-weight': this.weight,
+      }
+    },
+    getShortName() {
+      let shortName = this.name
+        ?.split(' ')
+        .filter((el, i, arr) => i === 0 || i === arr.length - 1)
+        .reduce((acc, el) => (acc += el[0]), '')
+        .toUpperCase()
+      return shortName
+    },
+  },
 }
-
-const props = defineProps<Props>()
-
-const {
-  imgUrl,
-  name,
-  size,
-  shape,
-  font,
-  weight,
-  color,
-  bgColor,
-  borderColor,
-  isOnline,
-  isNameRequired,
-} = toRefs(props)
-
-const getVars = computed(() => ({
-  '--bg-color': bgColor?.value || variables.gray700,
-  '--border-color': borderColor?.value || variables.baseWhite,
-  '--color': color?.value || variables.baseWhite,
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
-
-const getShortName = computed(() =>
-  name?.value
-    ?.split(' ')
-    .filter((el, i, arr) => i === 0 || i === arr.length - 1)
-    .reduce((acc, el) => (acc += el[0]), '')
-    .toUpperCase(),
-)
 </script>
 
 <style scoped lang="scss">
@@ -155,6 +179,7 @@ const getShortName = computed(() =>
         font-size: $h1-font-size;
       }
     }
+
     &-xl {
       width: 82px;
       height: 82px;
@@ -170,6 +195,7 @@ const getShortName = computed(() =>
         font-size: $h2-font-size;
       }
     }
+
     &-lg {
       width: 64px;
       height: 64px;
@@ -185,6 +211,7 @@ const getShortName = computed(() =>
         font-size: $p1-font-size;
       }
     }
+
     &-md {
       width: 46px;
       height: 46px;
@@ -200,6 +227,7 @@ const getShortName = computed(() =>
         font-size: $p2-font-size;
       }
     }
+
     &-sm {
       width: 36px;
       height: 36px;
@@ -215,6 +243,7 @@ const getShortName = computed(() =>
         font-size: $p4-font-size;
       }
     }
+
     &-xs {
       width: 24px;
       height: 24px;

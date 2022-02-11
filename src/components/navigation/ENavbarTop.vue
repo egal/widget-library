@@ -25,35 +25,51 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { toRefs, computed } from 'vue'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
-
-type Link = {
-  name: string
-  to: string
+export default {
+  name: 'ENavbarTop',
+  components: { BootstrapIcon },
+  data() {
+    return {}
+  },
+  props: {
+    font: {
+      type: String,
+      default: '',
+    },
+    weight: {
+      type: String,
+      default: '',
+    },
+    color: {
+      type: String,
+      default: '',
+    },
+    activeColor: {
+      type: String,
+      default: '',
+    },
+    logo: {
+      type: String,
+      required: true,
+    },
+    links: {
+      type: Array,
+      required: true,
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--active-color': this.activeColor || '#0066FF',
+        '--color': this.color || '#2D3748',
+        '--font': this.font || 'Open Sans',
+        '--font-weight': this.weight || 'bold',
+      }
+    },
+  },
 }
-
-type Props = {
-  logo: string
-  links: Link[]
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  color?: string
-  activeColor?: string
-}
-
-const props = defineProps<Props>()
-
-const { font, weight, color, activeColor, logo, links } = toRefs(props)
-
-const getVars = computed(() => ({
-  '--active-color': activeColor?.value || variables.primaryAccent,
-  '--color': color?.value || variables.gray800,
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
 </script>
 
 <style lang="scss" scoped>

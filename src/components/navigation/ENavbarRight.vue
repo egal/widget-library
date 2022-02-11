@@ -1,17 +1,12 @@
 <template>
-  <div
-    class="navbar"
-    :class="{ '--big': active }"
-    :style="getVars"
-    @mouseover="!isTransiring ? ((active = true), (isTransiring = true)) : ''"
-    ref="navbar"
-  >
+  <div class="navbar" :class="{ '--big': active }" :style="getVars" ref="navbar">
     <div class="navbar__logo-group">
       <img
         :src="smallLogo"
         class="navbar__logo-group__big-logo"
         :class="{ '--hidden': active }"
         alt="logo"
+        @click=";(active = true), (isTransiring = false)"
       />
       <img
         :src="logo"
@@ -37,9 +32,9 @@
         <li
           :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
         >
-          <a :href="href" @click="navigate"
-            ><BootstrapIcon icon="circle" />
-            <p>{{ link.name }}</p></a
+          <a :href="href" @click="navigate">
+            <BootstrapIcon icon="circle" />
+            <p v-if="active">{{ link.name }}</p></a
           >
         </li>
       </router-link>
@@ -47,52 +42,65 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { toRefs, computed, ref, onMounted } from 'vue'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
-type Link = {
-  name: string
-  to: string
+export default {
+  name: 'ENavbarRight',
+  components: { BootstrapIcon },
+  data() {
+    return {
+      active: true,
+      isTransiring: false,
+      navbar: null,
+    }
+  },
+  props: {
+    font: {
+      type: String,
+      default: '',
+    },
+    weight: {
+      type: String,
+      default: '',
+    },
+    color: {
+      type: String,
+      default: '',
+    },
+    activeColor: {
+      type: String,
+      default: '',
+    },
+    logo: {
+      type: String,
+      required: true,
+    },
+    links: {
+      type: Array,
+      required: true,
+    },
+    smallLogo: {
+      type: String,
+      required: true,
+    },
+    chevronColor: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--chevron-color': this.chevronColor || '#a0aec0',
+        '--active-color': this.activeColor || '#0066ff',
+        '--color': this.color || '#2d3748',
+        '--font': this.font || 'Open Sans',
+        '--font-weight': this.weight || 'bold',
+      }
+    },
+  },
 }
-
-type Props = {
-  logo: string
-  smallLogo: string
-  links: Link[]
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  color?: string
-  activeColor?: string
-  chevronColor?: string
-}
-
-const props = defineProps<Props>()
-
-const { font, weight, color, activeColor, chevronColor, links } = toRefs(props)
-
-const active = ref(false)
-
-const isTransiring = ref(false)
-
-const navbar = ref<HTMLElement>(null as any)
-
-defineExpose({ navbar })
-
-onMounted(() => {
-  navbar.value?.addEventListener('transitionend', () => {
-    isTransiring.value = false
-  })
-})
-
-const getVars = computed(() => ({
-  '--chevron-color': chevronColor?.value || variables.gray500,
-  '--active-color': activeColor?.value || variables.primaryAccent,
-  '--color': color?.value || variables.gray800,
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
 </script>
 
 <style scoped lang="scss">
@@ -105,7 +113,12 @@ const getVars = computed(() => ({
   font-weight: var(--font-weight);
   transition: all 0.3s;
   width: 66px;
-
+  height: 100vh;
+  border-right: 1px solid $gray-200;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: $base-white;
   &.--big {
     width: 250px;
 
@@ -127,6 +140,9 @@ const getVars = computed(() => ({
       height: 100%;
       object-fit: contain;
       object-position: left;
+    }
+    &__small-logo {
+      cursor: pointer;
     }
 
     &__chevron {

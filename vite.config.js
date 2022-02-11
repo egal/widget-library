@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import typescript from '@rollup/plugin-typescript'
+
 import path from 'path'
 
 export default defineConfig({
@@ -26,6 +28,7 @@ export default defineConfig({
           '@dvuckovic/vue3-bootstrap-icons': '@dvuckovic/vue3-bootstrap-icons',
         },
       },
+      plugins: [typescript({ sourceMap: false })],
     },
   },
   plugins: [vue()],
