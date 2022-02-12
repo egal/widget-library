@@ -18,7 +18,6 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import variables from '@/assets/variables.scss'
 
 export default {
   name: 'ECounter',
@@ -63,17 +62,16 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--value-color': this.styleConfig?.valueColor || variables.gray600,
-        '--value-font-weight': this.styleConfig?.valueFontWeight || variables.boldFontWeight,
-        '--label-color': this.styleConfig?.labelColor || variables.gray700,
-        '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
-        '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
-        '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.mediumFontWeight,
-        '--border-color': this.styleConfig?.borderColor || variables.gray200,
-        '--border-radius': this.styleConfig?.borderRadius || variables.allSidesLarge,
-        '--icon-color': this.styleConfig?.iconColor || variables.gray400,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--value-color': this.styleConfig?.valueColor || '#718096',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 700,
+        '--label-color': this.styleConfig?.labelColor || '#4a5568',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
+        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
+        '--border-radius': this.styleConfig?.borderRadius || '8px',
+        '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
       }
     },
   },

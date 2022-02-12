@@ -6,7 +6,7 @@
         class="navbar__logo-group__big-logo"
         :class="{ '--hidden': active }"
         alt="logo"
-        @click=";(active = true), (isTransiring = false)"
+        @click="openMenu"
       />
       <img
         :src="logo"
@@ -15,7 +15,7 @@
         alt="logo"
       />
       <BootstrapIcon
-        @click=";(active = false), (isTransiring = true)"
+        @click="closeMenu"
         class="navbar__logo-group__chevron"
         :class="{ '--hidden': !active }"
         icon="chevron-left"
@@ -58,19 +58,19 @@ export default {
   props: {
     font: {
       type: String,
-      default: '',
+      default: 'Open Sans',
     },
     weight: {
       type: String,
-      default: '',
+      default: 'bold',
     },
     color: {
       type: String,
-      default: '',
+      default: '#2d3748',
     },
     activeColor: {
       type: String,
-      default: '',
+      default: '#0066ff',
     },
     logo: {
       type: String,
@@ -86,18 +86,30 @@ export default {
     },
     chevronColor: {
       type: String,
-      default: '',
+      default: '#a0aec0',
     },
   },
   computed: {
     getVars() {
       return {
-        '--chevron-color': this.chevronColor || '#a0aec0',
-        '--active-color': this.activeColor || '#0066ff',
-        '--color': this.color || '#2d3748',
-        '--font': this.font || 'Open Sans',
-        '--font-weight': this.weight || 'bold',
+        '--chevron-color': this.chevronColor,
+        '--active-color': this.activeColor,
+        '--color': this.color,
+        '--font': this.font,
+        '--font-weight': this.weight,
       }
+    },
+  },
+  methods: {
+    openMenu() {
+      this.active = true
+      this.isTransiring = false
+      this.$emit('on:openMenu')
+    },
+    closeMenu() {
+      this.active = false
+      this.isTransiring = true
+      this.$emit('on:closeMenu')
     },
   },
 }
@@ -119,6 +131,7 @@ export default {
   top: 0;
   left: 0;
   background: $base-white;
+
   &.--big {
     width: 250px;
 
@@ -141,6 +154,7 @@ export default {
       object-fit: contain;
       object-position: left;
     }
+
     &__small-logo {
       cursor: pointer;
     }

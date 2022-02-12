@@ -58,7 +58,6 @@ import EDropdown from '@/components/inputs/Dropdown/EDropdown'
 import EClearButton from '@/components/inputs/ClearButton/EClearButton'
 import vClickOutside from 'click-outside-vue3'
 import { validate } from '@/helpers/validators'
-import variables from '@/assets/variables.scss'
 export default {
   name: 'ESelect',
   directives: {
@@ -150,27 +149,25 @@ export default {
     },
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--value-color': this.styleConfig?.valueColor || variables.gray500,
-        '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
-        '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray400,
-        '--placeholder-font-size': this.styleConfig?.placeholderFontSize || variables.p6FontSize,
-        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
-        '--label-color': this.styleConfig?.labelColor || variables.gray500,
-        '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
-        '--label-font-size': this.styleConfig?.labelFontSize || variables.p6FontSize,
-        '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
-        '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
-        '--border-color': this.styleConfig?.borderColor || variables.gray200,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--value-color': this.styleConfig?.valueColor || '#a0aec0',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
+        '--placeholder-font-size': this.styleConfig?.placeholderFontSize || '12px',
+        '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
+        '--label-color': this.styleConfig?.labelColor || '#a0aec0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--label-font-size': this.styleConfig?.labelFontSize || '12px',
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--focus-border-color': this.styleConfig?.focusBorderColor || variables.primaryAccent,
-        '--filled-background-color':
-          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
-        '--filled-font-color': this.styleConfig?.filledBackgroundColor || variables.info,
-        '--error-color': this.styleConfig?.errorColor || variables.danger,
-        '--arrow-color': this.styleConfig?.arrowColor || variables.gray400,
-        '--cross-color': this.styleConfig?.crossColor || variables.gray500,
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#0066ff',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
+        '--filled-font-color': this.styleConfig?.filledBackgroundColor || '#3385ff',
+        '--error-color': this.styleConfig?.errorColor || '#f16063',
+        '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
+        '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
       }
     },
   },

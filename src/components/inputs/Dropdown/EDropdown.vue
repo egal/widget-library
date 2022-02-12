@@ -39,7 +39,6 @@
 
 <script>
 import Input from '../Input/EInput'
-import variables from '@/assets/variables.scss'
 export default {
   name: 'EDropdown',
   components: { Input },
@@ -85,20 +84,21 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--option-color': this.styleConfig?.optionColor || variables.gray800,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sana',
+        '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
-          this.styleConfig?.optionHoverBackgroundColor || variables.gray200,
-        '--option-font-weight': this.styleConfig?.optionFontWeight || variables.regularFontWeight,
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || variables.info,
-        '--active-option-color': this.styleConfig?.activeOptionColor || variables.baseWhite,
-        '--group-name-color': this.styleConfig?.groupNameColor || variables.gray500,
-        '--group-name-font-weight':
-          this.styleConfig?.groupNameFontWeight || variables.boldFontWeight,
-        '--background-color': this.styleConfig?.bacckgroundColor || variables.baseWhite,
-        '--border-color': this.styleConfig?.borderColor || variables.gray200,
+          this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
+        '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
+        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
+        '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
+        '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
+        '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
+        '--background-color': this.styleConfig?.bacckgroundColor || '#ffffff',
+        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--box-shadow': this.styleConfig?.boxShadow || variables.shadowSm,
+        '--box-shadow':
+          this.styleConfig?.boxShadow ||
+          '0px 0px 1px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05)',
       }
     },
   },

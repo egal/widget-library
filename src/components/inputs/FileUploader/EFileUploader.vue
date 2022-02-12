@@ -37,7 +37,6 @@
 <script>
 import VueUploadComponent from 'vue-upload-component'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import variables from '@/assets/variables.scss'
 import { validate } from '@/helpers/validators'
 export default {
   name: 'EFileUploader',
@@ -115,33 +114,28 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--file-background-color': this.styleConfig?.fileBackgroundColor || variables.gray100,
-        '--file-border-radius': this.styleConfig?.fileBorderRadius || variables.allSidesSmall,
-        '--file-icon-color': this.styleConfig?.fileIconColor || variables.gray500,
-        '--file-name-font-weight':
-          this.styleConfig?.fileNameFontWeight || variables.mediumFontWeight,
-        '--file-name-font-size': this.styleConfig?.fileNameFontSize || variables.p6FontSize,
-        '--file-name-color': this.styleConfig?.fileNameColor || variables.gray800,
-        '--file-size-font-weight':
-          this.styleConfig?.fileSizeFontWeight || variables.mediumFontWeight,
-        '--file-size-color': this.styleConfig?.fileSizeColor || variables.gray500,
-        '--label-color': this.styleConfig?.labelColor || variables.gray700,
-        '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
-        '--label-font-size': this.styleConfig?.labelFontSize || variables.p5FontSize,
-        '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
-        '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.mediumFontWeight,
-        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || variables.p6FontSize,
-        '--border-color': this.styleConfig?.borderColor || variables.gray400,
-        '--border-radius': this.styleConfig?.borderRadius || variables.allSidesSmall,
-        '--icon-color': this.styleConfig?.iconColor || variables.gray600,
-        '--drop-label-color': this.styleConfig?.dropLabelColor || variables.gray600,
-        '--browse-label-color': this.styleConfig?.browseLabelColor || variables.info,
-        '--uploader-labels-font-weight':
-          this.styleConfig?.uploaderLabelsFontWeight || variables.mediumFontWeight,
-        '--uploader-labels-font-size':
-          this.styleConfig?.uploderLabelsFontSize || variables.p5FontSize,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--file-background-color': this.styleConfig?.fileBackgroundColor || '#f7fafc',
+        '--file-border-radius': this.styleConfig?.fileBorderRadius || '4px',
+        '--file-icon-color': this.styleConfig?.fileIconColor || '#a0aec0',
+        '--file-name-font-weight': this.styleConfig?.fileNameFontWeight || 500,
+        '--file-name-font-size': this.styleConfig?.fileNameFontSize || '12px',
+        '--file-name-color': this.styleConfig?.fileNameColor || '#2d3748',
+        '--file-size-font-weight': this.styleConfig?.fileSizeFontWeight || 500,
+        '--file-size-color': this.styleConfig?.fileSizeColor || '#a0aec0',
+        '--label-color': this.styleConfig?.labelColor || '#4a5568',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--label-font-size': this.styleConfig?.labelFontSize || '14px',
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
+        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
+        '--border-color': this.styleConfig?.borderColor || '#cbd5e0',
+        '--border-radius': this.styleConfig?.borderRadius || '4px',
+        '--icon-color': this.styleConfig?.iconColor || '#718096',
+        '--drop-label-color': this.styleConfig?.dropLabelColor || '#718096',
+        '--browse-label-color': this.styleConfig?.browseLabelColor || '#3385ff',
+        '--uploader-labels-font-weight': this.styleConfig?.uploaderLabelsFontWeight || 500,
+        '--uploader-labels-font-size': this.styleConfig?.uploderLabelsFontSize || '14px',
       }
     },
   },

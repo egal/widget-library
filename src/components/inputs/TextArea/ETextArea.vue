@@ -19,7 +19,6 @@
 
 <script>
 import { validate } from '@/helpers/validators'
-import variables from '@/assets/variables.scss'
 export default {
   name: 'ETextArea',
   components: {},
@@ -64,20 +63,19 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--value-color': this.styleConfig?.valueColor || variables.gray500,
-        '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
-        '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray500,
-        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
-        '--label-color': this.styleConfig?.labelColor || variables.gray800,
-        '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
-        '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
-        '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
-        '--border-color': this.styleConfig?.borderColor || variables.gray200,
-        '--border-radius': this.styleConfig?.borderRadius || variables.allSidesLarge,
-        '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
-        '--error-color': this.styleConfig?.errorColor || variables.danger,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--value-color': this.styleConfig?.valueColor || '#a0aec0',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#a0aec0',
+        '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
+        '--label-color': this.styleConfig?.labelColor || '#2d3748',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
+        '--border-radius': this.styleConfig?.borderRadius || '8px',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#3385ff',
+        '--error-color': this.styleConfig?.errorColor || '#f16063',
       }
     },
   },

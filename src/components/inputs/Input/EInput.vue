@@ -83,7 +83,6 @@
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import EClearButton from '@/components/inputs/ClearButton/EClearButton'
 import { validate } from '@/helpers/validators'
-import variables from '@/assets/variables.scss'
 export default {
   name: 'EInput',
   components: {
@@ -179,7 +178,7 @@ export default {
       default: true,
     },
     styleConfig: {
-      type: Boolean,
+      type: Object,
       default: () => {},
     },
   },
@@ -194,31 +193,27 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || variables.openSans,
-        '--value-color': this.styleConfig?.valueColor || variables.gray800,
-        '--value-font-weight': this.styleConfig?.valueFontWeight || variables.mediumFontWeight,
-        '--placeholder-color': this.styleConfig?.placeholderColor || variables.gray400,
-        '--placeholder-disabled-color':
-          this.styleConfig?.placeholderDisabledColor || variables.gray400,
-        '--label-color': this.styleConfig?.labelColor || variables.gray500,
-        '--label-font-weight': this.styleConfig?.labelFontWeight || variables.mediumFontWeight,
-        '--helper-text-color': this.styleConfig?.helperTextColor || variables.gray500,
-        '--helper-text-font-weight':
-          this.styleConfig?.helperTextFontWeight || variables.regularFontWeight,
-        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || variables.p6FontSize,
-        '--border-color': this.styleConfig?.borderColor || variables.gray200,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--value-color': this.styleConfig?.valueColor || '#2d3748',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
+        '--placeholder-disabled-color': this.styleConfig?.placeholderDisabledColor || '#cbd5e0',
+        '--label-color': this.styleConfig?.labelColor || '#a0aec0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
+        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
-        '--background-disabled-color':
-          this.styleConfig?.backgroundDisabledColor || variables.gray200,
-        '--focus-border-color': this.styleConfig?.focusBorderColor || variables.hoverAccent,
-        '--filled-background-color':
-          this.styleConfig?.filledBackgroundColor || variables.accentOpacity1,
-        '--filled-font-color': this.styleConfig?.filledFontColor || variables.info,
-        '--search-background-color': this.styleConfig?.searchBackgroundColor || variables.gray100,
-        '--icon-color': this.styleConfig?.iconColor || variables.gray400,
-        '--error-color': this.styleConfig?.errorColor || variables.danger,
-        '--success-color': this.styleConfig?.successColor || variables.success,
+        '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
+        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#edf2f7',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#3385ff',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
+        '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
+        '--search-background-color': this.styleConfig?.searchBackgroundColor || '#f7fafc',
+        '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
+        '--error-color': this.styleConfig?.errorColor || '#f16063',
+        '--success-color': this.styleConfig?.successColor || '#66cb9f',
       }
     },
   },

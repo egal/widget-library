@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import variables from '@/assets/variables.scss'
-
 export default {
   name: 'EClearButton',
   components: {},
@@ -46,10 +44,10 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--error-color': this.styleConfig?.errorColor || variables.danger,
-        '--success-color': this.styleConfig?.successColor || variables.success,
-        '--filled-color': this.styleConfig?.filledColor || variables.info,
-        '--color': this.styleConfig?.clearButtonColor || variables.gray400,
+        '--error-color': this.styleConfig?.errorColor || '#f16063',
+        '--success-color': this.styleConfig?.successColor || '#66cb9f',
+        '--filled-color': this.styleConfig?.filledColor || '#3385ff',
+        '--color': this.styleConfig?.clearButtonColor || '#cbd5e0',
       }
     },
   },
