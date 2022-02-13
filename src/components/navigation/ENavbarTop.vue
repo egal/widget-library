@@ -36,19 +36,19 @@ export default {
   props: {
     font: {
       type: String,
-      default: '',
+      default: 'Open Sans',
     },
     weight: {
       type: String,
-      default: '',
+      default: 'bold',
     },
     color: {
       type: String,
-      default: '',
+      default: '#2D3748',
     },
     activeColor: {
       type: String,
-      default: '',
+      default: '#0066FF',
     },
     logo: {
       type: String,
@@ -62,10 +62,10 @@ export default {
   computed: {
     getVars() {
       return {
-        '--active-color': this.activeColor || '#0066FF',
-        '--color': this.color || '#2D3748',
-        '--font': this.font || 'Open Sans',
-        '--font-weight': this.weight || 'bold',
+        '--active-color': this.activeColor,
+        '--color': this.color,
+        '--font': this.font,
+        '--font-weight': this.weight,
       }
     },
   },

@@ -11,30 +11,47 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { toRefs, computed } from 'vue'
-import { getFont, getFontWeight } from '@/helpers/configNavigation.js'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 
-type Props = {
-  position?: 'left' | 'right' | 'top' | 'bottom'
-  size?: 'sm' | 'md' | 'lg'
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  componentStyle?: 'light' | 'normal'
+export default {
+  name: 'ETooltip',
+  components: { BootstrapIcon },
+  data() {
+    return {}
+  },
+  props: {
+    font: {
+      type: String,
+      default: 'Open Sans',
+    },
+    weight: {
+      type: String,
+      default: 'bold',
+    },
+    position: {
+      type: String,
+      default: 'bottom',
+    },
+    componentStyle: {
+      type: String,
+      default: 'normal',
+    },
+    size: {
+      type: 'String',
+      default: 'md',
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--font': this.font,
+        '--font-weight': this.weight,
+      }
+    },
+  },
 }
-
-const props = defineProps<Props>()
-
-const { size, font, weight, componentStyle, position } = toRefs(props)
-
-const getVars = computed(() => ({
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
 </script>
-
 <style lang="scss" scoped>
 @import 'src/assets/variables';
 

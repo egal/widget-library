@@ -18,6 +18,7 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+
 export default {
   name: 'EAvatar',
   components: { BootstrapIcon },
@@ -32,11 +33,11 @@ export default {
     },
     color: {
       type: String,
-      default: '',
+      default: '#ffffff',
     },
     bgColor: {
       type: String,
-      default: '',
+      default: '#4a5568',
     },
     name: {
       type: String,
@@ -60,7 +61,7 @@ export default {
     },
     borderColor: {
       type: String,
-      default: '#fff',
+      default: '#ffffff',
     },
     isOnline: {
       type: Boolean,
@@ -74,20 +75,19 @@ export default {
   computed: {
     getVars() {
       return {
-        '--bg-color': this.bgColor || '#4a5568',
-        '--border-color': this.borderColor || '#fff',
-        '--color': this.color || '#fff',
+        '--bg-color': this.bgColor,
+        '--border-color': this.borderColor,
+        '--color': this.color,
         '--font': this.font,
         '--font-weight': this.weight,
       }
     },
     getShortName() {
-      let shortName = this.name
+      return this.name
         ?.split(' ')
         .filter((el, i, arr) => i === 0 || i === arr.length - 1)
         .reduce((acc, el) => (acc += el[0]), '')
         .toUpperCase()
-      return shortName
     },
   },
 }

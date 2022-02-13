@@ -11,64 +11,77 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { reactive, watchEffect, toRefs, computed } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
-
-type Props = {
-  size?: 'sm' | 'md' | 'lg'
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  color?: string
-  chevronColor?: string
-  activeColor?: string
-}
-
-const props = defineProps<Props>()
-
-const { size, font, weight, color, chevronColor, activeColor } = toRefs(props)
-
-const router = useRouter()
-
-type ParsedLink = {
-  to: string
-  name?: string
-}
-
-const parsedLinks = reactive([] as ParsedLink[])
-
-watchEffect(() => {
-  parsedLinks.splice(0, parsedLinks.length + 1)
-  parsedLinks.push(
-    ...router.currentRoute.value.fullPath
-      .split('/')
-      .reduce<Array<Array<string>>>(
-        (acc, value, index) => (
-          (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
-        ),
-        [],
+export default {
+  name: 'EBreadcrumbs',
+  components: { BootstrapIcon },
+  data() {
+    return {
+      parsedLinks: [],
+    }
+  },
+  props: {
+    font: {
+      type: String,
+      default: 'Open Sans',
+    },
+    weight: {
+      type: String,
+      default: 'bold',
+    },
+    size: {
+      type: String,
+      default: 'md',
+    },
+    color: {
+      type: String,
+      default: '#0066ff',
+    },
+    chevronColor: {
+      type: String,
+      default: '#a0aec0',
+    },
+    activeColor: {
+      type: String,
+      default: '#2d3748',
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--chevron-color': this.chevronColor,
+        '--active-color': this.activeColor,
+        '--color': this.color,
+        '--font': this.font,
+        '--font-weight': this.weight,
+      }
+    },
+  },
+  watch: {
+    parsedLinks() {
+      this.parsedLinks.splice(0, this.parsedLinks.length + 1)
+      this.parsedLinks.push(
+        ...this.router.currentRoute.value.fullPath
+          .split('/')
+          .reduce(
+            (acc, value, index) => (
+              (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
+            ),
+            [],
+          )
+          .map((el) => el.join('/'))
+          .map((el) => el)
+          .filter((el) => !!el)
+          .map((to) => ({
+            to,
+            name: this.router.getRoutes().filter(({ path }) => path === to)[0].name,
+          })),
       )
-      .map((el) => el.join('/'))
-      .map((el) => el)
-      .filter((el) => !!el)
-      .map((to) => ({
-        to,
-        name: router.getRoutes().filter(({ path }) => path === to)[0].name as string,
-      })),
-  )
-})
-
-const getVars = computed(() => ({
-  '--chevron-color': chevronColor?.value || variables.gray500,
-  '--active-color': activeColor?.value || variables.gray800,
-  '--color': color?.value || variables.primaryAccent,
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
+    },
+  },
+}
 </script>
-
 <style scoped lang="scss">
 @import 'src/assets/variables';
 

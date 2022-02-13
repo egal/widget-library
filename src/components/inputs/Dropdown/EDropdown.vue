@@ -93,7 +93,7 @@ export default {
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
-        '--background-color': this.styleConfig?.bacckgroundColor || '#ffffff',
+        '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--box-shadow':

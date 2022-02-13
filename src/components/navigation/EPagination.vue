@@ -31,69 +31,98 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { toRefs, ref, computed } from 'vue'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import { variables, getFont, getFontWeight } from '@/helpers/configNavigation'
 
-const emit = defineEmits<{ (e: 'update:modelValue', page: number): void }>()
-
-type Props = {
-  numberOfPages: number
-  modelValue: number
-  leftArrowLabel?: string
-  rightArrowLabel?: string
-  size?: 'sm' | 'md' | 'lg'
-  componentStyle?: 'normal' | 'light'
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  color?: string
-  activeColor?: string
-  activeBackgroundColor?: string
-  borderColor?: string
+export default {
+  name: 'EPagination',
+  components: { BootstrapIcon },
+  data() {
+    return {
+      currentPage: this.modelValue,
+    }
+  },
+  props: {
+    numberOfPages: {
+      type: Number,
+      required: true,
+    },
+    modelValue: {
+      type: Number,
+      required: true,
+    },
+    leftArrowLabel: {
+      type: String,
+      default: '',
+    },
+    rightArrowLabel: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String,
+      default: 'md',
+    },
+    componentStyle: {
+      type: String,
+      default: 'normal',
+    },
+    font: {
+      type: String,
+      default: 'Open Sans',
+    },
+    weight: {
+      type: String,
+      default: 'regular',
+    },
+    color: {
+      type: String,
+      default: '#718096',
+    },
+    activeColor: {
+      type: String,
+      default: '#0066ff',
+    },
+    activeBackgroundColor: {
+      type: String,
+      default: '#e5f0ff',
+    },
+    borderColor: {
+      type: String,
+      default: '#e2e8f0',
+    },
+  },
+  emits: ['update:modelValue'],
+  computed: {
+    getVars() {
+      return {
+        '--border-color': this.borderColor,
+        '--color': this.color,
+        '--active-color': this.activeColor,
+        '--active-background-color': this.activeBackgroundColor,
+        '--font': this.font,
+        '--font-weight': this.weight,
+      }
+    },
+    isInPageGroup(page) {
+      return (
+        [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(page) ||
+        (this.currentPage < 4 && page <= 4) ||
+        (this.currentPage > this.numberOfPages - 3 && page >= this.numberOfPages - 3) ||
+        page === 1 ||
+        page === this.numberOfPages
+      )
+    },
+  },
+  mounted() {},
+  methods: {
+    setPage(page) {
+      this.currentPage = page
+      this.$emit('update:modelValue', page)
+    },
+  },
 }
-
-const props = defineProps<Props>()
-
-const {
-  numberOfPages,
-  modelValue,
-  leftArrowLabel,
-  rightArrowLabel,
-  size,
-  componentStyle,
-  font,
-  weight,
-  color,
-  activeColor,
-  activeBackgroundColor,
-  borderColor,
-} = toRefs(props)
-
-const currentPage = ref(modelValue.value)
-
-const setPage = (page: number): void => {
-  currentPage.value = page
-  emit('update:modelValue', page)
-}
-
-const isInPageGroup = (page: number): boolean =>
-  [currentPage.value - 1, currentPage.value, currentPage.value + 1].includes(page) ||
-  (currentPage.value < 4 && page <= 4) ||
-  (currentPage.value > numberOfPages.value - 3 && page >= numberOfPages.value - 3) ||
-  page === 1 ||
-  page === numberOfPages.value
-
-const getVars = computed(() => ({
-  '--border-color': borderColor?.value || variables.gray300,
-  '--color': color?.value || variables.gray600,
-  '--active-color': activeColor?.value || variables.primaryAccent,
-  '--active-background-color': activeBackgroundColor?.value || variables.accentOpacity1,
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
 </script>
-
 <style lang="scss" scoped>
 @import 'src/assets/variables';
 
@@ -168,6 +197,7 @@ const getVars = computed(() => ({
       right: 0;
     }
   }
+
   &__right-arrow {
     p {
       margin-right: 4px;
@@ -209,6 +239,7 @@ const getVars = computed(() => ({
         }
       }
     }
+
     &-md {
       padding: 8px 10px;
       font-size: 12px;
@@ -239,6 +270,7 @@ const getVars = computed(() => ({
         }
       }
     }
+
     &-sm {
       padding: 6px 8px;
       font-size: 10px;

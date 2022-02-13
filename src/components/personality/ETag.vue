@@ -13,32 +13,59 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { toRefs, computed } from 'vue'
-import { getFont, getFontWeight } from '@/helpers/configPersonality'
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 
-type Props = {
-  size?: 'sm' | 'md' | 'lg'
-  shape?: 'square' | 'circle'
-  font?: 'Inter' | 'Open Sans' | 'Raleway'
-  weight?: 'medium' | 'regular' | 'bold'
-  icon?: string
-  crossIcon?: boolean
-  componentStyle?: 'light' | 'normal'
-  textStyle?: 'light' | 'normal'
+export default {
+  name: 'ETag',
+  components: { BootstrapIcon },
+  data() {
+    return {}
+  },
+  props: {
+    font: {
+      type: String,
+      default: 'Open Sans',
+    },
+    weight: {
+      type: String,
+      default: 'bold',
+    },
+    position: {
+      type: String,
+      default: 'bottom',
+    },
+    componentStyle: {
+      type: String,
+      default: 'normal',
+    },
+    size: {
+      type: 'String',
+      default: 'md',
+    },
+    shape: {
+      type: String,
+      default: 'square',
+    },
+    crossIcon: {
+      type: Boolean,
+      default: true,
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    getVars() {
+      return {
+        '--font': this.font,
+        '--font-weight': this.weight,
+      }
+    },
+  },
 }
-
-const props = defineProps<Props>()
-
-const { size, shape, font, weight, icon, crossIcon, componentStyle } = toRefs(props)
-
-const getVars = computed(() => ({
-  '--font': getFont(font?.value),
-  '--font-weight': getFontWeight(weight?.value),
-}))
 </script>
-
 <style lang="scss" scoped>
 @import 'src/assets/variables';
 
