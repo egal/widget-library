@@ -2,7 +2,7 @@ import EButton from './components/togglers/EButton.vue'
 import ECheckbox from './components/togglers/ECheckbox.vue'
 import ERadio from './components/togglers/ERadio.vue'
 import EToggle from './components/togglers/EToggle.vue'
-import EAvatar from '@/components/personality/EAvatar.vue'
+import EAvatar from './components/personality/EAvatar.vue'
 import ETag from './components/personality/ETag.vue'
 import ETooltip from './components/personality/ETooltip.vue'
 import EBreadcrumbs from './components/navigation/EBreadcrumbs.vue'
@@ -15,6 +15,7 @@ import EFileUploader from './components/inputs/FileUploader/EFileUploader.vue'
 import EInput from './components/inputs/Input/EInput.vue'
 import ESelect from './components/inputs/Select/ESelect.vue'
 import ETextArea from './components/inputs/TextArea/ETextArea.vue'
+import EWidget from './components/Widget.vue'
 
 export default {
   EButton,
@@ -34,4 +35,5 @@ export default {
   EInput,
   ESelect,
   ETextArea,
+  EWidget,
 }

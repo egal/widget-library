@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import VueUploadComponent from 'vue-upload-component'
+import VueUploadComponent from 'vue-upload-component/dist/vue-upload-component'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import { validate } from '@/helpers/validators'
 export default {

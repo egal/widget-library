@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-//    "declaration": true,
     "noImplicitAny": false,
     "strict": true,
     "jsx": "preserve",
@@ -13,9 +12,11 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "isolatedModules": true,
+    "useDefineForClassFields": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "vite/client"
     ],
     "paths": {
       "@/*": [
@@ -39,5 +40,5 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
 }

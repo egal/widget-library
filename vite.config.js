@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import typescript from '@rollup/plugin-typescript'
-
+import configRouterPlugin from 'vite-plugin-vue-router'
 import path from 'path'
 
 export default defineConfig({
@@ -31,5 +31,5 @@ export default defineConfig({
       plugins: [typescript({ sourceMap: false })],
     },
   },
-  plugins: [vue()],
+  plugins: [vue(), configRouterPlugin()],
 })
