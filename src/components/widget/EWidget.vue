@@ -4,6 +4,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
+
 export default {
   name: 'EWidget',
   props: {
@@ -25,47 +26,80 @@ export default {
   },
   computed: {
     component() {
+      let returnComponent
       if (this.type === 'counter') {
-        return () => defineAsyncComponent(() => import(`@/components/inputs/Counter/ECounter.vue`))
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/inputs/Counter/ECounter.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'input') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/inputs/Input/EInput.vue`))
+        return returnComponent
+      } else if (this.type === 'select') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/inputs/Select/ESelect.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'fileUploader') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/inputs/FileUploader/EFileUploader.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'dropDown') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/inputs/Dropdown/EDropdown.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'textArea') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/inputs/TextArea/ETextArea.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'breadcrumbs') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/navigation/EBreadcrumbs.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'navBarTop') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/navigation/ENavbarTop.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'navBarRight') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/navigation/ENavbarRight.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'pagination') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/navigation/EPagination.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'avatar') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/personality/EAvatar.vue`))
+        return returnComponent
+      } else if (this.type === 'tag') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/personality/ETag.vue`))
+        return returnComponent
+      } else if (this.type === 'tooltip') {
+        returnComponent = defineAsyncComponent(() =>
+          import(`@/components/personality/ETooltip.vue`),
+        )
+        return returnComponent
+      } else if (this.type === 'button') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/togglers/EButton.vue`))
+        return returnComponent
+      } else if (this.type === 'checkbox') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/togglers/ECheckbox.vue`))
+        return returnComponent
+      } else if (this.type === 'radio') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/togglers/ERadio.vue`))
+        return returnComponent
+      } else if (this.type === 'toggle') {
+        returnComponent = defineAsyncComponent(() => import(`@/components/togglers/EToggle.vue`))
+        return returnComponent
       }
-      return null
     },
-    //   if (this.type === 'Input') {
-    //     return () => import(`./inputs/Input/EInput`)
-    //   } else if (this.type === 'Select') {
-    //     return () => import(`./inputs/Select/ESelect`)
-    //   } else if (this.type === 'counter') {
-    //     return () => import(`./inputs/Counter/ECounter`)
-    //   } else if (this.type === 'FileUploader') {
-    //     return () => import(`./inputs/FileUploader/EFileUploader`)
-    //   } else if (this.type === 'DropDown') {
-    //     return () => import(`./inputs/Dropdown/EDropdown`)
-    //   } else if (this.type === 'TextArea') {
-    //     return () => import(`./inputs/TextArea/ETextArea`)
-    //   } else if (this.type === 'Breadcrumbs') {
-    //     return () => import(`./navigation/EBreadcrumbs`)
-    //   } else if (this.type === 'NavBarTop') {
-    //     return () => import(`./navigation/ENavbarTop`)
-    //   } else if (this.type === 'NavBarRight') {
-    //     return () => import(`./navigation/ENavbarRight`)
-    //   } else if (this.type === 'Pagination') {
-    //     return () => import(`./navigation/EPagination`)
-    //   } else if (this.type === 'Avatar') {
-    //     return () => import(`./personality/EAvatar`)
-    //   } else if (this.type === 'Tag') {
-    //     return () => import(`./personality/ETag`)
-    //   } else if (this.type === 'Tooltip') {
-    //     return () => import(`./personality/ETooltip`)
-    //   } else if (this.type === 'Button') {
-    //     return () => import(`./togglers/EButton`)
-    //   } else if (this.type === 'Checkbox') {
-    //     return () => import(`./togglers/ECheckbox`)
-    //   } else if (this.type === 'Radio') {
-    //     return () => import(`./togglers/ERadio`)
-    //   } else if (this.type === 'Toggle') {
-    //     return () => import(`./togglers/EToggle`)
-    //   }
-    // },
   },
 }
 </script>
