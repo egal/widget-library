@@ -27,14 +27,14 @@ export default {
   props: {
     data: {
       type: Object,
-      default: {
-        label: '',
+      default: () => ({
+        label: 'label',
         helperText: '',
         modelValue: 0,
         max: null,
         min: null,
         size: 'md',
-      },
+      }),
     },
     // label: {
     //   type: String,
