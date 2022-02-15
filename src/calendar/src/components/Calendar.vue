@@ -1,5 +1,16 @@
 <template>
   <div class="calendar">
+    <ul class="calendar__controls">
+      <li class="calendar__controls-left" @click="changeMonth(-1)">
+        <BootstrapIcon icon="chevron-left" />
+      </li>
+      <li class="calendar__controls-month">
+        {{ capitalize(displayOnlyMonth(curMonth)) }}
+      </li>
+      <li class="calendar__controls-right" @click="changeMonth(1)">
+        <BootstrapIcon icon="chevron-right" />
+      </li>
+    </ul>
     <ul class="calendar__weekdays">
       <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
     </ul>
@@ -10,8 +21,9 @@
         :class="{
           '--active': isDateSelected(date),
           '--in-range': isInDateRange(date) && !isDateSelected(date),
-          '--over-active': isOverOrOnDateSelected(date),
-          '--on-active': isOverOrOnDateSelected(date, 'on'),
+          '--beyond-active': isBeyondOrOnDateSelected(date, 'beyond'),
+          '--on-active': isBeyondOrOnDateSelected(date, 'on'),
+          '--not-cur-month': isDateInCurMonth(date, curMonth),
         }"
         @click="selectDate(date)"
         @mouseenter="queryHover(date)"
@@ -23,6 +35,8 @@
 </template>
 
 <script lang="ts" setup>
+import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
+
 import { ref, defineEmits } from "vue";
 
 interface ISODateDifferentiator extends String {
@@ -39,32 +53,38 @@ const capitalize = (word: string): string =>
 const formatToISODate = (el: Date): ISODate =>
   el.toISOString().slice(0, 10) as ISODate;
 
+const isDateInCurMonth = (date: ISODate | Date, curMonth: ISODate | Date) =>
+  new Date(date).getMonth() === new Date(curMonth).getMonth();
+
 const emit = defineEmits<{ (e: "selected", payload: ISODate[]): void }>();
 
-const dates = ref<ISODate[]>(
+const locale = ref<string>("us");
+
+const generateDates = (curMonth: Date): ISODate[] =>
   Array.from(
     new Set(
       new Array(31)
         .fill(1)
-        .map(() => new Date())
+        .map(() => new Date(curMonth))
         .map((el, i) => {
-          el.setUTCDate(i + 1);
+          el.setDate(i + 1);
           return el;
         })
-        .filter((el) => el.getMonth() === new Date().getMonth())
+        .filter((el) => isDateInCurMonth(el, curMonth))
         .map((el) => new Array(7).fill(el).map(generateWeekDaysFromIterator))
         .flat()
         .map(formatToISODate)
     )
-  )
-);
+  );
+
+const dates = ref<ISODate[]>(generateDates(new Date()));
 
 const weekdays = ref<string[]>(
   new Array(7)
     .fill(new Date())
-    .map((weekday, i) => generateWeekDaysFromIterator(weekday, i))
+    .map((weekday, i) => generateWeekDaysFromIterator(weekday, i - 1))
     .map((weekday) =>
-      weekday.toLocaleString("ru", {
+      weekday.toLocaleString(locale.value, {
         weekday: "short",
       })
     )
@@ -81,40 +101,50 @@ const isInDateRange = (day: ISODate): boolean => {
 
 const isDateSelected = (day: ISODate) => selectedDays.value.includes(day);
 
-const isOverOrOnDateSelected = (
+const isBeyondOrOnDateSelected = (
   day: ISODate,
-  mode: "over" | "on" = "over"
+  mode: "beyond" | "on" = "beyond"
 ): boolean => {
-  const [max, min] =
-    mode === "over"
-      ? selectedDays.value.map((el) => new Date(el)).sort()
-      : selectedDays.value
-          .map((el) => new Date(el))
-          .sort()
-          .reverse();
+  const [max, min] = selectedDays.value
+    .map((el) => new Date(el))
+    .sort((a, b) => a.getTime() - b.getTime());
 
-  if (!isInDateRange(day)) {
+  if (
+    !isInDateRange(day) ||
+    day === formatToISODate(max) ||
+    day === formatToISODate(min)
+  ) {
     return false;
   }
 
-  return (function generateValues(current): boolean {
-    return formatToISODate(current) === day &&
-      formatToISODate(current) !== formatToISODate(max) &&
-      formatToISODate(current) !== formatToISODate(min)
-      ? true
-      : isInDateRange(formatToISODate(current))
-      ? mode === "over"
-        ? generateValues(new Date(current.getTime() - 1000 * 60 * 60 * 24 * 7))
-        : generateValues(new Date(current.getTime() + 1000 * 60 * 60 * 24 * 7))
-      : false;
-  })(max);
+  return (mode === "on" ? min : max).getDay() === new Date(day)?.getDay();
 };
 
-const selectedDays = ref<ISODate[]>(["2022-02-13", "2022-02-28"] as ISODate[]);
+const curMonth = ref(
+  (() => {
+    const day = new Date();
+    day.setDate(1);
+    return day;
+  })()
+);
+
+const changeMonth = (shift: number): void => {
+  curMonth.value.setMonth(curMonth.value.getMonth() + shift);
+  curMonth.value = new Date(curMonth.value);
+  dates.value = generateDates(curMonth.value);
+};
+
+const selectedDays = ref<ISODate[]>([] as ISODate[]);
 
 const displayOnlyDay = (dateString: ISODate): string =>
-  new Date(dateString).toLocaleString("ru", {
+  new Date(dateString).toLocaleString(locale.value, {
     day: "numeric",
+  });
+
+const displayOnlyMonth = (dateString: ISODate): string =>
+  new Date(dateString).toLocaleString(locale.value, {
+    month: "long",
+    year: "numeric",
   });
 
 let mouseMayEnter = false;
@@ -144,6 +174,26 @@ const queryHover = (dateString: ISODate): void => {
   display: flex;
   flex-direction: column;
   width: fit-content;
+  padding: 24px 30px;
+
+  &__controls {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    height: 36px;
+
+    &-left,
+    &-right {
+      display: flex;
+      width: 36px;
+      height: 36px;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 
   &__weekdays,
   &__days {
@@ -204,14 +254,17 @@ const queryHover = (dateString: ISODate): void => {
           display: none;
         }
 
-        &.--over-active:nth-child(7n)::before {
+        &.--beyond-active:nth-child(7n)::before {
+          display: block;
           width: 100%;
           height: 12px;
-          left: 0px;
-          bottom: -8px;
+          left: unset;
+          bottom: unset;
+          right: 0;
+          top: -8px;
         }
 
-        &.--over-active:nth-child(7n + 1)::before {
+        &.--on-active:nth-child(7n + 1)::before {
           display: block;
           width: 50%;
           height: 12px;
@@ -219,10 +272,11 @@ const queryHover = (dateString: ISODate): void => {
           bottom: -8px;
         }
 
-        &.--on-active:nth-child(7n + 1)::after {
+        &.--beyond-active:nth-child(7n + 1)::before {
+          display: block;
           width: 100%;
           height: 12px;
-          right: 0;
+          left: 0;
           top: -8px;
         }
 
@@ -231,7 +285,9 @@ const queryHover = (dateString: ISODate): void => {
           width: 50%;
           height: 12px;
           right: 0;
-          top: -8px;
+          left: unset;
+          bottom: -8px;
+          top: unset;
         }
       }
     }
