@@ -15,7 +15,7 @@ import EFileUploader from './components/inputs/FileUploader/EFileUploader.vue'
 import EInput from './components/inputs/Input/EInput.vue'
 import ESelect from './components/inputs/Select/ESelect.vue'
 import ETextArea from './components/inputs/TextArea/ETextArea.vue'
-import EWidget from './components/Widget.vue'
+import EWidget from './components/widget/EWidget.vue'
 
 export default {
   EButton,

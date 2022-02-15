@@ -16,7 +16,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: `${path.resolve(__dirname, 'src/index.js')}`,
+      entry: `${path.resolve(__dirname, 'src/index.ts')}`,
       name: 'EgalWidgets',
       fileName: (format) => `egal-widgets-build.${format}.js`,
     },
@@ -31,5 +31,14 @@ export default defineConfig({
       plugins: [typescript({ sourceMap: false })],
     },
   },
-  plugins: [vue(), configRouterPlugin()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('e-'),
+        },
+      },
+    }),
+    configRouterPlugin(),
+  ],
 })

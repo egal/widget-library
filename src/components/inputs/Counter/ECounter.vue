@@ -1,6 +1,6 @@
 <template>
-  <div class="counter" :class="`counter--${size}`" :style="getStyleVars">
-    <div class="counter-label" v-if="label">{{ label }}</div>
+  <div class="counter" :class="`counter--${data.size}`" :style="getStyleVars">
+    <div class="counter-label" v-if="data.label">{{ data.label }}</div>
     <div class="counter-container">
       <div class="counter-container__minus">
         <b-icon icon="dash-lg" @click="decreaseValue" />
@@ -12,7 +12,7 @@
         <b-icon icon="plus-lg" @click="increaseValue" />
       </div>
     </div>
-    <div class="counter-helper-text" v-if="helperText">{{ helperText }}</div>
+    <div class="counter-helper-text" v-if="data.helperText">{{ data.helperText }}</div>
   </div>
 </template>
 
@@ -25,30 +25,40 @@ export default {
     BIcon: BootstrapIcon,
   },
   props: {
-    label: {
-      type: String,
-      default: '',
+    data: {
+      default: {
+        label: '',
+        helperText: '',
+        modelValue: 0,
+        max: null,
+        min: null,
+        size: 'md',
+      },
     },
-    helperText: {
-      type: String,
-      default: '',
-    },
-    modelValue: {
-      type: [Number, String],
-      default: 0,
-    },
-    max: {
-      type: [Number, String],
-      default: null,
-    },
-    min: {
-      type: [Number, String],
-      default: null,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
+    // label: {
+    //   type: String,
+    //   default: '',
+    // },
+    // helperText: {
+    //   type: String,
+    //   default: '',
+    // },
+    // modelValue: {
+    //   type: [Number, String],
+    //   default: 0,
+    // },
+    // max: {
+    //   type: [Number, String],
+    //   default: null,
+    // },
+    // min: {
+    //   type: [Number, String],
+    //   default: null,
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'md',
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
@@ -56,7 +66,7 @@ export default {
   },
   data() {
     return {
-      newValue: this.modelValue,
+      newValue: this.data.modelValue,
     }
   },
   computed: {
@@ -78,13 +88,13 @@ export default {
   mounted() {},
   methods: {
     increaseValue() {
-      if (!this.max || (this.max && this.newValue < this.max)) {
+      if (!this.data.max || (this.data.max && this.data.newValue < this.data.max)) {
         this.newValue++
       }
       this.$emit('update:modelValue', this.newValue)
     },
     decreaseValue() {
-      if (!this.min || (this.min && this.newValue > this.min)) {
+      if (!this.data.min || (this.data.min && this.newValue > this.data.min)) {
         this.newValue--
       }
       this.$emit('update:modelValue', this.newValue)
