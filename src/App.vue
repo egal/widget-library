@@ -1,4 +1,5 @@
 <template>
+  <h3>Pie Charts</h3>
   <div class="wrapper">
     <DonutChart :data="mockData1" header="Donat" description="Donat Description" :style-config="styleConfig1" center-label="Label" />
   </div>
@@ -11,6 +12,16 @@
   <div class="wrapper">
     <MultiProgressChart :data="mockData3" header="Multi Progress Chart" description="Multi Progress Chart Description" />
   </div>
+  <br />
+
+  <h3>Bar Charts</h3>
+  <div class="wrapper">
+
+  </div>
+  <div class="wrapper"></div>
+  <div class="wrapper">
+    <HorizontalBarChart :data="mockData1" header="Bar chart" description="Horizontal Bar Chart Description"  />
+  </div>
 </template>
 
 <script >
@@ -18,12 +29,14 @@ import { defineComponent } from 'vue'
 import DonutChart from "./components/DonutChart/DonutChart";
 import ProgressChart from "./components/ProgressChart/ProgressChart";
 import MultiProgressChart from "./components/MultiProgressChart/MultiProgressChart";
+import HorizontalBarChart from "@/components/HorizontalBarChart/HorizontalBarChart";
 
 
 
 export default defineComponent({
   name: 'App',
   components: {
+    HorizontalBarChart,
     MultiProgressChart,
     ProgressChart,
     DonutChart,

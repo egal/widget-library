@@ -101,8 +101,8 @@ export default {
   &-value {
      font-weight: bold;
      font-size: var(--center-font-size);
-     line-height: 16px;
-    color: var(--font-color);
+     //line-height: 16px;
+      color: var(--font-color);
      margin: 0 0 5px 0;
    }
 
