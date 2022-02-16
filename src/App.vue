@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <DonutChart :data="mockData1" chart-header="Donat" chart-description="Donat Description" :style-config="styleConfig1" center-label="dfggf" />
+    <DonutChart :data="mockData1" chart-header="Donat" chart-description="Donat Description" :style-config="styleConfig1" center-label="Label" />
   </div>
   <div class="wrapper">
     <ProgressChart :data="mockData2" :half="true" chart-header="Half Progress Chart" chart-description="Half Progress Chart Description" />
