@@ -37,6 +37,9 @@ export default {
         '--font-size': this.styleConfig?.fontSize || variables.p5FontSize,
         '--legend-font-size': this.styleConfig?.legendFontSize || variables.p6FontSize,
         '--center-font-size': this.styleConfig?.centerFontSize || variables.p6FontSize,
+        '--background-color': this.styleConfig?.backgroundColor || variables.baseWhite,
+        '--font-color': this.styleConfig?.fontColor || variables.gray800,
+        '--secondary-font-color': this.styleConfig?.secondaryFontColor || variables.gray500
       }
     },
   },
@@ -53,7 +56,7 @@ export default {
 .chart-wrapper {
   font-family: var(--font-family);
   padding: 24px;
-  background: $base-white;
+  background: var(--background-color);
   box-shadow: $shadow-sm;
   border-radius: 16px;
 
@@ -82,7 +85,7 @@ export default {
   align-self: flex-start;
   font-weight: bold;
   font-size: var(--font-size);
-  color: $gray-800;
+  color: var(--font-color);
 }
 
 .description {
@@ -90,7 +93,7 @@ export default {
   align-self: flex-start;
   font-weight: normal;
   font-size: var(--font-size);
-  color: $gray-500;
+  color: var(--secondary-font-color);
 }
 
 // center text styles
@@ -99,14 +102,14 @@ export default {
      font-weight: bold;
      font-size: var(--center-font-size);
      line-height: 16px;
-     color: $gray-800;
+    color: var(--font-color);
      margin: 0 0 5px 0;
    }
 
   &-label {
      margin: 0;
      font-size: var(--center-font-size);
-     color: $gray-500;
+    color: var(--secondary-font-color);
    }
 }
 
@@ -122,7 +125,7 @@ export default {
   font-style: normal;
   font-weight: $medium-font-weight;
   font-size: var(--legend-font-size);
-  color: $gray-800;
+  color: var(--font-color);
   margin: 4px 16px 0 0;
 
   &:last-child {

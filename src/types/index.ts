@@ -6,11 +6,14 @@ export interface styleConfigParams {
   fontSize?: string,
   legendFontSize?: string,
   centerFontSize?: string,
-  fontFamily?: string
+  fontFamily?: string,
+  backgroundColor?: string,
+  fontColor?: string,
+  secondaryFontColor?: string,
 }
 
 export interface metaData {
   label: string,
   value: number,
-  color?: string
+  color?: string,
 }

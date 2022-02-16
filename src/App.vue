@@ -1,15 +1,15 @@
 <template>
   <div class="wrapper">
-    <DonutChart :data="mockData1" chart-header="Donat" chart-description="Donat Description" :style-config="styleConfig1" center-label="Label" />
+    <DonutChart :data="mockData1" header="Donat" description="Donat Description" :style-config="styleConfig1" center-label="Label" />
   </div>
   <div class="wrapper">
-    <ProgressChart :data="mockData2" :half="true" chart-header="Half Progress Chart" chart-description="Half Progress Chart Description" />
+    <ProgressChart :data="mockData2" :half="true" header="Half Progress Chart" description="Half Progress Chart Description" />
   </div>
   <div class="wrapper">
-    <ProgressChart :data="mockData2" chart-header="Progress Chart" chart-description="Progress Chart Description" :style-config="styleConfig2" />
+    <ProgressChart :data="mockData2" header="Progress Chart" description="Progress Chart Description" :style-config="styleConfig2" />
   </div>
   <div class="wrapper">
-    <MultiProgressChart :data="mockData3" chart-header="Multi Progress Chart" chart-description="Multi Progress Chart Description" />
+    <MultiProgressChart :data="mockData3" header="Multi Progress Chart" description="Multi Progress Chart Description" />
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default defineComponent({
   data() {
     return {
       styleConfig1: {
-        chartSize: 200, legendFontSize: '10px', centerFontSize: '14px', fontSize: '18px'
+        chartSize: 200, legendFontSize: '10px', centerFontSize: '14px', fontSize: '18px', fontColor: '#66cb9f'
       },
       styleConfig2: {
         lineColor: 'green'
