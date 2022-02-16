@@ -1,18 +1,24 @@
 <template>
   <div
     class="textarea"
-    :class="[`textarea--${size}`, { 'textarea--error': errorMessage || error }]"
+    :class="[
+      `textarea--${mergedData.size}`,
+      { 'textarea--error': errorMessage || mergedData.error },
+    ]"
     :style="getStyleVars"
   >
-    <div class="textarea-label" v-if="label">{{ label }}</div>
+    <div class="textarea-label" v-if="mergedData.label">{{ mergedData.label }}</div>
     <textarea
       @input="inputHandler"
       v-model="newValue"
-      :disabled="disabled"
-      :placeholder="placeholder"
+      :disabled="mergedData.disabled"
+      :placeholder="mergedData.placeholder"
     />
-    <div class="textarea-helper-text" v-if="helperText || error || errorMessage">
-      {{ error || errorMessage || helperText }}
+    <div
+      class="textarea-helper-text"
+      v-if="mergedData.helperText || mergedData.error || errorMessage"
+    >
+      {{ mergedData.error || errorMessage || mergedData.helperText }}
     </div>
   </div>
 </template>
@@ -23,44 +29,63 @@ export default {
   name: 'ETextArea',
   components: {},
   props: {
-    label: {
-      type: String,
-      default: '',
+    data: {
+      type: Object,
+      default: () => {},
     },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    modelValue: {
-      type: String,
-      default: '',
-    },
-    helperText: {
-      type: String,
-      default: '',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    validators: {
-      type: Array,
-      default: () => [],
-    },
-    error: {
-      type: String,
-      default: '',
-    },
+    // label: {
+    //   type: String,
+    //   default: '',
+    // },
+    // placeholder: {
+    //   type: String,
+    //   default: '',
+    // },
+    // modelValue: {
+    //   type: String,
+    //   default: '',
+    // },
+    // helperText: {
+    //   type: String,
+    //   default: '',
+    // },
+    // disabled: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'md',
+    // },
+    // validators: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // error: {
+    //   type: String,
+    //   default: '',
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          label: '',
+          placeholder: '',
+          modelValue: '',
+          helperText: '',
+          disabled: false,
+          size: 'md',
+          validators: [],
+          error: '',
+        },
+        this.data,
+      )
+    },
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
@@ -79,17 +104,19 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.newValue = this.mergedData.modelValue
+  },
   data() {
     return {
-      newValue: this.modelValue,
+      newValue: '',
       errorMessage: '',
     }
   },
   methods: {
     inputHandler() {
-      if (this.validators.length) {
-        this.errorMessage = validate(this.validators, this.newValue)
+      if (this.mergedData.validators.length) {
+        this.errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', this.errorMessage)
       }
       this.$emit('update:modelValue', this.newValue)

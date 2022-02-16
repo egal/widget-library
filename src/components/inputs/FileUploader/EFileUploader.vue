@@ -1,19 +1,19 @@
 <template>
-  <div class="file-uploader" :class="`file-uploader--${size}`" :style="getStyleVars">
-    <span class="label" v-if="label">{{ label }}</span>
+  <div class="file-uploader" :class="`file-uploader--${mergedData.size}`" :style="getStyleVars">
+    <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
     <div class="upload-zone">
       <icon icon="upload" />
       <span class="drop-label">Drop file here or</span>
       <file-upload
-        :accept="accept.length ? accept.join() : ''"
-        :multiple="multiple"
-        :disabled="disabled"
+        :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
+        :multiple="mergedData.multiple"
+        :disabled="mergedData.disabled"
         ref="inputFile"
         :drop="true"
-        :maximum="maxFiles"
-        :size="maxSize"
+        :maximum="mergedData.maxFiles"
+        :size="mergedData.maxSize"
         @input-file="fileHandler"
-        v-show="multiple || !newFiles.length"
+        v-show="mergedData.multiple || !newFiles.length"
       >
         <span class="browse-label">Browse file</span>
       </file-upload>
@@ -25,12 +25,12 @@
         </div>
         <div class="file-name">{{ file.name || 'No name' }}</div>
         <div class="file-size">{{ fileSize(file.size) }}</div>
-        <div class="file-delete" @click.stop="deleteFile(file.id)" v-show="deletable">
+        <div class="file-delete" @click.stop="deleteFile(file.id)" v-show="mergedData.deletable">
           <icon icon="x-lg" />
         </div>
       </div>
     </div>
-    <span class="helper-text" v-if="helperText">{{ helperText }}</span>
+    <span class="helper-text" v-if="mergedData.helperText">{{ mergedData.helperText }}</span>
   </div>
 </template>
 
@@ -45,73 +45,98 @@ export default {
     Icon: BootstrapIcon,
   },
   props: {
-    modelValue: {
-      type: Array,
-      default: [],
+    data: {
+      type: Object,
+      default: () => {},
     },
-    label: {
-      type: String,
-      default: '',
-    },
-    helperText: {
-      type: String,
-      default: '',
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'sm',
-    },
-    validators: {
-      type: Array,
-      default: [],
-    },
-    accept: {
-      type: Array,
-      default: [],
-    },
-    maxFiles: {
-      type: Number,
-      default: 1,
-    },
-    maxSize: {
-      type: Number,
-      default: 0,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    deletable: {
-      type: Boolean,
-      default: true,
-    },
+    // modelValue: {
+    //   type: Array,
+    //   default: [],
+    // },
+    // label: {
+    //   type: String,
+    //   default: '',
+    // },
+    // helperText: {
+    //   type: String,
+    //   default: '',
+    // },
+    // multiple: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'sm',
+    // },
+    // validators: {
+    //   type: Array,
+    //   default: [],
+    // },
+    // accept: {
+    //   type: Array,
+    //   default: [],
+    // },
+    // maxFiles: {
+    //   type: Number,
+    //   default: 1,
+    // },
+    // maxSize: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // disabled: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // deletable: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // domain: {
+    //   type: String,
+    //   default: 'http://127.0.0.1:88',
+    // },
+    // microservice: {
+    //   type: String,
+    //   default: 'core',
+    // },
+    // model: {
+    //   type: String,
+    //   default: 'Document',
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
     },
-    domain: {
-      type: String,
-      default: 'http://127.0.0.1:88',
-    },
-    microservice: {
-      type: String,
-      default: 'core',
-    },
-    model: {
-      type: String,
-      default: 'Document',
-    },
   },
   data() {
     return {
-      newFiles: this.modelValue,
+      newFiles: [],
     }
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          modelValue: [],
+          label: '',
+          helperText: '',
+          multiple: false,
+          size: 'sm',
+          validators: [],
+          accept: [],
+          maxFiles: 1,
+          maxSize: 0,
+          disabled: false,
+          deletable: true,
+          domain: 'http://127.0.0.1:88',
+          microservice: 'core',
+          model: 'Document',
+        },
+        this.data,
+      )
+    },
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
@@ -139,7 +164,9 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.newFiles = this.mergedData.modelValue
+  },
   methods: {
     /**
      * Open file by link
@@ -156,7 +183,9 @@ export default {
      * @param fileId
      */
     deleteFile(fileId) {
-      fetch(`${this.domain}/${this.microservice}/${this.model}/delete/${fileId}`)
+      fetch(
+        `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/delete/${fileId}`,
+      )
         .then(() => {
           this.$emit('on:delete', fileId)
         })
@@ -183,13 +212,16 @@ export default {
      */
     createUploadPath(fileName) {
       return new Promise((resolve, reject) => {
-        fetch(`${this.domain}/${this.microservice}/${this.model}/createMultipartUpload`, {
-          method: 'POST',
-          body: JSON.stringify({
-            file_basename: fileName,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        })
+        fetch(
+          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/createMultipartUpload`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              file_basename: fileName,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
           .then((response) => response.json())
           .then((data) => {
             resolve(data.action_result.data)
@@ -245,14 +277,17 @@ export default {
      */
     uploadFile(file, fileName) {
       return new Promise((resolve, reject) => {
-        fetch(`${this.domain}/${this.microservice}/${this.model}/upload`, {
-          method: 'POST',
-          body: JSON.stringify({
-            file_basename: fileName,
-            contents: file,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        })
+        fetch(
+          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/upload`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              file_basename: fileName,
+              contents: file,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
           .then((response) => response.json())
           .then((data) => {
             resolve(data.action_result.data.path)
@@ -273,16 +308,19 @@ export default {
       return new Promise((resolve, reject) => {
         upload(this, 0)
         function upload(self, index) {
-          fetch(`${self.domain}/${self.microservice}/${self.model}/uploadPart`, {
-            method: 'POST',
-            body: JSON.stringify({
-              upload_id: uploadId,
-              path,
-              part_number: index,
-              contents: chunks[index],
-            }),
-            headers: { 'Content-Type': 'application/json' },
-          })
+          fetch(
+            `${self.mergedData.domain}/${self.mergedData.microservice}/${self.mergedData.model}/uploadPart`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                upload_id: uploadId,
+                path,
+                part_number: index,
+                contents: chunks[index],
+              }),
+              headers: { 'Content-Type': 'application/json' },
+            },
+          )
             .then((resp) => resp.json())
             .then((response) => {
               if (response.action_error || response.error_message) {
@@ -310,14 +348,17 @@ export default {
      */
     completeChunksUpload(uploadId, path) {
       return new Promise((resolve, reject) => {
-        fetch(`${this.domain}/${this.microservice}/${this.model}/completeMultipartUpload`, {
-          method: 'POST',
-          body: JSON.stringify({
-            upload_id: uploadId,
-            path,
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        })
+        fetch(
+          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/completeMultipartUpload`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              upload_id: uploadId,
+              path,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
           .then((response) => response.json())
           .then((data) => resolve(data.action_result.data.path))
           .catch((error) => {
@@ -332,15 +373,18 @@ export default {
      */
     createFile(path) {
       return new Promise((resolve, reject) => {
-        fetch(`${this.domain}/${this.microservice}/${this.model}/create`, {
-          method: 'POST',
-          body: JSON.stringify({
-            attributes: {
-              file_path: path,
-            },
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        })
+        fetch(
+          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/create`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              attributes: {
+                file_path: path,
+              },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
           .then((response) => response.json())
           .then((data) => {
             this.$emit('on:upload', data.action_result.data.id)
@@ -357,8 +401,8 @@ export default {
      * @param file
      */
     fileHandler(file) {
-      if (this.validators.length) {
-        const errorMessage = validate(this.validators, this.newValue)
+      if (this.mergedData.validators.length) {
+        const errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', errorMessage)
         if (errorMessage) {
           return

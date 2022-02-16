@@ -2,12 +2,12 @@
   <button
     class="egal-button"
     :class="[
-      `egal-button--${size}`,
-      { 'egal-button--soft': softColors },
-      { 'egal-button--rounded': rounded },
+      `egal-button--${mergedData.size}`,
+      { 'egal-button--soft': mergedData.softColors },
+      { 'egal-button--rounded': mergedData.rounded },
     ]"
     :style="customStyle"
-    :disabled="disabled"
+    :disabled="mergedData.disabled"
     @mouseover="isHover = true"
     @mouseout=";(isHover = false), (isActive = false)"
     @mousedown="isActive = true"
@@ -15,14 +15,14 @@
   >
     <BootstrapIcon
       class="egal-button__icon egal-button__icon--left"
-      :icon="leftIcon"
-      v-if="leftIcon"
+      :icon="mergedData.leftIcon"
+      v-if="mergedData.leftIcon"
     ></BootstrapIcon>
     <slot></slot>
     <BootstrapIcon
       class="egal-button__icon egal-button__icon--right"
-      :icon="rightIcon"
-      v-if="rightIcon"
+      :icon="mergedData.rightIcon"
+      v-if="mergedData.rightIcon"
     ></BootstrapIcon>
   </button>
 </template>
@@ -36,28 +36,32 @@ export default {
     BootstrapIcon,
   },
   props: {
-    disabled: {
-      type: Boolean,
-      default: false,
+    data: {
+      type: Object,
+      default: () => {},
     },
-    rounded: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    softColors: {
-      type: Boolean,
-      default: false,
-    },
-    leftIcon: {
-      type: String,
-    },
-    rightIcon: {
-      type: String,
-    },
+    // disabled: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // rounded: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'md',
+    // },
+    // softColors: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // leftIcon: {
+    //   type: String,
+    // },
+    // rightIcon: {
+    //   type: String,
+    // },
     styleConfig: {
       type: Object,
       default: () => {
@@ -69,10 +73,26 @@ export default {
     return {
       isHover: false,
       isActive: false,
-      isDisabled: this.disabled,
+      isDisabled: false,
     }
   },
+  mounted() {
+    this.isDisabled = this.mergedData.disabled
+  },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          disabled: false,
+          rounded: false,
+          size: 'md',
+          softColors: false,
+          leftIcon: '',
+          rightIcon: '',
+        },
+        this.data,
+      )
+    },
     /**
      * Возвращает стили состояний из объекта styleConfig в зависимости от флагов disabled, isActive, isHover
      * @returns {object}

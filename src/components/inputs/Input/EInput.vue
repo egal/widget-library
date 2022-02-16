@@ -1,37 +1,40 @@
 <template>
-  <div class="input" :class="`input--${size}`" :style="getStyleVars">
+  <div class="input" :class="`input--${mergedData.size}`" :style="getStyleVars">
     <label
       class="input-label"
-      :class="{ 'input-label--required': required }"
-      :for="id"
-      v-if="label"
-      >{{ label }}</label
+      :class="{ 'input-label--required': mergedData.required }"
+      :for="mergedData.id"
+      v-if="mergedData.label"
+      >{{ mergedData.label }}</label
     >
     <div
       class="input-container"
       :class="{
         search: type === 'search',
-        success: !error && !errorMessage && newValue && showSuccess,
-        error: (errorMessage || error) && showError,
+        success: !mergedData.error && !errorMessage && newValue && mergedData.showSuccess,
+        error: (errorMessage || mergedData.error) && mergedData.showError,
         filled:
-          !error &&
+          !mergedData.error &&
           !errorMessage &&
           newValue &&
-          !showSuccess &&
-          showFilled &&
+          !mergedData.showSuccess &&
+          mergedData.showFilled &&
           type !== 'search' &&
           type !== 'number',
       }"
     >
       <input
-        :id="id"
+        :id="mergedData.id"
         :type="type === 'search' ? 'text' : newType"
-        :placeholder="placeholder"
+        :placeholder="mergedData.placeholder"
         :value="newValue"
-        :maxlength="inputMaxLength"
-        :disabled="disabled"
-        :readonly="readonly"
-        :class="[iconLeft ? 'has-icon-left' : '', iconRight || clearable ? 'has-icon-right' : '']"
+        :maxlength="mergedData.inputMaxLength"
+        :disabled="mergedData.disabled"
+        :readonly="mergedData.readonly"
+        :class="[
+          mergedData.iconLeft ? 'has-icon-left' : '',
+          mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
+        ]"
         v-model="newValue"
         @input="inputHandler"
         autocomplete="off"
@@ -41,13 +44,13 @@
       />
       <b-icon
         :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
-        :icon="iconLeft"
-        v-if="iconLeft"
+        :icon="mergedData.iconLeft"
+        v-if="mergedData.iconLeft"
       />
       <b-icon
         :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
-        :icon="iconRight"
-        v-if="iconRight"
+        :icon="mergedData.iconRight"
+        v-if="mergedData.iconRight"
       />
       <b-icon
         class="icon icon--password"
@@ -55,26 +58,39 @@
         v-if="newValue && type === 'password'"
         @click.stop="showPassword"
       />
-      <div class="arrow-icons" v-if="type === 'number' && showArrows">
+      <div class="arrow-icons" v-if="type === 'number' && mergedData.showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
         <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
       </div>
       <EClearButton
         class="subtract-button"
-        :error="(!!error || !!errorMessage) && showError"
+        :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
-        v-show="clearable && newValue && type !== 'number' && type !== 'search'"
-        :size="size"
-        :success="!error && !errorMessage && newValue && showSuccess"
-        :filled="!error && !errorMessage && newValue && !showSuccess && showFilled"
+        v-show="mergedData.clearable && newValue && type !== 'number' && type !== 'search'"
+        :size="mergedData.size"
+        :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
+        :filled="
+          !mergedData.error &&
+          !errorMessage &&
+          newValue &&
+          !mergedData.showSuccess &&
+          mergedData.showFilled
+        "
         :style-config="styleConfig"
       />
     </div>
     <p
-      :class="['helper-text', (errorMessage || error) && showError ? 'helper-text--error' : '']"
-      v-if="errorMessage || error || helperText"
+      :class="[
+        'helper-text',
+        (errorMessage || mergedData.error) && mergedData.showError ? 'helper-text--error' : '',
+      ]"
+      v-if="errorMessage || mergedData.error || mergedData.helperText"
     >
-      {{ showError ? errorMessage || error || helperText : helperText }}
+      {{
+        mergedData.showError
+          ? errorMessage || mergedData.error || mergedData.helperText
+          : mergedData.helperText
+      }}
     </p>
   </div>
 </template>
@@ -90,93 +106,97 @@ export default {
     BIcon: BootstrapIcon,
   },
   props: {
-    id: {
-      type: String,
-      default: 'input-text',
+    data: {
+      type: Object,
+      default: () => {},
     },
-    type: {
-      type: String,
-      default: 'text',
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    error: {
-      type: String,
-      default: '',
-    },
-    showSuccess: {
-      type: Boolean,
-      default: false,
-    },
-    showFilled: {
-      type: Boolean,
-      default: true,
-    },
-    modelValue: {
-      type: [String, Number],
-      default: null,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    validators: {
-      type: Array,
-    },
-    helperText: {
-      type: String,
-      default: null,
-    },
-    iconLeft: {
-      type: String,
-      default: null,
-    },
-    iconRight: {
-      type: String,
-      default: null,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    showError: {
-      type: Boolean,
-      default: true,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    showArrows: {
-      type: Boolean,
-      default: true,
-    },
-    min: {
-      type: Number,
-      default: undefined,
-    },
-    max: {
-      type: Number,
-      default: undefined,
-    },
-    inputMaxLength: {
-      type: Number,
-      default: undefined,
-    },
-    readonly: {
-      type: Boolean,
-      default: false,
-    },
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
+    // id: {
+    //   type: String,
+    //   default: 'input-text',
+    // },
+    // type: {
+    //   type: String,
+    //   default: 'text',
+    // },
+    // placeholder: {
+    //   type: String,
+    //   default: '',
+    // },
+    // label: {
+    //   type: String,
+    //   default: '',
+    // },
+    // error: {
+    //   type: String,
+    //   default: '',
+    // },
+    // showSuccess: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // showFilled: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // modelValue: {
+    //   type: [String, Number],
+    //   default: null,
+    // },
+    // disabled: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // validators: {
+    //   type: Array,
+    // },
+    // helperText: {
+    //   type: String,
+    //   default: null,
+    // },
+    // iconLeft: {
+    //   type: String,
+    //   default: null,
+    // },
+    // iconRight: {
+    //   type: String,
+    //   default: null,
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'md',
+    // },
+    // showError: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // required: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // showArrows: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // min: {
+    //   type: Number,
+    //   default: undefined,
+    // },
+    // max: {
+    //   type: Number,
+    //   default: undefined,
+    // },
+    // inputMaxLength: {
+    //   type: Number,
+    //   default: undefined,
+    // },
+    // readonly: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // clearable: {
+    //   type: Boolean,
+    //   default: true,
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
@@ -184,13 +204,43 @@ export default {
   },
   data() {
     return {
-      newValue: this.modelValue || this.type === 'number' ? 0 : '',
-      newType: this.type,
+      newValue: '',
+      newType: '',
       errorMessage: '',
       passwordShown: false,
+      type: '',
     }
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          id: 'input-text',
+          type: 'text',
+          placeholder: '',
+          label: '',
+          error: '',
+          showSuccess: false,
+          showFilled: true,
+          modelValue: null,
+          disabled: false,
+          validators: [],
+          helperText: null,
+          iconLeft: null,
+          iconRight: null,
+          size: 'md',
+          showError: true,
+          required: false,
+          showArrows: true,
+          min: undefined,
+          max: undefined,
+          inputMaxLength: undefined,
+          readonly: false,
+          clearable: true,
+        },
+        this.data,
+      )
+    },
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
@@ -217,7 +267,10 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.newValue = this.mergedData.modelValue || this.mergedData.type === 'number' ? 0 : ''
+    this.type = this.mergedData.type ? this.mergedData.type : 'text'
+  },
   methods: {
     /**
      * Handle Input data based on Input type
@@ -227,8 +280,8 @@ export default {
         this.newValue = this.cutLetterSymbols(this.newValue)
         this.checkMinMaxValidity(this.newValue)
       }
-      if (this.validators?.length) {
-        this.errorMessage = validate(this.validators, this.newValue)
+      if (this.mergedData.validators?.length) {
+        this.errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', this.errorMessage)
       }
       this.$emit('update:modelValue', this.newValue)
@@ -254,14 +307,14 @@ export default {
         .replace('x', '.')
     },
     checkMinMaxValidity(value) {
-      if (this.max) {
-        if (Number(this.max) < Number(value)) {
-          this.newValue = this.max
+      if (this.mergedData.max) {
+        if (Number(this.mergedData.max) < Number(value)) {
+          this.newValue = this.mergedData.max
         }
       }
-      if (this.min) {
-        if (Number(this.min) > Number(value)) {
-          this.newValue = this.min
+      if (this.mergedData.min) {
+        if (Number(this.mergedData.min) > Number(value)) {
+          this.newValue = this.mergedData.min
         }
       }
     },
@@ -269,10 +322,10 @@ export default {
      * Increases the number by 1
      */
     increaseValue() {
-      if (this.type === 'number' && this.showArrows) {
+      if (this.type === 'number' && this.mergedData.showArrows) {
         const increasedNumber = Number(this.newValue) + 1
-        if (this.max !== undefined) {
-          if (increasedNumber <= Number(this.max)) {
+        if (this.mergedData.max !== undefined) {
+          if (increasedNumber <= Number(this.mergedData.max)) {
             this.newValue = increasedNumber
             this.$emit('update:modelValue', this.newValue)
           }
@@ -286,10 +339,10 @@ export default {
      * Decreases the number by 1
      */
     decreaseValue() {
-      if (this.type === 'number' && this.showArrows) {
+      if (this.type === 'number' && this.mergedData.showArrows) {
         const decreasedNumber = Number(this.newValue) - 1
-        if (this.min !== undefined) {
-          if (decreasedNumber >= Number(this.min)) {
+        if (this.mergedData.min !== undefined) {
+          if (decreasedNumber >= Number(this.mergedData.min)) {
             this.newValue = decreasedNumber
             this.$emit('update:modelValue', this.newValue)
           }

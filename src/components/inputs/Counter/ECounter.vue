@@ -1,6 +1,6 @@
 <template>
-  <div class="counter" :class="`counter--${data.size}`" :style="getStyleVars">
-    <div class="counter-label" v-if="data.label">{{ data.label }}</div>
+  <div class="counter" :class="`counter--${mergedData.size}`" :style="getStyleVars">
+    <div class="counter-label" v-if="mergedData.label">{{ mergedData.label }}</div>
     <div class="counter-container">
       <div class="counter-container__minus">
         <b-icon icon="dash-lg" @click="decreaseValue" />
@@ -12,7 +12,9 @@
         <b-icon icon="plus-lg" @click="increaseValue" />
       </div>
     </div>
-    <div class="counter-helper-text" v-if="data.helperText">{{ data.helperText }}</div>
+    <div class="counter-helper-text" v-if="mergedData.helperText">
+      {{ mergedData.helperText }}
+    </div>
   </div>
 </template>
 
@@ -27,39 +29,8 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => ({
-        label: 'label',
-        helperText: '',
-        modelValue: 0,
-        max: null,
-        min: null,
-        size: 'md',
-      }),
+      default: () => {},
     },
-    // label: {
-    //   type: String,
-    //   default: '',
-    // },
-    // helperText: {
-    //   type: String,
-    //   default: '',
-    // },
-    // modelValue: {
-    //   type: [Number, String],
-    //   default: 0,
-    // },
-    // max: {
-    //   type: [Number, String],
-    //   default: null,
-    // },
-    // min: {
-    //   type: [Number, String],
-    //   default: null,
-    // },
-    // size: {
-    //   type: String,
-    //   default: 'md',
-    // },
     styleConfig: {
       type: Object,
       default: () => {},
@@ -67,10 +38,23 @@ export default {
   },
   data() {
     return {
-      newValue: this.data.modelValue,
+      newValue: 0,
     }
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          label: 'label',
+          helperText: '',
+          modelValue: 0,
+          max: null,
+          min: null,
+          size: 'md',
+        },
+        this.data,
+      )
+    },
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
@@ -86,16 +70,18 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.newValue = this.mergedData.modelValue
+  },
   methods: {
     increaseValue() {
-      if (!this.data.max || (this.data.max && this.data.newValue < this.data.max)) {
+      if (!this.mergedData.max || (this.mergedData.max && newValue < this.mergedData.max)) {
         this.newValue++
       }
       this.$emit('update:modelValue', this.newValue)
     },
     decreaseValue() {
-      if (!this.data.min || (this.data.min && this.newValue > this.data.min)) {
+      if (!this.mergedData.min || (this.mergedData.min && this.newValue > this.mergedData.min)) {
         this.newValue--
       }
       this.$emit('update:modelValue', this.newValue)

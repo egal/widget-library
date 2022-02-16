@@ -1,31 +1,37 @@
 <template>
   <div
     class="select"
-    :class="[`select--${size}`, { 'select--error': showError && (error || errorMessage) }]"
+    :class="[
+      `select--${mergedData.size}`,
+      { 'select--error': mergedData.showError && (mergedData.error || errorMessage) },
+    ]"
     :style="getStyleVars"
   >
-    <div class="select-label">{{ label }}</div>
+    <div class="select-label">{{ mergedData.label }}</div>
     <div
       class="select-container"
-      :class="{ focus: showDropdown, filled: filled && !showDropdown && !error && !errorMessage }"
+      :class="{
+        focus: showDropdown,
+        filled: filled && !showDropdown && !mergedData.error && !errorMessage,
+      }"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
     >
       <div class="select-container__values">
         <div class="placeholder" v-show="!filled">
-          {{ placeholder }}
+          {{ mergedData.placeholder }}
         </div>
-        <div class="selected" v-if="multiple" v-for="option in selectModel">
-          <span>{{ option[shownKey] }}</span>
+        <div class="selected" v-if="mergedData.multiple" v-for="option in selectModel">
+          <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
-        <div class="selected" v-else>{{ selectModel[shownKey] }}</div>
+        <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
         <EClearButton
-          :error="showError && (errorMessage || error)"
-          :size="size"
-          :filled="filled && !error && !errorMessage"
+          :error="mergedData.showError && (errorMessage || mergedData.error)"
+          :size="mergedData.size"
+          :filled="filled && !mergedData.error && !errorMessage"
           :style-config="styleConfig"
           @delete="clearSelected"
         />
@@ -40,10 +46,10 @@
         class="dropdown-component"
         v-show="showDropdown"
         :value="selectModel"
-        :options="options"
-        :size="size"
-        :searchable="searchable"
-        :grouped="grouped"
+        :options="mergedData.options"
+        :size="mergedData.size"
+        :searchable="mergedData.searchable"
+        :grouped="mergedData.grouped"
         :style-config="dropdownStyleConfig"
         @select="selectOption"
         @click.native.stop
@@ -69,58 +75,62 @@ export default {
     BIcon: BootstrapIcon,
   },
   props: {
-    label: {
-      type: String,
-      default: '',
+    data: {
+      type: Object,
+      default: () => {},
     },
-    placeholder: {
-      type: String,
-      default: 'Select option',
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    clearable: {
-      type: Boolean,
-      default: true,
-    },
-    searchable: {
-      type: Boolean,
-      default: false,
-    },
-    multiple: {
-      type: Boolean,
-      default: false,
-    },
-    options: {
-      type: Array,
-      default: () => [],
-    },
-    modelValue: {
-      type: [Object, Array],
-      default: [],
-    },
-    shownKey: {
-      type: String,
-      default: 'name',
-    },
-    error: {
-      type: String,
-      default: '',
-    },
-    showError: {
-      type: Boolean,
-      default: true,
-    },
-    validators: {
-      type: Array,
-      default: [],
-    },
-    grouped: {
-      type: Boolean,
-      default: false,
-    },
+    // label: {
+    //   type: String,
+    //   default: '',
+    // },
+    // placeholder: {
+    //   type: String,
+    //   default: 'Select option',
+    // },
+    // size: {
+    //   type: String,
+    //   default: 'md',
+    // },
+    // clearable: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // searchable: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // multiple: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // options: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // modelValue: {
+    //   type: [Object, Array],
+    //   default: [],
+    // },
+    // shownKey: {
+    //   type: String,
+    //   default: 'name',
+    // },
+    // error: {
+    //   type: String,
+    //   default: '',
+    // },
+    // showError: {
+    //   type: Boolean,
+    //   default: true,
+    // },
+    // validators: {
+    //   type: Array,
+    //   default: [],
+    // },
+    // grouped: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
@@ -132,20 +142,40 @@ export default {
   },
   data() {
     return {
-      selectModel: this.modelValue,
+      selectModel: [],
       showDropdown: false,
       errorMessage: '',
     }
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          label: '',
+          placeholder: 'Select option',
+          size: 'md',
+          clearable: true,
+          searchable: false,
+          multiple: false,
+          options: [],
+          modelValue: [],
+          shownKey: 'name',
+          error: '',
+          showError: true,
+          validators: [],
+          grouped: false,
+        },
+        this.data,
+      )
+    },
     filled() {
-      if (this.multiple) {
+      if (this.mergedData.multiple) {
         return !!this.selectModel.length
       }
       return !!Object.keys(this.selectModel).length
     },
     showClearButton() {
-      return this.filled && this.clearable && !this.showDropdown
+      return this.filled && this.mergedData.clearable && !this.showDropdown
     },
     getStyleVars() {
       return {
@@ -164,20 +194,22 @@ export default {
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || '#0066ff',
         '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
-        '--filled-font-color': this.styleConfig?.filledBackgroundColor || '#3385ff',
+        '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.selectModel = this.mergedData.modelValue
+  },
   methods: {
     close() {
       this.showDropdown = false
     },
     selectOption(option) {
-      if (this.multiple) {
+      if (this.mergedData.multiple) {
         if (this.deleteOption(option)) {
           return
         }
@@ -193,7 +225,7 @@ export default {
      */
     deleteOption(option) {
       let index = this.selectModel.findIndex(
-        (item) => item[this.shownKey] === option[this.shownKey],
+        (item) => item[this.mergedData.shownKey] === option[this.mergedData.shownKey],
       )
       if (index !== -1) {
         this.selectModel.splice(index, 1)
@@ -202,7 +234,7 @@ export default {
       return false
     },
     clearSelected() {
-      if (this.multiple) {
+      if (this.mergedData.multiple) {
         this.selectModel = []
         return
       }
@@ -212,8 +244,8 @@ export default {
   watch: {
     selectModel: {
       handler(value) {
-        if (this.validators) {
-          this.errorMessage = validate(this.validators, this.newValue)
+        if (this.mergedData.validators) {
+          this.errorMessage = validate(this.mergedData.validators, this.newValue)
           this.$emit('error', this.errorMessage)
         }
         this.$emit('update:modelValue', value)

@@ -21,9 +21,7 @@ export default {
       default: {},
     },
   },
-  mounted() {
-    console.log(this.type, this.data)
-  },
+  mounted() {},
   computed: {
     component() {
       let returnComponent
