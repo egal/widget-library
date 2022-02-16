@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer :chart-header="chartHeader" :chart-description="chartDescription" :style-config="styleConfig">
+  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
     <div class="chart">
       <ve-progress
          :data="circles"
@@ -48,11 +48,11 @@ export default {
       type: Object,
       default: () => {},
     },
-    chartHeader: {
+    header: {
       type: String,
       default: ""
     },
-    chartDescription: {
+    description: {
       type: String,
       default: ""
     },

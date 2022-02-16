@@ -48,26 +48,6 @@ export default defineComponent({
           value: 20,
         },
         {
-          label: '333',
-          value: 30,
-        },
-        {
-          label: '3h33',
-          value: 3,
-        },
-        {
-          label: '33f3',
-          value: 3,
-        },
-        {
-          label: '33s3',
-          value: 3,
-        },
-        {
-          label: '33df3',
-          value: 3,
-        },
-        {
           label: '333g',
           value: 3,
           color: '#f16063'

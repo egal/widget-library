@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer :chart-header="chartHeader" :chart-description="chartDescription" :style-config="styleConfig">
+  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
     <div class="chart">
       <vc-donut background="#fff" :foreground="getStyleVars.emptyColor"
                 :size="getStyleVars.size" unit="px" :thickness="10"
@@ -31,11 +31,11 @@ export default {
       type: Object,
       default: () => {},
     },
-    chartHeader: {
+    header: {
       type: String,
       default: ""
     },
-    chartDescription: {
+    description: {
       type: String,
       default: ""
     },

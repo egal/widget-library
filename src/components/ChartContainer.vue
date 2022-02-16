@@ -1,7 +1,7 @@
 <template>
   <div class="chart-wrapper" :style="getStyleVars">
-    <span class="header">{{ chartHeader }}</span>
-    <p class="description">{{chartDescription}}</p>
+    <span class="header">{{ header }}</span>
+    <p class="description">{{description}}</p>
     <slot />
   </div>
 </template>
@@ -17,11 +17,11 @@ export default {
       type: Object,
       default: () => {},
     },
-    chartHeader: {
+    header: {
       type: String,
       default: ""
     },
-    chartDescription: {
+    description: {
       type: String,
       default: ""
     }
