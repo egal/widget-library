@@ -54,12 +54,13 @@ export default {
 
           legend: {
             position: 'top',
-
-            align: 'start',
+            // align: 'center',
             fullWidth: true,
             maintainAspectRatio: false,
+
             labels: {
               boxWidth: 5,
+              padding: 15,
               usePointStyle: true, // circle points
             },
           },
@@ -99,6 +100,7 @@ export default {
               zeroLineBorderDash: [4, 3],
               zeroLineColor: '#E4ECF7',
               color: '#E4ECF7',
+
             },
 
 
@@ -115,10 +117,10 @@ export default {
         },
 
         layout: {
-          // padding: {
-          //   top: 2,
-          //   bottom: 2,
-          // },
+          padding: {
+            top: 2,
+            bottom: 2,
+          },
         },
         hover: {
           mode: 'nearest',
