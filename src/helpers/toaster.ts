@@ -1,5 +1,5 @@
-import eventBus from '@/helpers/eventBus.ts'
-import { ToastParams } from '@/components/toaster/index.ts'
+import eventBus from '@/helpers/eventBus'
+import { ToastParams } from '@/components/toaster/index'
 
 /**
  * Управляющий класс, отвечающий за вызов тостов определённых типов и обработку

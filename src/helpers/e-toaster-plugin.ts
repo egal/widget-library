@@ -1,5 +1,5 @@
 import { App, provide } from 'vue'
-import Toaster from '@/helpers/toaster.ts'
+import Toaster from '@/helpers/toaster'
 
 export default {
   install(app: App) {
