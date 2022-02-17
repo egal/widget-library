@@ -7,7 +7,6 @@
                 :sections="sections" :total="100"
                 :start-angle="90"
                 >
-
         <p class="chart-value">{{ centerValue }}</p>
         <p class="chart-label">{{ sections.length !== 0 ? centerLabel : 'no data'}}</p>
       </vc-donut>

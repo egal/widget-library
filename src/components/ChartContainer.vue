@@ -101,15 +101,14 @@ export default {
   &-value {
      font-weight: bold;
      font-size: var(--center-font-size);
-     //line-height: 16px;
-      color: var(--font-color);
+     color: var(--font-color);
      margin: 0 0 5px 0;
    }
 
   &-label {
      margin: 0;
      font-size: var(--center-font-size);
-    color: var(--secondary-font-color);
+     color: var(--secondary-font-color);
    }
 }
 

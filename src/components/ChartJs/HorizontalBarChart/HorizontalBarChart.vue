@@ -1,31 +1,12 @@
-<template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
-    <div class="charts" v-if="sections.length > 0">
-      <div class="row" v-for="item in sections" :key="item.label">
-        <div class="text chart-label">
-          <div class="legend-item">
-            <div class="legend-item-color" :style="`background: ${item.color};`" />
-            <span>{{item.label}}</span>
-          </div>
-          <span>{{item[showKey]}}</span>
-        </div>
-        <div class="progress" :style="`background: ${getStyleVars.emptyColor};`">
-          <span :data-fill="item.value+'%'" class="progress-bar" :style="`width: ${item.value}%; background: ${item.color};`"></span>
-        </div>
-      </div>
-    </div>
-    <div v-else class="charts empty">
-      <span class="chart-label">no data</span>
-    </div>
-  </ChartContainer>
-</template>
 
 <script>
 import variables from "@/assets/styles/variables.scss";
 import ChartContainer from "@/components/ChartContainer";
+import { Bar } from 'vue3-chart-v2'
 
 export default {
   name: "HorizontalBarChart",
+  extends: Bar,
   components: {ChartContainer},
   props: {
     data: {
@@ -44,10 +25,10 @@ export default {
       type: String,
       default: ""
     },
-    showKey: {
-      type: String,
-      default: 'value'
-    }
+    options: {
+      type: Object,
+      default: () => {}
+    },
   },
   data() {
     return {
@@ -72,6 +53,23 @@ export default {
     },
   },
   mounted() {
+    this.renderChart({
+      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: false,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+      }]
+    }, this.options)
   },
   methods: {},
   watch: {}
@@ -79,7 +77,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/styles/variables';
+@import '@/assets/styles/variables';
 
 .charts {
   width: 100%;
