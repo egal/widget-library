@@ -1,5 +1,5 @@
 <p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
-<h1 align="center">Egal | Egal/Framework NPM Package</h1>
+<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
 <p align="center">
 <a href="https://www.npmjs.com/package/@egalteam/framework"><img src="https://badge.fury.io/js/%40egalteam%2Fframework.svg"></a>
 <a href="https://www.npmjs.com/package/@egalteam/framework"><img src="https://img.shields.io/npm/dt/@egalteam/framework"></a>

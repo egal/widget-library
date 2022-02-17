@@ -1,24 +1,24 @@
-#on:
-#  create:
-#    tags:
-#      - 'v*'
-#
-#jobs:
-#  publish:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v1
-#      - uses: actions/setup-node@v1
-#        with:
-#          node-version: 14.x
-#      - run: |
-#          sed -i -e "0,/{/ s/{/{\n\t\"version\": \"${GITHUB_REF##*/v}\",/" package.json
-#      - run: echo package.json
-#      - run: npm install
-#      - run: tsc
-#      - run: npm run build
-#      - run: |
-#          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
-#          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
-#      - run: npm whoami
-#      - run: npm publish --access public
+on:
+  create:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: |
+          sed -i -e "0,/{/ s/{/{\n\t\"version\": \"${GITHUB_REF##*/v}\",/" package.json
+      - run: echo package.json
+      - run: npm install
+      - run: tsc
+      - run: npm run build
+      - run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      - run: npm whoami
+      - run: npm publish --access public

@@ -1,5 +1,5 @@
 {
-  "name": "egal-widgets",
+  "name": "@egalteam/widget-library",
   "private": false,
   "description": "Egal widget set",
   "main": "./dist/egal-widgets-build.umd.js",
