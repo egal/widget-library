@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Open+Sans:wght@400;500;700&family=Raleway:wght@400;500;700&display=swap');
+
+$primary: #5855fa;
+$secondary: #e4ecf7;
+$success: #66cb9f;
+$warning: #ffd363;
+$danger: #f16063;
+$info: #3385ff;
+$dark: #272937;
+$base-white: #ffffff;
+$base-dark: #1d1d23;
+$main-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'warning': $warning,
+  'danger': $danger,
+  'info': $info,
+  'dark': $dark,
+);
+
+// grey colors
+$gray-100: #f7fafc;
+$gray-200: #edf2f7;
+$gray-300: #e2e8f0;
+$gray-400: #cbd5e0;
+$gray-500: #a0aec0;
+$gray-600: #718096;
+$gray-700: #4a5568;
+$gray-800: #2d3748;
+
+// danger colors
+$default-danger: #f16063;
+$hover-danger: #ee262a;
+
+// accent colors
+$primary-accent: #0066ff;
+$default-accent: #0066ff;
+$pressed-accent: #005ce4;
+$hover-accent: #3385ff;
+$accent-opacity-5: #80b3ff;
+$accent-opacity-3: #b3d2ff;
+$accent-opacity-1: #e5f0ff;
+
+// secondary colors
+$default-secondary: #deebfc;
+$pressed-secondary: #76acfb;
+$hover-secondary: #a6c8fa;
+
+//box-shadow
+$shadow-sm: 0px 0px 1px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05);
+$shadow-default: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 4px 20px -2px rgba(50, 50, 71, 0.08);
+$shadow-lg: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 10px 16px rgba(20, 37, 63, 0.06);
+$shadow-xl: 0px 0px 1px rgba(12, 26, 75, 0.1), 0px 20px 24px rgba(20, 37, 63, 0.06);
+$shadow-2xl: 0px 0px 1px rgba(12, 26, 75, 0.2), 0px 30px 40px rgba(20, 37, 63, 0.1);
+
+//border-radius
+$all-sides-square: 0px;
+$all-sides-small: 4px;
+$all-sides-large: 8px;
+$all-sides-xl: 12px;
+$all-sides-2xl: 16px;
+$all-sides-pill: 100px;
+
+$left-side-small: 4px 0 0 4px;
+$left-side-large: 8px 0px 0px 8px;
+$left-side-xl: 12px 0 0 12px;
+$left-side-2xl: 16px 0 0 16px;
+$left-side-pill: 100px 0 0 100px;
+
+$right-side-small: 0 4px 4px 0;
+$right-side-large: 0 8px 8px 0;
+$right-side-xl: 0 12px 12px 0;
+$right-side-2xl: 0 16px 16px 0;
+$right-side-pill: 0 100px 100px 0;
+
+$top-side-small: 4px 4px 0 0;
+$top-side-large: 8px 8px 0 0;
+$top-side-xl: 12px 12px 0 0;
+$top-side-2xl: 16px 16px 0 0;
+$top-side-pill: 100px 100px 0 0;
+
+$bottom-side-small: 0 0 4px 4px;
+$bottom-side-large: 0 0 8px 8px;
+$bottom-side-xl: 0 0 12px 12px;
+$bottom-side-2xl: 0 0 16px 16px;
+$bottom-side-pill: 0 0 100px 100px;
+
+// fonts
+$medium-font-weight: 500;
+$regular-font-weight: 400;
+$bold-font-weight: 700;
+
+$raleway-font: 'Raleway', sans-serif;
+$inter-font: 'Inter', sans-serif;
+$open-sans-font: 'Open Sans', sans-serif;
+
+//text styles
+$h1-font-size: 36px;
+$h1-font-style: bold;
+
+$h2-font-size: 32px;
+$h2-font-style: bold;
+
+$h3-font-size: 24px;
+$h3-font-style: bold;
+
+$h4-font-size: 18px;
+$h4-font-style: bold;
+
+$h5-font-size: 16px;
+$h5-font-style: bold;
+
+$h6-font-size: 14px;
+$h6-font-style: bold;
+
+$h7-font-size: 12px;
+$h7-font-style: bold;
+
+$p1-font-size: 24px;
+$p1-font-style: medium;
+
+$p2-font-size: 18px;
+$p2-font-style: medium;
+
+$p3-font-size: 16px;
+$p3-font-style: medium;
+
+$p4-font-size: 14px;
+$p4-font-style: regular;
+
+$p5-font-size: 14px;
+$p5-font-style: medium;
+
+$p6-font-size: 12px;
+$p6-font-style: regular;
+
+$p7-font-size: 12px;
+$p7-font-style: medium;
+
+$p8-font-size: 12px;
+$p8-font-style: bold;
+:export {
+  gray100: $gray-100;
+  gray200: $gray-200;
+  gray300: $gray-300;
+  gray400: $gray-400;
+  gray500: $gray-500;
+  gray600: $gray-600;
+  gray700: $gray-700;
+  gray800: $gray-800;
+
+  primary: $primary;
+  secondary: $secondary;
+  success: $success;
+  warning: $warning;
+  danger: $danger;
+  info: $info;
+  dark: $dark;
+  baseWhite: $base-white;
+
+  pressedAccent: $pressed-accent;
+  primaryAccent: $primary-accent;
+  hoverAccent: $hover-accent;
+  accentOpacity5: $accent-opacity-5;
+  accentOpacity3: $accent-opacity-3;
+  accentOpacity1: $accent-opacity-1;
+
+  mediumFontWeight: $medium-font-weight;
+  regularFontWeight: $regular-font-weight;
+  boldFontWeight: $bold-font-weight;
+
+  p6FontSize: $p6-font-size;
+  p5FontSize: $p5-font-size;
+
+  raleway: $raleway-font;
+  inter: $inter-font;
+  openSans: $open-sans-font;
+
+  allSidesSquare: $all-sides-square;
+  allSidesSmall: $all-sides-small;
+  allSidesLarge: $all-sides-large;
+  allSidesXl: $all-sides-xl;
+  allSides2xl: $all-sides-2xl;
+  allSidesPill: $all-sides-pill;
+
+  shadowSm: $shadow-sm;
+  shadowDefault: $shadow-default;
+  shadowLg: $shadow-lg;
+  shadowXl: $shadow-xl;
+  shadow2xl: $shadow-2xl;
+}

@@ -1,0 +1,124 @@
+@import '~@/assets/variables.scss';
+
+$map-variants: (
+        "light": (
+                "titleColor": $gray-800,
+                "bgColor": $base-white,
+                "closeIconColor": $gray-700,
+                "closeIconColorHover": $gray-400,
+                "messageColor": $gray-600,
+        ),
+        "dark": (
+                "titleColor": $base-white,
+                "bgColor": $gray-800,
+                "closeIconColor": $gray-400,
+                "closeIconColorHover": $gray-700,
+                "messageColor": $gray-800,
+        )
+);
+
+$map-types: (
+        "info": (
+                "iconColor": $info,
+                "buttonColor": $hover-accent,
+                "buttonColorHover": $default-accent,
+        ),
+        "danger": (
+                "iconColor": $danger,
+                "buttonColor": $default-danger,
+                "buttonColorHover": $hover-danger,
+        ),
+);
+
+
+@mixin toast($variant: 'light', $type: 'info', $ctx) {
+  width: fit-content;
+  display: flex;
+  flex-wrap: nowrap;
+  height: min-content;
+  min-width: 240px;
+  position: relative;
+  cursor: pointer;
+  background-color: map-get($map-variants, $variant, 'bgColor');
+  border-radius: $all-sides-large;
+  box-shadow: $shadow-sm;
+  font-family: $open-sans-font;
+  padding: 16px 16px 24px 16px;
+
+  #{$ctx}__title,
+  #{$ctx}__message,
+  #{$ctx}__icon {
+    display: block;
+  }
+  #{$ctx}__title {
+    font-size: $h4-font-size;
+    font-weight: $bold-font-weight;
+    color: map-get($map-variants, $variant, 'titleColor');
+  }
+  #{$ctx}__message {
+    font-size: $p6-font-size;
+    color: map-get($map-variants, $variant, 'messageColor');
+    margin-top: 4px;
+  }
+  #{$ctx}__icon {
+    color: map-get($map-types, $type, 'iconColor');
+    margin-right: 10px;
+    transform: translateY(25%);
+  }
+  #{$ctx}__button {
+    background-color: unset;
+    border: unset;
+    padding: unset;
+    cursor: pointer;
+    color: map-get($map-types, $type, 'buttonColor');
+    font-weight: $bold-font-weight;
+    font-size: $h6-font-size;
+    margin-top: 8px;
+    transition: color 0.07s;
+
+    &:hover {
+      color: map-get($map-types, $type, 'buttonColorHover');
+    }
+
+    &--secondary {
+      margin-left: 20px;
+    }
+  }
+  #{$ctx}__close-icon {
+    cursor: pointer;
+    color: map-get($map-variants, $variant, 'closeIconColor');
+    margin-left: auto;
+    padding-left: 14px;
+    transition: color 0.07s;
+
+    &:hover {
+      color: map-get($map-variants, $variant, 'closeIconColorHover');
+    }
+  }
+}
+
+@mixin toast-flat($ctx) {
+  padding: 12px 10px 16px 10px;
+
+  #{$ctx}__title,
+  #{$ctx}__message,
+  #{$ctx}__icon {
+    display: inline-block;
+  }
+
+  #{$ctx}__message {
+    margin-top: 0;
+    margin-left: 10px;
+    font-size: $p4-font-size;
+  }
+  #{$ctx}__icon {
+    margin-right: 15px;
+  }
+  #{$ctx}__button {
+    margin-top: 0;
+    margin-left: 15px;
+  }
+  #{$ctx}__close-icon {
+    align-self: end;
+  }
+}
