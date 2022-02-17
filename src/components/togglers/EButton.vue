@@ -40,28 +40,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    // disabled: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // rounded: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // size: {
-    //   type: String,
-    //   default: 'md',
-    // },
-    // softColors: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // leftIcon: {
-    //   type: String,
-    // },
-    // rightIcon: {
-    //   type: String,
-    // },
     styleConfig: {
       type: Object,
       default: () => {

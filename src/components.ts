@@ -10,7 +10,6 @@ import ENavbarTop from './components/navigation/ENavbarTop.vue'
 import ENavbarRight from './components/navigation/ENavbarRight.vue'
 import EPagination from './components/navigation/EPagination.vue'
 import ECounter from './components/inputs/Counter/ECounter.vue'
-import EDropdown from './components/inputs/Dropdown/EDropdown.vue'
 import EFileUploader from './components/inputs/FileUploader/EFileUploader.vue'
 import EInput from './components/inputs/Input/EInput.vue'
 import ESelect from './components/inputs/Select/ESelect.vue'
@@ -30,7 +29,6 @@ export default {
   ENavbarRight,
   EPagination,
   ECounter,
-  EDropdown,
   EFileUploader,
   EInput,
   ESelect,

@@ -1,5 +1,5 @@
 <template>
-  <div :class="`breadcrumbs --size-${size || 'md'}`" :style="getVars">
+  <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
     <template v-for="(link, i) in parsedLinks" :key="link.to">
       <router-link class="breadcrumbs__link" :to="link.to">{{ link.name }}</router-link>
       <BootstrapIcon
@@ -22,39 +22,32 @@ export default {
     }
   },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    color: {
-      type: String,
-      default: '#0066ff',
-    },
-    chevronColor: {
-      type: String,
-      default: '#a0aec0',
-    },
-    activeColor: {
-      type: String,
-      default: '#2d3748',
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          color: '#0066ff',
+          chevronColor: '#a0aec0',
+          size: 'md',
+          activeColor: '#2d3748',
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--chevron-color': this.chevronColor,
-        '--active-color': this.activeColor,
-        '--color': this.color,
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--chevron-color': this.mergedData.chevronColor,
+        '--active-color': this.mergedData.activeColor,
+        '--color': this.mergedData.color,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
   },

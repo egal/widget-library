@@ -1,14 +1,16 @@
 <template>
   <div
-    :class="`pagination --size-${size || 'md'} --style-${componentStyle || 'normal'}`"
+    :class="`pagination --size-${mergedData.size || 'md'} --style-${
+      mergedData.componentStyle || 'normal'
+    }`"
     :style="getVars"
   >
     <div class="pagination__left-arrow">
       <BootstrapIcon icon="chevron-left" class="pagination__left-arrow-icon" />
-      <p>{{ leftArrowLabel }}</p>
+      <p>{{ mergedData.leftArrowLabel }}</p>
     </div>
     <ul class="pagination__num-pages">
-      <template v-for="page in numberOfPages" :key="page">
+      <template v-for="page in mergedData.numberOfPages" :key="page">
         <li
           v-if="isInPageGroup(page)"
           @click="setPage(page)"
@@ -17,7 +19,7 @@
           {{ page }}
         </li>
         <li
-          v-else-if="[2, numberOfPages - 1].includes(page)"
+          v-else-if="[2, mergedData.numberOfPages - 1].includes(page)"
           @click="setPage(page > currentPage ? currentPage + 3 : currentPage - 3)"
         >
           ...
@@ -25,7 +27,7 @@
       </template>
     </ul>
     <div class="pagination__right-arrow">
-      <p>{{ rightArrowLabel }}</p>
+      <p>{{ mergedData.rightArrowLabel }}</p>
       <BootstrapIcon icon="chevron-right" class="pagination__right-arrow-icon" />
     </div>
   </div>
@@ -39,82 +41,60 @@ export default {
   components: { BootstrapIcon },
   data() {
     return {
-      currentPage: this.modelValue,
+      currentPage: null,
     }
   },
   props: {
-    numberOfPages: {
-      type: Number,
-      required: true,
-    },
-    modelValue: {
-      type: Number,
-      required: true,
-    },
-    leftArrowLabel: {
-      type: String,
-      default: '',
-    },
-    rightArrowLabel: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    componentStyle: {
-      type: String,
-      default: 'normal',
-    },
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'regular',
-    },
-    color: {
-      type: String,
-      default: '#718096',
-    },
-    activeColor: {
-      type: String,
-      default: '#0066ff',
-    },
-    activeBackgroundColor: {
-      type: String,
-      default: '#e5f0ff',
-    },
-    borderColor: {
-      type: String,
-      default: '#e2e8f0',
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   emits: ['update:modelValue'],
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          numberOfPages: 10,
+          modelValue: 1,
+          leftArrowLabel: '',
+          rightArrowLabel: '',
+          size: 'md',
+          componentStyle: 'normal',
+          font: 'Open Sans',
+          weight: 'regular',
+          color: '#718096',
+          activeColor: '#0066ff',
+          activeBackgroundColor: '#e5f0ff',
+          borderColor: '#e2e8f0',
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--border-color': this.borderColor,
-        '--color': this.color,
-        '--active-color': this.activeColor,
-        '--active-background-color': this.activeBackgroundColor,
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--border-color': this.mergedData.borderColor,
+        '--color': this.mergedData.color,
+        '--active-color': this.mergedData.activeColor,
+        '--active-background-color': this.mergedData.activeBackgroundColor,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
     isInPageGroup(page) {
       return (
         [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(page) ||
         (this.currentPage < 4 && page <= 4) ||
-        (this.currentPage > this.numberOfPages - 3 && page >= this.numberOfPages - 3) ||
+        (this.currentPage > this.mergedData.numberOfPages - 3 &&
+          page >= this.mergedData.numberOfPages - 3) ||
         page === 1 ||
-        page === this.numberOfPages
+        page === this.mergedData.numberOfPages
       )
     },
   },
-  mounted() {},
+  mounted() {
+    this.currentPage = this.mergedData.modelValue
+  },
   methods: {
     setPage(page) {
       this.currentPage = page

@@ -43,11 +43,6 @@ export default {
           import(`@/components/inputs/FileUploader/EFileUploader.vue`),
         )
         return returnComponent
-      } else if (this.type === 'dropDown') {
-        returnComponent = defineAsyncComponent(() =>
-          import(`@/components/inputs/Dropdown/EDropdown.vue`),
-        )
-        return returnComponent
       } else if (this.type === 'textArea') {
         returnComponent = defineAsyncComponent(() =>
           import(`@/components/inputs/TextArea/ETextArea.vue`),
@@ -56,16 +51,6 @@ export default {
       } else if (this.type === 'breadcrumbs') {
         returnComponent = defineAsyncComponent(() =>
           import(`@/components/navigation/EBreadcrumbs.vue`),
-        )
-        return returnComponent
-      } else if (this.type === 'navBarTop') {
-        returnComponent = defineAsyncComponent(() =>
-          import(`@/components/navigation/ENavbarTop.vue`),
-        )
-        return returnComponent
-      } else if (this.type === 'navBarRight') {
-        returnComponent = defineAsyncComponent(() =>
-          import(`@/components/navigation/ENavbarRight.vue`),
         )
         return returnComponent
       } else if (this.type === 'pagination') {

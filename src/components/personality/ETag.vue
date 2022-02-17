@@ -1,15 +1,17 @@
 <template>
   <div
-    :class="`tag --size-${size || 'md'} --shape-${shape || 'square'} --style-${
-      componentStyle || 'normal'
-    } --text-style-${textStyle || 'normal'}`"
+    :class="`tag --size-${mergedData.size || 'md'} --shape-${
+      mergedData.shape || 'square'
+    } --style-${mergedData.componentStyle || 'normal'} --text-style-${
+      mergedData.textStyle || 'normal'
+    }`"
     :style="getVars"
   >
-    <BootstrapIcon v-if="icon" icon="star" class="tag__icon" />
+    <BootstrapIcon v-if="mergedData.icon" icon="star" class="tag__icon" />
     <p class="tag__text">
       <slot></slot>
     </p>
-    <BootstrapIcon v-if="crossIcon" icon="x-lg" class="tag__close-icon" />
+    <BootstrapIcon v-if="mergedData.crossIcon" icon="x-lg" class="tag__close-icon" />
   </div>
 </template>
 
@@ -23,44 +25,32 @@ export default {
     return {}
   },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    position: {
-      type: String,
-      default: 'bottom',
-    },
-    componentStyle: {
-      type: String,
-      default: 'normal',
-    },
-    size: {
-      type: 'String',
-      default: 'md',
-    },
-    shape: {
-      type: String,
-      default: 'square',
-    },
-    crossIcon: {
-      type: Boolean,
-      default: true,
-    },
-    icon: {
-      type: String,
-      default: '',
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          position: 'bottom',
+          componentStyle: 'normal',
+          size: 'md',
+          shape: 'square',
+          crossIcon: true,
+          icon: '',
+          textStyle: 'normal',
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
   },

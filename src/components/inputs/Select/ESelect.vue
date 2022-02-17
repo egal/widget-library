@@ -79,58 +79,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    // label: {
-    //   type: String,
-    //   default: '',
-    // },
-    // placeholder: {
-    //   type: String,
-    //   default: 'Select option',
-    // },
-    // size: {
-    //   type: String,
-    //   default: 'md',
-    // },
-    // clearable: {
-    //   type: Boolean,
-    //   default: true,
-    // },
-    // searchable: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // multiple: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // options: {
-    //   type: Array,
-    //   default: () => [],
-    // },
-    // modelValue: {
-    //   type: [Object, Array],
-    //   default: [],
-    // },
-    // shownKey: {
-    //   type: String,
-    //   default: 'name',
-    // },
-    // error: {
-    //   type: String,
-    //   default: '',
-    // },
-    // showError: {
-    //   type: Boolean,
-    //   default: true,
-    // },
-    // validators: {
-    //   type: Array,
-    //   default: [],
-    // },
-    // grouped: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     styleConfig: {
       type: Object,
       default: () => {},

@@ -1,12 +1,14 @@
 <template>
   <div
-    :class="`tooltip --size-${size || 'md'} --style-${componentStyle || 'normal'}`"
+    :class="`tooltip --size-${mergedData.size || 'md'} --style-${
+      mergedData.componentStyle || 'normal'
+    }`"
     :style="getVars"
   >
     <div class="tooltip__icon">
       <BootstrapIcon icon="info-lg" />
     </div>
-    <div :class="`tooltip__text --position-${position || 'top'}`">
+    <div :class="`tooltip__text --position-${mergedData.position || 'top'}`">
       <slot></slot>
     </div>
   </div>
@@ -21,32 +23,28 @@ export default {
     return {}
   },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    position: {
-      type: String,
-      default: 'bottom',
-    },
-    componentStyle: {
-      type: String,
-      default: 'normal',
-    },
-    size: {
-      type: 'String',
-      default: 'md',
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          position: 'bottom',
+          componentStyle: 'normal',
+          size: 'md',
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
   },

@@ -33,38 +33,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    // label: {
-    //   type: String,
-    //   default: '',
-    // },
-    // placeholder: {
-    //   type: String,
-    //   default: '',
-    // },
-    // modelValue: {
-    //   type: String,
-    //   default: '',
-    // },
-    // helperText: {
-    //   type: String,
-    //   default: '',
-    // },
-    // disabled: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // size: {
-    //   type: String,
-    //   default: 'md',
-    // },
-    // validators: {
-    //   type: Array,
-    //   default: () => [],
-    // },
-    // error: {
-    //   type: String,
-    //   default: '',
-    // },
     styleConfig: {
       type: Object,
       default: () => {},

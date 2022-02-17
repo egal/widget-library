@@ -49,62 +49,6 @@ export default {
       type: Object,
       default: () => {},
     },
-    // modelValue: {
-    //   type: Array,
-    //   default: [],
-    // },
-    // label: {
-    //   type: String,
-    //   default: '',
-    // },
-    // helperText: {
-    //   type: String,
-    //   default: '',
-    // },
-    // multiple: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // size: {
-    //   type: String,
-    //   default: 'sm',
-    // },
-    // validators: {
-    //   type: Array,
-    //   default: [],
-    // },
-    // accept: {
-    //   type: Array,
-    //   default: [],
-    // },
-    // maxFiles: {
-    //   type: Number,
-    //   default: 1,
-    // },
-    // maxSize: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // disabled: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    // deletable: {
-    //   type: Boolean,
-    //   default: true,
-    // },
-    // domain: {
-    //   type: String,
-    //   default: 'http://127.0.0.1:88',
-    // },
-    // microservice: {
-    //   type: String,
-    //   default: 'core',
-    // },
-    // model: {
-    //   type: String,
-    //   default: 'Document',
-    // },
     styleConfig: {
       type: Object,
       default: () => {},

@@ -1,13 +1,16 @@
 <template>
   <label
     class="e-checkbox"
-    :class="[`e-checkbox--${size}`, checkboxRight ? 'e-checkbox--right' : 'e-checkbox--left']"
+    :class="[
+      `e-checkbox--${mergedData.size}`,
+      mergedData.checkboxRight ? 'e-checkbox--right' : 'e-checkbox--left',
+    ]"
   >
     <input
       type="checkbox"
       class="e-checkbox__input input"
-      :checked="checked"
-      :disabled="disabled"
+      :checked="mergedData.checked"
+      :disabled="mergedData.disabled"
       @change="(ev) => $emit('change', ev.target.checked)"
     />
     <span
@@ -20,39 +23,69 @@
   </label>
 </template>
 <script>
-import togglersComputedMixin from '@/helpers/togglersComputedMixin'
-
 export default {
   name: 'ECheckbox',
-  mixins: [togglersComputedMixin],
   props: {
-    checked: {
-      type: Boolean,
-      default: false,
+    data: {
+      type: Object,
+      default: () => {},
     },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    checkboxRight: {
-      type: Boolean,
-      default: false,
-    },
-    labelStyle: {
+    styleConfig: {
       type: Object,
       default: () => {
         return {}
       },
     },
-    inputStyle: {
-      type: Object,
-      default: () => {
-        return {}
-      },
+  },
+  computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          checked: false,
+          disabled: false,
+          size: 'md',
+          checkboxRight: false,
+          labelStyle: {},
+        },
+        this.data,
+      )
+    },
+    /**
+     * Проверяет наличие данных в дефолтном слоте.
+     * Необходимо, чтобы добавить класс "e-checkbox__text--empty", который убирает
+     * margin у чекбокса, если он используется без лэйбла
+     * @returns {boolean}
+     */
+    hasSlotData() {
+      return !this.$slots?.default
+    },
+
+    /**
+     * Объединяет объект стилей для лэйбла с объектом CSS переменныx
+     * для чекбокса и возвращет полученный результат
+     * @returns {object}
+     */
+    mergedCustomStyles() {
+      return Object.assign({}, this.mergedData.labelStyle, this.inputStyleVariables)
+    },
+
+    /**
+     * Возвращает объект с набором CSS переменных для кастомизации чекбокса
+     * @returns {object}
+     */
+    inputStyleVariables() {
+      return {
+        '--input-border-color': this.styleConfig.borderColor || null,
+        '--input-background-color': this.styleConfig.backgroundColor || null,
+        '--input-border-color-hover': this.styleConfig.hover?.borderColor || null,
+        '--input-background-color-hover': this.styleConfig.hover?.backgroundColor || null,
+        '--input-border-color-active': this.styleConfig.active?.borderColor || null,
+        '--input-background-color-active': this.styleConfig.active?.backgroundColor || null,
+        '--input-border-color-checked': this.styleConfig.checked?.borderColor || null,
+        '--input-background-color-checked': this.styleConfig.checked?.backgroundColor || null,
+        '--input-border-color-disabled': this.styleConfig.disabled?.borderColor || null,
+        '--input-background-color-disabled': this.styleConfig.disabled?.backgroundColor || null,
+      }
     },
   },
 }

@@ -1,15 +1,15 @@
 <template>
   <div
-    :class="`avatar ${isOnline ? '--online' : ''} --shape-${shape || 'circle'} --size-${
-      size || 'md'
-    }`"
+    :class="`avatar ${mergedData.isOnline ? '--online' : ''} --shape-${
+      mergedData.shape || 'circle'
+    } --size-${mergedData.size || 'md'}`"
     :style="getVars"
   >
-    <img v-if="imgUrl" :src="imgUrl" :alt="name" class="avatar__img" />
+    <img v-if="mergedData.imgUrl" :src="mergedData.imgUrl" :alt="name" class="avatar__img" />
     <p
-      v-if="!imgUrl || isNameRequired"
+      v-if="!mergedData.imgUrl || mergedData.isNameRequired"
       class="avatar__name"
-      :class="{ '--darken': darken, '--transparent': imgUrl }"
+      :class="{ '--darken': mergedData.darken, '--transparent': mergedData.imgUrl }"
     >
       {{ getShortName }}
     </p>
@@ -23,67 +23,42 @@ export default {
   name: 'EAvatar',
   components: { BootstrapIcon },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    color: {
-      type: String,
-      default: '#ffffff',
-    },
-    bgColor: {
-      type: String,
-      default: '#4a5568',
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    size: {
-      type: String,
-      default: 'md',
-    },
-    shape: {
-      type: String,
-      default: 'circle',
-    },
-    imgUrl: {
-      type: String,
-      default: '',
-    },
-    darken: {
-      type: Boolean,
-      default: false,
-    },
-    borderColor: {
-      type: String,
-      default: '#ffffff',
-    },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    isNameRequired: {
-      type: Boolean,
-      default: false,
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          color: '#ffffff',
+          bgColor: '#4a5568',
+          name: '',
+          size: 'md',
+          shape: 'circle',
+          imgUrl: '',
+          darken: false,
+          borderColor: '#ffffff',
+          isOnline: false,
+          isNameRequired: false,
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--bg-color': this.bgColor,
-        '--border-color': this.borderColor,
-        '--color': this.color,
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--bg-color': this.mergedData.bgColor,
+        '--border-color': this.mergedData.borderColor,
+        '--color': this.mergedData.color,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
     getShortName() {
-      return this.name
+      return this.mergedData.name
         ?.split(' ')
         .filter((el, i, arr) => i === 0 || i === arr.length - 1)
         .reduce((acc, el) => (acc += el[0]), '')
