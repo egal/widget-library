@@ -105,27 +105,10 @@ export default {
 
       new Chart(ctx, {
            type: 'vertical-grouped',
-           data: {
-             labels: ["2012", "2013", "2014", "2015"],
-             datasets: [{
-               label: 'Miljoner ton',
-               data: [5, 19, 6, 18],
-               backgroundColor: 'rgb(173,32,206)'
-             },
-               {
-                 label: 'Miljoner ton',
-                 data: [5, 19, 6, 18],
-                 backgroundColor: 'rgb(145,236,124)'
-               },
-               {
-                 label: 'Miljoner ton',
-                 data: [50, 19, 60, 18],
-                 backgroundColor: 'rgb(206,66,54)'
-               }]
-           },
+           data: this.data,
            options: {
 
-
+// ...this.options,
              //todo width og 1 category OR bars alignment
              categoryPercentage: 0.4,
              barPercentage: 1.0,
