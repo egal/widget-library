@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
+<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
     <div class="chart">
       <ve-progress
          :data="circles"
@@ -14,6 +14,7 @@
          :gap="3"
         >
 
+<!--        todo center value -->
         <template #legend-caption>
           <p class="chart-value">{{ centerValue }}</p>
           <p class="chart-label">{{ circles.length !== 0 ? centerLabel : 'no data'}}</p>
@@ -28,7 +29,7 @@
         </span>
       </div>
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script>
@@ -41,8 +42,12 @@ export default {
   components: {ChartContainer, VeProgress },
   props: {
     data: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {},
+    },
+    options: {
+      type: Object,
+      default: () => {},
     },
     styleConfig: {
       type: Object,
@@ -84,10 +89,12 @@ export default {
 
     circles() {
       let circlesArray = []
-      if (this.data.length) {
-        circlesArray =  this.data.map((item, index) => {
+
+      // todo empty datasets
+      if (this.data?.datasets) {
+        circlesArray =  this.data?.datasets.map((item, index) => {
           return {
-            progress: item.value,
+            progress: item.data[0],
             label: item.label,
             color: item.color || this.colors[index] || 'gray',
             thickness: 8 - index

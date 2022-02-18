@@ -1,19 +1,19 @@
 <template>
-  <ChartContainer  :header="header" :description="description" :style-config="styleConfig">
+<!--  <ChartContainer  :header="header" :description="description" :style-config="styleConfig">-->
     <div style="width: 400px;">
       <vue3-chart-js
-          :id="data.id"
-          :type="data.type"
-          :data="data.data"
-          :options=" options"
+          type="bar"
+          :data="dataset"
+          :options="options"
       ></vue3-chart-js>
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script>
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import ChartContainer from "@/components/ChartContainer";
+import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "BarChart",
@@ -26,6 +26,10 @@ export default {
       type: Object,
       default: () => {}
     },
+    // options: {
+    //   type: Object,
+    //   default: () => {}
+    // },
     styleConfig: {
       type: Object,
       default: () => {},
@@ -41,19 +45,23 @@ export default {
   },
   data() {
     return {
+      colors: [
+        variables.primaryAccent,
+        variables.pressedSecondary,
+        variables.gray500
+      ],
+
       options: {
         // barThickness: 7,
         borderRadius: 10,
 
-        categoryPercentage: 0.2,
-        barPercentage:  0.7,
+        categoryPercentage: 0.9,
+        barPercentage: 0.5,
 
 
         plugins: {
-
           legend: {
             position: 'top',
-
             align: 'start',
             fullWidth: true,
             maintainAspectRatio: false,
@@ -123,12 +131,19 @@ export default {
           mode: 'nearest',
         },
         responsive: true,
-        maintainAspectRatio: false,
+
 
       }
     }
   },
-  computed: {},
+  computed: {
+    dataset() {
+     const newDatasets = this.data?.datasets.map((item, index) => {
+        return {...item, backgroundColor: item.backgroundColor || this.colors[index] || 'gray'}
+      })
+      return {...this.data, datasets: newDatasets}
+    }
+  },
   mounted() {
   },
   methods: {},

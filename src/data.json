@@ -1,39 +1,141 @@
 {
-  "progressBar": {
-    "datasets": [
-      {
-        "label": "label1",
-        "value": 10,
-        "color": "red"
-      },
-      {
-        "label": "label2",
-        "value": 13
-      },
-      {
-        "label": "label4",
-        "value": 56
-      }
-    ]
+  "doughnut_bar": {
+    "type": "doughnut_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#f87979",
+          "data": [11]
+        },
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#f87979",
+          "data": [45]
+        }
+      ]
+    },
+    "options": {}
   },
-
-  "barChart": {
-    "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    "datasets": [
-      {
-        "label": "GitHub Commits",
-        "backgroundColor": "#f87979",
-        "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-      },
-      {
-        "label": "GitHu3",
-        "backgroundColor": [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 99, 132, 0.2)"
-        ],
-        "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
-      }
-    ]
+  "half_progress_bar": {
+    "type": "half_progress_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#f87979",
+          "data": [11]
+        }
+      ]
+    },
+    "options": {
+      "half": true
+    }
+  },
+  "progress_bar": {
+    "type": "progress_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January"],
+      "datasets": [
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#f87979",
+          "data": [55]
+        }
+      ]
+    },
+    "options": {}
+  },
+  "multi_progress_bar": {
+    "type": "multi_progress_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#f87979",
+          "data": [40]
+        },
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#f87979",
+          "data": [8]
+        }
+      ]
+    },
+    "options": {}
+  },
+  "stacked_bar": {
+    "type": "stacked_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#545",
+          "data": [40, 20, 12, 39, 10, 40, 39, 40, 40, 20, 12, 11]
+        },
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#783",
+          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+        }
+      ]
+    },
+    "options": {}
+  },
+  "bar": {
+    "type": "bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#f87979",
+          "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+        },
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#f87979",
+          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+        }
+      ]
+    },
+    "options": {}
+  },
+  "horizontal_bar": {
+    "type": "horizontal_bar",
+    "title": "title",
+    "description": "description",
+    "data": {
+      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "datasets": [
+        {
+          "label": "GitHub Commits",
+          "backgroundColor": "#f87979",
+          "data": [40]
+        },
+        {
+          "label": "GitHu3",
+          "backgroundColor": "#f87979",
+          "data": [51]
+        }
+      ]
+    },
+    "options": {}
   }
 }

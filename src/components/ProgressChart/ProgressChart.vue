@@ -1,9 +1,10 @@
 <template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
-    <div class="chart" :class="{half: half}" >
+<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
+
+    <div class="chart" :class="{half: options?.half}" >
       <ve-progress
-          :progress="data[0]?.value"
-          :angle="half ? 0 : -90"
+          :progress="data?.datasets[0]?.data[0]"
+          :angle="options?.half ? 0 : -90"
           :color="getStyleVars.lineColor"
           line="round"
           :empty-color="getStyleVars.emptyColor"
@@ -11,18 +12,18 @@
           :thickness="8"
           :hide-legend="true"
           :noData="data.length === 0"
-          :half="half"
+          :half="options?.half"
       >
 
         <template #legend-caption>
-          <p class="chart-value">{{ data.length !== 0 ? data[0].value : ''}}</p>
-          <p class="chart-label">{{ data.length !== 0 ? data[0].label : 'no data'}}</p>
+          <p class="chart-value">{{ data?.datasets.length !== 0 ? data?.datasets[0]?.data[0] : ''}}</p>
+          <p class="chart-label">{{ data?.datasets.length !== 0 ? data.labels[0] : 'no data'}}</p>
         </template>
 
       </ve-progress>
 
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script>
@@ -35,13 +36,17 @@ export default {
   components: { ChartContainer, VeProgress },
   props: {
     data: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {},
     },
-    half: {
-      type: Boolean,
-      default: false
+    options: {
+      type: Object,
+      default: () => {},
     },
+    // half: {
+    //   type: Boolean,
+    //   default: false
+    // },
     styleConfig: {
       type: Object,
       default: () => {},

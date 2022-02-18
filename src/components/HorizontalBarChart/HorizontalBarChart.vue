@@ -1,23 +1,25 @@
 <template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
-    <div class="charts" v-if="sections.length > 0">
-      <div class="row" v-for="item in sections" :key="item.label">
+<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
+
+    <div class="charts" v-if="sections.datasets?.length > 0">
+      <div class="row" v-for="item in sections.datasets" :key="item.label">
         <div class="text chart-label">
           <div class="legend-item">
-            <div class="legend-item-color" :style="`background: ${item.color};`" />
+            <div class="legend-item-color" :style="`background: ${item.backgroundColor};`" />
             <span>{{item.label}}</span>
           </div>
-          <span>{{item[showKey]}}</span>
+          <span>{{item.data[0]}}</span>
         </div>
         <div class="progress" :style="`background: ${getStyleVars.emptyColor};`">
-          <span :data-fill="item.value+'%'" class="progress-bar" :style="`width: ${item.value}%; background: ${item.color};`"></span>
+
+          <span :data-fill="item.data[0]+'%'" class="progress-bar" :style="`width: ${item.data[0]}%; background: ${item.backgroundColor};`"></span>
         </div>
       </div>
     </div>
     <div v-else class="charts empty">
       <span class="chart-label">no data</span>
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script>
@@ -29,8 +31,8 @@ export default {
   components: {ChartContainer},
   props: {
     data: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     styleConfig: {
       type: Object,
@@ -66,9 +68,12 @@ export default {
     },
 
     sections() {
-      return this.data.map((item, index) => {
-        return {...item, color: item.color || this.colors[index] || 'gray'}
-      } )
+
+      const newDatasets = this.data?.datasets.map((item, index) => {
+        return {...item, backgroundColor: item.backgroundColor || this.colors[index] || 'gray'}
+      })
+
+      return {...this.data, datasets: newDatasets}
     },
   },
   mounted() {

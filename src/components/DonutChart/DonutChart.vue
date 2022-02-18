@@ -1,5 +1,7 @@
 <template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
+
+<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
+<!--  todo center Value -->
     <div class="chart">
       <vc-donut background="#fff" :foreground="getStyleVars.emptyColor"
                 :size="getStyleVars.size" unit="px" :thickness="10"
@@ -11,7 +13,7 @@
         <p class="chart-label">{{ sections.length !== 0 ? centerLabel : 'no data'}}</p>
       </vc-donut>
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script >
@@ -23,10 +25,14 @@ export default {
   components: { ChartContainer },
   props: {
     data: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     styleConfig: {
+      type: Object,
+      default: () => {},
+    },
+    options: {
       type: Object,
       default: () => {},
     },
@@ -68,14 +74,17 @@ export default {
     },
 
     sections() {
-      return this.data.map((item, index) => {
-        return {...item, color: item.color || this.colors[index] || 'gray'}
-      } )
+      if (!this.data.datasets) {
+        return []
+      }
+
+      return this.data.datasets.map((item, index) => {
+        return {...item, value: item.data[0], color: item.color || this.colors[index] || 'gray'}
+      })
     },
 
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
   },
   watch: {}

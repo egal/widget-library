@@ -1,14 +1,13 @@
 <template>
-  <ChartContainer :header="header" :description="description" :style-config="styleConfig">
+<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
     <div style="width: 330px; height: 250px;">
       <vue3-chart-js
-          :id="data.id"
-          :type="data.type"
-          :data="data.data"
+          type="bar"
+          :data="dataset"
           :options="options"
       ></vue3-chart-js>
     </div>
-  </ChartContainer>
+<!--  </ChartContainer>-->
 </template>
 
 <script>
@@ -39,6 +38,12 @@ export default {
   },
   data() {
     return {
+      colors: [
+        variables.primaryAccent,
+        variables.pressedSecondary,
+        variables.gray500
+      ],
+
       id: 'stacked',
       type: 'bar',
 
@@ -56,7 +61,7 @@ export default {
             position: 'top',
             // align: 'center',
             fullWidth: true,
-            maintainAspectRatio: false,
+            // maintainAspectRatio: false,
 
             labels: {
               boxWidth: 5,
@@ -139,6 +144,16 @@ export default {
         size: this.styleConfig?.chartSize || 150
       }
     },
+
+    dataset() {
+      console.log(this.data)
+      const newDatasets = this.data?.datasets.map((item, index) => {
+        return {...item, backgroundColor: item.backgroundColor || this.colors[index] || 'gray'}
+      })
+      console.log(newDatasets)
+      return {...this.data, datasets: newDatasets}
+      // return {...this.data, datasets: newDatasets}
+    }
   },
   mounted() {
   },
