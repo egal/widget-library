@@ -1,22 +1,28 @@
 <template>
-
-<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
-<!--  todo center Value -->
-    <div class="chart">
-      <vc-donut background="#fff" :foreground="getStyleVars.emptyColor"
-                :size="getStyleVars.size" unit="px" :thickness="10"
-                has-legend legend-placement="bottom"
-                :sections="sections" :total="100"
-                :start-angle="90"
-                >
-        <p class="chart-value">{{ centerValue }}</p>
-        <p class="chart-label">{{ sections.length !== 0 ? centerLabel : 'no data'}}</p>
-      </vc-donut>
-    </div>
-<!--  </ChartContainer>-->
+  <div class="chart">
+    <vc-donut
+      :background="getConfig.backgroundColor"
+      :foreground="getConfig.emptyColor"
+      :size="getConfig.chartSize"
+      unit="px"
+      :thickness="getConfig.thickness"
+      :has-legend="getConfig.hasLegend"
+      :legend-placement="getConfig.legendPlacement"
+      :sections="sections"
+      :total="getConfig.total"
+      :start-angle="getConfig.angle"
+    >
+      <p class="chart-value" v-if="sections.length !== 0">
+        {{ options.centerValue }}
+      </p>
+      <p class="chart-label">
+        {{ sections.length !== 0 ? options.centerLabel : "no data" }}
+      </p>
+    </vc-donut>
+  </div>
 </template>
 
-<script >
+<script>
 import ChartContainer from "@/components/ChartContainer";
 import variables from "@/assets/styles/variables.scss";
 
@@ -28,70 +34,61 @@ export default {
       type: Object,
       default: () => {},
     },
-    styleConfig: {
-      type: Object,
-      default: () => {},
-    },
     options: {
       type: Object,
       default: () => {},
     },
-    header: {
-      type: String,
-      default: ""
-    },
-    description: {
-      type: String,
-      default: ""
-    },
-    centerValue: {
-      type: String,
-      default: ""
-    },
-    centerLabel: {
-      type: String,
-      default: ""
+    meta: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
     return {
-      displayValue: '',
-      displayLabel: '',
+      //todo colors !
       colors: [
         variables.primaryAccent,
         variables.pressedSecondary,
-        variables.gray500
+        variables.gray500,
       ],
-    }
+    };
   },
   computed: {
-    getStyleVars() {
+    //todo parse from Back
+    getConfig() {
       return {
-        lineColor: this.styleConfig?.lineColor || variables.primaryAccent,
-        emptyColor: this.styleConfig?.emptyColor || variables.gray300,
-        size: this.styleConfig?.chartSize || 150
-      }
+        // lineColor: this.options?.lineColor || variables.primaryAccent,
+        emptyColor: this.options?.emptyColor || variables.gray300,
+        chartSize: this.options?.chartSize || 150,
+        thickness: this.options?.thickness || 10,
+        backgroundColor: this.options?.background || variables.baseWhite,
+        hasLegend: this.options?.hasLegend ?? true,
+        legendPlacement: this.options?.legendPlacement || "bottom",
+        total: this.options?.total || 100,
+        angle: this.options?.angle || 90,
+      };
     },
 
     sections() {
       if (!this.data.datasets) {
-        return []
+        return [];
       }
 
       return this.data.datasets.map((item, index) => {
-        return {...item, value: item.data[0], color: item.color || this.colors[index] || 'gray'}
-      })
+        return {
+          ...item,
+          value: item.data[0],
+          color: item.backgroundColor || this.colors[index] || "gray",
+        };
+      });
     },
-
   },
   mounted() {},
-  methods: {
-  },
-  watch: {}
-}
+  methods: {},
+  watch: {},
+};
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/styles/variables';
-
+@import "../../assets/styles/variables";
 </style>

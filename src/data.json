@@ -1,31 +1,46 @@
 {
-  "doughnut_bar": {
+  "0": {
     "type": "doughnut_bar",
-    "title": "title",
-    "description": "description",
+    "title": "doughnut_bar",
+    "description": "doughnut_bar description",
     "data": {
-      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "labels": [],
       "datasets": [
         {
-          "label": "GitHub Commits",
-          "backgroundColor": "#f87979",
-          "data": [11]
+          "label": "GitHu3",
+          "backgroundColor": "#f82279",
+          "data": [45]
         },
         {
-          "label": "GitHu3",
+          "label": "GiftHu3",
           "backgroundColor": "#f87979",
           "data": [45]
         }
       ]
     },
-    "options": {}
+    "options": {
+      "angle": 90,
+      "fontColor": "#2D3748",
+      "secondFontColor": "#A0AEC0",
+      "titleFontSize": "14px",
+      "labelsFontSize": "12px",
+      "chartSize": 150,
+      "thickness": 10,
+      "centerValue": "donat",
+      "centerLabel": "",
+      "background": "#ffffff",
+      "emptyColor" : "#e2e8f0",
+      "hasLegend": true,
+      "legendPlacement": "bottom",
+      "total": 100
+    }
   },
-  "half_progress_bar": {
+  "1": {
     "type": "half_progress_bar",
-    "title": "title",
-    "description": "description",
+    "title": "half_progress_bar",
+    "description": "half_progress_bar description",
     "data": {
-      "labels": ["January"],
+      "labels": [],
       "datasets": [
         {
           "label": "GitHub Commits",
@@ -35,15 +50,25 @@
       ]
     },
     "options": {
-      "half": true
+      "half": true,
+      "fontColor": "#2D3748",
+      "secondFontColor": "#A0AEC0",
+      "titleFontSize": "14px",
+      "labelsFontSize": "12px",
+      "emptyColor" : "#e2e8f0",
+      "line": "round",
+      "lineColor": "#005ce4",
+      "chartSize": 150,
+      "thickness": 8,
+      "angle": "0"
     }
   },
-  "progress_bar": {
+  "2": {
     "type": "progress_bar",
-    "title": "title",
-    "description": "description",
+    "title": "progress_bar",
+    "description": "progress_bar description",
     "data": {
-      "labels": ["January"],
+      "labels": [],
       "datasets": [
         {
           "label": "GitHu3",
@@ -52,14 +77,26 @@
         }
       ]
     },
-    "options": {}
+    "options": {
+      "half": false,
+      "fontColor": "#2D3748",
+      "secondFontColor": "#A0AEC0",
+      "titleFontSize": "14px",
+      "labelsFontSize": "12px",
+      "emptyColor" : "#e2e8f0",
+      "line": "round",
+      "lineColor": "#005ce4",
+      "chartSize": 150,
+      "thickness": 8,
+      "angle": "-90"
+    }
   },
-  "multi_progress_bar": {
+  "3": {
     "type": "multi_progress_bar",
-    "title": "title",
-    "description": "description",
+    "title": "multi_progress_bar",
+    "description": "multi_progress_bar description",
     "data": {
-      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "labels": [],
       "datasets": [
         {
           "label": "GitHub Commits",
@@ -73,69 +110,206 @@
         }
       ]
     },
-    "options": {}
+    "options": {
+      "gap": 3,
+      "angle": "-90",
+      "fontColor": "#2D3748",
+      "secondFontColor": "#A0AEC0",
+      "titleFontSize": "14px",
+      "labelsFontSize": "12px",
+
+      "emptyColor" : "#e2e8f0",
+      "line": "round",
+      "chartSize": 150,
+      "thickness": 6,
+      "hasLegend": true,
+
+      "centerValue": "",
+      "centerLabel": ""
+    }
   },
-  "stacked_bar": {
+  "4": {
     "type": "stacked_bar",
-    "title": "title",
-    "description": "description",
+    "meta": {
+      "borderSkipped": false,
+      "enableBorderRadius": true,
+      "borderWidth": 2,
+      "borderRadius": 10,
+      "borderColor": "#fff",
+      "width": 11
+    },
+    "title": "stacked_bar",
+    "description": "stacked_bar description",
     "data": {
       "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       "datasets": [
         {
           "label": "GitHub Commits",
-          "backgroundColor": "#545",
+          "backgroundColor": "#0066FF",
           "data": [40, 20, 12, 39, 10, 40, 39, 40, 40, 20, 12, 11]
         },
         {
           "label": "GitHu3",
-          "backgroundColor": "#783",
+          "backgroundColor": "#76ACFB",
+          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+        },
+        {
+          "label": "GitHкu3",
+          "backgroundColor": "#A0AEC0",
           "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
         }
       ]
     },
-    "options": {}
+    "options": {
+      "legend": true,
+      "scales": {
+        "x": {
+          "stacked": true,
+          "display": true,
+          "grid": {
+            "display": false,
+            "drawBorder": false
+          },
+          "ticks": {
+            "font": {
+              "size": 12,
+              "family": "Open Sans"
+            },
+            "padding": 4,
+            "color": "#A0AEC0"
+          }
+        },
+        "y": {
+          "stacked": true,
+          "grid": {
+            "display": true,
+            "drawBorder": false,
+            "borderDash": [4, 3],
+            "zeroLineBorderDash": [4, 3],
+            "zeroLineColor": "#E4ECF7",
+            "color": "#E4ECF7"
+          },
+
+          "ticks": {
+            "color": "#A0AEC0",
+            "font": {
+              "size": 12,
+              "family": "Open Sans"
+            },
+
+            "maxTicksLimit": 6,
+            "minTicksLimit": 6,
+            "min": 0,
+            "max": 100,
+            "padding": 0
+          }
+        }
+      }
+    }
   },
-  "bar": {
-    "type": "bar",
-    "title": "title",
-    "description": "description",
+  "5": {
+    "type": "vertical_bar",
+    "meta": {
+      "borderRadius": 10,
+      "borderColor": "#fff",
+      "width": 7
+    },
+    "title": "vertical_bar",
+    "description": "vertical_bar description",
     "data": {
-      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "labels": ["January", "February", "March", "April", "May", "June"],
       "datasets": [
         {
           "label": "GitHub Commits",
-          "backgroundColor": "#f87979",
-          "data": [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+         "backgroundColor": "#0066FF",
+          "data": [40, 20, 12, 39, 10, 40]
         },
         {
           "label": "GitHu3",
-          "backgroundColor": "#f87979",
-          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+          "backgroundColor": "#76ACFB",
+          "data": [4, 2, 1, 3, 1, 4]
+        },
+        {
+          "label": "GitghHu3",
+          "backgroundColor": "#A0AEC0",
+          "data": [4, 2, 1, 3, 1, 67, 3, 8, 40, 2, 22, 41]
         }
       ]
     },
-    "options": {}
+    "options": {
+      "legend": true,
+      "scales": {
+        "x": {
+          "display": true,
+          "grid": {
+            "display": false,
+            "drawBorder": false
+          },
+          "ticks": {
+            "color": "#A0AEC0",
+            "font": {
+              "size": 12,
+              "family": "Open Sans"
+            },
+            "padding": 4
+          }
+        },
+        "y": {
+          "grid": {
+            "display": true,
+            "drawBorder": false,
+            "borderDash": [ 4, 3 ],
+            "zeroLineBorderDash": [ 4, 3 ],
+            "zeroLineColor": "#E4ECF7",
+            "color": "#E4ECF7"
+          },
+          "ticks": {
+            "color": "#A0AEC0",
+            "font": {
+              "size": 12,
+              "family": "Open Sans"
+            },
+            "maxTicksLimit": 6,
+            "minTicksLimit": 6,
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    }
   },
-  "horizontal_bar": {
+  "6": {
     "type": "horizontal_bar",
-    "title": "title",
-    "description": "description",
+    "title": "horizontal_bar",
+    "description": "horizontal_bar description",
     "data": {
-      "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "labels": ["January", "February", "March", "April", "May", "June"],
       "datasets": [
         {
           "label": "GitHub Commits",
-          "backgroundColor": "#f87979",
+          "backgroundColor": "#0066FF",
           "data": [40]
         },
         {
           "label": "GitHu3",
-          "backgroundColor": "#f87979",
+          "backgroundColor": "#76ACFB",
           "data": [51]
+        },
+        {
+          "label": "GitghHu3",
+          "backgroundColor": "#A0AEC0",
+          "data": [4]
         }
       ]
     },
-    "options": {}
+    "options": {
+      "emptyColor":"#e2e8f0",
+      "fontColor": "#2D3748",
+      "secondFontColor": "#A0AEC0",
+      "titleFontSize": "14px",
+      "labelsFontSize": "12px",
+      "thickness": 7,
+      "background": "#ffffff"
+    }
   }
 }

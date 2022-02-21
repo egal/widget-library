@@ -1,29 +1,29 @@
 <template>
-<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
-
-    <div class="chart" :class="{half: options?.half}" >
-      <ve-progress
-          :progress="data?.datasets[0]?.data[0]"
-          :angle="options?.half ? 0 : -90"
-          :color="getStyleVars.lineColor"
-          line="round"
-          :empty-color="getStyleVars.emptyColor"
-          :size="getStyleVars.size"
-          :thickness="8"
-          :hide-legend="true"
-          :noData="data.length === 0"
-          :half="options?.half"
-      >
-
-        <template #legend-caption>
-          <p class="chart-value">{{ data?.datasets.length !== 0 ? data?.datasets[0]?.data[0] : ''}}</p>
-          <p class="chart-label">{{ data?.datasets.length !== 0 ? data.labels[0] : 'no data'}}</p>
-        </template>
-
-      </ve-progress>
-
-    </div>
-<!--  </ChartContainer>-->
+  <div class="chart" :class="{ half: options?.half }">
+    <ve-progress
+      :progress="data?.datasets[0]?.data[0]"
+      :angle="getConfig.angle"
+      :color="getConfig.lineColor"
+      :line="getConfig.line"
+      :empty-color="getConfig.emptyColor"
+      :size="getConfig.chartSize"
+      :thickness="getConfig.thickness"
+      :hide-legend="getConfig.hideLegend"
+      :noData="data.length === 0"
+      :half="options?.half"
+    >
+      <template #legend-caption>
+        <p class="chart-value" v-if="data?.datasets.length !== 0">
+          {{ data?.datasets[0]?.data[0] }}
+        </p>
+        <p class="chart-label">
+          {{
+            data?.datasets.length !== 0 ? data.datasets[0]?.label : "no data"
+          }}
+        </p>
+      </template>
+    </ve-progress>
+  </div>
 </template>
 
 <script>
@@ -43,61 +43,57 @@ export default {
       type: Object,
       default: () => {},
     },
-    // half: {
-    //   type: Boolean,
-    //   default: false
-    // },
-    styleConfig: {
+    meta: {
       type: Object,
       default: () => {},
     },
-    header: {
-      type: String,
-      default: ""
-    },
-    description: {
-      type: String,
-      default: ""
-    },
   },
   data() {
-    return {}
+    return {};
   },
   computed: {
-    getStyleVars() {
+    getConfig() {
+      console.log(this.options?.hideLegend ?? true);
       return {
-        lineColor: this.styleConfig?.lineColor || variables.primaryAccent,
-        emptyColor: this.styleConfig?.emptyColor || variables.gray300,
-        size: this.styleConfig?.chartSize || 150
-      }
+        half: this.options?.half || false,
+        lineColor: this.options?.lineColor || variables.primaryAccent,
+        emptyColor: this.options?.emptyColor || variables.gray300,
+        chartSize: this.options?.chartSize || 150,
+
+        line: this.options?.line || "round",
+        thickness: this.options?.thickness || 8,
+        hideLegend: this.options?.hideLegend ?? true,
+        angle: this.options?.angle
+          ? this.options.angle
+          : this.options?.half
+          ? 0
+          : -90,
+      };
     },
   },
-  mounted() {
-  },
-
+  mounted() {},
   methods: {},
-  watch: {}
-}
+  watch: {},
+};
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/styles/variables';
+@import "../../assets/styles/variables";
 
-
-.chart  {
+.chart {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-      flex-direction: column;
-    -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: center;
-    -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 
   &.half {
     /deep/ .ep-legend--container {

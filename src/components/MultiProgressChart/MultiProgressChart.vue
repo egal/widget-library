@@ -1,35 +1,35 @@
 <template>
-<!--  <ChartContainer :header="header" :description="description" :style-config="styleConfig">-->
-    <div class="chart">
-      <ve-progress
-         :data="circles"
-         :angle="-90"
-         color="#0066FF"
-         line="round"
-         :empty-color="getStyleVars.emptyColor"
-         :size="getStyleVars.size"
-         :thickness="6"
-         :hide-legend="false"
-         :noData="false"
-         :gap="3"
-        >
+  <div class="chart">
+    <ve-progress
+      :data="circles"
+      :angle="-90"
+      color="#0066FF"
+      line="round"
+      :empty-color="getConfig.emptyColor"
+      :size="getConfig.chartSize"
+      :thickness="6"
+      :hide-legend="getConfig.hasLegend"
+      :noData="data.length === 0"
+      :gap="getConfig.gap"
+    >
+      <template #legend-caption v-if="circles.length !== 0">
+        <p class="chart-value">{{ options.centerValue }}</p>
+        <p class="chart-label">
+          {{ circles.length !== 0 ? options.centerLabel : "no data" }}
+        </p>
+      </template>
+    </ve-progress>
 
-<!--        todo center value -->
-        <template #legend-caption>
-          <p class="chart-value">{{ centerValue }}</p>
-          <p class="chart-label">{{ circles.length !== 0 ? centerLabel : 'no data'}}</p>
-        </template>
-
-      </ve-progress>
-
-      <div class="legend">
-        <span class="legend-item" v-for="item in circles" :key="item.label">
-          <span class="legend-item-color" :style="{backgroundColor: item.color}" />
-          <span>{{item.label}}</span>
-        </span>
-      </div>
+    <div class="legend" v-if="getConfig.hasLegend">
+      <span class="legend-item" v-for="item in circles" :key="item.label">
+        <span
+          class="legend-item-color"
+          :style="{ backgroundColor: item.color }"
+        />
+        <span>{{ item.label }}</span>
+      </span>
     </div>
-<!--  </ChartContainer>-->
+  </div>
 </template>
 
 <script>
@@ -39,7 +39,7 @@ import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "MultiProgressChart",
-  components: {ChartContainer, VeProgress },
+  components: { ChartContainer, VeProgress },
   props: {
     data: {
       type: Object,
@@ -49,95 +49,83 @@ export default {
       type: Object,
       default: () => {},
     },
-    styleConfig: {
+    meta: {
       type: Object,
       default: () => {},
-    },
-    header: {
-      type: String,
-      default: ""
-    },
-    description: {
-      type: String,
-      default: ""
-    },
-    centerValue: {
-      type: String || Number,
-      default: ""
-    },
-    centerLabel: {
-      type: String || Number,
-      default: ""
     },
   },
   data() {
     return {
+      //todo colors !
       colors: [
         variables.primaryAccent,
         variables.pressedSecondary,
         variables.gray500,
       ],
-    }
+    };
   },
   computed: {
-    getStyleVars() {
+    getConfig() {
+      console.log(!this.options?.hasLegend || false);
       return {
-        emptyColor: this.styleConfig?.emptyColor || variables.gray300,
-        size: this.styleConfig?.chartSize || 150
-      }
+        emptyColor: this.options?.emptyColor || variables.gray300,
+        chartSize: this.options?.chartSize || 150,
+
+        gap: this.options?.gap || 3,
+        angle: this.options?.angle || -90,
+        line: this.options?.line || "round",
+        thickness: this.options?.thickness || 6,
+        hasLegend: this.options?.hasLegend || false,
+      };
     },
 
     circles() {
-      let circlesArray = []
+      let circlesArray = [];
 
-      // todo empty datasets
+      // todo if empty datasets
       if (this.data?.datasets) {
-        circlesArray =  this.data?.datasets.map((item, index) => {
+        circlesArray = this.data?.datasets.map((item, index) => {
           return {
             progress: item.data[0],
             label: item.label,
-            color: item.color || this.colors[index] || 'gray',
-            thickness: 8 - index
-          }
-        })
-
+            color: item.color || this.colors[index] || "gray",
+            thickness: 8 - index,
+          };
+        });
       } else {
         circlesArray = [
           {
             progress: 0,
-            color: '',
+            color: "",
             thickness: 8,
-            label: ''
+            label: "",
           },
           {
             progress: 0,
-            color: '',
+            color: "",
             thickness: 7,
-            label: ''
+            label: "",
           },
           {
             progress: 0,
-            color: '',
+            color: "",
             thickness: 6,
-            label: ''
-          }
-        ]
+            label: "",
+          },
+        ];
       }
-      return circlesArray
+      return circlesArray;
     },
-
   },
-  mounted() {
-  },
+  mounted() {},
 
   methods: {},
-  watch: {}
-}
+  watch: {},
+};
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/styles/variables';
-
+@import "../../assets/styles/variables";
 
 .chart {
   display: -webkit-box;
@@ -165,5 +153,4 @@ export default {
     }
   }
 }
-
 </style>

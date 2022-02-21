@@ -18,7 +18,8 @@ import { Chart, registerables } from "chart.js";
 import { BarController } from "chart.js";
 
 export default {
-  name: "StackedBar",
+  name: "VerticalBar",
+  // extends: Custom,
   components: {},
   props: {
     // chartId: {
@@ -53,19 +54,17 @@ export default {
           super.draw(arguments);
 
           const meta = this.getMeta();
+
           meta.data = meta.data.map((i) => {
-            i.borderSkipped = metadata?.borderSkipped || false;
-            i.enableBorderRadius = metadata?.enableBorderRadius || true;
             i.options.borderRadius = metadata?.borderRadius || 10;
-            i.options.borderWidth = metadata?.borderWidth || 2;
             i.options.borderColor = metadata?.borderColor || "#fff";
-            i.width = metadata?.width || 11;
+            i.width = metadata?.width || 7;
             return i;
           });
         }
       }
 
-      Custom.id = "stacked";
+      Custom.id = "vertical-grouped";
       Custom.defaults = BarController.defaults;
 
       Chart.register(...registerables);
@@ -74,7 +73,7 @@ export default {
       const ctx = this.$refs.canvas.getContext("2d");
 
       new Chart(ctx, {
-        type: "stacked",
+        type: "vertical-grouped",
         data: this.data,
         options: {
           ...this.options,
