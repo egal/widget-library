@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import Chart from "@/components/Chart.vue";
 import fakeData from "../src/data.json";

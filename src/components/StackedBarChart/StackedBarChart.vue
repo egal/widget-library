@@ -16,7 +16,6 @@
       </div>
     </div>
 
-    <!--    <canvas id="canvas"></canvas>-->
     <vue3-chart-js ref="chartRef" v-bind="{ ...barChart }" />
   </div>
 </template>
@@ -50,9 +49,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    console.log(this.$refs);
-  },
+  mounted() {},
   methods: {},
   computed: {
     barChart() {
@@ -60,6 +57,49 @@ export default {
         type: "stacked",
         data: this.data,
         options: {
+          scales: {
+            x: {
+              stacked: true,
+              display: true,
+              grid: {
+                display: false,
+                drawBorder: false,
+              },
+              ticks: {
+                font: {
+                  size: 12,
+                  family: "Open Sans",
+                },
+                padding: 4,
+                color: "#A0AEC0",
+              },
+            },
+            y: {
+              stacked: true,
+              grid: {
+                display: true,
+                drawBorder: false,
+                borderDash: [4, 3],
+                zeroLineBorderDash: [4, 3],
+                zeroLineColor: "#E4ECF7",
+                color: "#E4ECF7",
+              },
+
+              ticks: {
+                color: "#A0AEC0",
+                font: {
+                  size: 12,
+                  family: "Open Sans",
+                },
+
+                maxTicksLimit: 6,
+                minTicksLimit: 6,
+                min: 0,
+                max: 100,
+                padding: 0,
+              },
+            },
+          },
           ...this.options,
           plugins: {
             legend: {
@@ -67,8 +107,8 @@ export default {
             },
           },
         },
-        width: this.options.width,
-        height: this.options.height,
+        width: this.options?.width || 327,
+        height: this.options?.height || 243,
       };
     },
   },
@@ -78,7 +118,7 @@ export default {
   beforeMount() {
     const metadata = this.meta;
 
-    class Custom extends BarController {
+    class CustomStacked extends BarController {
       draw(options) {
         super.draw(arguments);
 
@@ -89,17 +129,17 @@ export default {
           i.options.borderRadius = metadata?.borderRadius || 10;
           i.options.borderWidth = metadata?.borderWidth || 2;
           i.options.borderColor = metadata?.borderColor || "#fff";
-          i.width = metadata?.width || 11;
+          i.width = metadata?.barWidth || 11;
           return i;
         });
       }
     }
 
-    Custom.id = "stacked";
-    Custom.defaults = BarController.defaults;
+    CustomStacked.id = "stacked";
+    CustomStacked.defaults = BarController.defaults;
 
     Chart.register(...registerables);
-    Chart.register(Custom);
+    Chart.register(CustomStacked);
   },
   watch: {
     "data.datasets": {

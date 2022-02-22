@@ -22,6 +22,8 @@
       "angle": 90,
       "fontColor": "#2D3748",
       "secondFontColor": "#A0AEC0",
+      "fontWeight": "bold",
+      "secondFontWeight": "normal",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
       "chartSize": 150,
@@ -53,6 +55,8 @@
       "half": true,
       "fontColor": "#2D3748",
       "secondFontColor": "#A0AEC0",
+      "fontWeight": "bold",
+      "secondFontWeight": "normal",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
       "emptyColor" : "#e2e8f0",
@@ -81,6 +85,8 @@
       "half": false,
       "fontColor": "#2D3748",
       "secondFontColor": "#A0AEC0",
+      "fontWeight": "bold",
+      "secondFontWeight": "normal",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
       "emptyColor" : "#e2e8f0",
@@ -100,7 +106,7 @@
       "datasets": [
         {
           "label": "GitHub Commits",
-          "backgroundColor": "#f87979",
+          "backgroundColor": "#f82229",
           "data": [40]
         },
         {
@@ -115,6 +121,8 @@
       "angle": "-90",
       "fontColor": "#2D3748",
       "secondFontColor": "#A0AEC0",
+      "fontWeight": "bold",
+      "secondFontWeight": "normal",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
       "emptyColor" : "#e2e8f0",
@@ -122,7 +130,6 @@
       "chartSize": 150,
       "thickness": 6,
       "hasLegend": true,
-
       "centerValue": "",
       "centerLabel": ""
     }
@@ -130,12 +137,10 @@
   {
     "type": "stacked_bar",
     "meta": {
-      "borderSkipped": false,
-      "enableBorderRadius": true,
       "borderWidth": 2,
       "borderRadius": 10,
       "borderColor": "#fff",
-      "width": 11
+      "barWidth": 11
     },
     "title": "stacked_bar",
     "description": "stacked_bar description",
@@ -195,7 +200,8 @@
             "color": "#A0AEC0",
             "font": {
               "size": 12,
-              "family": "Open Sans"
+              "family": "Open Sans",
+              "weight": "bold"
             },
 
             "maxTicksLimit": 6,
@@ -211,10 +217,12 @@
   {
     "type": "vertical_bar",
     "meta": {
+      "borderWidth": 2,
       "borderRadius": 10,
       "borderColor": "#fff",
-      "width": 7
+      "barWidth": 11
     },
+
     "title": "vertical_bar",
     "description": "vertical_bar description",
     "data": {
@@ -311,6 +319,8 @@
       "secondFontColor": "#A0AEC0",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
+      "fontWeight": "bold",
+      "secondFontWeight": "normal",
       "thickness": 7,
       "background": "#ffffff"
     }

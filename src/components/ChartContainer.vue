@@ -41,6 +41,8 @@ export default {
         "--main-font-size": this.options?.titleFontSize || variables.p5FontSize,
         "--second-font-size":
           this.options?.labelsFontSize || variables.p6FontSize,
+        "--main-font-weight": this.options?.fontWeight || "bold",
+        "--second-font-weight": this.options?.secondFontWeight || "normal",
         "--background-color":
           this.options?.backgroundColor || variables.baseWhite,
       };
@@ -85,7 +87,7 @@ export default {
   margin: 0 0 8px 0;
   -ms-flex-item-align: start;
   align-self: flex-start;
-  font-weight: bold;
+  font-weight: var(--main-font-weight);
   font-size: var(--main-font-size);
   color: var(--main-font-color);
 }
@@ -93,7 +95,7 @@ export default {
 .description {
   margin: 0 0 24px 0;
   align-self: flex-start;
-  font-weight: normal;
+  font-weight: var(--second-font-weight);
   font-size: var(--main-font-size);
   color: var(--second-font-color);
 }
@@ -101,7 +103,7 @@ export default {
 // center text styles
 /deep/ .chart {
   &-value {
-    font-weight: bold;
+    font-weight: var(--main-font-weight);
     font-size: var(--second-font-size);
     color: var(--main-font-color);
     margin: 0;
@@ -109,6 +111,7 @@ export default {
 
   &-label {
     margin: 5px 0 0 0;
+    font-weight: var(--second-font-weight);
     font-size: var(--second-font-size);
     color: var(--second-font-color);
   }
