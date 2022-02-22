@@ -47,13 +47,16 @@ export default {
       type: Object,
       default: () => {},
     },
+    defaultColors: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {};
   },
   computed: {
     getConfig() {
-      console.log(this.options?.hideLegend ?? true);
       return {
         half: this.options?.half || false,
         lineColor: this.options?.lineColor || variables.primaryAccent,

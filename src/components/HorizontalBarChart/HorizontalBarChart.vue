@@ -45,16 +45,13 @@ export default {
       type: Object,
       default: () => {},
     },
+    defaultColors: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
-    return {
-      // todo colors !
-      colors: [
-        variables.primaryAccent,
-        variables.pressedSecondary,
-        variables.gray500,
-      ],
-    };
+    return {};
   },
   computed: {
     getConfig() {
@@ -68,7 +65,8 @@ export default {
       const newDatasets = this.data?.datasets.map((item, index) => {
         return {
           ...item,
-          backgroundColor: item.backgroundColor || this.colors[index] || "gray",
+          backgroundColor:
+            item.backgroundColor || this.defaultColors[index] || "gray",
         };
       });
 

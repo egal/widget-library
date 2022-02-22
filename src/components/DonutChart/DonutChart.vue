@@ -42,22 +42,17 @@ export default {
       type: Object,
       default: () => {},
     },
+    defaultColors: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
-    return {
-      //todo colors !
-      colors: [
-        variables.primaryAccent,
-        variables.pressedSecondary,
-        variables.gray500,
-      ],
-    };
+    return {};
   },
   computed: {
-    //todo parse from Back
     getConfig() {
       return {
-        // lineColor: this.options?.lineColor || variables.primaryAccent,
         emptyColor: this.options?.emptyColor || variables.gray300,
         chartSize: this.options?.chartSize || 150,
         thickness: this.options?.thickness || 10,
@@ -78,7 +73,7 @@ export default {
         return {
           ...item,
           value: item.data[0],
-          color: item.backgroundColor || this.colors[index] || "gray",
+          color: item.backgroundColor || this.defaultColors[index] || "gray",
         };
       });
     },

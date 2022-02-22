@@ -1,30 +1,35 @@
 <template>
-  <div class="legend" v-if="options.legend">
-    <div class="legend-item" v-for="item in data.datasets" :key="item">
+  <div>
+    <div class="legend" v-if="options.legend">
       <div
-        class="legend-item-color"
-        :style="`background: ${item.backgroundColor};`"
-      />
-      <span>{{ item.label }}</span>
+        class="legend-item"
+        v-for="(item, index) in data.datasets"
+        :key="item"
+      >
+        <div
+          class="legend-item-color"
+          :style="`background: ${
+            item.backgroundColor || defaultColors[index]
+          };`"
+        />
+        <span>{{ item.label }}</span>
+      </div>
     </div>
-  </div>
 
-  <canvas ref="canvas"></canvas>
+    <!--    <canvas id="canvas"></canvas>-->
+    <vue3-chart-js ref="chartRef" v-bind="{ ...barChart }" />
+  </div>
 </template>
 
 <script>
 import { Chart, registerables } from "chart.js";
-
 import { BarController } from "chart.js";
+import Vue3ChartJs from "@j-t-mcc/vue3-chartjs";
 
 export default {
   name: "StackedBar",
-  components: {},
+  components: { Vue3ChartJs },
   props: {
-    // chartId: {
-    //   type: String,
-    //   default: "",
-    // },
     data: {
       type: Object,
       default: () => {},
@@ -37,43 +42,21 @@ export default {
       type: Object,
       default: () => {},
     },
+    defaultColors: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {};
   },
   mounted() {
-    this.callRenderFunction();
+    console.log(this.$refs);
   },
-  methods: {
-    callRenderFunction() {
-      const metadata = this.meta;
-
-      class Custom extends BarController {
-        draw(options) {
-          super.draw(arguments);
-
-          const meta = this.getMeta();
-          meta.data = meta.data.map((i) => {
-            i.borderSkipped = metadata?.borderSkipped || false;
-            i.enableBorderRadius = metadata?.enableBorderRadius || true;
-            i.options.borderRadius = metadata?.borderRadius || 10;
-            i.options.borderWidth = metadata?.borderWidth || 2;
-            i.options.borderColor = metadata?.borderColor || "#fff";
-            i.width = metadata?.width || 11;
-            return i;
-          });
-        }
-      }
-
-      Custom.id = "stacked";
-      Custom.defaults = BarController.defaults;
-
-      Chart.register(...registerables);
-      Chart.register(Custom);
-
-      const ctx = this.$refs.canvas.getContext("2d");
-
-      new Chart(ctx, {
+  methods: {},
+  computed: {
+    barChart() {
+      return {
         type: "stacked",
         data: this.data,
         options: {
@@ -84,7 +67,47 @@ export default {
             },
           },
         },
-      });
+        width: this.options.width,
+        height: this.options.height,
+      };
+    },
+  },
+  beforeUnmount() {
+    this.$refs.chartRef.destroy();
+  },
+  beforeMount() {
+    const metadata = this.meta;
+
+    class Custom extends BarController {
+      draw(options) {
+        super.draw(arguments);
+
+        const meta = this.getMeta();
+        meta.data = meta.data.map((i) => {
+          i.borderSkipped = metadata?.borderSkipped || false;
+          i.enableBorderRadius = metadata?.enableBorderRadius || true;
+          i.options.borderRadius = metadata?.borderRadius || 10;
+          i.options.borderWidth = metadata?.borderWidth || 2;
+          i.options.borderColor = metadata?.borderColor || "#fff";
+          i.width = metadata?.width || 11;
+          return i;
+        });
+      }
+    }
+
+    Custom.id = "stacked";
+    Custom.defaults = BarController.defaults;
+
+    Chart.register(...registerables);
+    Chart.register(Custom);
+  },
+  watch: {
+    "data.datasets": {
+      handler() {
+        this.$refs.chartRef.destroy();
+        this.$refs.chartRef.render();
+      },
+      deep: true,
     },
   },
 };

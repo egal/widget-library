@@ -9,6 +9,7 @@
       :data="data.data"
       :options="data.options"
       :meta="data.meta ?? {}"
+      :theme-colors="defaultColors"
     />
   </ChartContainer>
 </template>
@@ -22,6 +23,7 @@ import HorizontalBarChart from "@/components/HorizontalBarChart/HorizontalBarCha
 import ChartContainer from "@/components/ChartContainer";
 import VerticalBarChart from "@/components/VerticalBarChart/VerticalBarChart";
 import StackedBarChart from "@/components/StackedBarChart/StackedBarChart";
+import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "Chart",
@@ -35,6 +37,11 @@ export default {
   data() {
     return {
       chartTypes,
+      defaultColors: [
+        variables.primaryAccent,
+        variables.pressedSecondary,
+        variables.gray500,
+      ],
     };
   },
   computed: {

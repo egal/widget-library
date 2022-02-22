@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-wrapper" :style="getStyleVars">
+  <div class="chart-wrapper" ref="chartWrapper" :style="getStyleVars">
     <span class="header">{{ title }}</span>
     <p class="description">{{ description }}</p>
     <slot />
@@ -27,7 +27,9 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      width: 0,
+    };
   },
   computed: {
     getStyleVars() {

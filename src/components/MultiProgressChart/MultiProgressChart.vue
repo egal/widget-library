@@ -53,24 +53,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    defaultColors: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
-    return {
-      //todo colors !
-      colors: [
-        variables.primaryAccent,
-        variables.pressedSecondary,
-        variables.gray500,
-      ],
-    };
+    return {};
   },
   computed: {
     getConfig() {
-      console.log(!this.options?.hasLegend || false);
       return {
         emptyColor: this.options?.emptyColor || variables.gray300,
         chartSize: this.options?.chartSize || 150,
-
         gap: this.options?.gap || 3,
         angle: this.options?.angle || -90,
         line: this.options?.line || "round",
@@ -82,13 +77,12 @@ export default {
     circles() {
       let circlesArray = [];
 
-      // todo if empty datasets
       if (this.data?.datasets) {
         circlesArray = this.data?.datasets.map((item, index) => {
           return {
             progress: item.data[0],
             label: item.label,
-            color: item.color || this.colors[index] || "gray",
+            color: item.backgroundColor || this.defaultColors[index] || "gray",
             thickness: 8 - index,
           };
         });

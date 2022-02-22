@@ -1,5 +1,5 @@
-{
-  "0": {
+ [
+   {
     "type": "doughnut_bar",
     "title": "doughnut_bar",
     "description": "doughnut_bar description",
@@ -9,12 +9,12 @@
         {
           "label": "GitHu3",
           "backgroundColor": "#f82279",
-          "data": [45]
+          "data": [4]
         },
         {
           "label": "GiftHu3",
           "backgroundColor": "#f87979",
-          "data": [45]
+          "data": [5]
         }
       ]
     },
@@ -35,7 +35,7 @@
       "total": 100
     }
   },
-  "1": {
+  {
     "type": "half_progress_bar",
     "title": "half_progress_bar",
     "description": "half_progress_bar description",
@@ -63,7 +63,7 @@
       "angle": "0"
     }
   },
-  "2": {
+   {
     "type": "progress_bar",
     "title": "progress_bar",
     "description": "progress_bar description",
@@ -91,7 +91,7 @@
       "angle": "-90"
     }
   },
-  "3": {
+  {
     "type": "multi_progress_bar",
     "title": "multi_progress_bar",
     "description": "multi_progress_bar description",
@@ -117,7 +117,6 @@
       "secondFontColor": "#A0AEC0",
       "titleFontSize": "14px",
       "labelsFontSize": "12px",
-
       "emptyColor" : "#e2e8f0",
       "line": "round",
       "chartSize": 150,
@@ -128,7 +127,7 @@
       "centerLabel": ""
     }
   },
-  "4": {
+  {
     "type": "stacked_bar",
     "meta": {
       "borderSkipped": false,
@@ -151,17 +150,19 @@
         {
           "label": "GitHu3",
           "backgroundColor": "#76ACFB",
-          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+          "data": [40, 20, 10, 35, 14, 45, 39, 88, 40, 27, 22, 41]
         },
         {
           "label": "GitHкu3",
           "backgroundColor": "#A0AEC0",
-          "data": [4, 2, 1, 3, 1, 4, 3, 8, 40, 2, 22, 41]
+          "data": [14, 12, 14, 13, 1, 4, 3, 8, 40, 2, 22, 41]
         }
       ]
     },
     "options": {
       "legend": true,
+      "width": 327,
+      "height": 243,
       "scales": {
         "x": {
           "stacked": true,
@@ -207,7 +208,7 @@
       }
     }
   },
-  "5": {
+  {
     "type": "vertical_bar",
     "meta": {
       "borderRadius": 10,
@@ -221,23 +222,25 @@
       "datasets": [
         {
           "label": "GitHub Commits",
-         "backgroundColor": "#0066FF",
-          "data": [40, 20, 12, 39, 10, 40]
+          "backgroundColor": "#0066FF",
+          "data": [40, 20, 12, 39, 10, 40, 39, 40, 40, 20, 12, 11]
         },
         {
           "label": "GitHu3",
           "backgroundColor": "#76ACFB",
-          "data": [4, 2, 1, 3, 1, 4]
+          "data": [40, 20, 10, 35, 14, 45, 39, 88, 40, 27, 22, 41]
         },
         {
-          "label": "GitghHu3",
+          "label": "GitHкu3",
           "backgroundColor": "#A0AEC0",
-          "data": [4, 2, 1, 3, 1, 67, 3, 8, 40, 2, 22, 41]
+          "data": [14, 12, 14, 13, 1, 4, 3, 8, 40, 2, 22, 41]
         }
       ]
     },
     "options": {
       "legend": true,
+      "width": 327,
+      "height": 243,
       "scales": {
         "x": {
           "display": true,
@@ -278,7 +281,7 @@
       }
     }
   },
-  "6": {
+ {
     "type": "horizontal_bar",
     "title": "horizontal_bar",
     "description": "horizontal_bar description",
@@ -312,4 +315,4 @@
       "background": "#ffffff"
     }
   }
-}
+]

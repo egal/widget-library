@@ -2,19 +2,15 @@
   <div class="wrapper" v-for="(dataItem, idx) in fakeData" :key="idx">
     <Chart :data="dataItem" />
   </div>
-
-  <hr />
-
   <div class="wrapper">
     <Chart :data="fakeData[2]" />
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
-import Chart from "@/components/Chart";
-
-import fakeData from "./data.json";
+import Chart from "@/components/Chart.vue";
+import fakeData from "../src/data.json";
 
 export default defineComponent({
   name: "App",
@@ -27,6 +23,8 @@ export default defineComponent({
       fakeData,
     };
   },
+  mounted() {},
+  methods: {},
 });
 </script>
 
