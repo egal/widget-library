@@ -27,7 +27,7 @@ import ChartContainer from "@/components/ChartContainer";
 import variables from "@/assets/styles/variables.scss";
 
 export default {
-  name: "SimplePieChart",
+  name: "DoughnutChart",
   components: { ChartContainer },
   props: {
     data: {

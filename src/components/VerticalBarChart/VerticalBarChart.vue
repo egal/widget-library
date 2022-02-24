@@ -1,16 +1,10 @@
 <template>
-  <div>
-    <div class="legend" v-if="options.legend">
-      <div class="legend-item" v-for="item in data.datasets" :key="item">
-        <div
-          class="legend-item-color"
-          :style="`background: ${item.backgroundColor};`"
-        />
-        <span>{{ item.label }}</span>
-      </div>
-    </div>
+  <div class="custom-chart">
+    <Legend v-if="options.legend" :datasets="data.datasets" />
 
-    <vue3-chart-js ref="chartRef" v-bind="{ ...barChart }" />
+    <div class="custom-chart__wrapper">
+      <vue3-chart-js ref="chartRef" v-bind="{ ...barChart }" />
+    </div>
   </div>
 </template>
 
@@ -18,10 +12,11 @@
 import { Chart, registerables } from "chart.js";
 import { BarController } from "chart.js";
 import Vue3ChartJs from "@j-t-mcc/vue3-chartjs";
+import Legend from "@/components/Legend";
 
 export default {
   name: "VerticalBar",
-  components: { Vue3ChartJs },
+  components: { Vue3ChartJs, Legend },
   props: {
     data: {
       type: Object,
@@ -51,6 +46,7 @@ export default {
         type: "vertical",
         data: this.data,
         options: {
+          legend: true,
           scales: {
             x: {
               display: true,
@@ -73,7 +69,6 @@ export default {
                 drawBorder: false,
                 borderDash: [4, 3],
                 zeroLineBorderDash: [4, 3],
-                zeroLineColor: "#E4ECF7",
                 color: "#E4ECF7",
               },
 
@@ -87,8 +82,7 @@ export default {
                 maxTicksLimit: 6,
                 minTicksLimit: 6,
                 min: 0,
-                max: 100,
-                padding: 0,
+                padding: 10,
               },
             },
           },
@@ -145,14 +139,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.legend {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 24px;
-  margin-top: 0;
-}
-</style>
+<style scoped lang="scss"></style>

@@ -147,4 +147,13 @@ export default {
   margin-right: 8px;
   display: inline-block;
 }
+
+// styles for custom charts (stacked, vertical, line and curves)
+/deep/ .custom-chart {
+  width: 100%;
+
+  &__wrapper {
+    margin-left: -10px;
+  }
+}
 </style>

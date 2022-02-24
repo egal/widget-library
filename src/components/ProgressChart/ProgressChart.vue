@@ -32,7 +32,7 @@ import ChartContainer from "@/components/ChartContainer";
 import variables from "@/assets/styles/variables.scss";
 
 export default {
-  name: "SimpleProgressChart",
+  name: "ProgressChart",
   components: { ChartContainer, VeProgress },
   props: {
     data: {

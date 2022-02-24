@@ -1,8 +1,8 @@
  [
    {
-    "type": "doughnut_bar",
-    "title": "doughnut_bar",
-    "description": "doughnut_bar description",
+    "type": "doughnut",
+    "title": "doughnut",
+    "description": "doughnut description",
     "data": {
       "labels": [],
       "datasets": [
@@ -167,51 +167,7 @@
     "options": {
       "legend": true,
       "width": 327,
-      "height": 243,
-      "scales": {
-        "x": {
-          "stacked": true,
-          "display": true,
-          "grid": {
-            "display": false,
-            "drawBorder": false
-          },
-          "ticks": {
-            "font": {
-              "size": 12,
-              "family": "Open Sans"
-            },
-            "padding": 4,
-            "color": "#A0AEC0"
-          }
-        },
-        "y": {
-          "stacked": true,
-          "grid": {
-            "display": true,
-            "drawBorder": false,
-            "borderDash": [4, 3],
-            "zeroLineBorderDash": [4, 3],
-            "zeroLineColor": "#E4ECF7",
-            "color": "#E4ECF7"
-          },
-
-          "ticks": {
-            "color": "#A0AEC0",
-            "font": {
-              "size": 12,
-              "family": "Open Sans",
-              "weight": "bold"
-            },
-
-            "maxTicksLimit": 6,
-            "minTicksLimit": 6,
-            "min": 0,
-            "max": 100,
-            "padding": 0
-          }
-        }
-      }
+      "height": 243
     }
   },
   {
@@ -248,45 +204,7 @@
     "options": {
       "legend": true,
       "width": 327,
-      "height": 243,
-      "scales": {
-        "x": {
-          "display": true,
-          "grid": {
-            "display": false,
-            "drawBorder": false
-          },
-          "ticks": {
-            "color": "#A0AEC0",
-            "font": {
-              "size": 12,
-              "family": "Open Sans"
-            },
-            "padding": 4
-          }
-        },
-        "y": {
-          "grid": {
-            "display": true,
-            "drawBorder": false,
-            "borderDash": [ 4, 3 ],
-            "zeroLineBorderDash": [ 4, 3 ],
-            "zeroLineColor": "#E4ECF7",
-            "color": "#E4ECF7"
-          },
-          "ticks": {
-            "color": "#A0AEC0",
-            "font": {
-              "size": 12,
-              "family": "Open Sans"
-            },
-            "maxTicksLimit": 6,
-            "minTicksLimit": 6,
-            "min": 0,
-            "max": 100
-          }
-        }
-      }
+      "height": 243
     }
   },
  {
@@ -324,5 +242,102 @@
       "thickness": 7,
       "background": "#ffffff"
     }
-  }
-]
+  },
+   {
+     "type": "line_chart",
+     "title": "line_chart",
+     "description": "line_chart description",
+     "data": {
+       "labels": [
+         "January",
+         "February",
+         "March",
+         "April",
+         "May",
+         "June",
+         "July"
+       ],
+       "datasets": [
+         {
+           "label": "Caffine Consumption",
+           "data": [65, 59, 40, 41, 56, 55, 40],
+           "backgroundColor": "rgba(0, 102, 255, 0.1)",
+           "borderColor": "#005CE4",
+           "pointBackgroundColor": "#005CE4",
+           "pointBorderWidth": 0,
+           "pointStyle": "circle",
+           "pointRadius": 4,
+           "pointHoverRadius": 5,
+           "fill": true
+         }
+       ]
+     },
+     "options": {
+       "tooltipStyles": {
+         "backgroundColor": "red",
+         "textColor": "green",
+         "opacity": "0.5",
+         "fontFamily": "monospace",
+         "fontWeight": 800,
+         "fontSize": "14px",
+         "lineHeight": "18px",
+         "padding": "1px 0",
+         "position": "bottom",
+         "title": {
+           "display": true,
+           "text": ["dfdf"]
+         },
+         "body": {
+           "display": false
+         }
+       }
+     }
+   },
+   {
+     "type": "curves_chart",
+     "title": "curves_chart ",
+     "description": "curves_chart description",
+     "data": {
+       "labels": [
+         "January",
+         "February",
+         "March",
+         "April",
+         "May",
+         "June",
+         "July"
+       ],
+       "datasets": [
+           {
+             "label": "Caffine Consumption",
+             "data": [65, 59, 80, 81, 56, 55, 40],
+             "fill": false,
+             "tension": 0.5,
+
+             "borderColor": "#96C0FF",
+             "pointBackgroundColor": "#005CE4",
+             "pointBorderWidth": 0,
+             "pointStyle": "circle",
+             "pointRadius": 4,
+             "pointHoverRadius": 5
+           },
+           {
+             "label": "Productivity",
+             "data": [70, 25, 110, 90, 5, 60, 30],
+             "fill": false,
+             "tension": 0.5,
+
+             "borderColor": "#0066FF",
+             "pointBackgroundColor": "#005CE4",
+             "pointBorderWidth": 0,
+             "pointStyle": "circle",
+             "pointRadius": 4,
+             "pointHoverRadius": 5
+           }
+       ]
+     },
+     "options": {
+        "legend": true
+     }
+   }
+ ]

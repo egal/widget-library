@@ -3,19 +3,18 @@
     <Legend v-if="options.legend" :datasets="data.datasets" />
 
     <div class="custom-chart__wrapper">
-      <vue3-chart-js ref="chartRef" v-bind="{ ...barChart }" />
+      <vue3-chart-js v-bind="{ ...lineChart }" />
     </div>
   </div>
 </template>
 
 <script>
-import { Chart, registerables } from "chart.js";
-import { BarController } from "chart.js";
 import Vue3ChartJs from "@j-t-mcc/vue3-chartjs";
 import Legend from "@/components/Legend";
+import { drawTooltip } from "@/assets/scripts";
 
 export default {
-  name: "StackedBar",
+  name: "CurvesChart",
   components: { Legend, Vue3ChartJs },
   props: {
     data: {
@@ -36,19 +35,17 @@ export default {
     },
   },
   data() {
-    return {};
-  },
-  mounted() {},
-  methods: {},
-  computed: {
-    barChart() {
-      return {
-        type: "stacked",
+    return {
+      lineChart: {
+        type: "line",
         data: this.data,
         options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          legend: true,
+
           scales: {
             x: {
-              stacked: true,
               display: true,
               grid: {
                 display: false,
@@ -64,7 +61,6 @@ export default {
               },
             },
             y: {
-              stacked: true,
               grid: {
                 display: true,
                 drawBorder: false,
@@ -89,56 +85,27 @@ export default {
               },
             },
           },
+
           ...this.options,
           plugins: {
             legend: {
               display: false,
             },
+            tooltip: {
+              enabled: false,
+
+              external: drawTooltip,
+            },
           },
         },
-        width: this.options?.width || 327,
-        height: this.options?.height || 243,
-      };
-    },
-  },
-  beforeUnmount() {
-    this.$refs.chartRef.destroy();
-  },
-  beforeMount() {
-    const metadata = this.meta;
-
-    class CustomStacked extends BarController {
-      draw(options) {
-        super.draw(arguments);
-
-        const meta = this.getMeta();
-        meta.data = meta.data.map((i) => {
-          i.borderSkipped = metadata?.borderSkipped || false;
-          i.enableBorderRadius = metadata?.enableBorderRadius || true;
-          i.options.borderRadius = metadata?.borderRadius || 10;
-          i.options.borderWidth = metadata?.borderWidth || 2;
-          i.options.borderColor = metadata?.borderColor || "#fff";
-          i.width = metadata?.barWidth || 11;
-          return i;
-        });
-      }
-    }
-
-    CustomStacked.id = "stacked";
-    CustomStacked.defaults = BarController.defaults;
-
-    Chart.register(...registerables);
-    Chart.register(CustomStacked);
-  },
-  watch: {
-    "data.datasets": {
-      handler() {
-        this.$refs.chartRef.destroy();
-        this.$refs.chartRef.render();
       },
-      deep: true,
-    },
+    };
   },
+  computed: {},
+  mounted() {},
+  beforeDestroy() {},
+  methods: {},
+  watch: {},
 };
 </script>
 

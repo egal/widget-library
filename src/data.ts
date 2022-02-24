@@ -3,7 +3,7 @@
  */
 export default class data {
   /**
-   * тип графика ( "doughnut_bar", "half_progress_bar",  "progress_bar", "multi_progress_bar", "stacked_bar", "vertical_bar", "horizontal_bar")
+   * тип графика ( "doughnut", "half_progress_bar",  "progress_bar", "multi_progress_bar", "stacked_bar", "vertical_bar", "horizontal_bar")
    */
   public type?: string;
   /**
@@ -101,7 +101,7 @@ export class Options {
   public chartSize?: number;
   /**
    * Толщина линии кругового графика.
-   * По дефолту для doughnut_bar- 10, для progress_bar/half_progress_bar - 8,
+   * По дефолту для doughnut - 10, для progress_bar/half_progress_bar - 8,
    * для horizontal_bar - 7, multi_progress_bar - 6
    */
   public thickness?: number;
@@ -145,7 +145,7 @@ export class Options {
   public gap?: number;
 
   /**
-   * Вид линии для круговых графиков, кроме doughnut_bar. По дефолнту - 'round'. Может принимать значения "round | square | butt"
+   * Вид линии для круговых графиков, кроме doughnut. По дефолнту - 'round'. Может принимать значения "round | square | butt"
    */
   public line?: boolean;
 }
