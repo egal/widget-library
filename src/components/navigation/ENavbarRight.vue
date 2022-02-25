@@ -2,14 +2,14 @@
   <div class="navbar" :class="{ '--big': active }" :style="getVars" ref="navbar">
     <div class="navbar__logo-group">
       <img
-        :src="smallLogo"
+        :src="mergedData.smallLogo"
         class="navbar__logo-group__big-logo"
         :class="{ '--hidden': active }"
         alt="logo"
         @click="openMenu"
       />
       <img
-        :src="logo"
+        :src="mergedData.logo"
         class="navbar__logo-group__small-logo"
         :class="{ '--hidden': !active }"
         alt="logo"
@@ -23,7 +23,7 @@
     </div>
     <ul class="navbar__links">
       <router-link
-        v-for="link in links"
+        v-for="link in mergedData.links"
         :to="link.to"
         v-slot="{ href, navigate, isActive, isExactActive }"
         custom
@@ -56,47 +56,34 @@ export default {
     }
   },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    color: {
-      type: String,
-      default: '#2d3748',
-    },
-    activeColor: {
-      type: String,
-      default: '#0066ff',
-    },
-    logo: {
-      type: String,
-      required: true,
-    },
-    links: {
-      type: Array,
-      required: true,
-    },
-    smallLogo: {
-      type: String,
-      required: true,
-    },
-    chevronColor: {
-      type: String,
-      default: '#a0aec0',
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          color: '#2d3748',
+          activeColor: '#0066ff',
+          logo: true,
+          links: true,
+          smallLogo: true,
+          chevronColor: '#a0aec0',
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--chevron-color': this.chevronColor,
-        '--active-color': this.activeColor,
-        '--color': this.color,
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--chevron-color': this.mergedData.chevronColor,
+        '--active-color': this.mergedData.activeColor,
+        '--color': this.mergedData.color,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
   },

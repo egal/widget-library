@@ -1,11 +1,11 @@
 <template>
   <div class="navbar" :style="getVars">
     <div class="navbar__logo">
-      <img :src="logo" alt="logo" />
+      <img :src="mergedData.logo" alt="logo" />
     </div>
     <ul class="navbar__links">
       <router-link
-        v-for="link in links"
+        v-for="link in mergedData.links"
         :to="link.to"
         v-slot="{ href, navigate, isActive, isExactActive }"
         custom
@@ -34,38 +34,31 @@ export default {
     return {}
   },
   props: {
-    font: {
-      type: String,
-      default: 'Open Sans',
-    },
-    weight: {
-      type: String,
-      default: 'bold',
-    },
-    color: {
-      type: String,
-      default: '#2D3748',
-    },
-    activeColor: {
-      type: String,
-      default: '#0066FF',
-    },
-    logo: {
-      type: String,
-      required: true,
-    },
-    links: {
-      type: Array,
-      required: true,
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          font: 'Open Sans',
+          weight: 'bold',
+          color: '#2d3748',
+          activeColor: '#0066ff',
+          logo: true,
+          links: true,
+        },
+        this.data,
+      )
+    },
     getVars() {
       return {
-        '--active-color': this.activeColor,
-        '--color': this.color,
-        '--font': this.font,
-        '--font-weight': this.weight,
+        '--active-color': this.mergedData.activeColor,
+        '--color': this.mergedData.color,
+        '--font': this.mergedData.font,
+        '--font-weight': this.mergedData.weight,
       }
     },
   },

@@ -38,6 +38,7 @@ export default defineConfig({
           isCustomElement: (tag) => tag.startsWith('e-'),
         },
       },
+      reactivityTransform: true,
     }),
     configRouterPlugin(),
   ],
