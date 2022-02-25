@@ -288,7 +288,11 @@
            "text": ["dfdf"]
          },
          "body": {
-           "display": false
+           "display": true
+         },
+         "pointMark": {
+           "display": true,
+           "borderRadius": "50%"
          }
        }
      }

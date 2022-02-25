@@ -1,20 +1,13 @@
-type TooltipContextType = {
+// @ts-ignore
+import { ChartTooltipModel } from "chart.js";
+
+interface TooltipContextType {
   chart: object;
   tooltip: object;
   replay: any;
-};
+}
 
-type TooltipModelType = {
-  opacity: number;
-  body: object[];
-  chart: object;
-  title: string[];
-  labelColors: object[];
-  caretX: number;
-  caretY: number;
-};
-
-type CustomStylesConfig = {
+interface CustomStylesConfig {
   backgroundColor?: string;
   textColor?: string;
   opacity?: string;
@@ -33,11 +26,15 @@ type CustomStylesConfig = {
     display?: boolean;
     text?: string[];
   };
-};
+  pointMark?: {
+    display?: boolean;
+    borderRadius?: string;
+  };
+}
 
 const setTooltipPosition = (
   context: TooltipContextType,
-  tooltipModel: TooltipModelType,
+  tooltipModel: ChartTooltipModel,
   tooltipEl: HTMLDivElement,
   customStyles: CustomStylesConfig
 ) => {
@@ -101,7 +98,7 @@ const setTooltipPosition = (
   }
 };
 const setTooltipStyles = (
-  tooltipModel: TooltipModelType,
+  tooltipModel: ChartTooltipModel,
   tooltipEl: HTMLDivElement,
   customStyles: CustomStylesConfig
 ) => {
@@ -119,7 +116,7 @@ const setTooltipStyles = (
 };
 
 const renderTooltipText = (
-  tooltipModel: TooltipModelType,
+  tooltipModel: ChartTooltipModel,
   tooltipEl: HTMLDivElement,
   customStyles: CustomStylesConfig
 ) => {
@@ -154,19 +151,22 @@ const renderTooltipText = (
     ) as HTMLTableSectionElement;
 
     if (!customStyles?.body || customStyles?.body?.display) {
-      bodyLines.forEach((body, i) => {
+      bodyLines.forEach((body: string, i: number) => {
         const colors = tooltipModel.labelColors[i];
 
         //todo span
-        const span = document.createElement("span");
-        // @ts-ignore
-        span.style.background = colors.borderColor;
-
-        span.style.marginRight = "10px";
-        span.style.height = "10px";
-        span.style.width = "10px";
-        // span.style.borderRadius = "50%";
-        span.style.display = "inline-block";
+        let span = null;
+        if (!customStyles?.pointMark || customStyles?.pointMark?.display) {
+          span = document.createElement("span");
+          // @ts-ignore
+          span.style.background = colors.borderColor;
+          span.style.marginRight = "10px";
+          span.style.height = "10px";
+          span.style.width = "10px";
+          span.style.borderRadius =
+            customStyles?.pointMark?.borderRadius || "0";
+          span.style.display = "inline-block";
+        }
 
         const tr = document.createElement("tr");
         tr.style.backgroundColor = "inherit";
@@ -177,7 +177,9 @@ const renderTooltipText = (
 
         const text = document.createTextNode(body);
 
-        td.appendChild(span);
+        if (span) {
+          td.appendChild(span);
+        }
         td.appendChild(text);
         tr.appendChild(td);
         tableBody.appendChild(tr);
@@ -211,7 +213,7 @@ export const drawTooltip = (
     document.body.appendChild(tooltipEl);
   }
 
-  const tooltipModel = context.tooltip as TooltipModelType;
+  const tooltipModel = context.tooltip as ChartTooltipModel;
 
   // Hide if no tooltip
   if (tooltipModel.opacity === 0) {
