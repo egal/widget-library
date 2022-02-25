@@ -56,7 +56,7 @@ export default {
                 color: "#A0AEC0",
                 font: {
                   size: 12,
-                  family: "Open Sans",
+                  family: this.options?.fontFamily || "Open Sans",
                 },
                 padding: 10,
               },
@@ -73,7 +73,7 @@ export default {
                 color: "#A0AEC0",
                 font: {
                   size: 12,
-                  family: "Open Sans",
+                  family: this.options?.fontFamily || "Open Sans",
                 },
               },
             },
@@ -87,7 +87,7 @@ export default {
 
             tooltip: {
               enabled: false,
-              external: drawTooltip,
+              external: (context) => drawTooltip(context, this.options),
             },
           },
         },

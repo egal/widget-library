@@ -1,6 +1,3 @@
-/**
- *
- */
 export default class data {
   /**
    * тип графика ( "doughnut", "half_progress_bar",  "progress_bar", "multi_progress_bar", "stacked_bar", "vertical_bar", "horizontal_bar")
@@ -26,14 +23,6 @@ export default class data {
    * Дополнительные опции для кастомизации столбцов vertical_bar и stacked_bar
    */
   public meta?: Meta;
-  // /**
-  //  * Ширина vertical_bar и stacked_bar (эти графики не растягиваются под контейнер)
-  //  */
-  // public width?: number;
-  // /**
-  //  * Высота vertical_bar и stacked_bar (эти графики не растягиваются под контейнер)
-  //  */
-  // public height?: number;
 }
 
 /**
@@ -65,7 +54,7 @@ export class Datasets {
   public data?: number[];
 }
 
-// Опции для stacked_bar, vertical_bar - из библиотеки Charts.js
+// Опции для stacked_bar, vertical_bar, line_chart и curves_chart можно взять из библиотеки Charts.js
 export class Options {
   /**
    * Старотовый угол (для круговых графиков)
@@ -148,6 +137,15 @@ export class Options {
    * Вид линии для круговых графиков, кроме doughnut. По дефолнту - 'round'. Может принимать значения "round | square | butt"
    */
   public line?: boolean;
+
+  /**
+   * Ширина vertical_bar и stacked_bar (эти графики не растягиваются под контейнер)
+   */
+  public width?: number;
+  /**
+   * Высота vertical_bar и stacked_bar (эти графики не растягиваются под контейнер)
+   */
+  public height?: number;
 }
 
 export class Meta {

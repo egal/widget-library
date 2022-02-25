@@ -3,31 +3,39 @@
 
 Содержит Круговые графики:
 
-- DonatChart - круговая диаграмма с сегментами
+- DonatChart - круговая диаграмма с сегментами:
+
 ![toasts](src/assets/img/doughnut_bar.png)
 
 - ProgressChart - круговой график для одного значения
+
 ![toasts](src/assets/img/half_progress_bar.png) 
 ![toasts](src/assets/img/progress_bar.png)
 
 - MultiProgressBar - для двух и более значений
-  ![toasts](src/assets/img/multi_progress_bar.png)
+
+![toasts](src/assets/img/multi_progress_bar.png)
 
 Линейные графики:
 - VerticalBarChart - вертикальный график
-  ![toasts](src/assets/img/vertical_bar.png)
+
+![toasts](src/assets/img/vertical_bar.png)
 
 - StackedBarChart - вертикальный график со столбцами, расположенными "друг на друге"
+
 ![toasts](src/assets/img/stacked_bar.png)
 
 - HorizontalBarChart - график с горизонтальными столбцами
-  ![toasts](src/assets/img/horizontal_bar.png)
+
+![toasts](src/assets/img/horizontal_bar.png)
 
 - Line Chart
-  ![toasts](src/assets/img/line_chart.png)
+
+![toasts](src/assets/img/line_chart.png)
 
 - CurvesChart
-  ![toasts](src/assets/img/curves_chart.png)
+
+![toasts](src/assets/img/curves_chart.png)
 
 ## Общее
 ### Использование
@@ -59,91 +67,7 @@ export default defineComponent({
 
 
 ## Пример вида dataItem
-
-````typescript
-  {
-    "type": "stacked_bar",
-        "meta": {
-        "borderSkipped": false,
-            "enableBorderRadius": true,
-            "borderWidth": 2,
-            "borderRadius": 10,
-            "borderColor": "#fff",
-            "width": 11
-    },
-    "title": "stacked_bar",
-        "description": "stacked_bar description",
-        "data": {
-        "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-            "datasets": [
-            {
-                "label": "GitHub Commits",
-                "backgroundColor": "#0066FF",
-                "data": [40, 20, 12, 39, 10, 40, 39, 40, 40, 20, 12, 11]
-            },
-            {
-                "label": "GitHu3",
-                "backgroundColor": "#76ACFB",
-                "data": [40, 20, 10, 35, 14, 45, 39, 88, 40, 27, 22, 41]
-            },
-            {
-                "label": "GitHкu3",
-                "backgroundColor": "#A0AEC0",
-                "data": [14, 12, 14, 13, 1, 4, 3, 8, 40, 2, 22, 41]
-            }
-        ]
-    },
-    "options": {
-        "legend": true,
-            "width": 327,
-            "height": 243,
-            "scales": {
-            "x": {
-                "stacked": true,
-                    "display": true,
-                    "grid": {
-                    "display": false,
-                        "drawBorder": false
-                },
-                "ticks": {
-                    "font": {
-                        "size": 12,
-                            "family": "Open Sans"
-                    },
-                    "padding": 4,
-                        "color": "#A0AEC0"
-                }
-            },
-            "y": {
-                "stacked": true,
-                    "grid": {
-                    "display": true,
-                        "drawBorder": false,
-                        "borderDash": [4, 3],
-                        "zeroLineBorderDash": [4, 3],
-                        "color": "#E4ECF7"
-                },
-
-                "ticks": {
-                    "color": "#A0AEC0",
-                        "font": {
-                        "size": 12,
-                            "family": "Open Sans",
-                            "weight": "bold"
-                    },
-
-                    "maxTicksLimit": 6,
-                        "minTicksLimit": 6,
-                        "min": 0,
-                        "max": 100,
-                        "padding": 0
-                }
-            }
-        }
-    }
-}
-````
-
+Пример передаваемых данных можно посмотреть в `data.json`
 
 
 ### Конфигурация dataItem

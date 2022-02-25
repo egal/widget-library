@@ -1,5 +1,5 @@
 // @ts-ignore
-import { ChartTooltipModel } from "chart.js";
+import { ChartTooltipModel, ChartOptions } from "chart.js";
 // @ts-ignore
 import variables from "@/assets/styles/variables.scss";
 
@@ -35,13 +35,15 @@ const setTooltipPosition = (
 };
 const setTooltipStyles = (
   tooltipModel: ChartTooltipModel,
-  tooltipEl: HTMLDivElement
+  tooltipEl: HTMLDivElement,
+  chartOptions: ChartOptions
 ) => {
   tooltipEl.style.opacity = "1";
-  tooltipEl.style.backgroundColor = variables.gray800; // "#2D3748"; // gray 800
+  tooltipEl.style.backgroundColor = variables.gray800;
   tooltipEl.style.color = "white";
   tooltipEl.style.borderRadius = "4px";
-  tooltipEl.style.fontFamily = "Open Sans"; // todo font style like all chart
+  // @ts-ignore
+  tooltipEl.style.fontFamily = chartOptions?.fontFamily || "Open Sans";
   tooltipEl.style.fontWeight = "500";
   tooltipEl.style.fontSize = "12px";
   tooltipEl.style.lineHeight = "120%";
@@ -120,7 +122,10 @@ const renderTooltipText = (
   }
 };
 
-export const drawTooltip = (context: TooltipContextType) => {
+export const drawTooltip = (
+  context: TooltipContextType,
+  chartOptions: ChartOptions
+) => {
   // Tooltip Element
   let tooltipEl = document.getElementById("chartjs-tooltip") as HTMLDivElement;
 
@@ -141,7 +146,7 @@ export const drawTooltip = (context: TooltipContextType) => {
 
   // Styling
   renderTooltipText(tooltipModel, tooltipEl);
-  setTooltipStyles(tooltipModel, tooltipEl);
+  setTooltipStyles(tooltipModel, tooltipEl, chartOptions);
   setTooltipPosition(context, tooltipModel, tooltipEl);
 
   return this;

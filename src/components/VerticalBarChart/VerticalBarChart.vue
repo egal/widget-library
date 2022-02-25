@@ -57,7 +57,7 @@ export default {
               ticks: {
                 font: {
                   size: 12,
-                  family: "Open Sans",
+                  family: this.options?.fontFamily || "Open Sans",
                 },
                 padding: 4,
                 color: "#A0AEC0",
@@ -76,7 +76,7 @@ export default {
                 color: "#A0AEC0",
                 font: {
                   size: 12,
-                  family: "Open Sans",
+                  family: this.options?.fontFamily || "Open Sans",
                 },
 
                 maxTicksLimit: 6,
