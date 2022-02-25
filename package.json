@@ -46,7 +46,7 @@
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.2.30",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "prettier": "^2.2.1",
     "rollup": "^2.67.1",
     "rollup-plugin-css-only": "^3.1.0",
@@ -64,8 +64,5 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ],
-  "peerDependencies": {
-    "vue": "^3.2.29"
-  }
+  ]
 }
