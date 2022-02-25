@@ -273,28 +273,6 @@
        ]
      },
      "options": {
-       "tooltipStyles": {
-         "backgroundColor": "red",
-         "textColor": "green",
-         "opacity": "0.5",
-         "fontFamily": "monospace",
-         "fontWeight": 800,
-         "fontSize": "14px",
-         "lineHeight": "18px",
-         "padding": "1px 0",
-         "position": "bottom",
-         "title": {
-           "display": true,
-           "text": ["dfdf"]
-         },
-         "body": {
-           "display": true
-         },
-         "pointMark": {
-           "display": true,
-           "borderRadius": "50%"
-         }
-       }
      }
    },
    {

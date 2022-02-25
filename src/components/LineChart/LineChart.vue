@@ -87,8 +87,7 @@ export default {
 
             tooltip: {
               enabled: false,
-              external: (context) =>
-                drawTooltip(context, this.options?.tooltipStyles ?? null),
+              external: drawTooltip,
             },
           },
         },

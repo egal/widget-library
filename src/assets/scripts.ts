@@ -1,5 +1,7 @@
 // @ts-ignore
 import { ChartTooltipModel } from "chart.js";
+// @ts-ignore
+import variables from "@/assets/styles/variables.scss";
 
 interface TooltipContextType {
   chart: object;
@@ -7,125 +9,53 @@ interface TooltipContextType {
   replay: any;
 }
 
-interface CustomStylesConfig {
-  backgroundColor?: string;
-  textColor?: string;
-  opacity?: string;
-  fontFamily?: string;
-  fontWeight?: number;
-  fontSize?: string;
-  lineHeight?: string;
-  padding?: string;
-  position?: string;
-
-  title?: {
-    display?: boolean;
-    text?: string[];
-  };
-  body?: {
-    display?: boolean;
-    text?: string[];
-  };
-  pointMark?: {
-    display?: boolean;
-    borderRadius?: string;
-  };
-}
-
 const setTooltipPosition = (
   context: TooltipContextType,
   tooltipModel: ChartTooltipModel,
-  tooltipEl: HTMLDivElement,
-  customStyles: CustomStylesConfig
+  tooltipEl: HTMLDivElement
 ) => {
   // @ts-ignore
   const position = context.chart.canvas.getBoundingClientRect();
 
   const tooltipMargin = 10;
-  const positionTop = {
-    left:
-      position.left +
-      window.pageXOffset +
-      tooltipModel.caretX -
-      tooltipEl.offsetWidth / 2 +
-      "px",
-    top:
-      position.top +
-      window.pageYOffset +
-      tooltipModel.caretY -
-      tooltipMargin -
-      tooltipEl.offsetHeight +
-      "px",
-  };
-  const positionBottom = {
-    left:
-      position.left +
-      window.pageXOffset +
-      tooltipModel.caretX -
-      tooltipEl.offsetWidth / 2 +
-      "px",
-    top:
-      position.top +
-      window.pageYOffset +
-      tooltipModel.caretY +
-      tooltipMargin +
-      "px",
-  };
-  const positionCornerLeft = {
-    left: position.left + window.pageXOffset + tooltipModel.caretX + "px",
-    top: position.top + window.pageYOffset + tooltipModel.caretY + "px",
-  };
 
-  if (customStyles?.position) {
-    switch (customStyles?.position) {
-      case "bottom":
-        tooltipEl.style.left = positionBottom.left;
-        tooltipEl.style.top = positionBottom.top;
-        break;
-      case "corner_left":
-        tooltipEl.style.left = positionCornerLeft.left;
-        tooltipEl.style.top = positionCornerLeft.top;
-        break;
-      case "top":
-      default:
-        tooltipEl.style.left = positionTop.left;
-        tooltipEl.style.top = positionTop.top;
-        break;
-    }
-  } else {
-    tooltipEl.style.left = positionTop.left;
-    tooltipEl.style.top = positionTop.top;
-  }
+  tooltipEl.style.left =
+    position.left +
+    window.pageXOffset +
+    tooltipModel.caretX -
+    tooltipEl.offsetWidth / 2 +
+    "px";
+  tooltipEl.style.top =
+    position.top +
+    window.pageYOffset +
+    tooltipModel.caretY -
+    tooltipMargin -
+    tooltipEl.offsetHeight +
+    "px";
 };
 const setTooltipStyles = (
   tooltipModel: ChartTooltipModel,
-  tooltipEl: HTMLDivElement,
-  customStyles: CustomStylesConfig
+  tooltipEl: HTMLDivElement
 ) => {
-  tooltipEl.style.opacity = customStyles?.opacity || "1";
-  tooltipEl.style.backgroundColor = customStyles?.backgroundColor || "#2D3748"; // gray 800
-  tooltipEl.style.color = customStyles?.textColor || "white";
+  tooltipEl.style.opacity = "1";
+  tooltipEl.style.backgroundColor = variables.gray800; // "#2D3748"; // gray 800
+  tooltipEl.style.color = "white";
   tooltipEl.style.borderRadius = "4px";
-  tooltipEl.style.fontFamily = customStyles?.fontFamily || "Open Sans";
-  tooltipEl.style.fontWeight = `${customStyles?.fontWeight}` || "500";
-  tooltipEl.style.fontSize = customStyles?.fontSize || "12px";
-  tooltipEl.style.lineHeight = customStyles?.lineHeight || "120%";
-  tooltipEl.style.padding = customStyles?.padding || "8px 12px";
+  tooltipEl.style.fontFamily = "Open Sans"; // todo font style like all chart
+  tooltipEl.style.fontWeight = "500";
+  tooltipEl.style.fontSize = "12px";
+  tooltipEl.style.lineHeight = "120%";
+  tooltipEl.style.padding = "8px 12px";
   tooltipEl.style.pointerEvents = "none";
   tooltipEl.style.position = "absolute";
 };
 
 const renderTooltipText = (
   tooltipModel: ChartTooltipModel,
-  tooltipEl: HTMLDivElement,
-  customStyles: CustomStylesConfig
+  tooltipEl: HTMLDivElement
 ) => {
   if (tooltipModel.body) {
-    let titleLines = [] as string[];
-
-    if (!customStyles?.title || customStyles?.title?.display) {
-      titleLines = customStyles?.title?.text || tooltipModel.title;
-    }
+    const titleLines = tooltipModel.title || [];
 
     // @ts-ignore
     const bodyLines = tooltipModel.body.map((b) => b.lines);
@@ -150,41 +80,32 @@ const renderTooltipText = (
       "tbody"
     ) as HTMLTableSectionElement;
 
-    if (!customStyles?.body || customStyles?.body?.display) {
-      bodyLines.forEach((body: string, i: number) => {
-        const colors = tooltipModel.labelColors[i];
+    bodyLines.forEach((body: string, i: number) => {
+      const colors = tooltipModel.labelColors[i];
 
-        //todo span
-        let span = null;
-        if (!customStyles?.pointMark || customStyles?.pointMark?.display) {
-          span = document.createElement("span");
-          // @ts-ignore
-          span.style.background = colors.borderColor;
-          span.style.marginRight = "10px";
-          span.style.height = "10px";
-          span.style.width = "10px";
-          span.style.borderRadius =
-            customStyles?.pointMark?.borderRadius || "0";
-          span.style.display = "inline-block";
-        }
+      const span = document.createElement("span");
+      // @ts-ignore
+      span.style.background = colors.borderColor;
+      span.style.marginRight = "10px";
+      span.style.height = "10px";
+      span.style.width = "10px";
+      span.style.borderRadius = "0";
+      span.style.display = "inline-block";
 
-        const tr = document.createElement("tr");
-        tr.style.backgroundColor = "inherit";
-        tr.style.borderWidth = "0";
+      const tr = document.createElement("tr");
+      tr.style.backgroundColor = "inherit";
+      tr.style.borderWidth = "0";
 
-        const td = document.createElement("td");
-        td.style.borderWidth = "0";
+      const td = document.createElement("td");
+      td.style.borderWidth = "0";
 
-        const text = document.createTextNode(body);
+      const text = document.createTextNode(body);
 
-        if (span) {
-          td.appendChild(span);
-        }
-        td.appendChild(text);
-        tr.appendChild(td);
-        tableBody.appendChild(tr);
-      });
-    }
+      td.appendChild(span);
+      td.appendChild(text);
+      tr.appendChild(td);
+      tableBody.appendChild(tr);
+    });
 
     let tableRoot = tooltipEl.querySelector("table") as HTMLTableElement;
 
@@ -199,10 +120,7 @@ const renderTooltipText = (
   }
 };
 
-export const drawTooltip = (
-  context: TooltipContextType,
-  customStyles: CustomStylesConfig
-) => {
+export const drawTooltip = (context: TooltipContextType) => {
   // Tooltip Element
   let tooltipEl = document.getElementById("chartjs-tooltip") as HTMLDivElement;
 
@@ -222,9 +140,9 @@ export const drawTooltip = (
   }
 
   // Styling
-  renderTooltipText(tooltipModel, tooltipEl, customStyles);
-  setTooltipStyles(tooltipModel, tooltipEl, customStyles);
-  setTooltipPosition(context, tooltipModel, tooltipEl, customStyles);
+  renderTooltipText(tooltipModel, tooltipEl);
+  setTooltipStyles(tooltipModel, tooltipEl);
+  setTooltipPosition(context, tooltipModel, tooltipEl);
 
   return this;
 };
