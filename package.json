@@ -64,5 +64,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "peerDependencies": {
+    "vue": "^3.2.29"
+  }
 }

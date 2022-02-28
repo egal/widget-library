@@ -7,7 +7,7 @@ import ETag from './components/personality/ETag.vue'
 import ETooltip from './components/personality/ETooltip.vue'
 import EBreadcrumbs from './components/navigation/EBreadcrumbs.vue'
 import ENavbarTop from './components/navigation/ENavbarTop.vue'
-import ENavbarRight from './components/navigation/ENavbarRight.vue'
+import ENavbarLeft from './components/navigation/ENavbarLeft.vue'
 import EPagination from './components/navigation/EPagination.vue'
 import ECounter from './components/inputs/Counter/ECounter.vue'
 import EFileUploader from './components/inputs/FileUploader/EFileUploader.vue'
@@ -26,7 +26,7 @@ export default {
   ETooltip,
   EBreadcrumbs,
   ENavbarTop,
-  ENavbarRight,
+  ENavbarLeft,
   EPagination,
   ECounter,
   EFileUploader,
