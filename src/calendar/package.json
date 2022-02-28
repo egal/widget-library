@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@dvuckovic/vue3-bootstrap-icons": "^1.0.4",
+    "click-outside-vue3": "^4.0.1",
     "@vue/cli": "^4.5.15",
     "core-js": "^3.6.5",
     "vue": "^3.0.0"
