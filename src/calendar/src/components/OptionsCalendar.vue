@@ -1,7 +1,5 @@
 <template>
   <div class="calendar" :style="getVars">
-    <!--    <test :type="isDouble ? 'left' : ''" />-->
-    <!--    <test v-if="isDouble" type="right" />-->
     <div class="left">
       <ul class="calendar__controls">
         <li
@@ -46,7 +44,7 @@
         </li>
       </ul>
 
-      <CalendarInput :is-am-pm="false" @select="setTime" />
+      <CalendarInput v-if="isTimeInput" :is-am-pm="!isAmPm" @select="setTime" />
     </div>
     <div class="right" v-if="isDouble">
       <ul class="calendar__controls">
@@ -81,7 +79,7 @@
         </li>
       </ul>
 
-      <CalendarInput :is-am-pm="true" @select="setTime" />
+      <CalendarInput v-if="isTimeInput" :is-am-pm="isAmPm" @select="setTime" />
     </div>
   </div>
 </template>
@@ -119,7 +117,23 @@ export default defineComponent({
       type: [Object, Array],
       default: () => [],
     },
+
+    locale: {
+      type: String,
+      default: "en-US",
+    },
+
     //  todo footer prop OR label + input props
+
+    //  todo add props for input
+    isTimeInput: {
+      type: Boolean,
+      default: false,
+    },
+    isAmPm: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -133,7 +147,7 @@ export default defineComponent({
       curMonth: null as any,
       dates: [] as ISODate[],
 
-      locale: "ru-RU",
+      // locale: "en-US",
       selectedDays: [] as ISODate[],
       mouseMayEnter: false,
 
