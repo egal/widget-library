@@ -137,7 +137,6 @@ export default defineComponent({
   },
   data() {
     return {
-      // modelValue: {} as ISODate,
       font: "",
       weight: "",
       color: "",
