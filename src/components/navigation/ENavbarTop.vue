@@ -15,7 +15,7 @@
           :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
         >
           <a :href="href" @click="navigate"
-            ><BootstrapIcon icon="circle" />
+            ><BootstrapIcon :icon="link.icon" />
             <p>{{ link.name }}</p></a
           >
         </li>
@@ -49,6 +49,7 @@ export default {
           activeColor: '#0066ff',
           logo: true,
           links: true,
+          icon: '',
         },
         this.data,
       )
