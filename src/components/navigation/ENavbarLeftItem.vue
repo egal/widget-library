@@ -5,23 +5,29 @@
     custom
     :style="getVars"
   >
-    <div class="nav-link">
-      <a
-        :href="href"
-        @click="navigate"
-        class="exact-link"
-        :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
-      >
+    <div
+      class="nav-link"
+      :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+    >
+      <a :href="href" @click="navigate" class="exact-link">
         <BootstrapIcon :icon="link.icon" />
         <p v-if="active">{{ link.name }}</p></a
       >
-      <BootstrapIcon icon="caret-down" class="caret-icon" v-if="link.links" />
+      <BootstrapIcon
+        icon="caret-down"
+        class="caret-icon"
+        v-if="link.links"
+        @click="linksOpen = !linksOpen"
+        :class="{ 'rotate-caret': linksOpen }"
+      />
     </div>
-    <ul v-if="link.links">
-      <li v-for="(child, index) in link.links" :key="index">
-        <ENavbarLeftItem :link="child" :active="active" :data="data"></ENavbarLeftItem>
-      </li>
-    </ul>
+    <transition-group name="slide-fade" tag="ul">
+      <ul v-if="link.links && linksOpen && active" class="children-links">
+        <li v-for="(child, index) in link.links" :key="index">
+          <ENavbarLeftItem :link="child" :active="active" :data="data"></ENavbarLeftItem>
+        </li>
+      </ul>
+    </transition-group>
   </router-link>
 </template>
 
@@ -30,6 +36,11 @@ import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 export default {
   name: 'ENavbarLeftItem',
   components: { BootstrapIcon },
+  data() {
+    return {
+      linksOpen: false,
+    }
+  },
   props: {
     link: {
       type: Object,
