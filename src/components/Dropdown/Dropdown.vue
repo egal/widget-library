@@ -53,7 +53,6 @@ export default {
     },
     options: {
       type: Array,
-      // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
       default: () => [],
     },
     searchable: {
@@ -62,7 +61,6 @@ export default {
     },
     value: {
       type: [Object, Array],
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       default: () => {},
     },
     shownKey: {
@@ -75,12 +73,10 @@ export default {
     },
     styleConfig: {
       type: Object,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       default: () => {},
     },
     inputSearchStyleConfig: {
       type: Object,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       default: () => {},
     },
   },

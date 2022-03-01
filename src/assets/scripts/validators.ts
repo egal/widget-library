@@ -15,3 +15,13 @@ export const validate = (validators: any, value: any) => {
   }
   return "";
 };
+
+/**
+ * @param str
+ */
+export const addLeadingZeros = (str: string): string => {
+  if (str.length < 2) {
+    return "0" + str;
+  }
+  return str;
+};

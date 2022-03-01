@@ -6,6 +6,7 @@
     "color": "#718096",
     "activeColor": "#0066FF",
     "activeBackgroundColor": "#E5F0FF",
+    "isAdaptiveWith": false,
     "isDouble": true,
     "locale": "ru-RU",
     "timePicker": {
@@ -20,6 +21,7 @@
     "color": "#718096",
     "activeColor": "#1166FF",
     "activeBackgroundColor": "#E5F0FF",
+    "isAdaptiveWith": true,
     "isDouble": false,
     "locale":  "en-US",
     "timePicker": {
@@ -33,6 +35,7 @@
     "color": "#718096",
     "activeColor": "#2266FF",
     "activeBackgroundColor": "#E5F0FF",
+    "isAdaptiveWith": false,
     "isDouble": false
   }
 ]

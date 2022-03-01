@@ -1,6 +1,10 @@
 <template>
   <div v-for="(item, idx) in data" :key="idx" style="margin-bottom: 40px">
-    <OptionsCalendar :data="item" @select-time="onSelectTime" />
+    <OptionsCalendar
+      :data="item"
+      @update:modelValue="setDate"
+      @select-time="onSelectTime"
+    />
   </div>
 </template>
 

@@ -137,12 +137,10 @@ export default {
     },
     styleConfig: {
       type: Object,
-      // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-empty-function
       default: () => {},
     },
     dropdownStyleConfig: {
       type: Object,
-      // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-empty-function
       default: () => {},
     },
   },

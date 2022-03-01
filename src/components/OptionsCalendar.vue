@@ -97,6 +97,7 @@ import CalendarInput from "@/components/CalendarInput/CalendarInput.vue";
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
 import { variables, getFont, getFontWeight } from "@/helpers/config.js";
 import { defineComponent } from "vue";
+import { addLeadingZeros } from "@/assets/scripts/validators";
 
 // Тип для ISOString, формально строка, но для невозможности пробросить просто string сделан этот тип
 // Нужно кастить этот тип к строке ISOString, сделано для более выраженной типизации
@@ -160,8 +161,6 @@ export default defineComponent({
       selectedDays: [] as ISODate[],
       mouseMayEnter: false,
 
-      //  todo double vars
-      //  todo or prev month
       nextMonth: null as any,
       nextMonthDates: [] as ISODate[],
 
@@ -209,19 +208,18 @@ export default defineComponent({
       dayCopy.setDate(1);
       dayCopy.setMonth(newDay.getMonth() + 1);
       this.nextMonth = dayCopy;
+
       this.nextMonthDates = this.generateDates(this.nextMonth);
     }
 
-    let todayMonth = `${this.today.getMonth() + 1}`;
-    if (todayMonth.length < 2) {
-      todayMonth = `0${todayMonth}`;
-    }
-
-    this.currentDay = `${this.today.getFullYear()}-${todayMonth}-${this.today.getDate()}`;
+    this.currentDay = `${this.today.getFullYear()}-${addLeadingZeros(
+      (this.today.getMonth() + 1).toString()
+    )}-${addLeadingZeros(this.today.getDate().toString())}`;
   },
 
   methods: {
     // Функции-помошники, используются в основном в map или filter
+
     isDateInCurMonth(date: ISODate | Date, curMonth: ISODate | Date) {
       return new Date(date).getMonth() === new Date(curMonth).getMonth();
     },
@@ -283,7 +281,7 @@ export default defineComponent({
     },
 
     //Генерация массива дятна месяц
-    generateDates(curMonth: Date): ISODate[] {
+    generateDates(curMonth: Date | ISODate): ISODate[] {
       return Array.from(
         new Set(
           new Array(31)

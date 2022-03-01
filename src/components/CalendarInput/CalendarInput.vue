@@ -11,15 +11,7 @@
           placeholder="12"
           @update:modelValue="(value) => setTime(value, 'hour')"
         />
-        <!--        <Input-->
-        <!--          id="hours"-->
-        <!--          icon-left="clock"-->
-        <!--          :validators="[timeValidator, hoursValidator]"-->
-        <!--          placeholder="10"-->
-        <!--          :clearable="false"-->
-        <!--        />-->
         <span style="margin: 0 5px">:</span>
-
         <Select
           :clearable="false"
           :options="minutes"
@@ -27,13 +19,6 @@
           placeholder="30"
           @update:modelValue="(value) => setTime(value, 'minutes')"
         />
-        <!--        <Input-->
-        <!--          class="input&#45;&#45;minutes"-->
-        <!--          id="minutes"-->
-        <!--          :validators="[timeValidator, minsValidator]"-->
-        <!--          placeholder="30"-->
-        <!--          :clearable="false"-->
-        <!--        />-->
 
         <Select
           v-if="isAmPm"
@@ -57,13 +42,13 @@
 
 <script lang="ts">
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
-// import Input from "@/components/Input/Input.vue";
+
 import Select from "@/components/Select/Select.vue";
 import { defineComponent } from "vue";
 
-type timeObj = {
+type selectTimeOption = {
   name: string;
-  value: number | string;
+  value: string | number;
 };
 
 export default defineComponent({
@@ -81,13 +66,13 @@ export default defineComponent({
   },
   data() {
     return {
-      selectedHour: {} as timeObj,
-      selectedMinutes: {} as timeObj,
-      selectedAmPm: { value: "am", name: "AM" } as timeObj,
+      selectedHour: {} as selectTimeOption,
+      selectedMinutes: {} as selectTimeOption,
+      selectedAmPm: { value: "am", name: "AM" } as selectTimeOption,
     };
   },
   computed: {
-    hours(): timeObj[] {
+    hours(): selectTimeOption[] {
       if (this.isAmPm) {
         return [
           { name: "12", value: 12 },
@@ -132,8 +117,8 @@ export default defineComponent({
         ];
       }
     },
-    minutes(): timeObj[] {
-      let arr: timeObj[] = [];
+    minutes(): selectTimeOption[] {
+      let arr: selectTimeOption[] = [];
       for (let i = 0; i++, i <= 60; ) {
         let obj = {
           name: i < 10 ? `0${i}` : `${i}`,
@@ -146,7 +131,7 @@ export default defineComponent({
   },
   // mounted() {},
   methods: {
-    setTime(val: timeObj, type: string) {
+    setTime(val: selectTimeOption, type: string) {
       switch (type) {
         case "hour":
           this.selectedHour = val;
@@ -231,7 +216,7 @@ export default defineComponent({
   }
 }
 
-/deep/ .input {
+:deep .input {
   width: 80px;
 
   &--minutes {
@@ -243,14 +228,16 @@ export default defineComponent({
   margin-right: 10px;
   color: $gray-600;
 }
-/deep/ .select {
+
+:deep .select {
   width: 70px;
 }
-/deep/ .select.ampm {
+
+:deep .select.ampm {
   margin-left: 15px;
 }
 
-/deep/ .dropdown {
+:deep .dropdown {
   max-height: 250px;
 }
 </style>
