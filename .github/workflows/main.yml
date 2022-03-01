@@ -15,7 +15,6 @@ jobs:
           sed -i -e "0,/{/ s/{/{\n\t\"version\": \"${GITHUB_REF##*/v}\",/" package.json
       - run: echo package.json
       - run: npm install
-      - run: tsc
       - run: npm run build
       - run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
