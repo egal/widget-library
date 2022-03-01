@@ -35,7 +35,6 @@
 <script>
 import { VeProgress } from "vue-ellipse-progress";
 import ChartContainer from "@/components/ChartContainer";
-import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "MultiProgressChart",
@@ -64,7 +63,7 @@ export default {
   computed: {
     getConfig() {
       return {
-        emptyColor: this.options?.emptyColor || variables.gray300,
+        emptyColor: this.options?.emptyColor || "#e2e8f0",
         chartSize: this.options?.chartSize || 150,
         gap: this.options?.gap || 3,
         angle: this.options?.angle || -90,

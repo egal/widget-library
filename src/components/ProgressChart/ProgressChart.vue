@@ -29,7 +29,6 @@
 <script>
 import { VeProgress } from "vue-ellipse-progress";
 import ChartContainer from "@/components/ChartContainer";
-import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "ProgressChart",
@@ -59,8 +58,8 @@ export default {
     getConfig() {
       return {
         half: this.options?.half || false,
-        lineColor: this.options?.lineColor || variables.primaryAccent,
-        emptyColor: this.options?.emptyColor || variables.gray300,
+        lineColor: this.options?.lineColor || "#0066ff",
+        emptyColor: this.options?.emptyColor || "#e2e8f0",
         chartSize: this.options?.chartSize || 150,
 
         line: this.options?.line || "round",
@@ -99,7 +98,7 @@ export default {
   align-items: center;
 
   &.half {
-    /deep/ .ep-legend--container {
+    :deep .ep-legend--container {
       top: 0;
       height: 45%;
       position: initial;
@@ -119,7 +118,7 @@ export default {
   }
 }
 
-/deep/ .ep-legend--value__counter {
+:deep .ep-legend--value__counter {
   display: none;
 }
 </style>

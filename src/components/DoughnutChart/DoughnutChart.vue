@@ -24,7 +24,6 @@
 
 <script>
 import ChartContainer from "@/components/ChartContainer";
-import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "DoughnutChart",
@@ -53,10 +52,10 @@ export default {
   computed: {
     getConfig() {
       return {
-        emptyColor: this.options?.emptyColor || variables.gray300,
+        emptyColor: this.options?.emptyColor || "#e2e8f0",
         chartSize: this.options?.chartSize || 150,
         thickness: this.options?.thickness || 10,
-        backgroundColor: this.options?.background || variables.baseWhite,
+        backgroundColor: this.options?.background || "#fff",
         hasLegend: this.options?.hasLegend ?? true,
         legendPlacement: this.options?.legendPlacement || "bottom",
         total: this.options?.total || 100,
@@ -84,6 +83,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-@import "../../assets/styles/variables";
-</style>
+<style scoped lang="scss"></style>

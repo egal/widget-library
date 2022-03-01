@@ -1,7 +1,5 @@
 // @ts-ignore
 import { ChartTooltipModel, ChartOptions } from "chart.js";
-// @ts-ignore
-import variables from "@/assets/styles/variables.scss";
 
 interface TooltipContextType {
   chart: object;
@@ -39,7 +37,7 @@ const setTooltipStyles = (
   chartOptions: ChartOptions
 ) => {
   tooltipEl.style.opacity = "1";
-  tooltipEl.style.backgroundColor = variables.gray800;
+  tooltipEl.style.backgroundColor = "#2d3748";
   tooltipEl.style.color = "white";
   tooltipEl.style.borderRadius = "4px";
   // @ts-ignore

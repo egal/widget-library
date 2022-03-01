@@ -25,7 +25,6 @@ import VerticalBarChart from "@/components/VerticalBarChart/VerticalBarChart";
 import StackedBarChart from "@/components/StackedBarChart/StackedBarChart";
 import LineChart from "@/components/LineChart/LineChart";
 import CurvesChart from "@/components/CurvesChart/CurvesChart";
-import variables from "@/assets/styles/variables.scss";
 
 export default {
   name: "Chart",
@@ -39,11 +38,7 @@ export default {
   data() {
     return {
       chartTypes,
-      defaultColors: [
-        variables.primaryAccent,
-        variables.pressedSecondary,
-        variables.gray500,
-      ],
+      defaultColors: ["#0066ff", "#76acfb", "#a0aec0"],
     };
   },
   computed: {

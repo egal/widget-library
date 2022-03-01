@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import variables from "@/assets/styles/variables.scss";
 import ChartContainer from "@/components/ChartContainer";
 
 export default {
@@ -56,7 +55,7 @@ export default {
   computed: {
     getConfig() {
       return {
-        emptyColor: this.options?.emptyColor || variables.gray300,
+        emptyColor: this.options?.emptyColor || "#e2e8f0",
         "--bar-height": this.options?.thickness + "px" || "7px",
       };
     },

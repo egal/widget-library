@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import variables from "@/assets/styles/variables.scss";
-
 export default {
   name: "ChartContainer",
   components: {},
@@ -34,17 +32,14 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        "--font-family": this.options?.fontFamily || variables.openSans,
-        "--main-font-color": this.options?.fontColor || variables.gray800,
-        "--second-font-color":
-          this.options?.secondFontColor || variables.gray500,
-        "--main-font-size": this.options?.titleFontSize || variables.p5FontSize,
-        "--second-font-size":
-          this.options?.labelsFontSize || variables.p6FontSize,
+        "--font-family": this.options?.fontFamily || "Open Sans",
+        "--main-font-color": this.options?.fontColor || "#2d3748",
+        "--second-font-color": this.options?.secondFontColor || "#a0aec0",
+        "--main-font-size": this.options?.titleFontSize || "14px",
+        "--second-font-size": this.options?.labelsFontSize || "12px",
         "--main-font-weight": this.options?.fontWeight || "bold",
         "--second-font-weight": this.options?.secondFontWeight || "normal",
-        "--background-color":
-          this.options?.backgroundColor || variables.baseWhite,
+        "--background-color": this.options?.backgroundColor || "#ffffff",
       };
     },
   },
@@ -101,7 +96,7 @@ export default {
 }
 
 // center text styles
-/deep/ .chart {
+:deep .chart {
   &-value {
     font-weight: var(--main-font-weight);
     font-size: var(--second-font-size);
@@ -118,16 +113,16 @@ export default {
 }
 
 // legend styles
-/deep/ .cdc-legend,
-/deep/ .legend {
+:deep .cdc-legend,
+:deep .legend {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-/deep/ .cdc-legend-item,
-/deep/ .legend-item {
+:deep .cdc-legend-item,
+:deep .legend-item {
   font-style: normal;
   font-weight: $medium-font-weight;
   font-size: var(--second-font-size);
@@ -139,8 +134,8 @@ export default {
   }
 }
 
-/deep/ .cdc-legend-item-color,
-/deep/ .legend-item-color {
+:deep .cdc-legend-item-color,
+:deep .legend-item-color {
   height: 8px;
   width: 8px;
   border-radius: 50%;
@@ -149,7 +144,7 @@ export default {
 }
 
 // styles for custom charts (stacked, vertical, line and curves)
-/deep/ .custom-chart {
+:deep .custom-chart {
   width: 100%;
 
   &__wrapper {
