@@ -11,7 +11,7 @@ const weightList = {
   medium: variables.mediumFontWeight,
   regular: variables.regularFontWeight,
   bold: variables.boldFontWeight,
-  default: variables.mediumFontWeight,
+  default: variables.regularFontWeight,
 };
 
 const getFont = (font) =>

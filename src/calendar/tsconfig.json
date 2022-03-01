@@ -5,9 +5,11 @@
     "strict": true,
     "jsx": "preserve",
     "noImplicitAny": false,
+
     "importHelpers": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,

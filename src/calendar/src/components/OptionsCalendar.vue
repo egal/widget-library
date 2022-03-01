@@ -1,10 +1,10 @@
 <template>
-  <div class="calendar" :style="getVars">
+  <div class="calendar" :style="getStyleVars">
     <div class="left">
       <ul class="calendar__controls">
         <li
           class="calendar__controls-left"
-          @click="changeMonth(isDouble ? -2 : -1)"
+          @click="changeMonth(data?.isDouble ? -2 : -1)"
         >
           <BootstrapIcon icon="chevron-left" />
         </li>
@@ -14,12 +14,12 @@
         <li
           class="calendar__controls-right"
           @click="changeMonth(1)"
-          v-if="!isDouble"
+          v-if="!data?.isDouble"
         >
           <BootstrapIcon icon="chevron-right" />
         </li>
         <!--        todo !!-->
-        <li class="calendar__controls-right" v-if="isDouble"></li>
+        <li class="calendar__controls-right" v-if="data?.isDouble"></li>
       </ul>
       <ul class="calendar__weekdays">
         <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
@@ -44,9 +44,13 @@
         </li>
       </ul>
 
-      <CalendarInput v-if="isTimeInput" :is-am-pm="!isAmPm" @select="setTime" />
+      <CalendarInput
+        v-if="data?.timePicker"
+        :is-am-pm="data?.timePicker?.isAMPM"
+        @select="setTime"
+      />
     </div>
-    <div class="right" v-if="isDouble">
+    <div class="right" v-if="data?.isDouble">
       <ul class="calendar__controls">
         <li class="calendar__controls-left"></li>
         <li class="calendar__controls-month">
@@ -79,7 +83,11 @@
         </li>
       </ul>
 
-      <CalendarInput v-if="isTimeInput" :is-am-pm="isAmPm" @select="setTime" />
+      <CalendarInput
+        v-if="data?.timePicker"
+        :is-am-pm="data?.timePicker?.isAMPM"
+        @select="setTime"
+      />
     </div>
   </div>
 </template>
@@ -99,41 +107,42 @@ export type ISODate = ISODateDifferentiator & string;
 
 type Props = {
   "--font"?: "Inter" | "Open Sans" | "Raleway";
-  "--font-weight"?: "medium" | "regular" | "bold";
+  "--font-weight"?: "medium" | "normal" | "bold";
+  "--font-size"?: string;
   "--color"?: string;
   "--active-color"?: string;
   "--active-background-color"?: string;
+};
+
+type dataProp = {
+  font?: string;
+  fontWeight?: string;
+  fontSize?: string;
+  color?: string;
+  activeColor?: string;
+  activeBackgroundColor?: string;
+  isDouble?: boolean;
+  locale?: string;
+  timePicker?: {
+    isAMPM?: boolean;
+    label?: string;
+  };
 };
 
 export default defineComponent({
   name: "OptionsCalendar",
   components: { CalendarInput, BootstrapIcon },
   props: {
-    isDouble: {
-      type: Boolean,
-      default: false,
-    },
-    modelValue: {
-      type: [Object, Array],
-      default: () => [],
+    data: {
+      type: Object as () => dataProp,
+      default: () => {},
     },
 
-    locale: {
-      type: String,
-      default: "en-US",
-    },
-
-    //  todo footer prop OR label + input props
-
-    //  todo add props for input
-    isTimeInput: {
-      type: Boolean,
-      default: false,
-    },
-    isAmPm: {
-      type: Boolean,
-      default: true,
-    },
+    // modelValue: {
+    //   type: [Object, Array],
+    //   default: () => [],
+    // },
+    //todo preset values ?
   },
   data() {
     return {
@@ -143,10 +152,11 @@ export default defineComponent({
       activeColor: "",
       activeBackgroundColor: "",
 
+      modelValue: {},
+
       curMonth: null as any,
       dates: [] as ISODate[],
 
-      // locale: "en-US",
       selectedDays: [] as ISODate[],
       mouseMayEnter: false,
 
@@ -155,28 +165,30 @@ export default defineComponent({
       nextMonth: null as any,
       nextMonthDates: [] as ISODate[],
 
-      //  todo today ???
       today: null as Date | null,
       currentDay: "",
     };
   },
   computed: {
-    getVars(): Props {
+    //todo getFont
+    getStyleVars(): Props {
       return {
         "--color": this.color || variables.gray600,
         "--active-color": this.activeColor || variables.primaryAccent,
         "--active-background-color":
           this.activeBackgroundColor || variables.accentOpacity1,
         "--font": getFont(this.font),
-        "--font-weight": getFontWeight(this.weight),
+        "--font-weight": getFontWeight(this.data?.fontWeight),
+        "--font-size": this.data?.fontSize || "14px",
       };
     },
+
     weekdays(): string[] {
       return new Array(7)
         .fill(new Date())
         .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
         .map((weekday) => {
-          return weekday.toLocaleString(this.locale, {
+          return weekday.toLocaleString(this.data?.locale ?? "en-US", {
             weekday: "short",
           });
         })
@@ -191,26 +203,23 @@ export default defineComponent({
     day.setDate(1);
     this.curMonth = day;
 
-    if (this.isDouble) {
-      //todo x
-      const x = new Date();
-      let test = x;
-      test.setDate(1);
-      test.setMonth(x.getMonth() + 1);
-      this.nextMonth = test;
-
+    if (this.data?.isDouble) {
+      const newDay = new Date();
+      let dayCopy = newDay;
+      dayCopy.setDate(1);
+      dayCopy.setMonth(newDay.getMonth() + 1);
+      this.nextMonth = dayCopy;
       this.nextMonthDates = this.generateDates(this.nextMonth);
     }
 
-    //todo get today date
-    let m = `${this.today.getMonth() + 1}`;
-    if (m.length < 2) {
-      m = `0${m}`;
+    let todayMonth = `${this.today.getMonth() + 1}`;
+    if (todayMonth.length < 2) {
+      todayMonth = `0${todayMonth}`;
     }
-    const ttt = `${this.today.getFullYear()}-${m}-${this.today.getDate()}`;
-    this.currentDay = ttt;
+
+    this.currentDay = `${this.today.getFullYear()}-${todayMonth}-${this.today.getDate()}`;
   },
-  // beforeUnmount() {},
+
   methods: {
     // Функции-помошники, используются в основном в map или filter
     isDateInCurMonth(date: ISODate | Date, curMonth: ISODate | Date) {
@@ -266,7 +275,7 @@ export default defineComponent({
       this.curMonth.setMonth(this.curMonth.getMonth() + shift);
       this.curMonth = new Date(this.curMonth);
 
-      if (this.isDouble) {
+      if (this.data?.isDouble) {
         this.nextMonth.setMonth(this.nextMonth.getMonth() + shift);
         this.nextMonthDates = this.generateDates(this.nextMonth);
       }
@@ -296,14 +305,14 @@ export default defineComponent({
 
     //Отобрадает только день, даты хранятся в ISODate
     displayOnlyDay(dateString: ISODate): string {
-      return new Date(dateString).toLocaleString(this.locale, {
+      return new Date(dateString).toLocaleString(this.data?.locale ?? "en-US", {
         day: "numeric",
       });
     },
 
     //Отобрадает только месяц и год, даты хранятся в ISODate
     displayOnlyMonth(dateString: ISODate): string {
-      return new Date(dateString).toLocaleString(this.locale, {
+      return new Date(dateString).toLocaleString(this.data?.locale ?? "en-US", {
         month: "long",
         year: "numeric",
       });
@@ -348,9 +357,7 @@ export default defineComponent({
     },
 
     setTime(val): void {
-      // todo timestamp ?
-      // todo check if am pm
-      // todo emit
+      // todo
       this.$emit("select-time", val);
     },
   },
@@ -370,8 +377,6 @@ export default defineComponent({
   box-shadow: $shadow-2xl;
   border-radius: 20px;
 
-  .left {
-  }
   .right {
     margin-left: 40px;
   }
@@ -409,16 +414,10 @@ export default defineComponent({
     }
 
     &-month {
-      // TODO FF?
-      //font-family: "Poppins";
-      font-family: "Open Sans";
-
       font-style: normal;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      /* identical to box height, or 171% */
-
+      font-weight: var(--font-weight);
+      font-size: var(--font-size);
+      line-height: 171%;
       color: $gray-800;
     }
   }
@@ -426,8 +425,6 @@ export default defineComponent({
   &__weekdays {
     font-size: $p6-font-size;
 
-    // TODO
-    //font-family: Open Sans;
     font-weight: normal;
     //line-height: 120%;
     /* or 14px */
@@ -474,7 +471,7 @@ export default defineComponent({
       border-radius: 4px;
 
       // todo styles
-      font-family: "Open Sans";
+
       font-style: normal;
       font-weight: normal;
 

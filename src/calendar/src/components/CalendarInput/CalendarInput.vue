@@ -59,8 +59,14 @@
 import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
 // import Input from "@/components/Input/Input.vue";
 import Select from "@/components/Select/Select.vue";
+import { defineComponent } from "vue";
 
-export default {
+type timeObj = {
+  name: string;
+  value: number | string;
+};
+
+export default defineComponent({
   name: "CalendarInput",
   components: { Select, BootstrapIcon },
   props: {
@@ -70,18 +76,18 @@ export default {
     },
     isAmPm: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {
     return {
-      selectedHour: {},
-      selectedMinutes: {},
-      selectedAmPm: { value: "am", name: "AM" },
+      selectedHour: {} as timeObj,
+      selectedMinutes: {} as timeObj,
+      selectedAmPm: { value: "am", name: "AM" } as timeObj,
     };
   },
   computed: {
-    hours() {
+    hours(): timeObj[] {
       if (this.isAmPm) {
         return [
           { name: "12", value: 12 },
@@ -126,11 +132,11 @@ export default {
         ];
       }
     },
-    minutes() {
-      let arr: any[] = [];
+    minutes(): timeObj[] {
+      let arr: timeObj[] = [];
       for (let i = 0; i++, i <= 60; ) {
         let obj = {
-          name: i < 10 ? `0${i}` : i,
+          name: i < 10 ? `0${i}` : `${i}`,
           value: i,
         };
         arr.push(obj);
@@ -140,7 +146,7 @@ export default {
   },
   // mounted() {},
   methods: {
-    setTime(val: any, type: string) {
+    setTime(val: timeObj, type: string) {
       switch (type) {
         case "hour":
           this.selectedHour = val;
@@ -164,7 +170,7 @@ export default {
     },
   },
   watch: {},
-};
+});
 </script>
 
 <style scoped lang="scss">

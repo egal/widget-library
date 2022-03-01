@@ -1,0 +1,38 @@
+[
+  {
+    "font": "Raleway",
+    "fontSize": "14px",
+    "fontWeight": "regular",
+    "color": "#718096",
+    "activeColor": "#0066FF",
+    "activeBackgroundColor": "#E5F0FF",
+    "isDouble": true,
+    "locale": "ru-RU",
+    "timePicker": {
+      "isAMPM": true,
+      "label": "time 1"
+    }
+  },
+  {
+    "font": "Raleway",
+    "fontSize":  "14px",
+    "fontWeight": "regular",
+    "color": "#718096",
+    "activeColor": "#1166FF",
+    "activeBackgroundColor": "#E5F0FF",
+    "isDouble": false,
+    "locale":  "en-US",
+    "timePicker": {
+      "isAMPM": false,
+      "label":  "time 2"
+    }
+  },
+  {
+    "font": "Raleway",
+    "fontSize":  "14px",
+    "color": "#718096",
+    "activeColor": "#2266FF",
+    "activeBackgroundColor": "#E5F0FF",
+    "isDouble": false
+  }
+]
