@@ -11,8 +11,8 @@
     >
       <a :href="href" @click="navigate" class="exact-link">
         <BootstrapIcon :icon="link.icon" />
-        <p v-if="active">{{ link.name }}</p></a
-      >
+        <p v-if="active" :class="{ 'link-active': active }">{{ link.name }}</p>
+      </a>
       <BootstrapIcon
         icon="caret-down"
         class="caret-icon"
@@ -22,7 +22,11 @@
       />
     </div>
     <transition-group name="slide-fade" tag="ul">
-      <ul v-if="link.links && linksOpen && active" class="children-links">
+      <ul
+        v-if="link.links && linksOpen"
+        class="children-links"
+        :class="{ 'closed-menu-links': !active }"
+      >
         <li v-for="(child, index) in link.links" :key="index">
           <ENavbarLeftItem :link="child" :active="active" :data="data"></ENavbarLeftItem>
         </li>

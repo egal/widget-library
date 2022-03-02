@@ -4,7 +4,7 @@
   box-sizing: border-box;
   font-family: var(--font);
   font-weight: var(--font-weight);
-  transition: all 0.3s;
+  transition: all 0.2s;
   width: 66px;
   height: 100vh;
   border-right: 1px solid $gray-200;
@@ -15,11 +15,6 @@
 
   &.--big {
     width: 250px;
-
-    li a p {
-      transform: translateX(0);
-      opacity: 1;
-    }
   }
 
   &__logo-group {
@@ -59,7 +54,7 @@
     align-items: flex-start;
     gap: 32px;
     font-size: $p4-font-size;
-    color: black;
+    color: $gray-800;
 
     &__list-item {
       display: block;
@@ -94,9 +89,11 @@
       color: var(--color);
       padding: 0;
       margin: 0;
-      transform: translateX(-100%);
       opacity: 0;
-      transition: 0.3s;
+      transition: all 0.5s;
+    }
+    .link-active {
+      opacity: 1;
     }
   }
 }
@@ -125,7 +122,8 @@
   align-items: flex-start;
   gap: 32px;
   font-size: $p4-font-size;
-  color: black;
+  color: $gray-800;
+  transition: all 0.3s ease-in-out;
 
   li {
     display: block;
@@ -133,6 +131,9 @@
     transition: 0.3s;
     width: 100%;
   }
+}
+.children-links.closed-menu-links {
+  padding: 24px 0;
 }
 
 .router-link-exact-active,
