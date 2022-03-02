@@ -1,22 +1,17 @@
 <template>
   <div v-for="(item, idx) in data" :key="idx" style="margin-bottom: 40px">
-    <OptionsCalendar
-      :data="item"
-      @update:modelValue="setDate"
-      @select-time="onSelectTime"
-    />
+    <Calendar :data="item" @update:dateValue="setDate" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import OptionsCalendar from "@/components/OptionsCalendar.vue";
-
+import Calendar from "@/components/Calendar/Calendar.vue";
 import data from "./data.json";
 
 export default defineComponent({
   name: "App",
-  components: { OptionsCalendar },
+  components: { Calendar },
   data() {
     return {
       data,
@@ -25,9 +20,6 @@ export default defineComponent({
   methods: {
     setDate(v) {
       console.log("setDate", v);
-    },
-    onSelectTime(v) {
-      console.log("onSelectTime", v);
     },
   },
 });

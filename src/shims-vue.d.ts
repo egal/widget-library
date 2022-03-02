@@ -5,5 +5,4 @@ declare module "*.vue" {
   export default component;
 }
 
-//todo
 declare module "@dvuckovic/vue3-bootstrap-icons";

@@ -48,7 +48,6 @@
     </div>
 
     <div class="select-dropdown">
-      <!--      // todo removed  @click.native.stop-->
       <Dropdown
         class="dropdown-component"
         v-show="showDropdown"
@@ -156,6 +155,7 @@ export default {
       if (this.multiple) {
         return !!this.selectModel.length;
       }
+
       return !!Object.keys(this.selectModel).length;
     },
     showClearButton() {
@@ -319,8 +319,8 @@ export default {
     border-color: var(--focus-border-color);
   }
   .filled {
-    //background-color: var(--filled-background-color);
-    //color: var(--filled-font-color);
+    background-color: var(--filled-background-color);
+    color: var(--filled-font-color);
     .selected {
       .bi {
         color: var(--filled-font-color);

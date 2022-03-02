@@ -1,27 +1,31 @@
 [
   {
-    "font": "Raleway",
+    "fontFamily": "Raleway",
     "fontSize": "14px",
     "fontWeight": "regular",
     "color": "#718096",
     "activeColor": "#0066FF",
     "activeBackgroundColor": "#E5F0FF",
-    "isAdaptiveWith": false,
+    "isAdaptiveSize": false,
     "isDouble": true,
     "locale": "ru-RU",
     "timePicker": {
       "isAMPM": true,
       "label": "time 1"
+    },
+    "data": {
+      "date_from": "2022-03-02T04:28:12.089Z",
+      "date_to": "2022-03-05T12:28:12.000Z"
     }
   },
   {
-    "font": "Raleway",
+    "fontFamily": "Raleway",
     "fontSize":  "14px",
     "fontWeight": "regular",
     "color": "#718096",
-    "activeColor": "#1166FF",
+    "activeColor": "#51e",
     "activeBackgroundColor": "#E5F0FF",
-    "isAdaptiveWith": true,
+    "isAdaptiveSize": false,
     "isDouble": false,
     "locale":  "en-US",
     "timePicker": {
@@ -30,12 +34,12 @@
     }
   },
   {
-    "font": "Raleway",
-    "fontSize":  "14px",
+    "fontFamily": "Open Sans",
+    "fontSize":  "18px",
     "color": "#718096",
-    "activeColor": "#2266FF",
-    "activeBackgroundColor": "#E5F0FF",
-    "isAdaptiveWith": false,
-    "isDouble": false
+    "activeColor": "red",
+    "activeBackgroundColor": "#ffF0FF",
+    "isAdaptiveSize": false,
+    "data":  {}
   }
 ]
