@@ -123,6 +123,7 @@
   gap: 32px;
   font-size: $p4-font-size;
   color: $gray-800;
+  transition: all 0.3s ease-in-out;
 
   li {
     display: block;
