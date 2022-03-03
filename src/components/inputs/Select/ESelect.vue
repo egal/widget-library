@@ -28,7 +28,7 @@
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
-        <EClearButton
+        <ClearButton
           :error="mergedData.showError && (errorMessage || mergedData.error)"
           :size="mergedData.size"
           :filled="filled && !mergedData.error && !errorMessage"
@@ -61,7 +61,7 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import EDropdown from '@/components/inputs/Dropdown/EDropdown'
-import EClearButton from '@/components/inputs/ClearButton/EClearButton'
+import ClearButton from '@/components/inputs/ClearButton/ClearButton'
 import vClickOutside from 'click-outside-vue3'
 import { validate } from '@/helpers/validators'
 export default {
@@ -70,7 +70,7 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   components: {
-    EClearButton,
+    ClearButton,
     EDropdown,
     BIcon: BootstrapIcon,
   },

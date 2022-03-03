@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'EClearButton',
+  name: 'ClearButton',
   components: {},
   props: {
     error: {
