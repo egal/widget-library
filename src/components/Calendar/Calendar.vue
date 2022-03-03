@@ -176,12 +176,12 @@ export default defineComponent({
 
   methods: {
     setInitSelectedValues(): void {
-      if (this.data?.data && this.data?.data?.date_from) {
+      if (this.data?.data?.date_from) {
         this.selectedDays.push(
           this.getDateFromTimestamp(this.data?.data?.date_from)
         );
       }
-      if (this.data?.data && this.data?.data?.date_to) {
+      if (this.data?.data?.date_to) {
         this.selectedDays.push(
           this.getDateFromTimestamp(this.data?.data?.date_to)
         );
@@ -445,8 +445,6 @@ export default defineComponent({
       &.--current {
         border: 1px solid var(--active-color);
 
-        //todo
-        //color: $pressed-accent;
         color: var(--active-color);
         background-color: $base-white;
       }
@@ -455,8 +453,6 @@ export default defineComponent({
         cursor: pointer;
         background-color: var(--active-background-color);
 
-        //todo
-        //color: $pressed-accent;
         color: var(--active-color);
       }
 
@@ -464,23 +460,6 @@ export default defineComponent({
         background-color: var(--active-color);
         color: white;
         z-index: 1;
-
-        //&:hover {
-        //  cursor: pointer;
-        //  //background-color: $base-white;
-        //
-        //  //todo
-        //  //color: $pressed-accent;
-        //  color: var(--active-color);
-        //
-        //  border: 1px solid var(--active-color);
-        //
-        //  //todo
-        //  //color: $pressed-accent;
-        //  color: var(--active-color);
-        //  //background-color: $base-white;
-        //  background-color: var(--active-background-color);
-        //}
       }
 
       &.--in-range {
@@ -562,6 +541,10 @@ export default defineComponent({
         &:hover {
           background-color: initial;
         }
+      }
+
+      &.--past {
+        color: $gray-500;
       }
     }
   }

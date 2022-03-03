@@ -159,18 +159,12 @@ export default defineComponent({
   padding-top: 20px;
   margin-top: 14px;
 
-  //todo vars
   .label {
     font-style: normal;
     font-weight: 500;
-    font-size: 12px;
-    line-height: 15px;
-    /* identical to box height */
-
     display: flex;
     align-items: center;
     color: $gray-500;
-
     margin-top: 0;
     margin-bottom: 8px;
   }
