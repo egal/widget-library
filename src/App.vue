@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(item, idx) in data" :key="idx" style="margin-bottom: 40px">
+  <div v-for="(item, idx) in jsonData" :key="idx" style="margin-bottom: 40px">
     <Calendar :data="item" @update:dateValue="setDate" />
   </div>
 </template>
@@ -7,19 +7,19 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Calendar from "@/components/Calendar/Calendar.vue";
-import data from "./data.json";
+import jsonData from "./data.json";
 
 export default defineComponent({
   name: "App",
   components: { Calendar },
   data() {
     return {
-      data,
+      jsonData,
     };
   },
   methods: {
-    setDate(v) {
-      console.log("setDate", v);
+    setDate(selectedDays: string[]) {
+      // do something
     },
   },
 });

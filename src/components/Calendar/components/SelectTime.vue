@@ -80,7 +80,7 @@ export default defineComponent({
     return {
       selectedHours: this.hours ? { name: this.hours } : {},
       selectedMinutes: this.minutes ? { name: this.minutes } : {},
-      selectedAmPm: this.format ? { name: this.format } : {},
+      selectedAmPm: this.format ? { name: this.format } : { name: "AM" },
 
       selectedTime: [] as string[],
     };
@@ -201,15 +201,8 @@ export default defineComponent({
   color: $gray-600;
 }
 
-// todo filled class
 :deep .select {
   width: 70px;
-  transition: 0.3s ease opacity;
-
-  .select-container.filled {
-    background-color: initial;
-    color: initial;
-  }
 }
 
 :deep .select.ampm {

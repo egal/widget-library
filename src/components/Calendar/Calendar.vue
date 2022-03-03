@@ -57,7 +57,7 @@
         :hours="getHoursFromTimestamp(data?.data?.date_to)?.hours"
         :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
         :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
-        :is-disabled="selectedDays.length === 0"
+        :is-disabled="selectedDays.length <= 1"
         type="to"
         @select="setTime"
       />
@@ -132,13 +132,13 @@ export default defineComponent({
 
       modelValue: {},
 
-      curMonth: null as any,
+      curMonth: {} as any,
       dates: [] as ISODate[],
 
       selectedDays: [] as string[],
       mouseMayEnter: false,
 
-      nextMonth: null as any,
+      nextMonth: {} as any,
       nextMonthDates: [] as ISODate[],
 
       formattedDateTimes: [] as string[],
@@ -212,16 +212,18 @@ export default defineComponent({
       }
     },
 
-    // time functions
     getDateFromTimestamp(isostr: ISODate | string): ISODate {
       return formatToISODate(new Date(isostr));
     },
 
+    isContainsTime(isostr: string): boolean {
+      return isostr.includes("T");
+    },
     getHoursFromTimestamp(isostr: ISODate): {
       hours: number | string;
       format: string;
     } | null {
-      if (!isostr) {
+      if (!isostr || !this.isContainsTime(isostr)) {
         return null;
       }
 
@@ -241,9 +243,11 @@ export default defineComponent({
     },
 
     getMinutesFromTimestamp(isostr: ISODate): string | number {
+      if (!isostr || !this.isContainsTime(isostr)) {
+        return "";
+      }
       return new Date(Date.parse(isostr)).getMinutes();
     },
-    // time functions
 
     generateWeekDaysFromIterator(weekday: Date, i: number): Date {
       return new Date(
@@ -314,18 +318,24 @@ export default defineComponent({
     },
 
     setTime(val): void {
-      switch (val.type) {
-        case "to":
-          this.formattedDateTimes[1] = new Date(
-            `${this.selectedDays[1]} ${val.time}`
-          ).toISOString();
-          break;
-        case "from":
-        default:
-          this.formattedDateTimes[0] = new Date(
-            `${this.selectedDays[0]} ${val.time}`
-          ).toISOString();
-          break;
+      if (!this.data?.isDouble) {
+        this.formattedDateTimes.map((item) =>
+          new Date(`${item} ${val.time}`).toISOString()
+        );
+      } else {
+        switch (val.type) {
+          case "to":
+            this.formattedDateTimes[1] = new Date(
+              `${this.selectedDays[1]} ${val.time}`
+            ).toISOString();
+            break;
+          case "from":
+          default:
+            this.formattedDateTimes[0] = new Date(
+              `${this.selectedDays[0]} ${val.time}`
+            ).toISOString();
+            break;
+        }
       }
 
       this.$emit("update:dateValue", this.formattedDateTimes);
@@ -348,12 +358,17 @@ export default defineComponent({
   border-radius: 20px;
 
   .left {
-    .calendar__controls-right.hidden {
+    :deep .calendar__controls-right.hidden {
       visibility: hidden;
     }
   }
+
   .right {
     margin-left: 40px;
+
+    :deep .calendar__controls-left {
+      visibility: hidden;
+    }
   }
 
   :deep &__controls {
