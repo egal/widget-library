@@ -25,7 +25,7 @@
     >
       <input
         :id="mergedData.id"
-        :type="type === 'search' ? 'text' : newType"
+        :type="mergedData.type === 'search' ? 'text' : newType"
         :placeholder="mergedData.placeholder"
         :value="newValue"
         :maxlength="mergedData.inputMaxLength"
@@ -55,14 +55,14 @@
       <b-icon
         class="icon icon--password"
         :icon="passwordShown ? 'eye' : 'eye-fill'"
-        v-if="newValue && type === 'password'"
+        v-if="newValue && mergedData.type === 'password'"
         @click.stop="showPassword"
       />
       <div class="arrow-icons" v-if="type === 'number' && mergedData.showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
         <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
       </div>
-      <EClearButton
+      <ClearButton
         class="subtract-button"
         :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
@@ -97,12 +97,12 @@
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import EClearButton from '@/components/inputs/ClearButton/EClearButton'
+import ClearButton from '@/components/inputs/ClearButton/ClearButton'
 import { validate } from '@/helpers/validators'
 export default {
   name: 'EInput',
   components: {
-    EClearButton,
+    ClearButton,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -181,8 +181,8 @@ export default {
     },
   },
   mounted() {
-    this.newValue = this.mergedData.modelValue || this.mergedData.type === 'number' ? 0 : ''
-    this.type = this.mergedData.type ? this.mergedData.type : 'text'
+    this.newValue = this.mergedData.modelValue
+    this.newType = this.mergedData.type
   },
   methods: {
     /**
