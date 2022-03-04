@@ -7,9 +7,19 @@
   >
     <div
       class="nav-link"
-      :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+      :class="{
+        'router-link-active': isActive,
+        'router-link-exact-active': isExactActive,
+        'router-link-exact-active nested':
+          link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),
+      }"
+      @click.stop="link.links && openNestedLinks()"
     >
-      <a :href="href" @click="navigate" class="exact-link">
+      <a
+        :href="href"
+        @click="(event) => navigationHandler(event, link, navigate)"
+        class="exact-link"
+      >
         <BootstrapIcon :icon="link.icon" />
         <p v-if="active" :class="{ 'link-active': active }">{{ link.name }}</p>
       </a>
@@ -17,13 +27,13 @@
         icon="caret-down"
         class="caret-icon"
         v-if="link.links"
-        @click="linksOpen = !linksOpen"
+        @click.stop="openNestedLinks()"
         :class="{ 'rotate-caret': linksOpen }"
       />
     </div>
-    <transition-group name="slide-fade" tag="ul">
+    <transition-group name="slide-fade" tag="ul" class="transition-group-list">
       <ul
-        v-if="link.links && linksOpen"
+        v-if="link.links && linksOpen && active"
         class="children-links"
         :class="{ 'closed-menu-links': !active }"
       >
@@ -68,6 +78,20 @@ export default {
         '--font': this.data.font,
         '--font-weight': this.data.weight,
       }
+    },
+  },
+
+  methods: {
+    navigationHandler(event, link, navigate) {
+      event.preventDefault()
+
+      if (!link.links) {
+        navigate()
+      }
+    },
+
+    openNestedLinks() {
+      this.linksOpen = !this.linksOpen
     },
   },
 }
