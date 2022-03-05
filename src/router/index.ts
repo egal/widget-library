@@ -3,7 +3,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = []
 
 const router = createRouter({
-  history: createWebHistory(import.meta.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 })
 
