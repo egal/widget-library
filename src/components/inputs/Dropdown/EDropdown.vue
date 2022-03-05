@@ -84,7 +84,7 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sana',
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
