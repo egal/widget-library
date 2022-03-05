@@ -117,7 +117,7 @@ export default {
           size: 'md',
           componentStyle: 'normal',
           font: 'Open Sans',
-          weight: 'regular',
+          weight: '500',
           color: this.minimalisticVersion ? '#A0AEC0' : '#718096',
           activeColor: '#0066ff',
           activeBackgroundColor: '#e5f0ff',
@@ -393,18 +393,18 @@ export default {
     border: none;
 
     .pagination__right-arrow {
-      padding-left: 11px;
-      margin-left: 10px;
+      padding-left: 5px;
+      margin-left: 5px;
     }
 
     .pagination__left-arrow {
-      padding-right: 11px;
-      margin-right: 10px;
+      padding-right: 5px;
+      margin-right: 5px;
     }
 
     .pagination__right-arrow,
     .pagination__left-arrow {
-      align-items: flex-start;
+      padding-bottom: 2px;
 
       &::after {
         display: none;
@@ -471,7 +471,7 @@ export default {
 .pagination-move,
 .pagination-enter-active,
 .pagination-leave-active {
-  transition: all 0.3s cubic-bezier(0.55, 0, 0.1, 1);
+  transition: all 0.5s cubic-bezier(0.28, 0.67, 0.25, 0.9);
 }
 
 .pagination-enter-from,
