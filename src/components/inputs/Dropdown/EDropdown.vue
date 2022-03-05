@@ -2,12 +2,14 @@
   <div class="dropdown" :class="`dropdown--${size}`" :style="getStyleVars">
     <div class="dropdown-items">
       <Input
+        :data="{
+          type: 'search',
+          placeholder: inputSearchPlaceholder,
+          iconLeft: 'search',
+          size,
+        }"
         class="dropdown-search"
-        type="search"
-        placeholder="Search"
-        icon-left="search"
         @update:modelValue="filterOptions"
-        :size="size"
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
@@ -75,6 +77,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    inputSearchPlaceholder: {
+      type: String,
+      default: 'Search',
+    },
   },
   data() {
     return {
@@ -84,7 +90,7 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sana',
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
@@ -154,10 +160,12 @@ export default {
   box-shadow: var(--box-shadow);
   max-height: 450px;
   overflow-y: auto;
-  width: max-content;
+  min-width: max-content;
 
   &-search {
     margin-bottom: 10px;
+    //background-color: $gray-100;
+    //border: 1px solid $gray-300;
   }
 
   &-item {

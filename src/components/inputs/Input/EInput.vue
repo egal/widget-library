@@ -404,7 +404,7 @@ input[type='number'] {
   input {
     color: var(--value-color);
     width: 100%;
-    background-color: var(--backgroud-color);
+    background-color: var(--background-color);
     border: 1px solid var(--border-color);
     box-sizing: border-box;
     border-radius: var(--border-radius);
@@ -418,7 +418,7 @@ input[type='number'] {
       outline: none;
     }
     &:disabled {
-      background: var(--backgroud-disabled-color);
+      background: var(--background-disabled-color);
       &::placeholder {
         color: var(--placeholder-disabled-color);
       }
@@ -429,6 +429,8 @@ input[type='number'] {
     }
   }
   .icon {
+    color: var(--icon-color);
+
     &--left {
       left: 16px;
       position: absolute;

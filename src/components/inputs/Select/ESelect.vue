@@ -50,7 +50,15 @@
         :size="mergedData.size"
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
+        :input-search-placeholder="mergedData.inputSearchPlaceholder"
         :style-config="dropdownStyleConfig"
+        :input-search-style-config="{
+          backgroundColor: '#F7FAFC',
+          borderColor: '#E2E8F0',
+          iconColor: '#CBD5E0',
+          placeholderColor: '#CBD5E0',
+          ...inputSearchStyleConfig,
+        }"
         @select="selectOption"
         @click.native.stop
       />
@@ -87,6 +95,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    inputSearchStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -112,6 +124,7 @@ export default {
           showError: true,
           validators: [],
           grouped: false,
+          inputSearchPlaceholder: 'Search',
         },
         this.data,
       )
@@ -217,6 +230,7 @@ export default {
   align-items: flex-start;
   width: 100%;
   font-family: var(--font-family);
+  position: relative;
   &-label {
     font-weight: var(--label-font-weight);
     color: var(--label-color);
@@ -269,6 +283,7 @@ export default {
       }
     }
   }
+
   .focus {
     border-color: var(--focus-border-color);
   }
@@ -339,8 +354,11 @@ export default {
     position: relative;
     z-index: 2;
     margin-top: 4px;
+    width: calc(100% + 32px);
+
     .dropdown-component {
       position: absolute;
+      width: 100%;
     }
   }
 }
