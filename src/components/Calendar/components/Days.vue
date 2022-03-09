@@ -18,9 +18,7 @@
           this.selectedDays.length &&
           date < this.selectedDays[0],
       }"
-      @click="
-        isDateInCurMonth(date, currentMonth) && $emit('select-date', date)
-      "
+      @click="$emit('select-date', date)"
       @mouseenter="$emit('mouse-enter', date)"
     >
       {{ displayOnlyDay(date) }}

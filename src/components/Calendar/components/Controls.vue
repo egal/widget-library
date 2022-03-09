@@ -12,7 +12,7 @@
     <li
       class="calendar__controls-right"
       :class="{ hidden: data?.isDouble }"
-      @click="$emit('change-month', 1)"
+      @click="$emit('change-month', data?.isDouble ? 2 : 1)"
     >
       <BootstrapIcon icon="chevron-right" />
     </li>

@@ -457,7 +457,7 @@ export default defineComponent({
   }
 
   :deep &__days {
-    flex-grow: 1;
+    margin-bottom: auto;
 
     li {
       font-size: var(--font-size);
@@ -484,6 +484,21 @@ export default defineComponent({
         background-color: var(--active-color);
         color: white;
         z-index: 1;
+      }
+
+      &.--not-cur-month {
+        //cursor: default;
+        color: $gray-300;
+        //background-color: $base-white;
+
+        //&:before,
+        //&:after {
+        //  display: none;
+        //}
+
+        //&:hover {
+        //  background-color: initial;
+        //}
       }
 
       &.--in-range {
@@ -531,13 +546,13 @@ export default defineComponent({
           top: -8px;
         }
 
-        &.--on-active:nth-child(7n)::before {
-          display: block;
-          width: 50%;
-          height: 12px;
-          left: 20px;
-          bottom: -8px;
-        }
+        //&.--on-active:nth-child(7n)::before {
+        //  display: block;
+        //  width: 50%;
+        //  height: 12px;
+        //  left: 20px;
+        //  bottom: -8px;
+        //}
 
         &.--beyond-active:nth-child(7n + 1)::before {
           display: block;
@@ -549,21 +564,6 @@ export default defineComponent({
 
         &.--on-active:nth-child(7n)::after {
           display: none;
-        }
-      }
-
-      &.--not-cur-month {
-        cursor: default;
-        color: $gray-300;
-        background-color: $base-white;
-
-        &:before,
-        &:after {
-          display: none;
-        }
-
-        &:hover {
-          background-color: initial;
         }
       }
 
