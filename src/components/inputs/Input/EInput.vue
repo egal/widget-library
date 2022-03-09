@@ -157,24 +157,24 @@ export default {
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#2d3748',
+        '--value-color': this.styleConfig?.valueColor || '#4A5568',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
-        '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#4A5568',
         '--placeholder-disabled-color': this.styleConfig?.placeholderDisabledColor || '#cbd5e0',
         '--label-color': this.styleConfig?.labelColor || '#a0aec0',
         '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
         '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
-        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
+        '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
-        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#edf2f7',
-        '--focus-border-color': this.styleConfig?.focusBorderColor || '#3385ff',
-        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
+        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#F7FAFC',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#DEEBFC',
         '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
         '--search-background-color': this.styleConfig?.searchBackgroundColor || '#f7fafc',
-        '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
+        '--icon-color': this.styleConfig?.iconColor || '#A0AEC0',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--success-color': this.styleConfig?.successColor || '#66cb9f',
       }
@@ -414,7 +414,7 @@ input[type='number'] {
       color: var(--placeholder-color);
     }
     &:focus {
-      border: 1px solid var(--focus-border-color);
+      border: 2px solid var(--focus-border-color);
       outline: none;
     }
     &:disabled {

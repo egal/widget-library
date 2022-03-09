@@ -128,7 +128,7 @@ export default {
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#a0aec0',
+        '--value-color': this.styleConfig?.valueColor || '#2D3748',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
         '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
         '--placeholder-font-size': this.styleConfig?.placeholderFontSize || '12px',
@@ -141,8 +141,8 @@ export default {
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || '#0066ff',
-        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
-        '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#0066ff1a',
+        '--filled-font-color': this.styleConfig?.filledFontColor || '#0066ff',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
