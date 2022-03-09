@@ -1,22 +1,29 @@
 <template>
-  <router-view>
-    <ENavbarLeft :data="{ links: [] }" />
-  </router-view>
+  <div v-for="(item, idx) in jsonData" :key="idx" style="margin-bottom: 40px">
+    <Calendar :data="item" @update:dateValue="setDate" />
+  </div>
 </template>
 
 <script lang="ts">
-import ENavbarLeft from "@/components/navigation/ENavbarLeft.vue";
+import Calendar from "@/components/Calendar/Calendar.vue";
+import jsonData from "./data.json";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "App",
   components: {
-    ENavbarLeft,
+    Calendar,
   },
   data() {
-    return {};
+    return {
+      jsonData,
+    };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    setDate(selectedDays: string[]) {
+      // do something
+    },
+  },
 });
 </script>
 
