@@ -267,8 +267,12 @@ export default {
     },
   },
   watch: {
-    modelValue(value) {
-      this.newValue = value || this.type === 'number' ? 0 : ''
+    modelValue: {
+      handle(value) {
+        console.log(value)
+        this.newValue = value || this.type === 'number' ? 0 : ''
+      },
+      deep: true,
     },
   },
 }

@@ -13,6 +13,7 @@
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
+      <!--       todo && grouped.length -->
       <div class="dropdown-groups" v-if="grouped">
         <div class="group" v-for="group in options">
           <span>{{ group.groupName }}</span>
@@ -26,6 +27,21 @@
           </div>
         </div>
       </div>
+      <!--      todo no data? + fix styles for sizes -->
+      <!--      <div-->
+      <!--        class="dropdown-item"-->
+      <!--        style="-->
+      <!--           {-->
+      <!--            justify-content: center;-->
+      <!--          }-->
+      <!--        "-->
+      <!--        v-else-if="grouped && !grouped.length"-->
+      <!--      >-->
+      <!--        no data-->
+      <!--      </div>-->
+
+      <!--       todo -if="!grouped && filteredOptions && filteredOptions.length" -->
+
       <div
         class="dropdown-item"
         v-else
@@ -35,6 +51,18 @@
       >
         {{ option[shownKey] }}
       </div>
+      <!--      todo no data? + fix styles for sizes -->
+      <!--      <div-->
+      <!--        class="dropdown-item"-->
+      <!--        style="-->
+      <!--           {-->
+      <!--            justify-content: center;-->
+      <!--          }-->
+      <!--        "-->
+      <!--        v-else-->
+      <!--      >-->
+      <!--        no data-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -108,7 +136,9 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    // this.filteredOptions = this.options
+  },
   methods: {
     /**
      * Return true if option is selected

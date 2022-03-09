@@ -9,6 +9,7 @@
   >
     <div class="select-label">{{ mergedData.label }}</div>
     <div
+      v-if="!mergedData.searchInput"
       class="select-container"
       :class="{
         focus: showDropdown,
@@ -41,14 +42,41 @@
       </div>
     </div>
 
-    <div class="select-dropdown">
+    <!--     todo modelValue: selectModel[mergedData.shownKey], -->
+    <EInput
+      class="input-search"
+      v-else-if="mergedData.searchInput"
+      @click="showDropdown = !showDropdown"
+      v-click-outside="close"
+      @update:modelValue="filterOptions"
+      :data="{
+        placeholder: mergedData.inputSearchPlaceholder,
+        showFilled: false,
+        type: 'search',
+        iconLeft: 'search',
+        size: mergedData.size,
+        modelValue: searchSelect,
+      }"
+      :style-config="{
+        backgroundColor: '#F7FAFC',
+        borderColor: '#E2E8F0',
+        iconColor: '#CBD5E0',
+        placeholderColor: '#CBD5E0',
+        ...inputSearchStyleConfig,
+      }"
+    />
+
+    <div
+      class="select-dropdown"
+      :class="{ 'search-input': mergedData.searchInput, grouped: mergedData.grouped }"
+    >
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
         :value="selectModel"
-        :options="mergedData.options"
+        :options="filteredOptions"
         :size="mergedData.size"
-        :searchable="mergedData.searchable"
+        :searchable="mergedData.searchable && !mergedData.searchInput"
         :grouped="mergedData.grouped"
         :input-search-placeholder="mergedData.inputSearchPlaceholder"
         :style-config="dropdownStyleConfig"
@@ -69,6 +97,7 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import EDropdown from '@/components/inputs/Dropdown/EDropdown'
+import EInput from '@/components/inputs/Input/EInput'
 import ClearButton from '@/components/inputs/ClearButton/ClearButton'
 import vClickOutside from 'click-outside-vue3'
 import { validate } from '@/helpers/validators'
@@ -80,6 +109,7 @@ export default {
   components: {
     ClearButton,
     EDropdown,
+    EInput,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -105,6 +135,11 @@ export default {
       selectModel: [],
       showDropdown: false,
       errorMessage: '',
+      searchValue: '',
+
+      filteredOptions: this.data?.options ?? [],
+      searchSelect: '',
+      // filteredOptions: [],
     }
   },
   computed: {
@@ -125,6 +160,9 @@ export default {
           validators: [],
           grouped: false,
           inputSearchPlaceholder: 'Search',
+
+          // todo namings
+          searchInput: false,
         },
         this.data,
       )
@@ -164,6 +202,9 @@ export default {
   },
   mounted() {
     this.selectModel = this.mergedData.modelValue
+
+    // this.filteredOptions = this.mergedData.options
+    console.log(this.filteredOptions)
   },
   methods: {
     close() {
@@ -201,6 +242,35 @@ export default {
       }
       this.selectModel = {}
     },
+    /**
+     * Filer options by search value
+     * @param value
+     */
+    filterOptions(value) {
+      if (!value) {
+        this.filteredOptions = this.mergedData.options
+        return
+      }
+
+      if (!this.mergedData.grouped) {
+        this.filteredOptions = this.mergedData.options.filter(
+          (option) =>
+            option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+        )
+      } else {
+        this.filteredOptions = this.mergedData.options.map((group) => {
+          const filteredGroupsOptions = group.options.filter(
+            (option) =>
+              option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+          )
+
+          return {
+            ...group,
+            options: filteredGroupsOptions,
+          }
+        })
+      }
+    },
   },
   watch: {
     selectModel: {
@@ -209,6 +279,10 @@ export default {
           this.errorMessage = validate(this.mergedData.validators, this.newValue)
           this.$emit('error', this.errorMessage)
         }
+
+        //todo add if statement
+        this.searchSelect = value[this.mergedData.shownKey]
+
         this.$emit('update:modelValue', value)
       },
       deep: true,
@@ -302,6 +376,12 @@ export default {
       color: var(--error-color);
     }
   }
+
+  //todo namnig
+  .input-search {
+    width: 100%;
+  }
+
   &--lg {
     .select-container {
       height: 46px;
@@ -353,8 +433,15 @@ export default {
   &-dropdown {
     position: relative;
     z-index: 2;
-    margin-top: 4px;
+    margin-top: 8px;
     width: calc(100% + 32px);
+
+    //todo namnig
+    &.search-input {
+      //todo width
+      width: inherit;
+      margin-top: 12px;
+    }
 
     .dropdown-component {
       position: absolute;
