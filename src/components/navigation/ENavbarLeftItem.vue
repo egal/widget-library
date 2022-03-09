@@ -1,6 +1,7 @@
 <template>
+  <!--  todo [Vue warn]: Extraneous non-props attributes (style) were passed to component but could not be automatically inherited because component renders fragment or text root nodes.  -->
   <router-link
-    :to="link.to"
+    :to="link.to ?? ''"
     v-slot="{ href, navigate, isActive, isExactActive }"
     custom
     :style="getVars"
@@ -10,7 +11,7 @@
       :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
     >
       <a :href="href" @click="navigate" class="exact-link">
-        <BootstrapIcon :icon="link.icon" />
+        <BootstrapIcon :icon="link.icon ?? ''" />
         <p v-if="active" :class="{ 'link-active': active }">{{ link.name }}</p>
       </a>
       <BootstrapIcon
