@@ -2,12 +2,9 @@
   <div class="dropdown" :class="`dropdown--${size}`" :style="getStyleVars">
     <div class="dropdown-items">
       <Input
+        :data="{ type: 'search', placeholder: 'Search', iconLeft: 'search', size: size }"
         class="dropdown-search"
-        type="search"
-        placeholder="Search"
-        icon-left="search"
         @update:modelValue="filterOptions"
-        :size="size"
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
@@ -39,6 +36,7 @@
 
 <script>
 import Input from '../Input/EInput'
+
 export default {
   name: 'EDropdown',
   components: { Input },
@@ -89,7 +87,7 @@ export default {
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
         '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
+        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#0066FF',
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
@@ -139,6 +137,7 @@ export default {
   width: 4px;
   height: 4px;
 }
+
 ::-webkit-scrollbar-track {
   background-color: $gray-100;
 }
@@ -147,6 +146,7 @@ export default {
   background-color: $gray-300;
   border-radius: 8px;
 }
+
 .dropdown {
   font-family: var(--font-family);
   background-color: var(--background-color);
@@ -175,11 +175,13 @@ export default {
       background-color: var(--option-hover-background-color);
     }
   }
+
   &-groups {
     .group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+
       span {
         color: var(--group-name-color);
         margin-bottom: 4px;
@@ -192,29 +194,36 @@ export default {
       }
     }
   }
+
   .active {
     background-color: var(--active-background-color);
     color: var(--active-option-color);
   }
+
   &--lg {
     .dropdown-items {
       padding: 14px 12px;
     }
+
     .dropdown-item {
       font-size: 14px;
       margin-bottom: 6px;
     }
+
     .group {
       margin-bottom: 16px;
+
       span {
         font-size: 14px;
       }
     }
   }
+
   &--md {
     .dropdown-items {
       padding: 12px 10px;
     }
+
     .dropdown-item {
       font-size: 12px;
       margin-bottom: 2px;
@@ -222,21 +231,25 @@ export default {
 
     .group {
       margin-bottom: 12px;
+
       span {
         font-size: 14px;
       }
     }
   }
+
   &--sm {
     .dropdown-items {
       padding: 10px 8px;
     }
+
     .dropdown-item {
       font-size: 10px;
     }
 
     .group {
       margin-bottom: 10px;
+
       span {
         font-size: 12px;
       }

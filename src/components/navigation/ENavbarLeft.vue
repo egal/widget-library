@@ -58,7 +58,7 @@ export default {
           logo: null,
           links: [],
           smallLogo: null,
-          chevronColor: '#a0aec0',
+          chevronColor: '#2D3748',
         },
         this.data,
       )
