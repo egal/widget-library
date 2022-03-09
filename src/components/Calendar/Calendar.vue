@@ -25,6 +25,7 @@
         :minutes="getMinutesFromTimestamp(data?.data?.date_from)"
         :format="getHoursFromTimestamp(data?.data?.date_from)?.format"
         :is-disabled="selectedDays.length === 0"
+        :select-style-config="selectStyleConfig"
         type="from"
         @select="setTime"
       />
@@ -58,6 +59,7 @@
         :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
         :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
         :is-disabled="selectedDays.length <= 1"
+        :select-style-config="selectStyleConfig"
         type="to"
         @select="setTime"
       />
@@ -120,6 +122,11 @@ export default defineComponent({
   props: {
     data: {
       type: Object as () => dataProp,
+      default: () => {},
+    },
+    // проп со стилями для ESelect
+    selectStyleConfig: {
+      type: Object,
       default: () => {},
     },
   },

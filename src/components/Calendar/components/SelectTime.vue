@@ -6,6 +6,7 @@
       <Select
         :clearable="false"
         :options="hoursOptions"
+        :style-config="selectStyleConfig"
         :model-value="selectedHours"
         shown-key="name"
         placeholder="12"
@@ -15,6 +16,7 @@
       <Select
         :clearable="false"
         :options="minutesOptions"
+        :style-config="selectStyleConfig"
         :model-value="selectedMinutes"
         shown-key="name"
         placeholder="30"
@@ -33,6 +35,7 @@
         ]"
         shown-key="name"
         :model-value="selectedAmPm"
+        :style-config="selectStyleConfig"
         @update:modelValue="(value) => setTime(value, 'ampm')"
       />
     </div>
@@ -74,6 +77,12 @@ export default defineComponent({
     format: {
       type: String,
       default: "",
+    },
+
+    // проп со стилями для ESelect
+    selectStyleConfig: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
