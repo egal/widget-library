@@ -1,14 +1,16 @@
 <template>
-  <!--  todo [Vue warn]: Extraneous non-props attributes (style) were passed to component but could not be automatically inherited because component renders fragment or text root nodes.  -->
   <router-link
     :to="link.to ?? ''"
     v-slot="{ href, navigate, isActive, isExactActive }"
     custom
-    :style="getVars"
   >
     <div
       class="nav-link"
-      :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+      :style="getVars"
+      :class="[
+        isActive && 'router-link-active',
+        isExactActive && 'router-link-exact-active',
+      ]"
     >
       <a :href="href" @click="navigate" class="exact-link">
         <BootstrapIcon :icon="link.icon ?? ''" />
@@ -29,7 +31,11 @@
         :class="{ 'closed-menu-links': !active }"
       >
         <li v-for="(child, index) in link.links" :key="index">
-          <ENavbarLeftItem :link="child" :active="active" :data="data"></ENavbarLeftItem>
+          <ENavbarLeftItem
+            :link="child"
+            :active="active"
+            :data="data"
+          ></ENavbarLeftItem>
         </li>
       </ul>
     </transition-group>
@@ -37,14 +43,14 @@
 </template>
 
 <script>
-import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import BootstrapIcon from "@dvuckovic/vue3-bootstrap-icons";
 export default {
-  name: 'ENavbarLeftItem',
+  name: "ENavbarLeftItem",
   components: { BootstrapIcon },
   data() {
     return {
       linksOpen: false,
-    }
+    };
   },
   props: {
     link: {
@@ -63,17 +69,17 @@ export default {
   computed: {
     getVars() {
       return {
-        '--chevron-color': this.data.chevronColor,
-        '--active-color': this.data.activeColor,
-        '--color': this.data.color,
-        '--font': this.data.font,
-        '--font-weight': this.data.weight,
-      }
+        "--chevron-color": this.data.chevronColor,
+        "--active-color": this.data.activeColor,
+        "--color": this.data.color,
+        "--font": this.data.font,
+        "--font-weight": this.data.weight,
+      };
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
-@import 'src/assets/navbar/sidebar';
+@import "src/assets/navbar/sidebar";
 </style>
