@@ -29,11 +29,7 @@
         @select="setTime"
       />
     </div>
-    <div
-      class="right"
-      v-if="data?.isDouble"
-      :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
-    >
+    <div class="right" v-if="data?.isDouble" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
       <Controls
         :data="data"
         :month-to-display="nextMonth"
@@ -66,56 +62,56 @@
 </template>
 
 <script lang="ts">
-import SelectTime from "@/components/Calendar/components/SelectTime.vue";
-import Controls from "@/components/Calendar/components/Controls.vue";
-import Days from "@/components/Calendar/components/Days.vue";
+import SelectTime from '@/components/Calendar/components/SelectTime.vue'
+import Controls from '@/components/Calendar/components/Controls.vue'
+import Days from '@/components/Calendar/components/Days.vue'
 
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 import {
   addLeadingZeros,
   capitalize,
   formatToISODate,
   isDateInCurMonth,
-} from "@/assets/scripts/helpers.ts";
+} from '@/assets/scripts/helpers.ts'
 
 // Тип для ISOString, формально строка, но для невозможности пробросить просто string сделан этот тип
 // Нужно кастить этот тип к строке ISOString, сделано для более выраженной типизации
 interface ISODateDifferentiator extends String {
-  [key: string]: unknown;
+  [key: string]: unknown
 }
-export type ISODate = ISODateDifferentiator & string;
+export type ISODate = ISODateDifferentiator & string
 
 type Props = {
-  "--font-family"?: string;
-  "--font-weight"?: string | number;
-  "--font-size"?: string;
-  "--active-color"?: string;
-  "--active-background-color"?: string;
-  "--width"?: string;
-};
+  '--font-family'?: string
+  '--font-weight'?: string | number
+  '--font-size'?: string
+  '--active-color'?: string
+  '--active-background-color'?: string
+  '--width'?: string
+}
 
 type dataProp = {
-  fontFamily?: string;
-  fontWeight?: string | number;
-  fontSize?: string;
-  color?: string;
-  activeColor?: string;
-  activeBackgroundColor?: string;
-  isAdaptiveSize: boolean;
-  isDouble?: boolean;
-  locale?: string;
+  fontFamily?: string
+  fontWeight?: string | number
+  fontSize?: string
+  color?: string
+  activeColor?: string
+  activeBackgroundColor?: string
+  isAdaptiveSize: boolean
+  isDouble?: boolean
+  locale?: string
   timePicker?: {
-    isAMPM?: boolean;
-    label?: string;
-  };
+    isAMPM?: boolean
+    label?: string
+  }
   data?: {
-    date_from?: string | ISODate;
-    date_to?: string | ISODate;
-  };
-};
+    date_from?: string | ISODate
+    date_to?: string | ISODate
+  }
+}
 
 export default defineComponent({
-  name: "OptionsCalendar",
+  name: 'OptionsCalendar',
   components: { SelectTime, Controls, Days },
   props: {
     data: {
@@ -142,19 +138,18 @@ export default defineComponent({
       nextMonthDates: [] as ISODate[],
 
       formattedDateTimes: [] as string[],
-    };
+    }
   },
   computed: {
     getStyleVars(): Props {
       return {
-        "--active-color": this.data?.activeColor || "#0066FF",
-        "--active-background-color":
-          this.data?.activeBackgroundColor || "#E5F0FF",
-        "--font-family": this.data?.fontFamily || "Raleway",
-        "--font-weight": this.data?.fontWeight || "normal",
-        "--font-size": this.data?.fontSize || "14px",
-        "--width": this.data?.isAdaptiveSize ? "" : "fit-content",
-      };
+        '--active-color': this.data?.activeColor || '#0066FF',
+        '--active-background-color': this.data?.activeBackgroundColor || '#E5F0FF',
+        '--font-family': this.data?.fontFamily || 'Raleway',
+        '--font-weight': this.data?.fontWeight || 'normal',
+        '--font-size': this.data?.fontSize || '14px',
+        '--width': this.data?.isAdaptiveSize ? '' : 'fit-content',
+      }
     },
 
     weekdays(): string[] {
@@ -162,108 +157,100 @@ export default defineComponent({
         .fill(new Date())
         .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
         .map((weekday) => {
-          return weekday.toLocaleString(this.data?.locale ?? "en-US", {
-            weekday: "short",
-          });
+          return weekday.toLocaleString(this.data?.locale ?? 'en-US', {
+            weekday: 'short',
+          })
         })
-        .map((weekday) => capitalize(weekday));
+        .map((weekday) => capitalize(weekday))
     },
   },
   mounted() {
-    this.renderCalendarDays();
-    this.setInitSelectedValues();
+    this.renderCalendarDays()
+    this.setInitSelectedValues()
   },
 
   methods: {
     setInitSelectedValues(): void {
       if (this.data?.data?.date_from) {
-        this.selectedDays.push(
-          this.getDateFromTimestamp(this.data?.data?.date_from)
-        );
+        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_from))
       }
       if (this.data?.data?.date_to) {
-        this.selectedDays.push(
-          this.getDateFromTimestamp(this.data?.data?.date_to)
-        );
+        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_to))
       }
 
       if (this.selectedDays.length !== 0) {
-        this.formattedDateTimes = this.selectedDays.map((day) =>
-          new Date(`${day}`).toISOString()
-        );
+        this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
       }
     },
 
     renderCalendarDays(): void {
-      this.dates = this.generateDates(new Date());
+      this.dates = this.generateDates(new Date())
 
-      const day = new Date();
-      day.setDate(1);
-      this.curMonth = day;
+      const day = new Date()
+      day.setDate(1)
+      this.curMonth = day
 
       if (this.data?.isDouble) {
-        const newDay = new Date();
-        let dayCopy = newDay;
-        dayCopy.setDate(1);
-        dayCopy.setMonth(newDay.getMonth() + 1);
-        this.nextMonth = dayCopy;
+        const newDay = new Date()
+        let dayCopy = newDay
+        dayCopy.setDate(1)
+        dayCopy.setMonth(newDay.getMonth() + 1)
+        this.nextMonth = dayCopy
 
-        this.nextMonthDates = this.generateDates(this.nextMonth);
+        this.nextMonthDates = this.generateDates(this.nextMonth)
       }
     },
 
     getDateFromTimestamp(isostr: ISODate | string): ISODate {
-      return formatToISODate(new Date(isostr));
+      return formatToISODate(new Date(isostr))
     },
 
     isContainsTime(isostr: string): boolean {
-      return isostr.includes("T");
+      return isostr.includes('T')
     },
     getHoursFromTimestamp(isostr: ISODate): {
-      hours: number | string;
-      format: string;
+      hours: number | string
+      format: string
     } | null {
       if (!isostr || !this.isContainsTime(isostr)) {
-        return null;
+        return null
       }
 
-      let hours = new Date(Date.parse(isostr)).getHours();
-      let format = "";
+      let hours = new Date(Date.parse(isostr)).getHours()
+      let format = ''
 
       if (this.data?.timePicker?.isAMPM) {
-        format = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12;
-        hours = hours > 0 ? hours : 12;
+        format = hours >= 12 ? 'PM' : 'AM'
+        hours = hours % 12
+        hours = hours > 0 ? hours : 12
       }
 
       return {
         hours,
         format,
-      };
+      }
     },
 
     getMinutesFromTimestamp(isostr: ISODate): string | number {
       if (!isostr || !this.isContainsTime(isostr)) {
-        return "";
+        return ''
       }
-      return new Date(Date.parse(isostr)).getMinutes();
+      return new Date(Date.parse(isostr)).getMinutes()
     },
 
     generateWeekDaysFromIterator(weekday: Date, i: number): Date {
-      return new Date(
-        weekday.setDate(weekday.getDate() - weekday.getDay() + i)
-      );
+      return new Date(weekday.setDate(weekday.getDate() - weekday.getDay() + i))
     },
 
     changeMonth(shift: number): void {
-      this.curMonth.setMonth(this.curMonth.getMonth() + shift);
-      this.curMonth = new Date(this.curMonth);
-      this.dates = this.generateDates(this.curMonth);
+      this.curMonth.setMonth(this.curMonth.getMonth() + shift)
+      this.curMonth = new Date(this.curMonth)
+      this.dates = this.generateDates(this.curMonth)
 
       if (this.data?.isDouble) {
-        this.nextMonth.setMonth(this.nextMonth.getMonth() + shift);
-        this.nextMonth = new Date(this.nextMonth);
-        this.nextMonthDates = this.generateDates(this.nextMonth);
+        this.nextMonth.setMonth(this.nextMonth.getMonth() + shift)
+        this.nextMonth = new Date(this.nextMonth)
+        this.nextMonthDates = this.generateDates(this.nextMonth)
       }
     },
 
@@ -275,79 +262,73 @@ export default defineComponent({
             .fill(1)
             .map(() => new Date(curMonth))
             .map((el, i) => {
-              el.setDate(i + 1);
-              return el;
+              el.setDate(i + 1)
+              return el
             })
             .filter((el) => isDateInCurMonth(el, curMonth))
-            .map((el) =>
-              new Array(7).fill(el).map(this.generateWeekDaysFromIterator)
-            )
+            .map((el) => new Array(7).fill(el).map(this.generateWeekDaysFromIterator))
             .flat()
-            .map(formatToISODate)
-        )
-      );
+            .map(formatToISODate),
+        ),
+      )
     },
 
     //Выбор даты
     selectDate(dateString: ISODate): void {
-      (this.selectedDays.length == 1 || this.selectedDays.length >= 2) &&
+      ;(this.selectedDays.length == 1 || this.selectedDays.length >= 2) &&
         !this.mouseMayEnter &&
-        this.declineSelect();
+        this.declineSelect()
 
-      this.selectedDays.push(dateString);
-      this.selectedDays = Array.from(new Set(this.selectedDays)).sort();
-      this.mouseMayEnter = !this.mouseMayEnter;
+      this.selectedDays.push(dateString)
+      this.selectedDays = Array.from(new Set(this.selectedDays)).sort()
+      this.mouseMayEnter = !this.mouseMayEnter
 
-      this.formattedDateTimes = this.selectedDays.map((day) =>
-        new Date(`${day}`).toISOString()
-      );
+      this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
 
-      this.$emit("update:dateValue", this.formattedDateTimes);
+      this.$emit('update:dateValue', this.formattedDateTimes)
     },
 
     declineSelect(): void {
-      this.selectedDays = [];
-      this.formattedDateTimes = [];
+      this.selectedDays = []
+      this.formattedDateTimes = []
     },
 
     //Hover для даты
     queryHover(dateString: ISODate): void {
       if (this.mouseMayEnter) {
-        this.selectedDays[1] = dateString;
-        this.selectedDays = [...this.selectedDays];
+        this.selectedDays[1] = dateString
+        this.selectedDays = [...this.selectedDays]
       }
     },
 
     setTime(val): void {
       if (!this.data?.isDouble) {
-        this.formattedDateTimes.map((item) =>
-          new Date(`${item} ${val.time}`).toISOString()
-        );
+        this.formattedDateTimes.map((item) => new Date(`${item} ${val.time}`).toISOString())
       } else {
         switch (val.type) {
-          case "to":
+          case 'to':
             this.formattedDateTimes[1] = new Date(
-              `${this.selectedDays[1]} ${val.time}`
-            ).toISOString();
-            break;
-          case "from":
+              `${this.selectedDays[1]} ${val.time}`,
+            ).toISOString()
+            break
+          case 'from':
           default:
             this.formattedDateTimes[0] = new Date(
-              `${this.selectedDays[0]} ${val.time}`
-            ).toISOString();
-            break;
+              `${this.selectedDays[0]} ${val.time}`,
+            ).toISOString()
+            break
         }
       }
 
-      this.$emit("update:dateValue", this.formattedDateTimes);
+      this.$emit('update:dateValue', this.formattedDateTimes)
     },
   },
   watch: {},
-});
+})
 </script>
 
 <style scoped lang="scss">
-@import "../../assets/scss/variables.scss";
+@import '../../assets/scss/variables.scss';
 
 .calendar {
   display: flex;
@@ -429,7 +410,7 @@ export default defineComponent({
   :deep &__weekdays,
   :deep &__days {
     display: grid;
-    grid-template: "a a a a a a a";
+    grid-template: 'a a a a a a a';
     list-style: none;
     padding: 0;
     margin: 0;
@@ -446,7 +427,7 @@ export default defineComponent({
       &::before,
       &::after {
         position: absolute;
-        content: "";
+        content: '';
         display: block;
         background-color: transparent;
         z-index: 0;
@@ -484,21 +465,6 @@ export default defineComponent({
         background-color: var(--active-color);
         color: white;
         z-index: 1;
-      }
-
-      &.--not-cur-month {
-        //cursor: default;
-        color: $gray-300;
-        //background-color: $base-white;
-
-        //&:before,
-        //&:after {
-        //  display: none;
-        //}
-
-        //&:hover {
-        //  background-color: initial;
-        //}
       }
 
       &.--in-range {
@@ -565,6 +531,21 @@ export default defineComponent({
         &.--on-active:nth-child(7n)::after {
           display: none;
         }
+      }
+
+      &.--not-cur-month {
+        //cursor: default;
+        color: $gray-300;
+        //background-color: $base-white;
+
+        //&:before,
+        //&:after {
+        //  display: none;
+        //}
+
+        //&:hover {
+        //  background-color: initial;
+        //}
       }
 
       &.--past {
