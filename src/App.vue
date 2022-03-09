@@ -1,7 +1,10 @@
 <template>
-  <div v-for="(item, idx) in jsonData" :key="idx" style="margin-bottom: 40px">
-    <Calendar :data="item" @update:dateValue="setDate" />
-  </div>
+  <!--  <div v-for="(item, idx) in jsonData" :key="idx" style="margin-bottom: 40px">-->
+  <Calendar
+    :data="{ isDouble: true, timePicker: { isAMPM: true } }"
+    @update:dateValue="setDate"
+  />
+  <!--  </div>-->
 </template>
 
 <script lang="ts">

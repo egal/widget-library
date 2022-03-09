@@ -76,7 +76,7 @@ import {
   capitalize,
   formatToISODate,
   isDateInCurMonth,
-} from "@/assets/scripts/helpers";
+} from "@/assets/scripts/helpers.ts";
 
 // Тип для ISOString, формально строка, но для невозможности пробросить просто string сделан этот тип
 // Нужно кастить этот тип к строке ISOString, сделано для более выраженной типизации
@@ -258,12 +258,13 @@ export default defineComponent({
     changeMonth(shift: number): void {
       this.curMonth.setMonth(this.curMonth.getMonth() + shift);
       this.curMonth = new Date(this.curMonth);
+      this.dates = this.generateDates(this.curMonth);
 
       if (this.data?.isDouble) {
         this.nextMonth.setMonth(this.nextMonth.getMonth() + shift);
+        this.nextMonth = new Date(this.nextMonth);
         this.nextMonthDates = this.generateDates(this.nextMonth);
       }
-      this.dates = this.generateDates(this.curMonth);
     },
 
     //Генерация массива дятна месяц
@@ -356,6 +357,12 @@ export default defineComponent({
   font-family: var(--font-family);
   box-shadow: $shadow-2xl;
   border-radius: 20px;
+
+  .left,
+  .right {
+    display: flex;
+    flex-direction: column;
+  }
 
   .left {
     :deep .calendar__controls-right.hidden {
@@ -450,6 +457,8 @@ export default defineComponent({
   }
 
   :deep &__days {
+    flex-grow: 1;
+
     li {
       font-size: var(--font-size);
       border-radius: 4px;
