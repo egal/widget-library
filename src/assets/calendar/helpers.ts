@@ -1,3 +1,4 @@
+// @ts-ignore
 import { ISODate } from '@/components/calendar/Calendar.vue'
 
 export const addLeadingZeros = (str: string): string => {

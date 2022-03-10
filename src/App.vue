@@ -63,6 +63,7 @@ export default defineComponent({
   },
   methods: {
     setDate(selectedDays: string[]) {
+      console.log(selectedDays)
       // do something
     },
   },

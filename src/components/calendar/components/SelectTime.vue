@@ -4,35 +4,43 @@
     <div class="picker" :class="{ disabled: isDisabled }">
       <BootstrapIcon icon="clock" />
       <ESelect
-        :clearable="false"
-        :options="hoursOptions"
-        :model-value="selectedHours"
-        shown-key="name"
-        placeholder="12"
+        :data="{
+          clearable: false,
+          options: hoursOptions,
+          modelValue: selectedHours,
+          shownKey: selectedHours.name,
+          placeholder: 12,
+        }"
+        :style-config="selectStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
       <span style="margin: 0 5px">:</span>
       <ESelect
-        :clearable="false"
-        :options="minutesOptions"
-        :model-value="selectedMinutes"
-        shown-key="name"
-        placeholder="30"
+        :data="{
+          clearable: false,
+          options: minutesOptions,
+          modelValue: selectedMinutes,
+          shownKey: selectedMinutes.name,
+          placeholder: 30,
+        }"
+        :style-config="selectStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
-
       <ESelect
         v-if="config?.isAMPM"
         class="ampm"
-        :clearable="false"
-        :options="[
-          { name: 'AM' },
-          {
-            name: 'PM',
-          },
-        ]"
-        shown-key="name"
-        :model-value="selectedAmPm"
+        :data="{
+          clearable: false,
+          options: [
+            { name: 'AM' },
+            {
+              name: 'PM',
+            },
+          ],
+          shownKey: selectedAmPm.name,
+          modelValue: selectedAmPm,
+        }"
+        :style-config="selectStyleConfig"
         @update:modelValue="(value) => setTime(value, 'ampm')"
       />
     </div>
@@ -75,13 +83,18 @@ export default defineComponent({
       type: String,
       default: '',
     },
+
+    // проп со стилями для ESelect
+    selectStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       selectedHours: this.hours ? { name: this.hours } : {},
       selectedMinutes: this.minutes ? { name: this.minutes } : {},
       selectedAmPm: this.format ? { name: this.format } : { name: 'AM' },
-
       selectedTime: [] as string[],
     }
   },

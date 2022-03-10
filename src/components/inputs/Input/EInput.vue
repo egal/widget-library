@@ -1,5 +1,6 @@
 <template>
   <div class="input" :class="`input--${mergedData.size}`" :style="getStyleVars">
+    {{ mergedData.type }}
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -66,7 +67,13 @@
         class="subtract-button"
         :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
-        v-show="mergedData.clearable && newValue && type !== 'number' && type !== 'search'"
+        v-show="
+          mergedData.clearable &&
+          newValue &&
+          type !== 'number' &&
+          type !== 'search' &&
+          type !== 'password'
+        "
         :size="mergedData.size"
         :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
         :filled="
@@ -268,7 +275,7 @@ export default {
   },
   watch: {
     modelValue(value) {
-      this.newValue = value || this.type === 'number' ? 0 : ''
+      this.newValue = value
     },
   },
 }

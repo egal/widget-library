@@ -25,6 +25,7 @@
         :minutes="getMinutesFromTimestamp(data?.data?.date_from)"
         :format="getHoursFromTimestamp(data?.data?.date_from)?.format"
         :is-disabled="selectedDays.length === 0"
+        :select-style-config="selectStyleConfig"
         type="from"
         @select="setTime"
       />
@@ -54,6 +55,7 @@
         :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
         :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
         :is-disabled="selectedDays.length <= 1"
+        :select-style-config="selectStyleConfig"
         type="to"
         @select="setTime"
       />
@@ -72,7 +74,7 @@ import {
   capitalize,
   formatToISODate,
   isDateInCurMonth,
-} from '@/assets/calendar/helpers'
+} from '@/assets/calendar/helpers.ts'
 
 // Тип для ISOString, формально строка, но для невозможности пробросить просто string сделан этот тип
 // Нужно кастить этот тип к строке ISOString, сделано для более выраженной типизации
@@ -116,6 +118,11 @@ export default defineComponent({
   props: {
     data: {
       type: Object as () => dataProp,
+      default: () => {},
+    },
+    // проп со стилями для ESelect
+    selectStyleConfig: {
+      type: Object,
       default: () => {},
     },
   },
@@ -240,15 +247,16 @@ export default defineComponent({
     changeMonth(shift: number): void {
       this.curMonth.setMonth(this.curMonth.getMonth() + shift)
       this.curMonth = new Date(this.curMonth)
+      this.dates = this.generateDates(this.curMonth)
 
       if (this.data?.isDouble) {
         this.nextMonth.setMonth(this.nextMonth.getMonth() + shift)
+        this.nextMonth = new Date(this.nextMonth)
         this.nextMonthDates = this.generateDates(this.nextMonth)
       }
-      this.dates = this.generateDates(this.curMonth)
     },
 
-    //Генерация массива дятна месяц
+    //Генерация массива дат на месяц
     generateDates(curMonth: Date | ISODate): ISODate[] {
       return Array.from(
         new Set(
@@ -332,6 +340,12 @@ export default defineComponent({
   font-family: var(--font-family);
   box-shadow: $shadow-2xl;
   border-radius: 20px;
+
+  .left,
+  .right {
+    display: flex;
+    flex-direction: column;
+  }
 
   .left {
     :deep .calendar__controls-right.hidden {
@@ -426,6 +440,8 @@ export default defineComponent({
   }
 
   :deep &__days {
+    margin-bottom: auto;
+
     li {
       font-size: var(--font-size);
       border-radius: 4px;
@@ -498,14 +514,6 @@ export default defineComponent({
           top: -8px;
         }
 
-        &.--on-active:nth-child(7n)::before {
-          display: block;
-          width: 50%;
-          height: 12px;
-          left: 20px;
-          bottom: -8px;
-        }
-
         &.--beyond-active:nth-child(7n + 1)::before {
           display: block;
           width: 100%;
@@ -520,18 +528,7 @@ export default defineComponent({
       }
 
       &.--not-cur-month {
-        cursor: default;
         color: $gray-300;
-        background-color: $base-white;
-
-        &:before,
-        &:after {
-          display: none;
-        }
-
-        &:hover {
-          background-color: initial;
-        }
       }
 
       &.--past {

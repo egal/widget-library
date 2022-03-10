@@ -25,6 +25,7 @@
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
+        <div class="selected" v-else-if="!!selectModel.name">{{ selectModel.name }}</div>
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
