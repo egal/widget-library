@@ -1,6 +1,11 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
+    <!--    ?todo on;y on prop -->
+    <!--    <p>{{ data.crumbs }}</p>-->
+    <!--    <p>{{ parsedLinks }}</p>-->
+    <!--  todo   parsedLinks -->
     <template v-for="(link, i) in parsedLinks" :key="link.to">
+      <!--      todo add active class for the lasty link ? -->
       <router-link class="breadcrumbs__link" :to="link.to">{{ link.name }}</router-link>
       <BootstrapIcon
         class="breadcrumbs__icon"
@@ -28,15 +33,18 @@ export default {
     },
   },
   computed: {
+    crumbs() {
+      return this.data.crumbs
+    },
     mergedData() {
       return Object.assign(
         {
           font: 'Open Sans',
           weight: 'bold',
-          color: '#0066ff',
+          color: '#2d3748',
           chevronColor: '#a0aec0',
           size: 'md',
-          activeColor: '#2d3748',
+          activeColor: '#0066ff',
         },
         this.data,
       )
@@ -51,27 +59,69 @@ export default {
       }
     },
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     console.log('to', to)
+  //     console.log('from', from)
+  //     console.log(vm)
+  //   })
+  // },
+  mounted() {
+    console.log(this.crumbs)
+    // console.log(this.$router.getRoutes())
+    // console.log(this.$router.currentRoute.value)
+    // console.log(this.$route)
+    //
+    // let matched = this.$route.matched.map((link) => {
+    //   this.parsedLinks.push({
+    //     to: link.path,
+    //     name: link.name,
+    //   })
+    // })
+    // console.log(this.$route.matched)
+  },
   watch: {
-    parsedLinks() {
-      this.parsedLinks.splice(0, this.parsedLinks.length + 1)
-      this.parsedLinks.push(
-        ...this.router.currentRoute.value.fullPath
-          .split('/')
-          .reduce(
-            (acc, value, index) => (
-              (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
-            ),
-            [],
-          )
-          .map((el) => el.join('/'))
-          .map((el) => el)
-          .filter((el) => !!el)
-          .map((to) => ({
-            to,
-            name: this.router.getRoutes().filter(({ path }) => path === to)[0].name,
-          })),
-      )
+    crumbs(newValue) {
+      console.log('crumbs changeds', newValue)
+      let x = this.crumbs.map((i) => {
+        return {
+          to: i.path,
+          name: i.name,
+        }
+      })
+
+      this.parsedLinks = x
     },
+    // parsedLinks() {
+    //   //todo recursively parse data.crumbs for children
+    //   //get array of  objects with
+    //   console.log(this.data.crumbs)
+    //   let x = this.crumbs.map((i) => {
+    //     return {
+    //       to: i.path,
+    //       name: i.name,
+    //     }
+    //   })
+    //   console.log(this.crumbs)
+    //   this.parsedLinks.splice(0, this.parsedLinks.length + 1)
+    //   this.parsedLinks.push(
+    //     ...this.router.currentRoute.value.fullPath
+    //       .split('/')
+    //       .reduce(
+    //         (acc, value, index) => (
+    //           (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
+    //         ),
+    //         [],
+    //       )
+    //       .map((el) => el.join('/'))
+    //       .map((el) => el)
+    //       .filter((el) => !!el)
+    //       .map((to) => ({
+    //         to,
+    //         name: this.router.getRoutes().filter(({ path }) => path === to)[0].name,
+    //       })),
+    //   )
+    // },
   },
 }
 </script>
@@ -90,7 +140,7 @@ export default {
 
   &__link {
     position: relative;
-    color: inherit !important;
+    color: var(--color);
     text-decoration: none;
     display: block;
 
