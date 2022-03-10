@@ -9,7 +9,7 @@
   >
     <div class="select-label">{{ mergedData.label }}</div>
     <div
-      v-if="!mergedData.searchInput"
+      v-if="!mergedData.searchableInput"
       class="select-container"
       :class="{
         focus: showDropdown,
@@ -42,20 +42,19 @@
       </div>
     </div>
 
-    <!--     todo modelValue: selectModel[mergedData.shownKey], -->
     <EInput
       class="input-search"
-      v-else-if="mergedData.searchInput"
+      v-else-if="mergedData.searchableInput"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
       @update:modelValue="filterOptions"
       :data="{
-        placeholder: mergedData.inputSearchPlaceholder,
+        placeholder: mergedData.searchPlaceholder,
         showFilled: false,
         type: 'search',
         iconLeft: 'search',
         size: mergedData.size,
-        modelValue: searchSelect,
+        modelValue: selectModel[mergedData.shownKey],
       }"
       :style-config="{
         backgroundColor: '#F7FAFC',
@@ -68,17 +67,18 @@
 
     <div
       class="select-dropdown"
-      :class="{ 'search-input': mergedData.searchInput, grouped: mergedData.grouped }"
+      :class="{ 'search-input': mergedData.searchableInput, grouped: mergedData.grouped }"
     >
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
         :value="selectModel"
+        :empty-dropdown-text="mergedData.emptyDropdownText"
         :options="filteredOptions"
         :size="mergedData.size"
-        :searchable="mergedData.searchable && !mergedData.searchInput"
+        :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
-        :input-search-placeholder="mergedData.inputSearchPlaceholder"
+        :search-placeholder="mergedData.searchPlaceholder"
         :style-config="dropdownStyleConfig"
         :input-search-style-config="{
           backgroundColor: '#F7FAFC',
@@ -138,8 +138,6 @@ export default {
       searchValue: '',
 
       filteredOptions: this.data?.options ?? [],
-      searchSelect: '',
-      // filteredOptions: [],
     }
   },
   computed: {
@@ -159,10 +157,9 @@ export default {
           showError: true,
           validators: [],
           grouped: false,
-          inputSearchPlaceholder: 'Search',
-
-          // todo namings
-          searchInput: false,
+          searchPlaceholder: 'Search',
+          searchableInput: false,
+          emptyDropdownText: 'no data',
         },
         this.data,
       )
@@ -202,9 +199,6 @@ export default {
   },
   mounted() {
     this.selectModel = this.mergedData.modelValue
-
-    // this.filteredOptions = this.mergedData.options
-    console.log(this.filteredOptions)
   },
   methods: {
     close() {
@@ -247,8 +241,11 @@ export default {
      * @param value
      */
     filterOptions(value) {
+      this.showDropdown = true
       if (!value) {
         this.filteredOptions = this.mergedData.options
+
+        this.selectModel = value
         return
       }
 
@@ -280,13 +277,10 @@ export default {
           this.$emit('error', this.errorMessage)
         }
 
-        //todo add if statement
-        this.searchSelect = value[this.mergedData.shownKey]
-
         this.$emit('update:modelValue', value)
       },
-      deep: true,
     },
+
     modelValue: {
       handler(value) {
         this.selectModel = value

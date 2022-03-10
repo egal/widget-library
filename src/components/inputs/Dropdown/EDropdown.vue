@@ -4,7 +4,7 @@
       <Input
         :data="{
           type: 'search',
-          placeholder: inputSearchPlaceholder,
+          placeholder: searchPlaceholder,
           iconLeft: 'search',
           size,
         }"
@@ -13,7 +13,7 @@
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
-      <!--       todo && grouped.length -->
+
       <div class="dropdown-groups" v-if="grouped">
         <div class="group" v-for="group in options">
           <span>{{ group.groupName }}</span>
@@ -27,21 +27,12 @@
           </div>
         </div>
       </div>
-      <!--      todo no data? + fix styles for sizes -->
-      <!--      <div-->
-      <!--        class="dropdown-item"-->
-      <!--        style="-->
-      <!--           {-->
-      <!--            justify-content: center;-->
-      <!--          }-->
-      <!--        "-->
-      <!--        v-else-if="grouped && !grouped.length"-->
-      <!--      >-->
-      <!--        no data-->
-      <!--      </div>-->
-
-      <!--       todo -if="!grouped && filteredOptions && filteredOptions.length" -->
-
+      <div
+        class="dropdown-item dropdown-item--empty"
+        v-else-if="!grouped && filteredOptions.length === 0"
+      >
+        {{ emptyDropdownText }}
+      </div>
       <div
         class="dropdown-item"
         v-else
@@ -51,18 +42,6 @@
       >
         {{ option[shownKey] }}
       </div>
-      <!--      todo no data? + fix styles for sizes -->
-      <!--      <div-->
-      <!--        class="dropdown-item"-->
-      <!--        style="-->
-      <!--           {-->
-      <!--            justify-content: center;-->
-      <!--          }-->
-      <!--        "-->
-      <!--        v-else-->
-      <!--      >-->
-      <!--        no data-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -105,9 +84,13 @@ export default {
       type: Object,
       default: () => {},
     },
-    inputSearchPlaceholder: {
+    searchPlaceholder: {
       type: String,
       default: 'Search',
+    },
+    emptyDropdownText: {
+      type: String,
+      default: 'no data',
     },
   },
   data() {
@@ -136,9 +119,7 @@ export default {
       }
     },
   },
-  mounted() {
-    // this.filteredOptions = this.options
-  },
+  mounted() {},
   methods: {
     /**
      * Return true if option is selected
@@ -163,6 +144,11 @@ export default {
       this.filteredOptions = this.options.filter(
         (option) => option[this.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
       )
+    },
+  },
+  watch: {
+    options(newValue) {
+      this.filteredOptions = newValue
     },
   },
 }
@@ -194,8 +180,6 @@ export default {
 
   &-search {
     margin-bottom: 10px;
-    //background-color: $gray-100;
-    //border: 1px solid $gray-300;
   }
 
   &-item {
@@ -212,7 +196,18 @@ export default {
     &:hover {
       background-color: var(--option-hover-background-color);
     }
+
+    &--empty {
+      cursor: default;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: initial;
+      }
+    }
   }
+
   &-groups {
     .group {
       display: flex;

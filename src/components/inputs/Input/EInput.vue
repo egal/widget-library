@@ -125,6 +125,9 @@ export default {
     }
   },
   computed: {
+    modelValue() {
+      return this.mergedData.modelValue
+    },
     mergedData() {
       return Object.assign(
         {
@@ -267,12 +270,8 @@ export default {
     },
   },
   watch: {
-    modelValue: {
-      handle(value) {
-        console.log(value)
-        this.newValue = value || this.type === 'number' ? 0 : ''
-      },
-      deep: true,
+    modelValue(value) {
+      this.newValue = value
     },
   },
 }

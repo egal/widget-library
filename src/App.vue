@@ -1,12 +1,11 @@
 <template>
   <div style="width: 228px">
-    <!--  todo naming  searchInput: true,-->
-    <!--    todo pass props like requiring for input-->
     <ESelect
+      @update:modelValue="onSelect"
       :data="{
-        searchable: true,
-        searchInput: true,
-        size: 'lg',
+        searchable: false,
+        searchableInput: true,
+        size: 'md',
         options: [
           {
             name: 'Option one',
@@ -36,7 +35,11 @@ export default defineComponent({
     return {}
   },
   mounted() {},
-  methods: {},
+  methods: {
+    onSelect(v) {
+      console.log(v)
+    },
+  },
 })
 </script>
 
