@@ -371,7 +371,6 @@ export default {
     }
   }
 
-  //todo namnig
   .input-search {
     width: 100%;
   }
@@ -430,9 +429,7 @@ export default {
     margin-top: 8px;
     width: calc(100% + 32px);
 
-    //todo namnig
     &.search-input {
-      //todo width
       width: inherit;
       margin-top: 12px;
     }
