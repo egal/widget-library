@@ -15,6 +15,7 @@ import EInput from './components/inputs/Input/EInput.vue'
 import ESelect from './components/inputs/Select/ESelect.vue'
 import ETextArea from './components/inputs/TextArea/ETextArea.vue'
 import EWidget from './components/widget/EWidget.vue'
+import ECalendar from './components/calendar/Calendar.vue'
 
 export default {
   EButton,
@@ -34,4 +35,5 @@ export default {
   ESelect,
   ETextArea,
   EWidget,
+  ECalendar,
 }

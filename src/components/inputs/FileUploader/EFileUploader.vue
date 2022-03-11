@@ -418,7 +418,7 @@ export default {
     .browse-label {
       color: var(--browse-label-color);
     }
-    :deep(label) {
+    ::v-deep(label) {
       cursor: pointer;
     }
   }
