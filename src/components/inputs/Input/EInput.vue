@@ -1,6 +1,5 @@
 <template>
   <div class="input" :class="`input--${mergedData.size}`" :style="getStyleVars">
-    {{ mergedData.type }}
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -11,7 +10,7 @@
     <div
       class="input-container"
       :class="{
-        search: type === 'search',
+        search: mergedData.type === 'search',
         success: !mergedData.error && !errorMessage && newValue && mergedData.showSuccess,
         error: (errorMessage || mergedData.error) && mergedData.showError,
         filled:
@@ -72,7 +71,7 @@
           newValue &&
           type !== 'number' &&
           type !== 'search' &&
-          type !== 'password'
+          mergedData.type !== 'password'
         "
         :size="mergedData.size"
         :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
@@ -300,6 +299,7 @@ input[type='number'] {
   &--lg {
     .input-label {
       font-size: 14px;
+      color: var(--label-color);
     }
     input {
       height: 46px;
@@ -332,6 +332,7 @@ input[type='number'] {
   &--md {
     .input-label {
       font-size: 12px;
+      color: var(--label-color);
     }
     input {
       height: 36px;
@@ -364,6 +365,7 @@ input[type='number'] {
   &--sm {
     .input-label {
       font-size: 12px;
+      color: var(--label-color);
     }
     input {
       height: 26px;
@@ -439,10 +441,12 @@ input[type='number'] {
     &--left {
       left: 16px;
       position: absolute;
+      color: var(--icon-color);
     }
     &--right {
       right: 16px;
       position: absolute;
+      color: var(--icon-color);
     }
     &--password {
       right: 16px;
@@ -473,6 +477,7 @@ input[type='number'] {
 .helper-text {
   font-size: var(--helper-text-font-size);
   color: var(--helper-text-color);
+  font-weight: var(--helper-text-font-weight);
   margin-top: 6px;
   margin-bottom: 0;
   max-width: fit-content;

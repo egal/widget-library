@@ -186,7 +186,7 @@ export default defineComponent({
       opacity: 0.5;
       pointer-events: none;
 
-      :deep .select-container {
+      ::v-deep(.select-container) {
         background-color: $gray-100;
       }
 
@@ -197,10 +197,10 @@ export default defineComponent({
   }
 }
 
-:deep .input {
+::v-deep(.input) {
   width: 80px;
 
-  &--minutes {
+  .input--minutes {
     width: 50px;
   }
 }
@@ -210,15 +210,15 @@ export default defineComponent({
   color: $gray-600;
 }
 
-:deep .select {
+::v-deep(.select) {
   width: 70px;
 }
 
-:deep .select.ampm {
+::v-deep(.select.ampm) {
   margin-left: 15px;
 }
 
-:deep .dropdown {
+::v-deep(.dropdown) {
   max-height: 250px;
 }
 </style>

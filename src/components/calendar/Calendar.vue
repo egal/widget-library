@@ -81,6 +81,7 @@ import {
 interface ISODateDifferentiator extends String {
   [key: string]: unknown
 }
+
 export type ISODate = ISODateDifferentiator & string
 
 type Props = {
@@ -331,7 +332,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import '../../assets/variables.scss';
-
 .calendar {
   display: flex;
   flex-direction: row;
@@ -340,27 +340,22 @@ export default defineComponent({
   font-family: var(--font-family);
   box-shadow: $shadow-2xl;
   border-radius: 20px;
-
   .left,
   .right {
     display: flex;
     flex-direction: column;
   }
-
   .left {
     :deep .calendar__controls-right.hidden {
       visibility: hidden;
     }
   }
-
   .right {
     margin-left: 40px;
-
     :deep .calendar__controls-left {
       visibility: hidden;
     }
   }
-
   :deep &__controls {
     display: flex;
     list-style: none;
@@ -370,7 +365,6 @@ export default defineComponent({
     margin: 0;
     padding: 0;
     height: 36px;
-
     &-left,
     &-right {
       display: flex;
@@ -378,21 +372,17 @@ export default defineComponent({
       height: 36px;
       justify-content: center;
       align-items: center;
-
       .bi {
         color: $gray-600;
         transition: 0.3s ease color;
       }
-
       &:hover {
         cursor: pointer;
-
         .bi {
           color: $gray-800;
         }
       }
     }
-
     &-month {
       font-style: normal;
       font-weight: var(--font-weight);
@@ -401,14 +391,12 @@ export default defineComponent({
       color: $gray-800;
     }
   }
-
   :deep &__weekdays {
     font-size: calc(var(--font-size) - 2px);
     font-weight: normal;
     line-height: 120%;
     color: $gray-500;
   }
-
   :deep &__weekdays,
   :deep &__days {
     display: grid;
@@ -417,7 +405,6 @@ export default defineComponent({
     padding: 0;
     margin: 0;
     column-gap: 4px;
-
     li {
       display: flex;
       justify-content: center;
@@ -425,7 +412,6 @@ export default defineComponent({
       width: 40px;
       height: 40px;
       position: relative;
-
       &::before,
       &::after {
         position: absolute;
@@ -438,37 +424,29 @@ export default defineComponent({
       }
     }
   }
-
   :deep &__days {
     margin-bottom: auto;
-
     li {
       font-size: var(--font-size);
       border-radius: 4px;
       font-weight: var(--font-weight);
       line-height: 150%;
       box-sizing: border-box;
-
       &.--current {
         border: 1px solid var(--active-color);
-
         color: var(--active-color);
         background-color: $base-white;
       }
-
       &:hover {
         cursor: pointer;
         background-color: var(--active-background-color);
-
         color: var(--active-color);
       }
-
       &.--active {
         background-color: var(--active-color);
         color: white;
         z-index: 1;
       }
-
       &.--in-range {
         position: relative;
         border-radius: 0;
@@ -476,34 +454,27 @@ export default defineComponent({
         color: var(--active-color);
         border: none;
         transition: 0s all;
-
         &:hover {
           cursor: default;
         }
-
         &::before,
         &::after {
           background-color: var(--active-background-color);
         }
-
         &::before {
           left: -8px;
           bottom: 0;
         }
-
         &::after {
           right: -8px;
           top: 0;
         }
-
         &:nth-child(7n + 1)::before {
           display: none;
         }
-
         &:nth-child(7n)::after {
           display: none;
         }
-
         &.--beyond-active:nth-child(7n)::before {
           display: block;
           width: 100%;
@@ -513,7 +484,6 @@ export default defineComponent({
           right: 0;
           top: -8px;
         }
-
         &.--beyond-active:nth-child(7n + 1)::before {
           display: block;
           width: 100%;
@@ -521,22 +491,18 @@ export default defineComponent({
           left: 0;
           top: -8px;
         }
-
         &.--on-active:nth-child(7n)::after {
           display: none;
         }
       }
-
       &.--not-cur-month {
         color: $gray-300;
       }
-
       &.--past {
         color: $gray-500;
       }
     }
   }
-
   :deep .footer {
     .label {
       font-size: calc(var(--font-size) - 2px);
