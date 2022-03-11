@@ -4,18 +4,16 @@
       :data="{
         links: [
           {
-            name: 'dsfsdf',
-            to: '/user',
+            name: 'user',
             links: [
               {
-                name: 'ssd',
+                name: 'profile',
                 to: '/user/profile',
-                links: [{ name: 'posts', to: '/user/profile/posts' }],
               },
             ],
           },
-          { name: 'ssd', to: '/user/profile' },
-          { name: 'posts', to: '/user/profile/posts' },
+
+          { name: 'category', to: '/category' },
         ],
       }"
     />
@@ -28,7 +26,9 @@
       >
         <EBreadcrumbs
           :data="{
-            crumbs: $route.matched,
+            crumbs: $route.matched.map((route) =>
+              route.children.length > 0 ? { ...route, path: '' } : route,
+            ),
           }"
         />
       </div>

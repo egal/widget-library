@@ -1,12 +1,9 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
-    <!--    ?todo on;y on prop -->
-    <!--    <p>{{ data.crumbs }}</p>-->
-    <!--    <p>{{ parsedLinks }}</p>-->
-    <!--  todo   parsedLinks -->
     <template v-for="(link, i) in parsedLinks" :key="link.to">
-      <!--      todo add active class for the lasty link ? -->
-      <router-link class="breadcrumbs__link" :to="link.to">{{ link.name }}</router-link>
+      <router-link class="breadcrumbs__link" :class="{ disabled: !link.to }" :to="link.to ?? ''"
+        >{{ link.name }}
+      </router-link>
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
@@ -59,69 +56,21 @@ export default {
       }
     },
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     console.log('to', to)
-  //     console.log('from', from)
-  //     console.log(vm)
-  //   })
-  // },
+
   mounted() {
-    console.log(this.crumbs)
-    // console.log(this.$router.getRoutes())
-    // console.log(this.$router.currentRoute.value)
-    // console.log(this.$route)
-    //
-    // let matched = this.$route.matched.map((link) => {
-    //   this.parsedLinks.push({
-    //     to: link.path,
-    //     name: link.name,
-    //   })
-    // })
-    // console.log(this.$route.matched)
+    //todo
+    console.log(this.$route)
   },
   watch: {
     crumbs(newValue) {
-      console.log('crumbs changeds', newValue)
-      let x = this.crumbs.map((i) => {
+      // console.log('crumbs changeds', newValue)
+      this.parsedLinks = this.crumbs.map((i) => {
         return {
           to: i.path,
           name: i.name,
         }
       })
-
-      this.parsedLinks = x
     },
-    // parsedLinks() {
-    //   //todo recursively parse data.crumbs for children
-    //   //get array of  objects with
-    //   console.log(this.data.crumbs)
-    //   let x = this.crumbs.map((i) => {
-    //     return {
-    //       to: i.path,
-    //       name: i.name,
-    //     }
-    //   })
-    //   console.log(this.crumbs)
-    //   this.parsedLinks.splice(0, this.parsedLinks.length + 1)
-    //   this.parsedLinks.push(
-    //     ...this.router.currentRoute.value.fullPath
-    //       .split('/')
-    //       .reduce(
-    //         (acc, value, index) => (
-    //           (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
-    //         ),
-    //         [],
-    //       )
-    //       .map((el) => el.join('/'))
-    //       .map((el) => el)
-    //       .filter((el) => !!el)
-    //       .map((to) => ({
-    //         to,
-    //         name: this.router.getRoutes().filter(({ path }) => path === to)[0].name,
-    //       })),
-    //   )
-    // },
   },
 }
 </script>
@@ -145,7 +94,8 @@ export default {
     display: block;
 
     &.router-link-exact-active {
-      color: var(--active-color) !important;
+      // todo !important
+      color: var(--active-color);
     }
 
     &:not(.router-link-exact-active)::after {
@@ -166,6 +116,12 @@ export default {
       &::after {
         opacity: 1;
       }
+    }
+
+    &.router-link-exact-active.disabled,
+    &.router-link-active.disabled {
+      color: var(--color);
+      cursor: default;
     }
   }
 

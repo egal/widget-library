@@ -1,15 +1,25 @@
 <template>
   <router-link
-    :to="link.to"
+    :to="link.to ?? ''"
     v-slot="{ href, navigate, isActive, isExactActive }"
     custom
     :style="getVars"
   >
+    <!--    todo deep nested -->
+    <!--    :class="{-->
+    <!--    'router-link-active': (link.to && isActive) || (link.links && linksOpen && !link.to),-->
+    <!--    'router-link-exact-active':-->
+    <!--    (link.to && isExactActive) || (link.links && linksOpen && !link.to),-->
+    <!--    'router-link-exact-active nested':-->
+    <!--    link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),-->
+    <!--    }"-->
+
+    <!--    todo styles & conditions -->
     <div
       class="nav-link"
       :class="{
-        'router-link-active': isActive,
-        'router-link-exact-active': isExactActive,
+        'router-link-active': link.to && isActive,
+        'router-link-exact-active': link.to && isExactActive,
         'router-link-exact-active nested':
           link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),
       }"
@@ -20,7 +30,7 @@
         @click="(event) => navigationHandler(event, link, navigate)"
         class="exact-link"
       >
-        <BootstrapIcon :icon="link.icon" />
+        <BootstrapIcon :icon="link.icon ?? ''" />
         <p v-if="active" :class="{ 'link-active': active }">{{ link.name }}</p>
       </a>
       <BootstrapIcon
