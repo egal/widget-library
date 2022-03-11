@@ -65,7 +65,7 @@ export default {
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
         '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
-        '--border-radius': this.styleConfig?.borderRadius || '8px',
+        '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
       }
     },

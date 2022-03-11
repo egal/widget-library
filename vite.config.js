@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import typescript from '@rollup/plugin-typescript'
 import configRouterPlugin from 'vite-plugin-vue-router'
+
 import path from 'path'
 
 export default defineConfig({
@@ -21,11 +22,17 @@ export default defineConfig({
       fileName: (format) => `egal-widgets-build.${format}.js`,
     },
     rollupOptions: {
-      external: ['vue', '@dvuckovic/vue3-bootstrap-icons'],
+      external: [
+        'vue',
+        '@dvuckovic/vue3-bootstrap-icons',
+        'vue-upload-component/dist/vue-upload-component',
+      ],
       output: {
         globals: {
           vue: 'Vue',
           '@dvuckovic/vue3-bootstrap-icons': '@dvuckovic/vue3-bootstrap-icons',
+          'vue-upload-component/dist/vue-upload-component':
+            'vue-upload-component/dist/vue-upload-component',
         },
       },
       plugins: [typescript({ sourceMap: false })],

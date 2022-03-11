@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'EClearButton',
+  name: 'ClearButton',
   components: {},
   props: {
     error: {
@@ -89,11 +89,16 @@ export default {
   mask-repeat: no-repeat;
   mask-size: cover;
   mask-position: center;
+  -webkit-mask-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='15' height='14' viewBox='0 0 15 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cmask id='mask0' mask-type='alpha' maskUnits='userSpaceOnUse' x='0' y='0' width='15' height='14'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M15 7C15 10.866 11.6421 14 7.5 14C3.35786 14 0 10.866 0 7C0 3.13401 3.35786 0 7.5 0C11.6421 0 15 3.13401 15 7ZM4.21875 6.5C3.95987 6.5 3.75 6.72386 3.75 7C3.75 7.27614 3.95987 7.5 4.21875 7.5H10.7812C11.0401 7.5 11.25 7.27614 11.25 7C11.25 6.72386 11.0401 6.5 10.7812 6.5H4.21875Z' fill='black'/%3e%3c/mask%3e%3cg mask='url(%23mask0)'%3e%3crect width='15' height='14' fill='%23CBD5E0'/%3e%3c/g%3e%3c/svg%3e");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  -webkit-mask-position: center;
   background-color: var(--color);
   align-self: center;
   cursor: pointer;
   z-index: 1;
   border-color: transparent;
+  border-radius: 50%;
 }
 .error {
   background-color: var(--error-color);

@@ -2,15 +2,18 @@
   <div class="dropdown" :class="`dropdown--${size}`" :style="getStyleVars">
     <div class="dropdown-items">
       <Input
+        :data="{
+          type: 'search',
+          placeholder: searchPlaceholder,
+          iconLeft: 'search',
+          size,
+        }"
         class="dropdown-search"
-        type="search"
-        placeholder="Search"
-        icon-left="search"
         @update:modelValue="filterOptions"
-        :size="size"
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
+
       <div class="dropdown-groups" v-if="grouped">
         <div class="group" v-for="group in options">
           <span>{{ group.groupName }}</span>
@@ -23,6 +26,12 @@
             {{ option[shownKey] }}
           </div>
         </div>
+      </div>
+      <div
+        class="dropdown-item dropdown-item--empty"
+        v-else-if="!grouped && filteredOptions.length === 0"
+      >
+        {{ emptyDropdownText }}
       </div>
       <div
         class="dropdown-item"
@@ -75,6 +84,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    searchPlaceholder: {
+      type: String,
+      default: 'Search',
+    },
+    emptyDropdownText: {
+      type: String,
+      default: 'no data',
+    },
   },
   data() {
     return {
@@ -84,7 +101,7 @@ export default {
   computed: {
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sana',
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
@@ -129,6 +146,11 @@ export default {
       )
     },
   },
+  watch: {
+    options(newValue) {
+      this.filteredOptions = newValue
+    },
+  },
 }
 </script>
 
@@ -154,7 +176,7 @@ export default {
   box-shadow: var(--box-shadow);
   max-height: 450px;
   overflow-y: auto;
-  width: max-content;
+  min-width: max-content;
 
   &-search {
     margin-bottom: 10px;
@@ -174,7 +196,18 @@ export default {
     &:hover {
       background-color: var(--option-hover-background-color);
     }
+
+    &--empty {
+      cursor: default;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: initial;
+      }
+    }
   }
+
   &-groups {
     .group {
       display: flex;

@@ -9,6 +9,7 @@
   >
     <div class="select-label">{{ mergedData.label }}</div>
     <div
+      v-if="!mergedData.searchableInput"
       class="select-container"
       :class="{
         focus: showDropdown,
@@ -25,10 +26,11 @@
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
+        <div class="selected" v-else-if="!!selectModel.name">{{ selectModel.name }}</div>
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
-        <EClearButton
+        <ClearButton
           :error="mergedData.showError && (errorMessage || mergedData.error)"
           :size="mergedData.size"
           :filled="filled && !mergedData.error && !errorMessage"
@@ -41,16 +43,51 @@
       </div>
     </div>
 
-    <div class="select-dropdown">
+    <EInput
+      class="input-search"
+      v-else-if="mergedData.searchableInput"
+      @click="showDropdown = !showDropdown"
+      v-click-outside="close"
+      @update:modelValue="filterOptions"
+      :data="{
+        placeholder: mergedData.searchPlaceholder,
+        showFilled: false,
+        type: 'search',
+        iconLeft: 'search',
+        size: mergedData.size,
+        modelValue: selectModel[mergedData.shownKey],
+      }"
+      :style-config="{
+        backgroundColor: '#F7FAFC',
+        borderColor: '#E2E8F0',
+        iconColor: '#CBD5E0',
+        placeholderColor: '#CBD5E0',
+        ...inputSearchStyleConfig,
+      }"
+    />
+
+    <div
+      class="select-dropdown"
+      :class="{ 'search-input': mergedData.searchableInput, grouped: mergedData.grouped }"
+    >
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
         :value="selectModel"
-        :options="mergedData.options"
+        :empty-dropdown-text="mergedData.emptyDropdownText"
+        :options="filteredOptions"
         :size="mergedData.size"
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
+        :search-placeholder="mergedData.searchPlaceholder"
         :style-config="dropdownStyleConfig"
+        :input-search-style-config="{
+          backgroundColor: '#F7FAFC',
+          borderColor: '#E2E8F0',
+          iconColor: '#CBD5E0',
+          placeholderColor: '#CBD5E0',
+          ...inputSearchStyleConfig,
+        }"
         @select="selectOption"
         @click.native.stop
       />
@@ -61,7 +98,8 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import EDropdown from '@/components/inputs/Dropdown/EDropdown'
-import EClearButton from '@/components/inputs/ClearButton/EClearButton'
+import EInput from '@/components/inputs/Input/EInput'
+import ClearButton from '@/components/inputs/ClearButton/ClearButton'
 import vClickOutside from 'click-outside-vue3'
 import { validate } from '@/helpers/validators'
 export default {
@@ -70,8 +108,9 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   components: {
-    EClearButton,
+    ClearButton,
     EDropdown,
+    EInput,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -87,12 +126,19 @@ export default {
       type: Object,
       default: () => {},
     },
+    inputSearchStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       selectModel: [],
       showDropdown: false,
       errorMessage: '',
+      searchValue: '',
+
+      filteredOptions: this.data?.options ?? [],
     }
   },
   computed: {
@@ -112,6 +158,9 @@ export default {
           showError: true,
           validators: [],
           grouped: false,
+          searchPlaceholder: 'Search',
+          searchableInput: false,
+          emptyDropdownText: 'no data',
         },
         this.data,
       )
@@ -128,7 +177,7 @@ export default {
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#a0aec0',
+        '--value-color': this.styleConfig?.valueColor || '#2D3748',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
         '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
         '--placeholder-font-size': this.styleConfig?.placeholderFontSize || '12px',
@@ -141,8 +190,8 @@ export default {
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || '#0066ff',
-        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#e5f0ff',
-        '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#0066ff1a',
+        '--filled-font-color': this.styleConfig?.filledFontColor || '#0066ff',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
@@ -188,6 +237,38 @@ export default {
       }
       this.selectModel = {}
     },
+    /**
+     * Filer options by search value
+     * @param value
+     */
+    filterOptions(value) {
+      this.showDropdown = true
+      if (!value) {
+        this.filteredOptions = this.mergedData.options
+
+        this.selectModel = value
+        return
+      }
+
+      if (!this.mergedData.grouped) {
+        this.filteredOptions = this.mergedData.options.filter(
+          (option) =>
+            option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+        )
+      } else {
+        this.filteredOptions = this.mergedData.options.map((group) => {
+          const filteredGroupsOptions = group.options.filter(
+            (option) =>
+              option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+          )
+
+          return {
+            ...group,
+            options: filteredGroupsOptions,
+          }
+        })
+      }
+    },
   },
   watch: {
     selectModel: {
@@ -196,10 +277,11 @@ export default {
           this.errorMessage = validate(this.mergedData.validators, this.newValue)
           this.$emit('error', this.errorMessage)
         }
+
         this.$emit('update:modelValue', value)
       },
-      deep: true,
     },
+
     modelValue: {
       handler(value) {
         this.selectModel = value
@@ -217,6 +299,7 @@ export default {
   align-items: flex-start;
   width: 100%;
   font-family: var(--font-family);
+  position: relative;
   &-label {
     font-weight: var(--label-font-weight);
     color: var(--label-color);
@@ -269,6 +352,7 @@ export default {
       }
     }
   }
+
   .focus {
     border-color: var(--focus-border-color);
   }
@@ -287,6 +371,11 @@ export default {
       color: var(--error-color);
     }
   }
+
+  .input-search {
+    width: 100%;
+  }
+
   &--lg {
     .select-container {
       height: 46px;
@@ -338,9 +427,17 @@ export default {
   &-dropdown {
     position: relative;
     z-index: 2;
-    margin-top: 4px;
+    margin-top: 8px;
+    width: calc(100% + 32px);
+
+    &.search-input {
+      width: inherit;
+      margin-top: 12px;
+    }
+
     .dropdown-component {
       position: absolute;
+      width: 100%;
     }
   }
 }
