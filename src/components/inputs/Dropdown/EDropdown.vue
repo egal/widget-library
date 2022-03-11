@@ -2,12 +2,18 @@
   <div class="dropdown" :class="`dropdown--${size}`" :style="getStyleVars">
     <div class="dropdown-items">
       <Input
-        :data="{ type: 'search', placeholder: 'Search', iconLeft: 'search', size: size }"
+        :data="{
+          type: 'search',
+          placeholder: searchPlaceholder,
+          iconLeft: 'search',
+          size,
+        }"
         class="dropdown-search"
         @update:modelValue="filterOptions"
         v-if="searchable && !grouped"
         :style-config="inputSearchStyleConfig"
       />
+
       <div class="dropdown-groups" v-if="grouped">
         <div class="group" v-for="group in options">
           <span>{{ group.groupName }}</span>
@@ -20,6 +26,12 @@
             {{ option[shownKey] }}
           </div>
         </div>
+      </div>
+      <div
+        class="dropdown-item dropdown-item--empty"
+        v-else-if="!grouped && filteredOptions.length === 0"
+      >
+        {{ emptyDropdownText }}
       </div>
       <div
         class="dropdown-item"
@@ -36,7 +48,6 @@
 
 <script>
 import Input from '../Input/EInput'
-
 export default {
   name: 'EDropdown',
   components: { Input },
@@ -73,6 +84,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    searchPlaceholder: {
+      type: String,
+      default: 'Search',
+    },
+    emptyDropdownText: {
+      type: String,
+      default: 'no data',
+    },
   },
   data() {
     return {
@@ -87,7 +106,7 @@ export default {
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
         '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#0066FF',
+        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
@@ -127,6 +146,11 @@ export default {
       )
     },
   },
+  watch: {
+    options(newValue) {
+      this.filteredOptions = newValue
+    },
+  },
 }
 </script>
 
@@ -137,7 +161,6 @@ export default {
   width: 4px;
   height: 4px;
 }
-
 ::-webkit-scrollbar-track {
   background-color: $gray-100;
 }
@@ -146,7 +169,6 @@ export default {
   background-color: $gray-300;
   border-radius: 8px;
 }
-
 .dropdown {
   font-family: var(--font-family);
   background-color: var(--background-color);
@@ -154,7 +176,7 @@ export default {
   box-shadow: var(--box-shadow);
   max-height: 450px;
   overflow-y: auto;
-  width: max-content;
+  min-width: max-content;
 
   &-search {
     margin-bottom: 10px;
@@ -174,6 +196,16 @@ export default {
     &:hover {
       background-color: var(--option-hover-background-color);
     }
+
+    &--empty {
+      cursor: default;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: initial;
+      }
+    }
   }
 
   &-groups {
@@ -181,7 +213,6 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-
       span {
         color: var(--group-name-color);
         margin-bottom: 4px;
@@ -194,36 +225,29 @@ export default {
       }
     }
   }
-
   .active {
     background-color: var(--active-background-color);
     color: var(--active-option-color);
   }
-
   &--lg {
     .dropdown-items {
       padding: 14px 12px;
     }
-
     .dropdown-item {
       font-size: 14px;
       margin-bottom: 6px;
     }
-
     .group {
       margin-bottom: 16px;
-
       span {
         font-size: 14px;
       }
     }
   }
-
   &--md {
     .dropdown-items {
       padding: 12px 10px;
     }
-
     .dropdown-item {
       font-size: 12px;
       margin-bottom: 2px;
@@ -231,25 +255,21 @@ export default {
 
     .group {
       margin-bottom: 12px;
-
       span {
         font-size: 14px;
       }
     }
   }
-
   &--sm {
     .dropdown-items {
       padding: 10px 8px;
     }
-
     .dropdown-item {
       font-size: 10px;
     }
 
     .group {
       margin-bottom: 10px;
-
       span {
         font-size: 12px;
       }

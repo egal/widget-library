@@ -167,7 +167,6 @@ export default defineComponent({
   border-top: 1px solid $gray-200;
   padding-top: 20px;
   margin-top: 14px;
-
   .label {
     font-style: normal;
     font-weight: 500;
@@ -177,48 +176,38 @@ export default defineComponent({
     margin-top: 0;
     margin-bottom: 8px;
   }
-
   .picker {
     display: flex;
     align-items: center;
-
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
-
-      ::v-deep(.select-container) {
+      :deep .select-container {
         background-color: $gray-100;
       }
-
       .bi {
         opacity: 0.5;
       }
     }
   }
 }
-
-::v-deep(.input) {
+:deep .input {
   width: 80px;
-
-  .input--minutes {
+  &--minutes {
     width: 50px;
   }
 }
-
 .bi {
   margin-right: 10px;
   color: $gray-600;
 }
-
-::v-deep(.select) {
+:deep .select {
   width: 70px;
 }
-
-::v-deep(.select.ampm) {
+:deep .select.ampm {
   margin-left: 15px;
 }
-
-::v-deep(.dropdown) {
+:deep .dropdown {
   max-height: 250px;
 }
 </style>
