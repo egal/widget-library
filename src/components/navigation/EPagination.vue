@@ -1,53 +1,108 @@
 <template>
-  <div
-    :class="`pagination --size-${mergedData.size || 'md'} --style-${
-      mergedData.componentStyle || 'normal'
-    }`"
-    :style="getVars"
-  >
-    <div class="pagination__left-arrow">
-      <BootstrapIcon icon="chevron-left" class="pagination__left-arrow-icon" />
-      <p>{{ mergedData.leftArrowLabel }}</p>
+  <div class="wrapper-pagination" :style="getVars">
+    <div
+      :class="`pagination --size-${mergedData.size || 'md'} --style-${
+        mergedData.componentStyle || 'normal'
+      } ${minimalisticVersion ? '--select' : ''}`"
+    >
+      <TransitionGroup name="pagination">
+        <div class="pagination__left-arrow" v-if="currentPage > 1" @click="toPrevPage">
+          <BootstrapIcon
+            :icon="minimalisticVersion ? 'caret-left-fill' : 'chevron-left'"
+            class="pagination__left-arrow-icon"
+          />
+          <p v-if="!minimalisticVersion">{{ mergedData.leftArrowLabel }}</p>
+        </div>
+
+        <ul class="pagination__num-pages">
+          <template v-for="page in mergedData.numberOfPages" :key="page">
+            <li
+              v-if="isInPageGroup(page)"
+              @click="setPage(page)"
+              :class="{ '--active': page === currentPage }"
+            >
+              {{ page }}
+            </li>
+            <li
+              class="--dots"
+              v-else-if="[2, mergedData.numberOfPages - 1].includes(page)"
+              @click="setPage(page > currentPage ? currentPage + 3 : currentPage - 3)"
+            >
+              ...
+            </li>
+          </template>
+        </ul>
+
+        <div
+          class="pagination__right-arrow"
+          v-if="currentPage < mergedData.numberOfPages"
+          @click="toNextPage"
+        >
+          <p v-if="!minimalisticVersion">{{ mergedData.rightArrowLabel }}</p>
+          <BootstrapIcon
+            :icon="minimalisticVersion ? 'caret-right-fill' : 'chevron-right'"
+            class="pagination__right-arrow-icon"
+          />
+        </div>
+      </TransitionGroup>
     </div>
-    <ul class="pagination__num-pages">
-      <template v-for="page in mergedData.numberOfPages" :key="page">
-        <li
-          v-if="isInPageGroup(page)"
-          @click="setPage(page)"
-          :class="{ '--active': page === currentPage }"
-        >
-          {{ page }}
-        </li>
-        <li
-          v-else-if="[2, mergedData.numberOfPages - 1].includes(page)"
-          @click="setPage(page > currentPage ? currentPage + 3 : currentPage - 3)"
-        >
-          ...
-        </li>
-      </template>
-    </ul>
-    <div class="pagination__right-arrow">
-      <p>{{ mergedData.rightArrowLabel }}</p>
-      <BootstrapIcon icon="chevron-right" class="pagination__right-arrow-icon" />
+
+    <div
+      v-if="minimalisticVersion"
+      class="per-page"
+      :class="`--size-${mergedData.size || 'md'} --style-${mergedData.componentStyle || 'normal'}`"
+    >
+      <p class="per-page__text">Show:</p>
+      <ESelect
+        @update:modelValue="setPerPage"
+        :data="{
+          placeholder: mergedData.perPage,
+          clearable: false,
+          searchable: false,
+          multiple: false,
+          options: mergedData.selectOptions,
+        }"
+        :style-config="{
+          placeholderFontSize:
+            mergedData.size === 'lg' ? '14px' : mergedData.size === 'md' ? '12px' : '10px',
+          fontFamily: mergedData.font,
+          ...selectStyleConfig,
+        }"
+        :dropdown-style-config="dropdownStyleConfig"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import ESelect from '@/components/inputs/Select/ESelect'
 
 export default {
   name: 'EPagination',
-  components: { BootstrapIcon },
+  components: { BootstrapIcon, ESelect },
   data() {
     return {
       currentPage: null,
     }
   },
   props: {
+    selectStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
+    dropdownStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
     data: {
       type: Object,
       default: () => {},
+    },
+
+    minimalisticVersion: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['update:modelValue'],
@@ -62,11 +117,26 @@ export default {
           size: 'md',
           componentStyle: 'normal',
           font: 'Open Sans',
-          weight: 'regular',
-          color: '#718096',
+          weight: '500',
+          color: this.minimalisticVersion ? '#A0AEC0' : '#718096',
           activeColor: '#0066ff',
           activeBackgroundColor: '#e5f0ff',
           borderColor: '#e2e8f0',
+          perPage: 10,
+          selectOptions: [
+            {
+              name: 5,
+            },
+            {
+              name: 10,
+            },
+            {
+              name: 25,
+            },
+            {
+              name: 50,
+            },
+          ],
         },
         this.data,
       )
@@ -81,6 +151,36 @@ export default {
         '--font-weight': this.mergedData.weight,
       }
     },
+  },
+  mounted() {
+    this.currentPage = this.mergedData.modelValue
+  },
+  methods: {
+    toNextPage() {
+      if (this.currentPage >= this.mergedData.numberOfPages) {
+        return
+      }
+
+      this.setPage(this.currentPage + 1)
+    },
+
+    toPrevPage() {
+      if (this.currentPage <= 1) {
+        return
+      }
+
+      this.setPage(this.currentPage - 1)
+    },
+
+    setPage(page) {
+      this.currentPage = page
+      this.$emit('update:modelValue', page)
+    },
+
+    setPerPage(value) {
+      this.$emit('update:perPageValue', value)
+    },
+
     isInPageGroup(page) {
       return (
         [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(page) ||
@@ -92,26 +192,23 @@ export default {
       )
     },
   },
-  mounted() {
-    this.currentPage = this.mergedData.modelValue
-  },
-  methods: {
-    setPage(page) {
-      this.currentPage = page
-      this.$emit('update:modelValue', page)
-    },
-  },
 }
 </script>
 <style lang="scss" scoped>
 @import 'src/assets/variables';
+
+.wrapper-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font);
+}
 
 .pagination {
   display: flex;
   width: fit-content;
   border: 1px solid var(--border-color);
   color: var(--color);
-  font-family: var(--font);
   font-weight: var(--font-weight);
   padding: 9px 10px;
   border-radius: $all-sides-small;
@@ -131,6 +228,10 @@ export default {
       transition: 0.2s;
       cursor: pointer;
       user-select: none;
+
+      &.--dots {
+        color: var(--active-color);
+      }
 
       &.--active,
       &:hover {
@@ -166,6 +267,11 @@ export default {
       background: var(--border-color);
       transform: translateY(-50%);
     }
+
+    &:hover {
+      cursor: pointer;
+      opacity: 1.5;
+    }
   }
 
   &__left-arrow {
@@ -191,7 +297,7 @@ export default {
   &.--size {
     &-lg {
       padding: 8px 10px;
-      font-size: 12px;
+      font-size: 14px;
       line-height: 12px;
 
       .pagination__left-arrow {
@@ -282,5 +388,99 @@ export default {
       }
     }
   }
+
+  &.--select {
+    border: none;
+
+    .pagination__right-arrow {
+      padding-left: 5px;
+      margin-left: 5px;
+    }
+
+    .pagination__left-arrow {
+      padding-right: 5px;
+      margin-right: 5px;
+    }
+
+    .pagination__right-arrow,
+    .pagination__left-arrow {
+      padding-bottom: 2px;
+
+      &::after {
+        display: none;
+      }
+
+      &-icon {
+        color: var(--color);
+        opacity: 0.7;
+      }
+    }
+
+    .pagination__num-pages {
+      li {
+        border-radius: 0;
+        padding: 0;
+        margin: 0 6px;
+
+        &.--active,
+        &:hover {
+          background-color: transparent;
+          border-bottom: 1.5px solid var(--active-color);
+        }
+      }
+    }
+  }
+}
+
+.per-page {
+  display: flex;
+  align-items: center;
+
+  &__text {
+    margin-right: 12px;
+    font-weight: 500;
+
+    color: $gray-500;
+  }
+
+  &.--size {
+    &-lg {
+      font-size: 14px;
+
+      .select {
+        width: 84px;
+      }
+    }
+    &-md {
+      font-size: 12px;
+
+      .select {
+        width: 71px;
+      }
+    }
+    &-sm {
+      font-size: 10px;
+
+      .select {
+        width: 61px;
+      }
+    }
+  }
+}
+
+.pagination-move,
+.pagination-enter-active,
+.pagination-leave-active {
+  transition: all 0.5s cubic-bezier(0.28, 0.67, 0.25, 0.9);
+}
+
+.pagination-enter-from,
+.pagination-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+.pagination-leave-active {
+  position: absolute;
 }
 </style>

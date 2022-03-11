@@ -58,7 +58,7 @@ export default {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--value-color': this.styleConfig?.valueColor || '#a0aec0',
-        '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 400,
         '--placeholder-color': this.styleConfig?.placeholderColor || '#a0aec0',
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--label-color': this.styleConfig?.labelColor || '#2d3748',
@@ -67,7 +67,7 @@ export default {
         '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '8px',
-        '--focus-border-color': this.styleConfig?.focusBorderColor || '#3385ff',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
       }
     },
@@ -124,7 +124,7 @@ export default {
       border-color: var(--focus-border-color);
     }
     &:focus-visible:enabled {
-      border: 1px solid var(--focus-border-color);
+      border: 2px solid var(--focus-border-color);
       outline: none;
     }
   }

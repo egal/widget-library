@@ -21,6 +21,10 @@
         <ENavbarLeftItem :link="link" :active="active" :data="mergedData"></ENavbarLeftItem>
       </li>
     </ul>
+
+    <div class="navbar__footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
@@ -54,7 +58,7 @@ export default {
           logo: null,
           links: [],
           smallLogo: null,
-          chevronColor: '#a0aec0',
+          chevronColor: '#2D3748',
         },
         this.data,
       )
