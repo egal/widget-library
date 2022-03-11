@@ -1,11 +1,7 @@
 <template>
-  <router-link
-    :to="link.to"
-    v-slot="{ href, navigate, isActive, isExactActive }"
-    custom
-    :style="getVars"
-  >
+  <router-link :to="link.to ?? ''" v-slot="{ href, navigate, isActive, isExactActive }" custom>
     <div
+      :style="getVars"
       class="nav-link"
       :class="{
         'router-link-active': isActive,
@@ -20,7 +16,7 @@
         @click="(event) => navigationHandler(event, link, navigate)"
         class="exact-link"
       >
-        <BootstrapIcon :icon="link.icon" />
+        <BootstrapIcon :icon="link.icon ?? ''" />
         <p v-if="active" :class="{ 'link-active': active }">{{ link.name }}</p>
       </a>
       <BootstrapIcon
