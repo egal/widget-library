@@ -68,6 +68,7 @@
           multiple: false,
           options: mergedData.selectOptions,
           dropdownPosition: mergedData.dropdownPosition,
+          modelValue: { name: mergedData.perPage },
         }"
         :style-config="{
           placeholderFontSize:
