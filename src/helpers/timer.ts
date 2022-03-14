@@ -3,7 +3,7 @@ export default class Timer {
   private _startTime: number | undefined
   private _remaining: number | undefined
   private _onTimerEnd: Function | undefined
-  private _timeout: number | undefined
+  private _timeout: any
 
   constructor(duration: number) {
     this._duration = duration
