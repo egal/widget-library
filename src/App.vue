@@ -1,17 +1,10 @@
-<template>
-  <router-view>
-    <ENavbarLeft :data="{ links: [{ name: 'dsf' }] }" />
-  </router-view>
-</template>
+<template></template>
 
 <script lang="ts">
-import ENavbarLeft from '@/components/navigation/ENavbarLeft.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
-  components: {
-    ENavbarLeft,
-  },
+  components: {},
   data() {
     return {}
   },
