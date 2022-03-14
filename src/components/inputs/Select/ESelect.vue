@@ -137,7 +137,6 @@ export default {
       showDropdown: false,
       errorMessage: '',
       searchValue: '',
-
       filteredOptions: this.data?.options ?? [],
     }
   },
@@ -195,6 +194,8 @@ export default {
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
+        '--focus-box-shadow':
+          this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
       }
     },
   },
@@ -355,6 +356,7 @@ export default {
 
   .focus {
     border-color: var(--focus-border-color);
+    box-shadow: var(--focus-box-shadow);
   }
   .filled {
     background-color: var(--filled-background-color);

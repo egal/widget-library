@@ -5,7 +5,12 @@
     } --size-${mergedData.size || 'md'}`"
     :style="getVars"
   >
-    <img v-if="mergedData.imgUrl" :src="mergedData.imgUrl" :alt="name" class="avatar__img" />
+    <img
+      v-if="mergedData.imgUrl"
+      :src="mergedData.imgUrl"
+      :alt="mergedData.name"
+      class="avatar__img"
+    />
     <p
       v-if="!mergedData.imgUrl || mergedData.isNameRequired"
       class="avatar__name"
