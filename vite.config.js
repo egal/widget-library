@@ -38,6 +38,7 @@ export default defineConfig({
       plugins: [typescript({ sourceMap: false })],
     },
   },
+  css: { preprocessorOptions: { scss: { charset: false } } },
   plugins: [
     vue({
       template: {

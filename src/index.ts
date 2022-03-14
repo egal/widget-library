@@ -1,15 +1,22 @@
 import components from './components'
-
+import { App } from 'vue'
+import Toaster from '@/helpers/toaster'
 const plugin = {
-  install: (app) => {
+  install: (app: App) => {
     for (const prop in components) {
       // eslint-disable-next-line no-prototype-builtins
-      if (components.hasOwnProperty(prop)) {
+      if (components.hasOwnProperty(prop) && components[prop] !== 'EToasterPlugin') {
         const component = components[prop]
         app.component(component.name, component)
       }
     }
+    app.config.globalProperties.$toaster = new Toaster()
   },
+}
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $toaster: Toaster
+  }
 }
 
 export default plugin
