@@ -187,6 +187,7 @@ export default {
     },
 
     setPerPage(value) {
+      this.setPage(1)
       this.$emit('update:perPageValue', value)
     },
 

@@ -456,10 +456,6 @@ export default {
       position: absolute;
       width: 100%;
     }
-
-    //:deep .dropdown--top {
-    //  bottom: 0;
-    //}
   }
 }
 </style>
