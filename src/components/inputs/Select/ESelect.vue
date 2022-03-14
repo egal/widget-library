@@ -81,6 +81,7 @@
         :grouped="mergedData.grouped"
         :search-placeholder="mergedData.searchPlaceholder"
         :style-config="dropdownStyleConfig"
+        :dropdown-position="mergedData.dropdownPosition"
         :input-search-style-config="{
           backgroundColor: '#F7FAFC',
           borderColor: '#E2E8F0',
@@ -160,6 +161,7 @@ export default {
           searchPlaceholder: 'Search',
           searchableInput: false,
           emptyDropdownText: 'no data',
+          dropdownPosition: 'bottom',
         },
         this.data,
       )
@@ -391,6 +393,10 @@ export default {
         }
       }
     }
+
+    :deep .dropdown--top {
+      bottom: calc(46px + 16px);
+    }
     .select-label {
       font-size: 14px;
     }
@@ -407,6 +413,10 @@ export default {
           height: 12px;
         }
       }
+    }
+
+    :deep .dropdown--top {
+      bottom: calc(36px + 16px);
     }
   }
   &--sm {
@@ -425,12 +435,17 @@ export default {
         }
       }
     }
+
+    :deep .dropdown--top {
+      bottom: calc(26px + 16px);
+    }
   }
   &-dropdown {
     position: relative;
     z-index: 2;
     margin-top: 8px;
-    width: calc(100% + 32px);
+    //width: calc(100% + 32px);
+    width: calc(100% + 14%);
 
     &.search-input {
       width: inherit;
