@@ -1,5 +1,9 @@
 <template>
-  <div class="dropdown" :class="`dropdown--${size}`" :style="getStyleVars">
+  <div
+    class="dropdown"
+    :class="`dropdown--${size} dropdown--${dropdownPosition}`"
+    :style="getStyleVars"
+  >
     <div class="dropdown-items">
       <Input
         :data="{
@@ -91,6 +95,10 @@ export default {
     emptyDropdownText: {
       type: String,
       default: 'no data',
+    },
+    dropdownPosition: {
+      type: String,
+      default: 'bottom',
     },
   },
   data() {

@@ -6,7 +6,12 @@
       } ${minimalisticVersion ? '--select' : ''}`"
     >
       <TransitionGroup name="pagination">
-        <div class="pagination__left-arrow" v-if="currentPage > 1" @click="toPrevPage">
+        <div
+          class="pagination__left-arrow"
+          v-if="currentPage > 1"
+          @click="toPrevPage"
+          key="left-arrow"
+        >
           <BootstrapIcon
             :icon="minimalisticVersion ? 'caret-left-fill' : 'chevron-left'"
             class="pagination__left-arrow-icon"
@@ -14,7 +19,7 @@
           <p v-if="!minimalisticVersion">{{ mergedData.leftArrowLabel }}</p>
         </div>
 
-        <ul class="pagination__num-pages">
+        <ul class="pagination__num-pages" key="pages">
           <template v-for="page in mergedData.numberOfPages" :key="page">
             <li
               v-if="isInPageGroup(page)"
@@ -35,6 +40,7 @@
 
         <div
           class="pagination__right-arrow"
+          key="right-arrow"
           v-if="currentPage < mergedData.numberOfPages"
           @click="toNextPage"
         >
@@ -61,6 +67,7 @@
           searchable: false,
           multiple: false,
           options: mergedData.selectOptions,
+          dropdownPosition: mergedData.dropdownPosition,
         }"
         :style-config="{
           placeholderFontSize:
@@ -105,7 +112,7 @@ export default {
       default: false,
     },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'update:perPageValue'],
   computed: {
     mergedData() {
       return Object.assign(
@@ -137,6 +144,7 @@ export default {
               name: 50,
             },
           ],
+          dropdownPosition: 'bottom',
         },
         this.data,
       )
@@ -228,6 +236,8 @@ export default {
       transition: 0.2s;
       cursor: pointer;
       user-select: none;
+      color: var(--color);
+      font-weight: var(--font-weight);
 
       &.--dots {
         color: var(--active-color);
@@ -438,8 +448,7 @@ export default {
 
   &__text {
     margin-right: 12px;
-    font-weight: 500;
-
+    font-weight: var(--font-weight);
     color: $gray-500;
   }
 
@@ -471,7 +480,7 @@ export default {
 .pagination-move,
 .pagination-enter-active,
 .pagination-leave-active {
-  transition: all 0.5s cubic-bezier(0.28, 0.67, 0.25, 0.9);
+  transition: all 0.3s cubic-bezier(0.28, 0.67, 0.25, 0.9);
 }
 
 .pagination-enter-from,
