@@ -9,29 +9,51 @@ const routes: Array<RouteRecordRaw> = []
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    // {
+    //   path: '/user',
+    //   name: 'user',
+    //   component: User,
+    //   children: [
+    //     {
+    //       path: '/profile',
+    //       name: 'profile',
+    //       component: UserProfile,
+    //       children: [
+    //         {
+    //           path: '/posts',
+    //           name: 'posts',
+    //           component: UserPosts,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
+    // {
+    //   path: '/posts2',
+    //   name: 'werwe',
+    //   component: UserPosts2,
+    // },
     {
-      path: '/user',
-      name: 'user',
-      component: User,
-      children: [
-        {
-          path: '/profile',
-          name: 'profile',
-          component: UserProfile,
-          children: [
-            {
-              path: '/posts',
-              name: 'posts',
-              component: UserPosts,
-            },
-          ],
-        },
-      ],
+      path: '/',
+      name: 'Home',
+      component: UserPosts2,
+
     },
     {
-      path: '/posts2',
-      name: 'werwe',
-      component: UserPosts2,
+      path: '/category-product',
+      name: 'ProductCategory',
+      component: User,
+      meta: {
+        breadcrumbs: ['Каталог']
+      }
+    },
+    {
+      path: '/products',
+      name: 'products',
+      component: UserPosts,
+      meta: {
+        breadcrumbs: ['Каталог']
+      }
     },
   ],
 })

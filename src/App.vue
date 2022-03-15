@@ -2,7 +2,31 @@
   <div>
     <ENavbarLeft
       :data="{
-        links
+         links: [
+          {
+            name: 'Главная',
+            to: '/',
+            icon: 'house',
+          },
+
+          {
+            name: 'Каталог',
+            to: '',
+            icon: 'book',
+            links: [
+              {
+                name: 'Категории продуктов',
+                to: '/category-product',
+                icon: 'dot',
+              },
+              {
+                name: 'Продукты',
+                to: '/products',
+                icon: 'dot',
+              },
+            ],
+          },
+        ],
       }"
     />
 
@@ -13,7 +37,31 @@
         }"
       >
         <EBreadcrumbs :data="{
-        links
+       links: [
+          {
+            name: 'Главная',
+            to: '/',
+            icon: 'house',
+          },
+
+          {
+            name: 'Каталог',
+            to: '',
+            icon: 'book',
+            links: [
+              {
+                name: 'Категории продуктов',
+                to: '/category-product',
+                icon: 'dot',
+              },
+              {
+                name: 'Продукты',
+                to: '/products',
+                icon: 'dot',
+              },
+            ],
+          },
+        ],
       }" />
       </div>
     </router-view>

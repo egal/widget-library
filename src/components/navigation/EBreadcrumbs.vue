@@ -1,9 +1,9 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
 <!--{{parsedLinks}}-->
-    <template v-for="(link, i) in parsedLinks" :key="link.path">
+    <template v-for="(link, i) in parsedLinks" :key=" link.to">
 <!--      <span class="breadcrumbs__link" @click='navigate(link)'>{{ link.name }}</span>-->
-      <router-link class="breadcrumbs__link" :to="link.path">{{ link.name }}</router-link>
+      <router-link class="breadcrumbs__link" :to="  link.to">{{ link.name }}</router-link>
 
       <BootstrapIcon
         class="breadcrumbs__icon"
@@ -33,13 +33,42 @@ export default {
   computed: {
     parsedLinks() {
       let arr = []
-      this.$route.matched.map(item => {
-        arr.push(this.check(item))
-      })
-      console.log(this.$route.matched)
-      console.log(arr)
-      return arr
+      console.log(this.$route)
+      // this.$route.matched.map(item => {
+      //   arr.push(this.check(item))
+      // })
+      // console.log(this.$route.matched)
+      // console.log(arr)
+      // return arr
+      if (!this.$route.meta.breadcrumbs) {
+        // return this.$route.matched
+        return [] // todo or this route
+      } else {
+        console.log(this.data.links, this.$route.meta.breadcrumbs[0])
+        let x = this.data.links.find(item => item.name === this.$route.meta.breadcrumbs[0])
 
+        console.log(x)
+        arr.push(x)
+        if (x.links ) {
+          console.log(x.links)
+          let y = x.links.find(item => item.to === this.$route.path)
+          arr.push( y)
+        }
+        // todo x.links
+        // todo check if undefined some x, y on so on
+
+      }
+      //   let noLinks = this.$route.meta.breadcrumbs.map(item => {
+      //     return {
+      //       name: item,
+      //       path: ''
+      //     }
+      //   })
+      //
+      //
+      // return [...noLinks, ...this.$route.matched]
+      console.log(arr)
+return  arr
     },
 
     mergedData() {
@@ -72,14 +101,14 @@ export default {
       this.$router.push({path: link.path})
       //   todo add emit
     },
-    check(item) {
-      console.log('check', item)
-
-      let link = this.data.links.find(link => link.name === item.name)
-      if (link && !link.to) {
-        return {...item,  path: ''}
-      } else return  item
-    }
+    // check(item) {
+    //   console.log('check', item)
+    //
+    //   let link = this.data.links.find(link => link.name === item.name)
+    //   if (link && !link.to) {
+    //     return {...item,  path: ''}
+    //   } else return  item
+    // }
   },
   watch: {
     // currentRouteFull(currentRoute) {
