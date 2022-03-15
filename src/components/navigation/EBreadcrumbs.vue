@@ -1,12 +1,10 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
-    <!--    ?todo on;y on prop -->
-    <!--    <p>{{ data.crumbs }}</p>-->
-    <!--    <p>{{ parsedLinks }}</p>-->
-    <!--  todo   parsedLinks -->
-    <template v-for="(link, i) in parsedLinks" :key="link.to">
-      <!--      todo add active class for the lasty link ? -->
-      <router-link class="breadcrumbs__link" :to="link.to">{{ link.name }}</router-link>
+<!--{{parsedLinks}}-->
+    <template v-for="(link, i) in parsedLinks" :key="link.path">
+<!--      <span class="breadcrumbs__link" @click='navigate(link)'>{{ link.name }}</span>-->
+      <router-link class="breadcrumbs__link" :to="link.path">{{ link.name }}</router-link>
+
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
@@ -23,7 +21,6 @@ export default {
   components: { BootstrapIcon },
   data() {
     return {
-      parsedLinks: [],
     }
   },
   props: {
@@ -32,10 +29,19 @@ export default {
       default: () => {},
     },
   },
+
   computed: {
-    crumbs() {
-      return this.data.crumbs
+    parsedLinks() {
+      let arr = []
+      this.$route.matched.map(item => {
+        arr.push(this.check(item))
+      })
+      console.log(this.$route.matched)
+      console.log(arr)
+      return arr
+
     },
+
     mergedData() {
       return Object.assign(
         {
@@ -59,69 +65,30 @@ export default {
       }
     },
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     console.log('to', to)
-  //     console.log('from', from)
-  //     console.log(vm)
-  //   })
-  // },
-  mounted() {
-    console.log(this.crumbs)
-    // console.log(this.$router.getRoutes())
-    // console.log(this.$router.currentRoute.value)
-    // console.log(this.$route)
-    //
-    // let matched = this.$route.matched.map((link) => {
-    //   this.parsedLinks.push({
-    //     to: link.path,
-    //     name: link.name,
-    //   })
-    // })
-    // console.log(this.$route.matched)
+
+  mounted() {},
+  methods: {
+    navigate(link) {
+      this.$router.push({path: link.path})
+      //   todo add emit
+    },
+    check(item) {
+      console.log('check', item)
+
+      let link = this.data.links.find(link => link.name === item.name)
+      if (link && !link.to) {
+        return {...item,  path: ''}
+      } else return  item
+    }
   },
   watch: {
-    crumbs(newValue) {
-      console.log('crumbs changeds', newValue)
-      let x = this.crumbs.map((i) => {
-        return {
-          to: i.path,
-          name: i.name,
-        }
-      })
+    // currentRouteFull(currentRoute) {
+    //
+    //   this.parsedLinks = this.$route.matched
+    //
+    //
+    // }
 
-      this.parsedLinks = x
-    },
-    // parsedLinks() {
-    //   //todo recursively parse data.crumbs for children
-    //   //get array of  objects with
-    //   console.log(this.data.crumbs)
-    //   let x = this.crumbs.map((i) => {
-    //     return {
-    //       to: i.path,
-    //       name: i.name,
-    //     }
-    //   })
-    //   console.log(this.crumbs)
-    //   this.parsedLinks.splice(0, this.parsedLinks.length + 1)
-    //   this.parsedLinks.push(
-    //     ...this.router.currentRoute.value.fullPath
-    //       .split('/')
-    //       .reduce(
-    //         (acc, value, index) => (
-    //           (acc[index] = index === 0 ? [value] : [...acc[index - 1], value]), acc
-    //         ),
-    //         [],
-    //       )
-    //       .map((el) => el.join('/'))
-    //       .map((el) => el)
-    //       .filter((el) => !!el)
-    //       .map((to) => ({
-    //         to,
-    //         name: this.router.getRoutes().filter(({ path }) => path === to)[0].name,
-    //       })),
-    //   )
-    // },
   },
 }
 </script>
@@ -144,7 +111,8 @@ export default {
     text-decoration: none;
     display: block;
 
-    &.router-link-exact-active {
+
+    &:last-child {
       color: var(--active-color) !important;
     }
 

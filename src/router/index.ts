@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import User from '@/views/User.vue'
 import UserProfile from '@/views/UserProfile.vue'
 import UserPosts from '@/views/UserPosts.vue'
+import UserPosts2 from '@/views/UserPosts2.vue'
 
 const routes: Array<RouteRecordRaw> = []
 
@@ -14,18 +15,23 @@ const router = createRouter({
       component: User,
       children: [
         {
-          path: 'profile',
-          name: 'userprofile',
+          path: '/profile',
+          name: 'profile',
           component: UserProfile,
           children: [
             {
-              path: 'posts',
-              name: 'userposts',
+              path: '/posts',
+              name: 'posts',
               component: UserPosts,
             },
           ],
         },
       ],
+    },
+    {
+      path: '/posts2',
+      name: 'werwe',
+      component: UserPosts2,
     },
   ],
 })

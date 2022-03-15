@@ -2,21 +2,7 @@
   <div>
     <ENavbarLeft
       :data="{
-        links: [
-          {
-            name: 'dsfsdf',
-            to: '/user',
-            links: [
-              {
-                name: 'ssd',
-                to: '/user/profile',
-                links: [{ name: 'posts', to: '/user/profile/posts' }],
-              },
-            ],
-          },
-          { name: 'ssd', to: '/user/profile' },
-          { name: 'posts', to: '/user/profile/posts' },
-        ],
+        links
       }"
     />
 
@@ -26,11 +12,9 @@
           marginLeft: '300px',
         }"
       >
-        <EBreadcrumbs
-          :data="{
-            crumbs: $route.matched,
-          }"
-        />
+        <EBreadcrumbs :data="{
+        links
+      }" />
       </div>
     </router-view>
   </div>
@@ -44,7 +28,23 @@ export default defineComponent({
   name: 'App',
   components: { EBreadcrumbs, ENavbarLeft },
   data() {
-    return {}
+    return {
+      links: [
+        {
+          name: 'user',
+          to: '',
+          links: [
+            {
+              name: 'profile',
+              to: '',
+              links: [{ name: 'posts', to: '/posts' }],
+            },
+          ],
+        },
+
+        { name: 'posts 2 ', to: '/posts2' },
+      ],
+    }
   },
 
   methods: {},
