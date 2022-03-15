@@ -1,14 +1,12 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
-<!--{{parsedLinks}}-->
-    <template v-for="(link, i) in parsedLinks" :key=" link.to">
-<!--      <span class="breadcrumbs__link" @click='navigate(link)'>{{ link.name }}</span>-->
+    <template v-for="(link, i) in currentBreadcrumbs" :key=" link.to">
       <router-link class="breadcrumbs__link" :to="  link.to">{{ link.name }}</router-link>
 
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
-        v-if="i < parsedLinks.length - 1"
+        v-if="i < currentBreadcrumbs.length - 1"
       />
     </template>
   </div>
@@ -31,47 +29,16 @@ export default {
   },
 
   computed: {
+    currentBreadcrumbs() {
+      return this.flatParent(this.parsedLinks.filter(link => link.to === this.$route.path)).reverse()
+    },
+
     parsedLinks() {
-      let arr = []
-      console.log(this.$route)
-      // this.$route.matched.map(item => {
-      //   arr.push(this.check(item))
-      // })
-      // console.log(this.$route.matched)
-      // console.log(arr)
-      // return arr
-      if (!this.$route.meta.breadcrumbs) {
-        // return this.$route.matched
-        return [] // todo or this route
-      } else {
-        console.log(this.data.links, this.$route.meta.breadcrumbs[0])
-        let x = this.data.links.find(item => item.name === this.$route.meta.breadcrumbs[0])
-
-        console.log(x)
-        arr.push(x)
-        if (x.links ) {
-          console.log(x.links)
-          let y = x.links.find(item => item.to === this.$route.path)
-          arr.push( y)
-        }
-        // todo x.links
-        // todo check if undefined some x, y on so on
-
-      }
-      //   let noLinks = this.$route.meta.breadcrumbs.map(item => {
-      //     return {
-      //       name: item,
-      //       path: ''
-      //     }
-      //   })
-      //
-      //
-      // return [...noLinks, ...this.$route.matched]
-      console.log(arr)
-return  arr
+      return this.flat(this.data.links)
     },
 
     mergedData() {
+      //todo styles
       return Object.assign(
         {
           font: 'Open Sans',
@@ -95,29 +62,45 @@ return  arr
     },
   },
 
-  mounted() {},
+  mounted() {
+  },
   methods: {
     navigate(link) {
       this.$router.push({path: link.path})
-      //   todo add emit
     },
-    // check(item) {
-    //   console.log('check', item)
-    //
-    //   let link = this.data.links.find(link => link.name === item.name)
-    //   if (link && !link.to) {
-    //     return {...item,  path: ''}
-    //   } else return  item
-    // }
-  },
-  watch: {
-    // currentRouteFull(currentRoute) {
-    //
-    //   this.parsedLinks = this.$route.matched
-    //
-    //
-    // }
 
+    flatParent(array) {
+      let result = [];
+      array.forEach( (a) => {
+        result.push(a);
+        if (!a.parent) {
+          return
+        }
+        if (a.parent) {
+          result = result.concat(this.flatParent(a.parent));
+        }
+      });
+
+      return result
+    },
+
+    flat(array) {
+      let result = [];
+      array.forEach( (a) => {
+
+        result.push(a);
+        if (!a.links) {
+          return
+        }
+        if (a.links) {
+          result = result.concat(this.flat(a.links.map(i => {
+            return { ...i, parent: [a] }
+          })));
+        }
+      });
+
+      return result;
+    },
   },
 }
 </script>

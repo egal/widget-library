@@ -2,31 +2,7 @@
   <div>
     <ENavbarLeft
       :data="{
-         links: [
-          {
-            name: 'Главная',
-            to: '/',
-            icon: 'house',
-          },
-
-          {
-            name: 'Каталог',
-            to: '',
-            icon: 'book',
-            links: [
-              {
-                name: 'Категории продуктов',
-                to: '/category-product',
-                icon: 'dot',
-              },
-              {
-                name: 'Продукты',
-                to: '/products',
-                icon: 'dot',
-              },
-            ],
-          },
-        ],
+         links: links
       }"
     />
 
@@ -37,31 +13,7 @@
         }"
       >
         <EBreadcrumbs :data="{
-       links: [
-          {
-            name: 'Главная',
-            to: '/',
-            icon: 'house',
-          },
-
-          {
-            name: 'Каталог',
-            to: '',
-            icon: 'book',
-            links: [
-              {
-                name: 'Категории продуктов',
-                to: '/category-product',
-                icon: 'dot',
-              },
-              {
-                name: 'Продукты',
-                to: '/products',
-                icon: 'dot',
-              },
-            ],
-          },
-        ],
+       links:links
       }" />
       </div>
     </router-view>
@@ -77,20 +29,35 @@ export default defineComponent({
   components: { EBreadcrumbs, ENavbarLeft },
   data() {
     return {
-      links: [
+      links:[
         {
-          name: 'user',
+          name: 'Главная',
+          to: '/',
+          icon: 'house',
+        },
+
+        {
+          name: 'Каталог',
           to: '',
+          icon: 'book',
           links: [
             {
-              name: 'profile',
-              to: '',
-              links: [{ name: 'posts', to: '/posts' }],
+              name: 'Категории продуктов',
+              to: '/category-product',
+              icon: 'dot',
+              // links: [{
+              //   name: 'Продукты',
+              //   to: '/products',
+              //   icon: 'dot',
+              // },]
+            },
+            {
+              name: 'Продукты',
+              to: '/products',
+              icon: 'dot',
             },
           ],
         },
-
-        { name: 'posts 2 ', to: '/posts2' },
       ],
     }
   },

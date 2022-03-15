@@ -43,17 +43,11 @@ const router = createRouter({
       path: '/category-product',
       name: 'ProductCategory',
       component: User,
-      meta: {
-        breadcrumbs: ['Каталог']
-      }
     },
     {
       path: '/products',
       name: 'products',
       component: UserPosts,
-      meta: {
-        breadcrumbs: ['Каталог']
-      }
     },
   ],
 })
