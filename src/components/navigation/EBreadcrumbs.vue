@@ -1,13 +1,12 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
-    <template v-for="(link, i) in parsedLinks" :key="link.to">
-      <router-link class="breadcrumbs__link" :class="{ disabled: !link.to }" :to="link.to ?? ''"
-        >{{ link.name }}
-      </router-link>
+    <template v-for="(link, i) in currentBreadcrumbs" :key=" link.to">
+      <router-link class="breadcrumbs__link" :to="  link.to">{{ link.name }}</router-link>
+
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
-        v-if="i < parsedLinks.length - 1"
+        v-if="i < currentBreadcrumbs.length - 1"
       />
     </template>
   </div>
@@ -20,7 +19,6 @@ export default {
   components: { BootstrapIcon },
   data() {
     return {
-      parsedLinks: [],
     }
   },
   props: {
@@ -29,11 +27,18 @@ export default {
       default: () => {},
     },
   },
+
   computed: {
-    crumbs() {
-      return this.data.crumbs
+    currentBreadcrumbs() {
+      return this.flatParent(this.parsedLinks.filter(link => link.to === this.$route.path)).reverse()
     },
+
+    parsedLinks() {
+      return this.flat(this.data.links)
+    },
+
     mergedData() {
+      //todo styles
       return Object.assign(
         {
           font: 'Open Sans',
@@ -58,18 +63,43 @@ export default {
   },
 
   mounted() {
-    //todo
-    console.log(this.$route)
   },
-  watch: {
-    crumbs(newValue) {
-      // console.log('crumbs changeds', newValue)
-      this.parsedLinks = this.crumbs.map((i) => {
-        return {
-          to: i.path,
-          name: i.name,
+  methods: {
+    navigate(link) {
+      this.$router.push({path: link.path})
+    },
+
+    flatParent(array) {
+      let result = [];
+      array.forEach( (a) => {
+        result.push(a);
+        if (!a.parent) {
+          return
         }
-      })
+        if (a.parent) {
+          result = result.concat(this.flatParent(a.parent));
+        }
+      });
+
+      return result
+    },
+
+    flat(array) {
+      let result = [];
+      array.forEach( (a) => {
+
+        result.push(a);
+        if (!a.links) {
+          return
+        }
+        if (a.links) {
+          result = result.concat(this.flat(a.links.map(i => {
+            return { ...i, parent: [a] }
+          })));
+        }
+      });
+
+      return result;
     },
   },
 }
@@ -93,9 +123,9 @@ export default {
     text-decoration: none;
     display: block;
 
-    &.router-link-exact-active {
-      // todo !important
-      color: var(--active-color);
+
+    &:last-child {
+      color: var(--active-color) !important;
     }
 
     &:not(.router-link-exact-active)::after {
@@ -116,12 +146,6 @@ export default {
       &::after {
         opacity: 1;
       }
-    }
-
-    &.router-link-exact-active.disabled,
-    &.router-link-active.disabled {
-      color: var(--color);
-      cursor: default;
     }
   }
 

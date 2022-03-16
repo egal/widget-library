@@ -2,19 +2,7 @@
   <div>
     <ENavbarLeft
       :data="{
-        links: [
-          {
-            name: 'user',
-            links: [
-              {
-                name: 'profile',
-                to: '/user/profile',
-              },
-            ],
-          },
-
-          { name: 'category', to: '/category' },
-        ],
+         links: links
       }"
     />
 
@@ -24,13 +12,9 @@
           marginLeft: '300px',
         }"
       >
-        <EBreadcrumbs
-          :data="{
-            crumbs: $route.matched.map((route) =>
-              route.children.length > 0 ? { ...route, path: '' } : route,
-            ),
-          }"
-        />
+        <EBreadcrumbs :data="{
+       links:links
+      }" />
       </div>
     </router-view>
   </div>
@@ -44,7 +28,38 @@ export default defineComponent({
   name: 'App',
   components: { EBreadcrumbs, ENavbarLeft },
   data() {
-    return {}
+    return {
+      links:[
+        {
+          name: 'Главная',
+          to: '/',
+          icon: 'house',
+        },
+
+        {
+          name: 'Каталог',
+          to: '',
+          icon: 'book',
+          links: [
+            {
+              name: 'Категории продуктов',
+              to: '/category-product',
+              icon: 'dot',
+              // links: [{
+              //   name: 'Продукты',
+              //   to: '/products',
+              //   icon: 'dot',
+              // },]
+            },
+            {
+              name: 'Продукты',
+              to: '/products',
+              icon: 'dot',
+            },
+          ],
+        },
+      ],
+    }
   },
 
   methods: {},
