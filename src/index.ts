@@ -4,7 +4,6 @@ import Toaster from '@/helpers/toaster'
 const plugin = {
   install: (app: App) => {
     for (const prop in components) {
-      // eslint-disable-next-line no-prototype-builtins
       if (components.hasOwnProperty(prop) && components[prop] !== 'EToasterPlugin') {
         const component = components[prop]
         app.component(component.name, component)
