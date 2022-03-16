@@ -426,8 +426,7 @@ input[type='number'] {
       color: var(--placeholder-color);
     }
     &:focus {
-      border: 2px solid var(--focus-border-color);
-      outline: none;
+      outline: 2px solid var(--focus-border-color);
     }
     &:disabled {
       background: var(--background-disabled-color);
@@ -517,6 +516,7 @@ input[type='number'] {
     color: var(--error-color);
     &:focus {
       border-color: var(--error-color);
+      outline: none;
     }
   }
   .bi {
@@ -535,6 +535,7 @@ input[type='number'] {
     color: var(--success-color);
     &:focus {
       border-color: var(--success-color);
+      outline: none;
     }
   }
   .bi {
