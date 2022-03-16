@@ -1,10 +1,5 @@
 <template>
-  <router-link
-    exact
-    :to="link.to ?? ''"
-    v-slot="{ href, navigate, isActive, isExactActive }"
-    custom
-  >
+  <router-link :to="link.to ?? ''" v-slot="{ href, navigate, isActive, isExactActive }" custom>
     <div
       class="nav-link"
       @click.stop="link.links && openNestedLinks()"
