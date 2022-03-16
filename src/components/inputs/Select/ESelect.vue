@@ -9,6 +9,7 @@
   >
     <div class="select-label">{{ mergedData.label }}</div>
     <div
+      v-if="!mergedData.searchableInput"
       class="select-container"
       :class="{
         focus: showDropdown,
@@ -25,6 +26,7 @@
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
+        <div class="selected" v-else-if="!!selectModel.name">{{ selectModel.name }}</div>
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
       <div class="select-container__clear" v-if="showClearButton">
@@ -41,16 +43,52 @@
       </div>
     </div>
 
-    <div class="select-dropdown">
+    <EInput
+      class="input-search"
+      v-else-if="mergedData.searchableInput"
+      @click="showDropdown = !showDropdown"
+      v-click-outside="close"
+      @update:modelValue="filterOptions"
+      :data="{
+        placeholder: mergedData.searchPlaceholder,
+        showFilled: false,
+        type: 'search',
+        iconLeft: 'search',
+        size: mergedData.size,
+        modelValue: selectModel[mergedData.shownKey],
+      }"
+      :style-config="{
+        backgroundColor: '#F7FAFC',
+        borderColor: '#E2E8F0',
+        iconColor: '#CBD5E0',
+        placeholderColor: '#CBD5E0',
+        ...inputSearchStyleConfig,
+      }"
+    />
+
+    <div
+      class="select-dropdown"
+      :class="{ 'search-input': mergedData.searchableInput, grouped: mergedData.grouped }"
+    >
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
         :value="selectModel"
-        :options="mergedData.options"
+        :empty-dropdown-text="mergedData.emptyDropdownText"
+        :options="filteredOptions"
         :size="mergedData.size"
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
+        :search-placeholder="mergedData.searchPlaceholder"
         :style-config="dropdownStyleConfig"
+        :dropdown-position="mergedData.dropdownPosition"
+        :input-search-style-config="{
+          backgroundColor: '#F7FAFC',
+          borderColor: '#E2E8F0',
+          iconColor: '#CBD5E0',
+          placeholderColor: '#CBD5E0',
+          ...inputSearchStyleConfig,
+        }"
         @select="selectOption"
         @click.native.stop
       />
@@ -61,6 +99,7 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import EDropdown from '@/components/inputs/Dropdown/EDropdown'
+import EInput from '@/components/inputs/Input/EInput'
 import ClearButton from '@/components/inputs/ClearButton/ClearButton'
 import vClickOutside from 'click-outside-vue3'
 import { validate } from '@/helpers/validators'
@@ -72,6 +111,7 @@ export default {
   components: {
     ClearButton,
     EDropdown,
+    EInput,
     BIcon: BootstrapIcon,
   },
   props: {
@@ -87,12 +127,18 @@ export default {
       type: Object,
       default: () => {},
     },
+    inputSearchStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       selectModel: [],
       showDropdown: false,
       errorMessage: '',
+      searchValue: '',
+      filteredOptions: this.data?.options ?? [],
     }
   },
   computed: {
@@ -112,6 +158,10 @@ export default {
           showError: true,
           validators: [],
           grouped: false,
+          searchPlaceholder: 'Search',
+          searchableInput: false,
+          emptyDropdownText: 'no data',
+          dropdownPosition: 'bottom',
         },
         this.data,
       )
@@ -146,6 +196,8 @@ export default {
         '--error-color': this.styleConfig?.errorColor || '#f16063',
         '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
+        '--focus-box-shadow':
+          this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
       }
     },
   },
@@ -188,6 +240,38 @@ export default {
       }
       this.selectModel = {}
     },
+    /**
+     * Filer options by search value
+     * @param value
+     */
+    filterOptions(value) {
+      this.showDropdown = true
+      if (!value) {
+        this.filteredOptions = this.mergedData.options
+
+        this.selectModel = value
+        return
+      }
+
+      if (!this.mergedData.grouped) {
+        this.filteredOptions = this.mergedData.options.filter(
+          (option) =>
+            option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+        )
+      } else {
+        this.filteredOptions = this.mergedData.options.map((group) => {
+          const filteredGroupsOptions = group.options.filter(
+            (option) =>
+              option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+          )
+
+          return {
+            ...group,
+            options: filteredGroupsOptions,
+          }
+        })
+      }
+    },
   },
   watch: {
     selectModel: {
@@ -196,10 +280,11 @@ export default {
           this.errorMessage = validate(this.mergedData.validators, this.newValue)
           this.$emit('error', this.errorMessage)
         }
+
         this.$emit('update:modelValue', value)
       },
-      deep: true,
     },
+
     modelValue: {
       handler(value) {
         this.selectModel = value
@@ -217,6 +302,7 @@ export default {
   align-items: flex-start;
   width: 100%;
   font-family: var(--font-family);
+  position: relative;
   &-label {
     font-weight: var(--label-font-weight);
     color: var(--label-color);
@@ -269,8 +355,10 @@ export default {
       }
     }
   }
+
   .focus {
     border-color: var(--focus-border-color);
+    box-shadow: var(--focus-box-shadow);
   }
   .filled {
     background-color: var(--filled-background-color);
@@ -287,6 +375,11 @@ export default {
       color: var(--error-color);
     }
   }
+
+  .input-search {
+    width: 100%;
+  }
+
   &--lg {
     .select-container {
       height: 46px;
@@ -299,6 +392,10 @@ export default {
           height: 17px;
         }
       }
+    }
+
+    :deep .dropdown--top {
+      bottom: calc(46px + 16px);
     }
     .select-label {
       font-size: 14px;
@@ -317,6 +414,10 @@ export default {
         }
       }
     }
+
+    :deep .dropdown--top {
+      bottom: calc(36px + 16px);
+    }
   }
   &--sm {
     .select-container {
@@ -334,13 +435,26 @@ export default {
         }
       }
     }
+
+    :deep .dropdown--top {
+      bottom: calc(26px + 16px);
+    }
   }
   &-dropdown {
     position: relative;
     z-index: 2;
-    margin-top: 4px;
+    margin-top: 8px;
+    //width: calc(100% + 32px);
+    width: calc(100% + 14%);
+
+    &.search-input {
+      width: inherit;
+      margin-top: 12px;
+    }
+
     .dropdown-component {
       position: absolute;
+      width: 100%;
     }
   }
 }

@@ -8,7 +8,6 @@ export default defineComponent({
   data() {
     return {}
   },
-
   methods: {},
 })
 </script>

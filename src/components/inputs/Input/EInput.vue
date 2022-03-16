@@ -10,7 +10,7 @@
     <div
       class="input-container"
       :class="{
-        search: type === 'search',
+        search: mergedData.type === 'search',
         success: !mergedData.error && !errorMessage && newValue && mergedData.showSuccess,
         error: (errorMessage || mergedData.error) && mergedData.showError,
         filled:
@@ -66,7 +66,13 @@
         class="subtract-button"
         :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
-        v-show="mergedData.clearable && newValue && type !== 'number' && type !== 'search'"
+        v-show="
+          mergedData.clearable &&
+          newValue &&
+          type !== 'number' &&
+          type !== 'search' &&
+          mergedData.type !== 'password'
+        "
         :size="mergedData.size"
         :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
         :filled="
@@ -125,6 +131,9 @@ export default {
     }
   },
   computed: {
+    modelValue() {
+      return this.mergedData.modelValue
+    },
     mergedData() {
       return Object.assign(
         {
@@ -268,7 +277,7 @@ export default {
   },
   watch: {
     modelValue(value) {
-      this.newValue = value || this.type === 'number' ? 0 : ''
+      this.newValue = value
     },
   },
 }
@@ -293,6 +302,7 @@ input[type='number'] {
   &--lg {
     .input-label {
       font-size: 14px;
+      color: var(--label-color);
     }
     input {
       height: 46px;
@@ -325,6 +335,7 @@ input[type='number'] {
   &--md {
     .input-label {
       font-size: 12px;
+      color: var(--label-color);
     }
     input {
       height: 36px;
@@ -357,6 +368,7 @@ input[type='number'] {
   &--sm {
     .input-label {
       font-size: 12px;
+      color: var(--label-color);
     }
     input {
       height: 26px;
@@ -404,7 +416,7 @@ input[type='number'] {
   input {
     color: var(--value-color);
     width: 100%;
-    background-color: var(--backgroud-color);
+    background-color: var(--background-color);
     border: 1px solid var(--border-color);
     box-sizing: border-box;
     border-radius: var(--border-radius);
@@ -418,7 +430,7 @@ input[type='number'] {
       outline: none;
     }
     &:disabled {
-      background: var(--backgroud-disabled-color);
+      background: var(--background-disabled-color);
       &::placeholder {
         color: var(--placeholder-disabled-color);
       }
@@ -429,13 +441,17 @@ input[type='number'] {
     }
   }
   .icon {
+    color: var(--icon-color);
+
     &--left {
       left: 16px;
       position: absolute;
+      color: var(--icon-color);
     }
     &--right {
       right: 16px;
       position: absolute;
+      color: var(--icon-color);
     }
     &--password {
       right: 16px;
@@ -466,6 +482,7 @@ input[type='number'] {
 .helper-text {
   font-size: var(--helper-text-font-size);
   color: var(--helper-text-color);
+  font-weight: var(--helper-text-font-weight);
   margin-top: 6px;
   margin-bottom: 0;
   max-width: fit-content;
