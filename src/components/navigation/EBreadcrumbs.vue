@@ -1,12 +1,14 @@
 <template>
   <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
-    <template v-for="(link, i) in currentBreadcrumbs" :key=" link.to">
-      <router-link class="breadcrumbs__link" :to="  link.to">{{ link.name }}</router-link>
+    <template v-for="(link, i) in parsedLinks" :key="link.path">
+      <router-link class="breadcrumbs__link" :class="{ inactive: !link.path }" :to="link.path">{{
+        link.name
+      }}</router-link>
 
       <BootstrapIcon
         class="breadcrumbs__icon"
         icon="chevron-right"
-        v-if="i < currentBreadcrumbs.length - 1"
+        v-if="i < parsedLinks.length - 1"
       />
     </template>
   </div>
@@ -18,8 +20,7 @@ export default {
   name: 'EBreadcrumbs',
   components: { BootstrapIcon },
   data() {
-    return {
-    }
+    return {}
   },
   props: {
     data: {
@@ -29,21 +30,19 @@ export default {
   },
 
   computed: {
-    currentBreadcrumbs() {
-      return this.flatParent(this.parsedLinks.filter(link => link.to === this.$route.path)).reverse()
+    currentRoute() {
+      return this.$router.currentRoute.value
     },
-
     parsedLinks() {
-      return this.flat(this.data.links)
+      return this.flat(this.$router.currentRoute.value)
     },
 
     mergedData() {
-      //todo styles
       return Object.assign(
         {
           font: 'Open Sans',
-          weight: 'bold',
-          color: '#2d3748',
+          weight: '500',
+          color: '#a0aec0',
           chevronColor: '#a0aec0',
           size: 'md',
           activeColor: '#0066ff',
@@ -62,44 +61,37 @@ export default {
     },
   },
 
-  mounted() {
-  },
+  mounted() {},
   methods: {
     navigate(link) {
-      this.$router.push({path: link.path})
+      this.$router.push({ path: link.path })
     },
 
-    flatParent(array) {
-      let result = [];
-      array.forEach( (a) => {
-        result.push(a);
-        if (!a.parent) {
-          return
+    formatMetaToLinkObject(element) {
+      if (typeof element === 'object') {
+        return element
+      } else {
+        return {
+          name: element,
+          path: '',
         }
-        if (a.parent) {
-          result = result.concat(this.flatParent(a.parent));
-        }
-      });
+      }
+    },
+    flat(obj) {
+      let result = []
 
+      if (obj?.meta?.breadcrumbs) {
+        if (Array.isArray(obj.meta.breadcrumbs)) {
+          obj.meta.breadcrumbs.forEach((item) => {
+            result.push(this.formatMetaToLinkObject(item))
+          })
+        } else {
+          result.push(this.formatMetaToLinkObject(obj.meta.breadcrumbs))
+        }
+      }
+
+      result.push(obj)
       return result
-    },
-
-    flat(array) {
-      let result = [];
-      array.forEach( (a) => {
-
-        result.push(a);
-        if (!a.links) {
-          return
-        }
-        if (a.links) {
-          result = result.concat(this.flat(a.links.map(i => {
-            return { ...i, parent: [a] }
-          })));
-        }
-      });
-
-      return result;
     },
   },
 }
@@ -123,9 +115,13 @@ export default {
     text-decoration: none;
     display: block;
 
-
     &:last-child {
       color: var(--active-color) !important;
+      cursor: default;
+    }
+
+    &.inactive {
+      cursor: default;
     }
 
     &:not(.router-link-exact-active)::after {
