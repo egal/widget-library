@@ -2,7 +2,7 @@
   <div>
     <ENavbarLeft
       :data="{
-         links: links
+        links: links,
       }"
     />
 
@@ -12,9 +12,11 @@
           marginLeft: '300px',
         }"
       >
-        <EBreadcrumbs :data="{
-       links:links
-      }" />
+        <EBreadcrumbs
+          :data="{
+            links: links,
+          }"
+        />
       </div>
     </router-view>
   </div>
@@ -29,7 +31,7 @@ export default defineComponent({
   components: { EBreadcrumbs, ENavbarLeft },
   data() {
     return {
-      links:[
+      links: [
         {
           name: 'Главная',
           to: '/',
@@ -45,11 +47,13 @@ export default defineComponent({
               name: 'Категории продуктов',
               to: '/category-product',
               icon: 'dot',
-              // links: [{
-              //   name: 'Продукты',
-              //   to: '/products',
-              //   icon: 'dot',
-              // },]
+              // links: [
+              //   {
+              //     name: 'Продукты',
+              //     to: '/products',
+              //     icon: 'dot',
+              //   },
+              // ],
             },
             {
               name: 'Продукты',
