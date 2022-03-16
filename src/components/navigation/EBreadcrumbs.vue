@@ -41,7 +41,7 @@ export default {
       return Object.assign(
         {
           font: 'Open Sans',
-          weight: '500',
+          weight: 'bold',
           color: '#a0aec0',
           chevronColor: '#a0aec0',
           size: 'md',
