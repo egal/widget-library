@@ -152,6 +152,7 @@ export default {
           searchable: false,
           multiple: false,
           options: [],
+          isLocalOptions: true,
           modelValue: [],
           shownKey: 'name',
           error: '',
@@ -199,6 +200,10 @@ export default {
         '--focus-box-shadow':
           this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
       }
+    },
+
+    nonlocalOptions() {
+      return this.mergedData.options
     },
   },
   mounted() {
@@ -248,8 +253,12 @@ export default {
       this.showDropdown = true
       if (!value) {
         this.filteredOptions = this.mergedData.options
-
         this.selectModel = value
+        return
+      }
+
+      if (!this.mergedData.isLocalOptions) {
+        this.filteredOptions = this.mergedData.options
         return
       }
 
@@ -290,6 +299,12 @@ export default {
         this.selectModel = value
       },
       deep: true,
+    },
+
+    nonlocalOptions(options) {
+      if (!this.mergedData.isLocalOptions) {
+        this.filteredOptions = options
+      }
     },
   },
 }
