@@ -1,5 +1,6 @@
 export interface ToastParams {
-  message: string
+  rawHtml?: string
+  message?: string
   title?: string
   type?: string
   variant?: string

@@ -6,6 +6,7 @@
         v-for="toast in toasts"
         :key="toast.id"
         v-bind="toast"
+        :style-config="styleConfig"
         @close="closeToast"
       ></ToasterMessage>
     </transition-group>
@@ -74,6 +75,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    styleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -110,11 +115,12 @@ export default defineComponent({
     formToast(params: ToastParams): Toast {
       return {
         id: `toast-${this.toastsCounter}`,
+        rawHtml: params.rawHtml ?? '',
         title:
           params.title ?? (params.type === 'info' ? this.globalInfoTitle : this.globalDangerTitle),
         icon: params.icon ?? (params.type === 'info' ? this.globalInfoIcon : this.globalDangerIcon),
         variant: params.variant || this.globalVariant,
-        message: params.message,
+        message: params.message ?? '',
         type: params.type,
         primaryAction: params.primaryAction,
         secondaryAction: params.secondaryAction,
