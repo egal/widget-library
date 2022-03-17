@@ -18,7 +18,18 @@
     </div>
     <ul class="navbar__links">
       <li v-for="link in mergedData.links" :key="link.to" class="navbar__links__list-item">
-        <ENavbarLeftItem :link="link" :active="active" :data="mergedData"></ENavbarLeftItem>
+        <ENavbarLeftItem
+          :link="link"
+          :active="active"
+          :data="mergedData"
+          :style-config="{
+            active: mergedData.activeStyle,
+            hover: mergedData.hoverStyle,
+            default: mergedData.defaultStyle,
+          }"
+        >
+          <slot></slot>
+        </ENavbarLeftItem>
       </li>
     </ul>
 

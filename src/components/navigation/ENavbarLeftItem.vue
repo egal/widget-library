@@ -1,9 +1,15 @@
 <template>
   <router-link :to="link.to ?? ''" v-slot="{ href, navigate, isActive, isExactActive }" custom>
+    <!--    todo  :style="getVars"-->
+    <!--    todo set styles if current route -->
     <div
       class="nav-link"
       @click.stop="link.links && openNestedLinks()"
-      :style="getVars"
+      :style="activeStyle"
+      @mouseover="setHoverStyles"
+      @mouseout="setDefaultStyles"
+      @mousedown="setActiveStyles"
+      @mouseup="setActiveStyles"
       :class="{
         'router-link-active': link.to && isActive,
         'router-link-exact-active': link.to && isExactActive,
@@ -21,6 +27,9 @@
           {{ link.name }}
         </p>
       </a>
+      <!--      todo add slot -->
+      <!--      todo name ? styles ? -->
+      <slot></slot>
       <BootstrapIcon
         icon="caret-down"
         class="caret-icon"
@@ -51,6 +60,7 @@ export default {
   data() {
     return {
       linksOpen: false,
+      activeStyle: this.styleConfig.default,
     }
   },
   props: {
@@ -66,6 +76,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    styleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: {
     getVars() {
@@ -79,6 +93,15 @@ export default {
     },
   },
   methods: {
+    setHoverStyles() {
+      this.activeStyle = this.styleConfig.hover
+    },
+    setDefaultStyles() {
+      this.activeStyle = this.styleConfig.default
+    },
+    setActiveStyles() {
+      this.activeStyle = this.styleConfig.active
+    },
     navigationHandler(event, link, navigate) {
       event.preventDefault()
 
