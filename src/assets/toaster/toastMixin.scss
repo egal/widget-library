@@ -55,7 +55,7 @@ $map-types: (
     font-weight: $bold-font-weight;
     color: map-get($map-variants, $variant, 'titleColor');
   }
-  #{$ctx}__message {
+  #{$ctx}__message, #{$ctx}__text {
     font-size: $p6-font-size;
     color: map-get($map-variants, $variant, 'messageColor');
     margin-top: 4px;
