@@ -51,13 +51,13 @@ export default {
     return {
       isHover: false,
       isActive: false,
-      isDisabled: false,
     }
   },
-  mounted() {
-    this.isDisabled = this.mergedData.disabled
-  },
+  mounted() {},
   computed: {
+    isDisabled() {
+      return this.mergedData.disabled
+    },
     mergedData() {
       return Object.assign(
         {
@@ -78,19 +78,21 @@ export default {
     customStyle() {
       const styleProperties = Object.keys(this.styleConfig)
 
+      // Возвращает объект стилей без свойств hover, active, disabled
+      const styles = Object.fromEntries(
+        Object.entries(this.styleConfig).filter(
+          (prop) => prop[0] !== 'hover' && prop[0] !== 'active' && prop[0] !== 'disabled',
+        ),
+      )
+
       if (styleProperties.includes('disabled') && this.isDisabled) {
-        return this.styleConfig.disabled
+        return Object.assign({}, styles, this.styleConfig.disabled)
       } else if (styleProperties.includes('active') && this.isActive) {
-        return this.styleConfig.active
+        return Object.assign({}, styles, this.styleConfig.active)
       } else if (styleProperties.includes('hover') && this.isHover) {
-        return this.styleConfig.hover
+        return Object.assign({}, styles, this.styleConfig.hover)
       } else {
-        // Возвращает объект стилей без свойств hover, active, disabled
-        return Object.fromEntries(
-          Object.entries(this.styleConfig).filter(
-            (prop) => prop[0] !== 'hover' || prop[0] !== 'active' || prop[0] !== 'disabled',
-          ),
-        )
+        return styles
       }
     },
   },
