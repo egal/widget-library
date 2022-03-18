@@ -1,11 +1,8 @@
 @import 'src/assets/variables';
 
-
-
-
 .navbar {
   box-sizing: border-box;
-  font-family: var(--font);
+  font-family: var(--font-family);
   font-weight: var(--font-weight);
   transition: all 0.2s;
   width: 66px;
@@ -61,18 +58,25 @@
     text-align: left;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 32px;
+    //gap: 12px;
+    gap: var(--ul-gap);
     font-size: $p4-font-size;
     color: $gray-800;
+    position: relative;
 
     &__list-item {
       display: block;
-      position: relative;
       transition: 0.3s;
-      width: 100%;
+
+      background-color: var(--list-item-background-color);
+      border-radius: var(--list-item-border-radius);
+
+      // todo add prefixes
+      width: -webkit-fill-available;
 
       &:hover {
         cursor: pointer;
+        background-color: var(--hover-list-item-background-color);
       }
     }
   }
@@ -93,7 +97,16 @@
   align-items: center;
   justify-content: space-between;
   transition: all 0.2s;
-  width: 100%;
+  //padding: 10px 0;
+  padding: var(--list-item-padding);
+
+  .vertical-dash {
+    width: 2px;
+    height: 28px;
+    position: absolute;
+    background-color: var(--active-text-color);
+    left: 0;
+  }
 
   a {
     position: relative;
@@ -111,13 +124,14 @@
     }
 
     p {
-      color: var(--color);
+      color: var(--text-color);
       padding: 0;
       margin: 0;
       opacity: 0;
       transition: all 0.5s;
       max-width: 85%;
     }
+
     .link-active {
       opacity: 1;
     }
@@ -125,21 +139,20 @@
 
   &:hover {
       * {
-        color: var(--hover-color) !important;
+        color: var(--hover-text-color) !important;
       }
   }
 }
 
-// todo old sidebar
 .router-link-exact-active,
 .router-link-exact-active {
   a{
     p {
-      color: var(--active-color);
+      color: var(--active-text-color);
     }
 
     svg {
-      color: var(--active-color);
+      color: var(--active-text-color);
     }
   }
 }
@@ -155,14 +168,15 @@
   height: 24px;
   transform: translateY(-24px);
   border-radius: 2px;
-  background-color: var(--active-color);
+  background-color: var(--active-text-color);
   opacity: 0;
   transition: 0.3s;
 }
 
 .children-links {
   list-style: none;
-  padding: 24px 0 24px 24px;
+  padding: 0;
+  margin-top: 4px;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -174,18 +188,19 @@
 
   li {
     display: block;
-    position: relative;
     transition: 0.3s;
     width: 100%;
     font-weight: 500;
+    margin-left: 8px;
   }
+
 
   .nav-link::after{
     left: -48px;
   }
 
   .nav-link > svg, .nav-link > p {
-    color: var(--color);
+    color: var(--text-color);
   }
 }
 .children-links.closed-menu-links {
@@ -194,16 +209,6 @@
 
 .transition-group-list {
   padding-left: 0;
-}
-
-// todo html tag
-.router-link-exact-active::after {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.router-link-exact-active.nested::after {
-  opacity: 0;
 }
 
 

@@ -2,25 +2,17 @@
   "name": "@egalteam/widget-library",
   "private": false,
   "description": "Egal widget set",
+  "author": "Egal Team",
+  "scripts": {
+    "serve": "vite prnmeview",
+    "build": "tsc && vite build",
+    "dev": "vite"
+  },
   "main": "./dist/egal-widgets-build.umd.js",
   "module": "./dist/egal-widgets-build.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/egal-widgets-build.es.js",
-      "require": "./dist/egal-widgets-build.umd .js"
-    },
-    "./dist/style.css": "./dist/style.css"
-  },
   "files": [
     "dist/*"
   ],
-  "author": "Egal Team",
-  "license": "Apache-2.0",
-  "scripts": {
-    "dev": "vite",
-    "serve": "vite prnmeview",
-    "build": "tsc && vite build"
-  },
   "dependencies": {
     "@dvuckovic/vue3-bootstrap-icons": "^1.0.4",
     "@rollup/plugin-typescript": "^8.3.0",
@@ -42,9 +34,9 @@
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-url": "^6.1.0",
     "@vitejs/plugin-vue": "^2.1.0",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "~5.0.3",
+    "@vue/cli-plugin-typescript": "~5.0.3",
+    "@vue/cli-service": "5.0.3",
     "@vue/compiler-sfc": "^3.2.30",
     "node-sass": "^7.0.0",
     "prettier": "^2.2.1",
@@ -56,16 +48,24 @@
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0",
     "svg-inline-loader": "^0.8.2",
-    "typescript": "~4.1.5",
+    "typescript": "~4.5.5",
     "vite": "^2.7.13",
     "vue-svg-loader": "^0.16.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.29"
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead"
   ],
-  "peerDependencies": {
-    "vue": "^3.2.29"
-  }
+  "exports": {
+    ".": {
+      "import": "./dist/egal-widgets-build.es.js",
+      "require": "./dist/egal-widgets-build.umd .js"
+    },
+    "./dist/style.css": "./dist/style.css"
+  },
+  "license": "Apache-2.0"
 }

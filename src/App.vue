@@ -1,7 +1,10 @@
 <template>
-  <ENavbarLeft :style="{ height: '100%' }" :data="sidebarConfig">
+  <ENavbarLeft :style="{ height: '100%' }" :data="sidebarConfig" :style-config="styleConfig">
     <!--   todo name -->
-    <span>B</span>
+    <!--     todo pass name + link.name as prop -->
+    <template v-slot:badge>
+      <span>B</span>
+    </template>
   </ENavbarLeft>
 </template>
 
@@ -19,11 +22,13 @@ export default defineComponent({
             name: 'Главная',
             to: '/',
             icon: 'house',
+            counter: true,
           },
           {
             name: 'Каталог',
             to: '',
             icon: 'book',
+            counter: true,
             links: [
               {
                 name: 'Категории продуктов',
@@ -33,25 +38,28 @@ export default defineComponent({
             ],
           },
         ],
+      },
 
+      styleConfig: {
         // todo concrete styles
-        activeColor: '#00A8E8',
-        color: '#646E78',
-        hoverColor: '#E7EFC5', // todo added
-        commonStyle: {
-          borderRadius: '16px',
-          width: 'initial',
-          // padding: '12px 20px',
-        },
-        hoverStyle: {
-          backgroundColor: '#B0A1BA',
-        },
-        activeStyle: {
-          backgroundColor: '#ABC8C7',
-        },
-        defaultStyle: {
-          backgroundColor: '#BFF0D4',
-        },
+        // text
+        // activeColor: '#00A8E8',
+        // color: '#646E78',
+        // hoverColor: '#E7EFC5', // todo added
+        // commonStyle: {
+        //   borderRadius: '16px',
+        //   width: 'initial',
+        //   // padding: '12px 20px',
+        // },
+        // hoverStyle: {
+        //   backgroundColor: '#B0A1BA',
+        // },
+        // activeStyle: {
+        //   backgroundColor: '#ABC8C7',
+        // },
+        // defaultStyle: {
+        //   backgroundColor: '#BFF0D4',
+        // },
       },
     }
   },

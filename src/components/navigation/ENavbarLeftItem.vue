@@ -2,20 +2,20 @@
   <router-link :to="link.to ?? ''" v-slot="{ href, navigate, isActive, isExactActive }" custom>
     <!--    todo  :style="getVars"-->
 
-    <!--    @mousedown="setActiveStyles"-->
-    <!--    @mouseup="setActiveStyles"-->
+    <!--    :style="[-->
+    <!--    isHover-->
+    <!--    ? hoverStyle-->
+    <!--    : link.to && isActive-->
+    <!--    ? activeStyle-->
+    <!--    : isHover-->
+    <!--    ? hoverStyle-->
+    <!--    : defaultStyle,-->
+    <!--    ]"-->
+    <!--    -->
+
     <div
       class="nav-link"
       @click.stop="link.links && openNestedLinks()"
-      :style="[
-        isHover
-          ? hoverStyle
-          : link.to && isActive
-          ? activeStyle
-          : isHover
-          ? hoverStyle
-          : defaultStyle,
-      ]"
       @mouseover="isHover = true"
       @mouseout="isHover = false"
       :class="{
@@ -25,6 +25,9 @@
           link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),
       }"
     >
+      <!--      todo prop to show -->
+      <!--      todo check work on nested links-->
+      <div class="vertical-dash" v-if="link.to && isActive"></div>
       <a
         :href="href"
         @click="(event) => navigationHandler(event, link, navigate)"
@@ -37,7 +40,7 @@
       </a>
       <!--      todo add slot -->
       <!--      todo name ? styles ? -->
-      <slot></slot>
+      <slot name="badge"></slot>
       <BootstrapIcon
         icon="caret-down"
         class="caret-icon"
@@ -46,8 +49,8 @@
         :class="{ 'rotate-caret': linksOpen }"
       />
     </div>
-    <transition-group name="slide-fade" tag="ul">
-      <!--      todo counter s-->
+    <transition-group name="slide-fade" tag="ul" style="padding: 0">
+      <!--      todo counter -->
       <!--      todo ul styles -->
       <!--      todo slot namde for concrete link -->
       <ul
@@ -60,12 +63,7 @@
             :link="child"
             :active="active"
             :data="data"
-            :style-config="{
-              active: styleConfig.active,
-              hover: styleConfig.hover,
-              default: styleConfig.default,
-              common: styleConfig.common,
-            }"
+            :style-config="styleConfig"
           ></ENavbarLeftItem>
         </li>
       </ul>
@@ -107,34 +105,51 @@ export default {
     },
   },
   computed: {
-    activeStyle() {
-      return Object.assign(this.styleConfig?.active, this.styleConfig.common ?? {})
-    },
-    defaultStyle() {
-      console.log(this.styleConfig)
-      return Object.assign(this.styleConfig?.default, this.styleConfig.common ?? {})
-    },
-    hoverStyle() {
-      return Object.assign(this.styleConfig?.hover, this.styleConfig.common ?? {})
-    },
+    // activeStyle() {
+    //   return Object.assign(this.styleConfig?.active, this.styleConfig.common ?? {})
+    // },
+    // defaultStyle() {
+    //   console.log(this.styleConfig)
+    //   return Object.assign(this.styleConfig?.default, this.styleConfig.common ?? {})
+    // },
+    // hoverStyle() {
+    //   return Object.assign(this.styleConfig?.hover, this.styleConfig.common ?? {})
+    // },
+    // todo split theese 2 getVars
     getVars() {
       return {
-        '--chevron-color': this.data.chevronColor,
-        '--active-color': this.data.activeColor,
-        '--hover-color': this.data.hoverColor,
-        '--color': this.data.color,
-        '--font': this.data.font,
-        '--font-weight': this.data.weight,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans', // renamed from font
+        '--font-weight': this.styleConfig?.fontWeight || '700', // todo ??? // renamed
+
+        '--chevron-color': this.styleConfig?.chevronColor || '#a0aec0', // todo use // '#2D3748',
+
+        // text
+        '--active-text-color': this.styleConfig?.active?.textColor || '#0066FF', // renamed
+        '--hover-text-color': this.styleConfig?.hover?.textColor || '#0066FF', // renamed
+        '--text-color': this.styleConfig?.textColor || '#2D3748', // renamed // todo add common or merge objects or ?
+
+        // link container
+        '--active-list-item-background-color':
+          this.styleConfig?.active?.listItemBackgroundColor || 'transparent', // added // todo only inline
+        '--hover-list-item-background-color':
+          this.styleConfig?.hover?.listItemBackgroundColor || 'transparent', // added
+        '--list-item-background-color': this.styleConfig?.listItemBackgroundColor || 'transparent', // added
+
+        '--list-item-border-radius': this.styleConfig?.listItemBorderRadius || '0', // added ? need ?
+        '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0', // added ???
+
+        // ul
+        '--ul-gap': this.styleConfig?.ulGap || '12px', // added ???
       }
     },
   },
   methods: {
-    setHoverStyles() {
-      this.activeStyle = this.styleConfig?.hover ?? {}
-    },
-    setDefaultStyles() {
-      this.activeStyle = this.styleConfig?.default ?? {}
-    },
+    // setHoverStyles() {
+    //   this.activeStyle = this.styleConfig?.hover ?? {}
+    // },
+    // setDefaultStyles() {
+    //   this.activeStyle = this.styleConfig?.default ?? {}
+    // },
     // setActiveStyles() {
     //   this.activeStyle = this.styleConfig?.active ?? {}
     // },

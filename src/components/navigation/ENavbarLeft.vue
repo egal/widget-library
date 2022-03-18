@@ -16,22 +16,20 @@
         icon="chevron-left"
       />
     </div>
-    <!--     todo style gap -->
-    <!--    todo ul styles -->
+
     <ul class="navbar__links">
       <li v-for="link in mergedData.links" :key="link.to" class="navbar__links__list-item">
         <ENavbarLeftItem
           :link="link"
           :active="active"
           :data="mergedData"
-          :style-config="{
-            active: mergedData.activeStyle,
-            hover: mergedData.hoverStyle,
-            default: mergedData.defaultStyle,
-            common: mergedData.commonStyle,
-          }"
+          :style-config="styleConfig"
         >
-          <slot></slot>
+          <template v-slot:badge>
+            <div v-if="link.counter && !link?.links">
+              <slot name="badge"></slot>
+            </div>
+          </template>
         </ENavbarLeftItem>
       </li>
     </ul>
@@ -60,34 +58,59 @@ export default {
       type: Object,
       default: () => {},
     },
+    styleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: {
     mergedData() {
       //todo styleconfig
       return Object.assign(
         {
-          font: 'Open Sans',
-          weight: 'bold',
-          color: '#2d3748',
-          activeColor: '#0066ff',
+          // font: 'Open Sans', // removed + renamed
+          // weight: 'bold', // removed + renamed
+          // color: '#2d3748', //removed
+          // activeColor: '#0066ff', // removed
           logo: null,
           links: [],
           smallLogo: null,
-          chevronColor: '#2D3748',
-          hoverColor: 'black', // todo
+          // chevronColor: '#2D3748',
+          // hoverColor: 'black', // todo
+          // activeStyle: {}, // todo def
+          // defaultStyle: {}, // todo def
+          // hoverStyle: {}, // todo def
+          // commonStyle: {}, // todo def
         },
         this.data,
       )
     },
-    // todo
+
+    // todo split theese 2 getVars
     getVars() {
       return {
-        '--chevron-color': this.mergedData.chevronColor,
-        '--active-color': this.mergedData.activeColor,
-        '--hover-color': this.mergedData.hoverColor,
-        '--color': this.mergedData.color,
-        '--font': this.mergedData.font,
-        '--font-weight': this.mergedData.weight,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans', // renamed from font
+        '--font-weight': this.styleConfig?.fontWeight || '700', // todo ??? // renamed
+
+        '--chevron-color': this.styleConfig?.chevronColor || '#a0aec0', // todo use // '#2D3748',
+
+        // text
+        '--active-text-color': this.styleConfig?.active?.textColor || '#0066FF', // renamed
+        '--hover-text-color': this.styleConfig?.hover?.textColor || '#0066FF', // renamed
+        '--text-color': this.styleConfig?.textColor || '#2D3748', // renamed // todo add common or merge objects or ?
+
+        // link container
+        '--active-list-item-background-color':
+          this.styleConfig?.active?.listItemBackgroundColor || 'transparent', // added // todo only inline
+        '--hover-list-item-background-color':
+          this.styleConfig?.hover?.listItemBackgroundColor || 'transparent', // added
+        '--list-item-background-color': this.styleConfig?.listItemBackgroundColor || 'transparent', // added
+
+        '--list-item-border-radius': this.styleConfig?.listItemBorderRadius || '0', // added ? need ?
+        '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0', // added ???
+
+        // ul
+        '--ul-gap': this.styleConfig?.ulGap || '12px', // added ???
       }
     },
   },
