@@ -25,10 +25,8 @@
           :data="mergedData"
           :style-config="styleConfig"
         >
-          <template v-slot:badge>
-            <div v-if="link.counter && !link?.links">
-              <slot name="badge"></slot>
-            </div>
+          <template v-slot:badge="{ linkName }">
+            <slot name="badge" :linkName="linkName"></slot>
           </template>
         </ENavbarLeftItem>
       </li>
@@ -65,52 +63,39 @@ export default {
   },
   computed: {
     mergedData() {
-      //todo styleconfig
       return Object.assign(
         {
-          // font: 'Open Sans', // removed + renamed
-          // weight: 'bold', // removed + renamed
-          // color: '#2d3748', //removed
-          // activeColor: '#0066ff', // removed
+          verticalDash: true, // added
           logo: null,
           links: [],
           smallLogo: null,
-          // chevronColor: '#2D3748',
-          // hoverColor: 'black', // todo
-          // activeStyle: {}, // todo def
-          // defaultStyle: {}, // todo def
-          // hoverStyle: {}, // todo def
-          // commonStyle: {}, // todo def
         },
         this.data,
       )
     },
 
-    // todo split theese 2 getVars
     getVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sans', // renamed from font
-        '--font-weight': this.styleConfig?.fontWeight || '700', // todo ??? // renamed
-
-        '--chevron-color': this.styleConfig?.chevronColor || '#a0aec0', // todo use // '#2D3748',
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--font-weight': this.styleConfig?.fontWeight || '700',
+        '--chevron-color': this.styleConfig?.chevronColor || '#a0aec0',
 
         // text
-        '--active-text-color': this.styleConfig?.active?.textColor || '#0066FF', // renamed
-        '--hover-text-color': this.styleConfig?.hover?.textColor || '#0066FF', // renamed
-        '--text-color': this.styleConfig?.textColor || '#2D3748', // renamed // todo add common or merge objects or ?
+        '--active-text-color': this.styleConfig?.active?.textColor || '#0066FF',
+        '--hover-text-color': this.styleConfig?.hover?.textColor || '#0066FF',
+        '--text-color': this.styleConfig?.textColor || '#2D3748',
 
-        // link container
+        // link
         '--active-list-item-background-color':
-          this.styleConfig?.active?.listItemBackgroundColor || 'transparent', // added // todo only inline
+          this.styleConfig?.active?.backgroundColor || 'transparent',
         '--hover-list-item-background-color':
-          this.styleConfig?.hover?.listItemBackgroundColor || 'transparent', // added
-        '--list-item-background-color': this.styleConfig?.listItemBackgroundColor || 'transparent', // added
-
-        '--list-item-border-radius': this.styleConfig?.listItemBorderRadius || '0', // added ? need ?
-        '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0', // added ???
+          this.styleConfig?.hover?.backgroundColor || 'transparent',
+        '--list-item-background-color': this.styleConfig?.backgroundColor || 'transparent',
+        '--list-item-border-radius': this.styleConfig?.borderRadius || '0',
+        '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0',
 
         // ul
-        '--ul-gap': this.styleConfig?.ulGap || '12px', // added ???
+        '--ul-gap': this.styleConfig?.ulGap || '12px',
       }
     },
   },

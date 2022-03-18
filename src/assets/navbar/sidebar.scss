@@ -67,16 +67,12 @@
     &__list-item {
       display: block;
       transition: 0.3s;
-
-      background-color: var(--list-item-background-color);
-      border-radius: var(--list-item-border-radius);
-
-      // todo add prefixes
       width: -webkit-fill-available;
+      width:  -moz-available;
+      width:  fill-available;
 
       &:hover {
         cursor: pointer;
-        background-color: var(--hover-list-item-background-color);
       }
     }
   }
@@ -97,8 +93,9 @@
   align-items: center;
   justify-content: space-between;
   transition: all 0.2s;
-  //padding: 10px 0;
   padding: var(--list-item-padding);
+  background-color: var(--list-item-background-color);
+  border-radius: var(--list-item-border-radius);
 
   .vertical-dash {
     width: 2px;
@@ -118,7 +115,7 @@
 
     svg {
       font-size: $p3-font-size;
-      color: $gray-500;
+      color: var(--text-color);
       margin-right: 10px;
       transition: 0.3s;
     }
@@ -138,14 +135,15 @@
   }
 
   &:hover {
+    background-color: var(--hover-list-item-background-color);
       * {
         color: var(--hover-text-color) !important;
       }
   }
 }
 
-.router-link-exact-active,
 .router-link-exact-active {
+  background-color: var(--active-list-item-background-color);
   a{
     p {
       color: var(--active-text-color);
@@ -156,7 +154,6 @@
     }
   }
 }
-
 
 
 .nav-link::after {
@@ -185,13 +182,14 @@
   gap: 20px;
   font-size: $p4-font-size;
   transition: all 0.3s ease-in-out;
+  margin-left: 8px;
 
   li {
     display: block;
     transition: 0.3s;
     width: 100%;
     font-weight: 500;
-    margin-left: 8px;
+
   }
 
 
@@ -215,7 +213,7 @@
 svg.bi.caret-icon {
   font-size: 12px;
   margin-bottom: 0;
-  color: $gray-500;
+  color: var(--chevron-color);
   transition: 0.2s;
 }
 
