@@ -1,5 +1,6 @@
 <template>
   <ENavbarLeft :style="{ height: '100%' }" :data="sidebarConfig">
+    <!--   todo name -->
     <span>B</span>
   </ENavbarLeft>
 </template>
@@ -32,18 +33,24 @@ export default defineComponent({
             ],
           },
         ],
+
+        // todo concrete styles
+        activeColor: '#00A8E8',
+        color: '#646E78',
+        hoverColor: '#E7EFC5', // todo added
+        commonStyle: {
+          borderRadius: '16px',
+          width: 'initial',
+          // padding: '12px 20px',
+        },
         hoverStyle: {
-          padding: '12px 20px',
-          backgroundColor: 'red',
+          backgroundColor: '#B0A1BA',
         },
         activeStyle: {
-          padding: '12px 20px',
-          backgroundColor: 'blue',
+          backgroundColor: '#ABC8C7',
         },
         defaultStyle: {
-          padding: '12px 20px',
-          backgroundColor: 'red',
-          color: 'green',
+          backgroundColor: '#BFF0D4',
         },
       },
     }

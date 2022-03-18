@@ -16,6 +16,8 @@
         icon="chevron-left"
       />
     </div>
+    <!--     todo style gap -->
+    <!--    todo ul styles -->
     <ul class="navbar__links">
       <li v-for="link in mergedData.links" :key="link.to" class="navbar__links__list-item">
         <ENavbarLeftItem
@@ -26,6 +28,7 @@
             active: mergedData.activeStyle,
             hover: mergedData.hoverStyle,
             default: mergedData.defaultStyle,
+            common: mergedData.commonStyle,
           }"
         >
           <slot></slot>
@@ -60,6 +63,7 @@ export default {
   },
   computed: {
     mergedData() {
+      //todo styleconfig
       return Object.assign(
         {
           font: 'Open Sans',
@@ -70,14 +74,17 @@ export default {
           links: [],
           smallLogo: null,
           chevronColor: '#2D3748',
+          hoverColor: 'black', // todo
         },
         this.data,
       )
     },
+    // todo
     getVars() {
       return {
         '--chevron-color': this.mergedData.chevronColor,
         '--active-color': this.mergedData.activeColor,
+        '--hover-color': this.mergedData.hoverColor,
         '--color': this.mergedData.color,
         '--font': this.mergedData.font,
         '--font-weight': this.mergedData.weight,

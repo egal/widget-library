@@ -1,5 +1,8 @@
 @import 'src/assets/variables';
 
+
+
+
 .navbar {
   box-sizing: border-box;
   font-family: var(--font);
@@ -83,6 +86,8 @@
   }
 }
 
+
+
 .nav-link {
   display: flex;
   align-items: center;
@@ -117,7 +122,29 @@
       opacity: 1;
     }
   }
+
+  &:hover {
+      * {
+        color: var(--hover-color) !important;
+      }
+  }
 }
+
+// todo old sidebar
+.router-link-exact-active,
+.router-link-exact-active {
+  a{
+    p {
+      color: var(--active-color);
+    }
+
+    svg {
+      color: var(--active-color);
+    }
+  }
+}
+
+
 
 .nav-link::after {
   position: absolute;
@@ -169,19 +196,7 @@
   padding-left: 0;
 }
 
-.router-link-exact-active,
-.router-link-exact-active:hover {
-  a{
-    p {
-      color: var(--active-color);
-    }
-
-    svg {
-      color: var(--active-color);
-    }
-  }
-}
-
+// todo html tag
 .router-link-exact-active::after {
   transform: translateY(0);
   opacity: 1;
