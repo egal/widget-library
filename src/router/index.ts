@@ -6,18 +6,7 @@ const routes: Array<RouteRecordRaw> = []
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'Hone',
-      component: App,
-    },
-    {
-      path: '/category-product',
-      name: 'Category',
-      component: Category,
-    },
-  ],
+  routes,
 })
 
 export default router

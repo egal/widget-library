@@ -65,7 +65,7 @@ export default {
     mergedData() {
       return Object.assign(
         {
-          verticalDash: true, // added
+          verticalDash: true,
           logo: null,
           links: [],
           smallLogo: null,
