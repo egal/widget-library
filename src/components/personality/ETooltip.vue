@@ -1,20 +1,18 @@
 <template>
-  <div>
-    <div
-      :class="`${mergedData.displayIcon ? 'tooltip' : 'tooltip-component'} --size-${
-        mergedData.size || 'md'
-      } --style-${mergedData.componentStyle || 'normal'}`"
-      :style="getVars"
-    >
-      <div class="tooltip__icon" v-if="mergedData.displayIcon">
-        <BootstrapIcon icon="info-lg" />
-      </div>
-      <div class="tooltip__component" v-else>
-        <slot name="element"></slot>
-      </div>
-      <div :class="`tooltip__text --position-${mergedData.position || 'top'}`">
-        <slot></slot>
-      </div>
+  <div
+    :class="`${mergedData.displayIcon ? 'tooltip' : 'tooltip-component'} --size-${
+      mergedData.size || 'md'
+    } --style-${mergedData.componentStyle || 'normal'}`"
+    :style="getVars"
+  >
+    <div class="tooltip__icon" v-if="mergedData.displayIcon">
+      <BootstrapIcon icon="info-lg" />
+    </div>
+    <div class="tooltip__component" v-else>
+      <slot name="element"></slot>
+    </div>
+    <div :class="`tooltip__text --position-${mergedData.position || 'top'}`">
+      <slot></slot>
     </div>
   </div>
 </template>
