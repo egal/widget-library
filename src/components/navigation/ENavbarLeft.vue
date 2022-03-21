@@ -16,9 +16,19 @@
         icon="chevron-left"
       />
     </div>
+
     <ul class="navbar__links">
       <li v-for="link in mergedData.links" :key="link.to" class="navbar__links__list-item">
-        <ENavbarLeftItem :link="link" :active="active" :data="mergedData"></ENavbarLeftItem>
+        <ENavbarLeftItem
+          :link="link"
+          :active="active"
+          :data="mergedData"
+          :style-config="styleConfig"
+        >
+          <template v-slot:badge="{ linkName }">
+            <slot name="badge" :linkName="linkName"></slot>
+          </template>
+        </ENavbarLeftItem>
       </li>
     </ul>
 
@@ -46,30 +56,46 @@ export default {
       type: Object,
       default: () => {},
     },
+    styleConfig: {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: {
     mergedData() {
       return Object.assign(
         {
-          font: 'Open Sans',
-          weight: 'bold',
-          color: '#2d3748',
-          activeColor: '#0066ff',
+          verticalDash: true,
           logo: null,
           links: [],
           smallLogo: null,
-          chevronColor: '#2D3748',
         },
         this.data,
       )
     },
+
     getVars() {
       return {
-        '--chevron-color': this.mergedData.chevronColor,
-        '--active-color': this.mergedData.activeColor,
-        '--color': this.mergedData.color,
-        '--font': this.mergedData.font,
-        '--font-weight': this.mergedData.weight,
+        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--font-weight': this.styleConfig?.fontWeight || '700',
+        '--chevron-color': this.styleConfig?.chevronColor || '#a0aec0',
+
+        // text
+        '--active-text-color': this.styleConfig?.active?.textColor || '#0066FF',
+        '--hover-text-color': this.styleConfig?.hover?.textColor || '#0066FF',
+        '--text-color': this.styleConfig?.textColor || '#2D3748',
+
+        // link
+        '--active-list-item-background-color':
+          this.styleConfig?.active?.backgroundColor || 'transparent',
+        '--hover-list-item-background-color':
+          this.styleConfig?.hover?.backgroundColor || 'transparent',
+        '--list-item-background-color': this.styleConfig?.backgroundColor || 'transparent',
+        '--list-item-border-radius': this.styleConfig?.borderRadius || '0',
+        '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0',
+
+        // ul
+        '--ul-gap': this.styleConfig?.ulGap || '12px',
       }
     },
   },

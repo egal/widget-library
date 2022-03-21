@@ -3,14 +3,18 @@
     <div
       class="nav-link"
       @click.stop="link.links && openNestedLinks()"
-      :style="getVars"
+      @mouseover="isHover = true"
+      @mouseout="isHover = false"
       :class="{
-        'router-link-active': link.to && isActive,
         'router-link-exact-active': link.to && isExactActive,
         'router-link-exact-active nested':
           link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),
       }"
     >
+      <div
+        class="vertical-dash"
+        v-if="link.to && isActive && !link.links && data.verticalDash"
+      ></div>
       <a
         :href="href"
         @click="(event) => navigationHandler(event, link, navigate)"
@@ -21,6 +25,7 @@
           {{ link.name }}
         </p>
       </a>
+      <slot name="badge" :linkName="link.name"> </slot>
       <BootstrapIcon
         icon="caret-down"
         class="caret-icon"
@@ -29,14 +34,19 @@
         :class="{ 'rotate-caret': linksOpen }"
       />
     </div>
-    <transition-group name="slide-fade" tag="ul">
+    <transition-group name="slide-fade" tag="ul" style="padding: 0">
       <ul
         v-if="link.links && linksOpen && active"
         class="children-links"
         :class="{ 'closed-menu-links': !active }"
       >
         <li v-for="(child, index) in link.links" :key="index">
-          <ENavbarLeftItem :link="child" :active="active" :data="data"></ENavbarLeftItem>
+          <ENavbarLeftItem
+            :link="child"
+            :active="active"
+            :data="data"
+            :style-config="styleConfig"
+          ></ENavbarLeftItem>
         </li>
       </ul>
     </transition-group>
@@ -51,12 +61,13 @@ export default {
   data() {
     return {
       linksOpen: false,
+      isHover: false,
     }
   },
   props: {
     link: {
       type: Object,
-      default: () => ({}),
+      default: () => {},
     },
     active: {
       type: Boolean,
@@ -64,18 +75,11 @@ export default {
     },
     data: {
       type: Object,
-      default: () => ({}),
+      default: () => {},
     },
-  },
-  computed: {
-    getVars() {
-      return {
-        '--chevron-color': this.data.chevronColor,
-        '--active-color': this.data.activeColor,
-        '--color': this.data.color,
-        '--font': this.data.font,
-        '--font-weight': this.data.weight,
-      }
+    styleConfig: {
+      type: Object,
+      default: () => {},
     },
   },
   methods: {
