@@ -1,12 +1,15 @@
 <template>
   <div
-    :class="`tooltip --size-${mergedData.size || 'md'} --style-${
-      mergedData.componentStyle || 'normal'
-    }`"
+    :class="`${mergedData.displayIcon ? 'tooltip' : 'tooltip-component'} --size-${
+      mergedData.size || 'md'
+    } --style-${mergedData.componentStyle || 'normal'}`"
     :style="getVars"
   >
-    <div class="tooltip__icon">
+    <div class="tooltip__icon" v-if="mergedData.displayIcon">
       <BootstrapIcon icon="info-lg" />
+    </div>
+    <div class="tooltip__component" v-else>
+      <slot name="element"></slot>
     </div>
     <div :class="`tooltip__text --position-${mergedData.position || 'top'}`">
       <slot></slot>
@@ -37,6 +40,7 @@ export default {
           position: 'bottom',
           componentStyle: 'normal',
           size: 'md',
+          displayIcon: true,
         },
         this.data,
       )
@@ -56,9 +60,10 @@ export default {
 .tooltip {
   position: relative;
   display: inline-block;
-  background-color: $gray-800;
+  background-color: $gray-500;
   border-radius: 50%;
   margin-left: 300px;
+  z-index: 1;
 
   &__icon {
     color: $base-white;
@@ -69,6 +74,48 @@ export default {
     height: 100%;
   }
 
+  &.--size {
+    &-sm {
+      width: 16px;
+      height: 16px;
+      font-size: $p6-font-size;
+    }
+    &-md {
+      width: 20px;
+      height: 20px;
+      font-size: $p4-font-size;
+    }
+    &-xl {
+      width: 24px;
+      height: 24px;
+      font-size: $p3-font-size;
+    }
+  }
+}
+
+.tooltip-component {
+  position: relative;
+  display: inline-block;
+  background-color: $gray-500;
+  border-radius: 50%;
+  margin-left: 300px;
+  z-index: 1;
+
+  &.--size {
+    &-sm {
+      font-size: $p6-font-size;
+    }
+    &-md {
+      font-size: $p4-font-size;
+    }
+    &-xl {
+      font-size: $p3-font-size;
+    }
+  }
+}
+
+.tooltip,
+.tooltip-component {
   &__text {
     position: absolute;
     width: fit-content;
@@ -109,8 +156,10 @@ export default {
     }
   }
 
-  &__icon:hover + &__text {
+  &__icon:hover + &__text,
+  &__component:hover + &__text {
     opacity: 1;
+    z-index: 5;
 
     &.--position-top {
       transform: translate(50%, 0);
@@ -126,24 +175,6 @@ export default {
 
     &.--position-right {
       transform: translate(0, -50%);
-    }
-  }
-
-  &.--size {
-    &-sm {
-      width: 16px;
-      height: 16px;
-      font-size: $p6-font-size;
-    }
-    &-md {
-      width: 20px;
-      height: 20px;
-      font-size: $p4-font-size;
-    }
-    &-xl {
-      width: 24px;
-      height: 24px;
-      font-size: $p3-font-size;
     }
   }
 }
