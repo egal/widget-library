@@ -175,7 +175,6 @@ export default {
       return !!Object.keys(this.selectModel).length
     },
     showClearButton() {
-      console.log(this.filled, this.mergedData.clearable, !this.showDropdown)
       return this.filled && this.mergedData.clearable && !this.showDropdown
     },
     getStyleVars() {
