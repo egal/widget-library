@@ -50,6 +50,7 @@
       v-click-outside="close"
       @update:modelValue="filterOptions"
       :data="{
+        clearable: mergedData.clearable,
         placeholder: mergedData.searchPlaceholder,
         showFilled: false,
         type: 'search',
@@ -174,6 +175,7 @@ export default {
       return !!Object.keys(this.selectModel).length
     },
     showClearButton() {
+      console.log(this.filled, this.mergedData.clearable, !this.showDropdown)
       return this.filled && this.mergedData.clearable && !this.showDropdown
     },
     getStyleVars() {
@@ -253,7 +255,7 @@ export default {
       this.showDropdown = true
       if (!value) {
         this.filteredOptions = this.mergedData.options
-        this.selectModel = value
+        this.selectModel = []
         return
       }
 
