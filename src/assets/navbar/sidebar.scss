@@ -15,11 +15,35 @@
   overflow-x: hidden;
   overflow-y: auto;
 
+  &__links {
+    padding: 10px;
+  }
+
+  .nav-link {
+    justify-content: center;
+
+    a > svg {
+      margin-right: 0;
+    }
+  }
+
   &.--big {
     width: 250px;
 
-    .nav-link > a {
-      width: 100%;
+    .navbar__links {
+      padding: 24px;
+    }
+
+    .nav-link {
+      justify-content: space-between;
+
+      a {
+        width: 100%;
+
+        svg {
+          margin-right: 10px;
+        }
+      }
     }
   }
 
@@ -52,7 +76,7 @@
   &__links {
     list-style: none;
     margin-top: 30px;
-    padding: 24px;
+    //padding: 24px;
     display: flex;
     flex-direction: column;
     text-align: left;
