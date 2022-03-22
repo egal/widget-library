@@ -12,8 +12,8 @@
   >
     <BootstrapIcon class="toast__icon" :icon="icon" />
     <div class="toast__content-container">
-      <span class="toast__title" :style="styleConfig.title">{{ title }}</span>
-      <span class="toast__message" :style="styleConfig.message">{{ message }}</span>
+      <span class="toast__title" :style="styleConfig?.title">{{ title }}</span>
+      <span class="toast__message" :style="styleConfig?.message">{{ message }}</span>
       <span class="toast__text" v-html="rawHtml" v-if="rawHtml" :style="styleConfig.rawHtml"></span>
       <button
         class="toast__button toast__button--primary"
@@ -37,8 +37,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import Timer from '@/helpers/timer.js'
-import eventBus from '@/helpers/eventBus.js'
+import Timer from '@/helpers/timer.ts'
+import eventBus from '@/helpers/eventBus.ts'
 
 export default defineComponent({
   name: 'ToasterMessage',
@@ -108,6 +108,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    console.log(this.title)
     if (this.primaryAction || this.secondaryAction) {
       eventBus.$emit('toast-added', this.id)
     }
