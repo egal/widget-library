@@ -37,8 +37,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import Timer from '@/helpers/timer.ts'
-import eventBus from '@/helpers/eventBus.ts'
+import Timer from '@/helpers/timer.js'
+import eventBus from '@/helpers/eventBus.js'
 
 export default defineComponent({
   name: 'ToasterMessage',
@@ -108,7 +108,6 @@ export default defineComponent({
     },
   },
   mounted() {
-    console.log(this.title)
     if (this.primaryAction || this.secondaryAction) {
       eventBus.$emit('toast-added', this.id)
     }
