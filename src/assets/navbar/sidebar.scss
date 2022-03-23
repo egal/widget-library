@@ -90,9 +90,7 @@
     &__list-item {
       display: block;
       transition: 0.3s;
-      width: -webkit-fill-available;
-      width:  -moz-available;
-      width:  fill-available;
+      width: 100%;
 
       &:hover {
         cursor: pointer;

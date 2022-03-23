@@ -29,7 +29,7 @@
       <BootstrapIcon
         icon="caret-down"
         class="caret-icon"
-        v-if="link.links"
+        v-if="link.links && active"
         @click.stop="openNestedLinks()"
         :class="{ 'rotate-caret': linksOpen }"
       />

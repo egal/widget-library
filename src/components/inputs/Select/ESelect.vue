@@ -177,13 +177,22 @@ export default {
     showClearButton() {
       return this.filled && this.mergedData.clearable && !this.showDropdown
     },
+    computeDefaultFontSize() {
+      return this.mergedData.size === 'lg'
+        ? '14px'
+        : this.mergedData.size === 'md'
+        ? '12px'
+        : '10px'
+    },
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
+        '--value-font-size': this.styleConfig?.valueFontSize || this.computeDefaultFontSize,
         '--value-color': this.styleConfig?.valueColor || '#2D3748',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
         '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
-        '--placeholder-font-size': this.styleConfig?.placeholderFontSize || '12px',
+        '--placeholder-font-size':
+          this.styleConfig?.placeholderFontSize || this.computeDefaultFontSize,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--label-color': this.styleConfig?.labelColor || '#a0aec0',
         '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
@@ -399,9 +408,7 @@ export default {
   &--lg {
     .select-container {
       height: 46px;
-      .selected {
-        font-size: 12px;
-      }
+
       &__arrow {
         .bi {
           width: 17px;
@@ -420,9 +427,7 @@ export default {
   &--md {
     .select-container {
       height: 36px;
-      .selected {
-        font-size: 12px;
-      }
+
       &__arrow {
         .bi {
           width: 12px;
@@ -438,12 +443,7 @@ export default {
   &--sm {
     .select-container {
       height: 26px;
-      .placeholder {
-        font-size: 10px;
-      }
-      .selected {
-        font-size: 10px;
-      }
+
       &__arrow {
         .bi {
           width: 10px;
@@ -456,11 +456,19 @@ export default {
       bottom: calc(26px + 16px);
     }
   }
+
+  .placeholder {
+    font-size: var(--placeholder-font-size);
+  }
+
+  .selected {
+    font-size: var(--value-font-size);
+  }
+
   &-dropdown {
     position: relative;
     z-index: 2;
     margin-top: 8px;
-    //width: calc(100% + 32px);
     width: calc(100% + 14%);
 
     &.search-input {
