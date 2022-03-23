@@ -91,7 +91,7 @@ export default {
   components: { BootstrapIcon, ESelect },
   data() {
     return {
-      // currentPage: null,
+      currentPage: null,
     }
   },
   props: {
@@ -115,9 +115,10 @@ export default {
   },
   emits: ['update:modelValue', 'update:perPageValue'],
   computed: {
-    currentPage() {
+    modelValueCurrentPage() {
       return this.mergedData.modelValue
     },
+
     mergedData() {
       return Object.assign(
         {
@@ -164,8 +165,11 @@ export default {
       }
     },
   },
-  mounted() {
-    // this.currentPage = this.mergedData.modelValue
+  mounted() {},
+  watch: {
+    modelValueCurrentPage(value) {
+      this.currentPage = value
+    },
   },
   methods: {
     toNextPage() {

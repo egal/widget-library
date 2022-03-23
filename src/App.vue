@@ -5,7 +5,9 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'App',
   components: {},
-  data() {},
+  data() {
+    return {}
+  },
   methods: {},
 })
 </script>
