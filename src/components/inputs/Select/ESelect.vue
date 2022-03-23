@@ -410,9 +410,10 @@ export default {
       }
     }
 
-    :deep .dropdown--top {
+    ::v-deep(.dropdown--top) {
       bottom: calc(46px + 16px);
     }
+
     .select-label {
       font-size: 14px;
     }
@@ -431,7 +432,7 @@ export default {
       }
     }
 
-    :deep .dropdown--top {
+    ::v-deep(.dropdown--top) {
       bottom: calc(36px + 16px);
     }
   }
@@ -452,7 +453,7 @@ export default {
       }
     }
 
-    :deep .dropdown--top {
+    ::v-deep(.dropdown--top) {
       bottom: calc(26px + 16px);
     }
   }
@@ -460,7 +461,6 @@ export default {
     position: relative;
     z-index: 2;
     margin-top: 8px;
-    //width: calc(100% + 32px);
     width: calc(100% + 14%);
 
     &.search-input {

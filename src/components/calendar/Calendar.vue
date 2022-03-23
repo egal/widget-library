@@ -346,17 +346,17 @@ export default defineComponent({
     flex-direction: column;
   }
   .left {
-    :deep .calendar__controls-right.hidden {
+    ::v-deep(.calendar__controls-right.hidden) {
       visibility: hidden;
     }
   }
   .right {
     margin-left: 40px;
-    :deep .calendar__controls-left {
+    ::v-deep(.calendar__controls-left) {
       visibility: hidden;
     }
   }
-  :deep &__controls {
+  ::v-deep(.calendar__controls) {
     display: flex;
     list-style: none;
     justify-content: space-between;
@@ -365,8 +365,9 @@ export default defineComponent({
     margin: 0;
     padding: 0;
     height: 36px;
-    &-left,
-    &-right {
+
+    .calendar__controls-left,
+    .calendar__controls-right {
       display: flex;
       width: 36px;
       height: 36px;
@@ -383,7 +384,8 @@ export default defineComponent({
         }
       }
     }
-    &-month {
+
+    .calendar__controls-month {
       font-style: normal;
       font-weight: var(--font-weight);
       font-size: var(--font-size);
@@ -391,14 +393,14 @@ export default defineComponent({
       color: $gray-800;
     }
   }
-  :deep &__weekdays {
+  ::v-deep(.calendar__weekdays) {
     font-size: calc(var(--font-size) - 2px);
     font-weight: normal;
     line-height: 120%;
     color: $gray-500;
   }
-  :deep &__weekdays,
-  :deep &__days {
+  ::v-deep(.calendar__weekdays),
+  ::v-deep(.calendar__days) {
     display: grid;
     grid-template: 'a a a a a a a';
     list-style: none;
@@ -424,8 +426,9 @@ export default defineComponent({
       }
     }
   }
-  :deep &__days {
+  ::v-deep(.calendar__days) {
     margin-bottom: auto;
+
     li {
       font-size: var(--font-size);
       border-radius: 4px;
@@ -503,10 +506,8 @@ export default defineComponent({
       }
     }
   }
-  :deep .footer {
-    .label {
-      font-size: calc(var(--font-size) - 2px);
-    }
+  ::v-deep(.footer > .label) {
+    font-size: calc(var(--font-size) - 2px);
   }
 }
 </style>
