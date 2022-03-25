@@ -46,6 +46,9 @@
       >
         {{ option[shownKey] }}
       </div>
+      <div v-if="showMoreButtonDisplay" class="dropdown-button">
+        <button @click="$emit('show-more')" class="show-more-btn">{{ showMoreButtonText }}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +102,14 @@ export default {
     dropdownPosition: {
       type: String,
       default: 'bottom',
+    },
+    showMoreButtonDisplay: {
+      type: Boolean,
+      default: false,
+    },
+    showMoreButtonText: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -216,6 +227,22 @@ export default {
     }
   }
 
+  &-button {
+    .show-more-btn {
+      outline: none;
+      border: none;
+      background-color: transparent;
+      color: var(--active-background-color);
+      font-family: var(--font-family);
+      font-weight: var(--option-font-weight);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    padding-bottom: 10px;
+  }
+
   &-groups {
     .group {
       display: flex;
@@ -245,6 +272,9 @@ export default {
       font-size: 14px;
       margin-bottom: 6px;
     }
+    .show-more-btn {
+      font-size: 14px;
+    }
     .group {
       margin-bottom: 16px;
       span {
@@ -260,7 +290,9 @@ export default {
       font-size: 12px;
       margin-bottom: 2px;
     }
-
+    .show-more-btn {
+      font-size: 12px;
+    }
     .group {
       margin-bottom: 12px;
       span {
@@ -275,7 +307,9 @@ export default {
     .dropdown-item {
       font-size: 10px;
     }
-
+    .show-more-btn {
+      font-size: 10px;
+    }
     .group {
       margin-bottom: 10px;
       span {
