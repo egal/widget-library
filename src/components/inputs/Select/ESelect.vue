@@ -217,7 +217,7 @@ export default {
     },
   },
   mounted() {
-    this.selectModel = this.mergedData.modelValue
+    // this.selectModel = this.mergedData.modelValue
   },
   methods: {
     close() {
@@ -296,7 +296,7 @@ export default {
     selectModel: {
       handler(value) {
         if (this.mergedData.validators) {
-          this.errorMessage = validate(this.mergedData.validators, this.newValue)
+          this.errorMessage = validate(this.mergedData.validators, value)
           this.$emit('error', this.errorMessage)
         }
 
@@ -304,11 +304,8 @@ export default {
       },
     },
 
-    modelValue: {
-      handler(value) {
-        this.selectModel = value
-      },
-      deep: true,
+    'mergedData.modelValue'(value) {
+      this.selectModel = value
     },
 
     nonlocalOptions(options) {
