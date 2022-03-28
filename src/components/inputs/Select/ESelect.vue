@@ -231,7 +231,7 @@ export default {
     },
   },
   mounted() {
-    // this.selectModel = this.mergedData.modelValue
+    this.selectModel = this.mergedData.modelValue
   },
   methods: {
     close() {
@@ -243,9 +243,11 @@ export default {
           return
         }
         this.selectModel.push(option)
+        this.$emit('update:modelValue', this.selectModel)
         return
       }
       this.selectModel = option
+      this.$emit('update:modelValue', this.selectModel)
     },
     /**
      * Delete option if we have this option and return true, otherwise return false
@@ -258,6 +260,7 @@ export default {
       )
       if (index !== -1) {
         this.selectModel.splice(index, 1)
+        this.$emit('update:modelValue', this.selectModel)
         return true
       }
       return false
@@ -265,9 +268,11 @@ export default {
     clearSelected() {
       if (this.mergedData.multiple) {
         this.selectModel = []
+        this.$emit('update:modelValue', this.selectModel)
         return
       }
       this.selectModel = {}
+      this.$emit('update:modelValue', this.selectModel)
     },
     /**
      * Filer options by search value
@@ -278,6 +283,7 @@ export default {
       if (!value) {
         this.filteredOptions = this.mergedData.options
         this.selectModel = []
+        this.$emit('update:modelValue', this.selectModel)
         return
       }
 
@@ -314,7 +320,7 @@ export default {
           this.$emit('error', this.errorMessage)
         }
 
-        this.$emit('update:modelValue', value)
+        // this.$emit('update:modelValue', value)
       },
       deep: true,
     },
