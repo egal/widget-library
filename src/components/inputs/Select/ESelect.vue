@@ -83,6 +83,8 @@
         :search-placeholder="mergedData.searchPlaceholder"
         :style-config="dropdownStyleConfig"
         :dropdown-position="mergedData.dropdownPosition"
+        :show-more-button-display="isDisplayShowMore"
+        :show-more-button-text="mergedData.showMoreButtonText"
         :input-search-style-config="{
           backgroundColor: '#F7FAFC',
           borderColor: '#E2E8F0',
@@ -91,6 +93,7 @@
           ...inputSearchStyleConfig,
         }"
         @select="selectOption"
+        @show-more="$emit('show-more')"
         @click.native.stop
       />
     </div>
@@ -133,6 +136,7 @@ export default {
       default: () => {},
     },
   },
+  emits: ['update:modelValue', 'error', 'show-more'],
   data() {
     return {
       selectModel: [],
@@ -154,6 +158,7 @@ export default {
           multiple: false,
           options: [],
           isLocalOptions: true,
+          nonLocalOptionsTotalCount: 0,
           modelValue: [],
           shownKey: 'name',
           error: '',
@@ -164,6 +169,8 @@ export default {
           searchableInput: false,
           emptyDropdownText: 'no data',
           dropdownPosition: 'bottom',
+          showMoreButtonDisplay: false,
+          showMoreButtonText: 'Show more...',
         },
         this.data,
       )
@@ -214,6 +221,13 @@ export default {
 
     nonlocalOptions() {
       return this.mergedData.options
+    },
+
+    isDisplayShowMore() {
+      return this.mergedData.showMoreButtonDisplay
+        ? this.mergedData.isLocalOptions === false &&
+            this.nonlocalOptions.length < this.mergedData.nonLocalOptionsTotalCount
+        : false
     },
   },
   mounted() {
