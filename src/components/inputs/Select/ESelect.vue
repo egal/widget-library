@@ -302,6 +302,7 @@ export default {
 
         this.$emit('update:modelValue', value)
       },
+      deep: true,
     },
 
     'mergedData.modelValue'(value) {
