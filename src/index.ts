@@ -1,6 +1,8 @@
 import components from './components'
 import { App } from 'vue'
 import Toaster from '@/helpers/toaster'
+
+const ToasterInstance = new Toaster()
 const plugin = {
   install: (app: App) => {
     for (const prop in components) {
@@ -9,7 +11,7 @@ const plugin = {
         app.component(component.name, component)
       }
     }
-    app.config.globalProperties.$toaster = new Toaster()
+    app.config.globalProperties.$toaster = ToasterInstance
   },
 }
 declare module '@vue/runtime-core' {
@@ -19,3 +21,4 @@ declare module '@vue/runtime-core' {
 }
 
 export default plugin
+export { ToasterInstance }
