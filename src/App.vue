@@ -1,5 +1,6 @@
 <template>
-  <div :style="{ width: '350px' }">
+  <div :style="{ width: '600px' }">
+
     <ESelect
       :data="selectdata"
       @update:modelValue="upd"
@@ -9,7 +10,6 @@
           searchOptions($event.target.value)
         }
       "
-      @error="fff"
     ></ESelect>
   </div>
 </template>
@@ -27,24 +27,20 @@ export default defineComponent({
         multiple: true,
         searchableInput: true,
         modelValue: [{ name: 'gggggggg' }],
-        options: [{ name: 'jki' }, { name: 'ii' }],
-        isLocalOptions: false,
+        options: [{ name: 'jki' }, { name: 'ii' }, { name: 'gggggggg' }, { name: 'ggggdsdsgggg' }, { name: 'ggggggggsdf' }],
+        isLocalOptions: true,
         nonLocalOptionsTotalCount: 20,
         showMoreButtonDisplay: true,
         showMoreButtonText: 'Показать больше...',
         validators: [this.required],
+        iconRight: 'search'
       },
+
     }
   },
   methods: {
-    required(value) {
-      return !value ? 'Обязательное поле' : ''
-    },
-    fff(error) {
-      console.log(error)
-    },
     upd(v) {
-      console.log('on update ', v)
+      console.log(v)
       this.selectdata.modelValue = v
     },
     addMore() {
@@ -65,6 +61,9 @@ export default defineComponent({
       })
     },
     searchOptions(v) {
+      if (!v) {
+        this.selectdata.options = [{ name: 'jki' }, { name: 'ii' }, { name: 'gggggggg' }, { name: 'ggggdsdsgggg' }, { name: 'ggggggggsdf' }]
+      }
       this.selectdata.options = this.selectdata.options.filter((i) => i.name.includes(v))
     },
   },

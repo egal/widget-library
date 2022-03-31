@@ -1,12 +1,12 @@
 <template>
-  <!--  // todo conditional class-->
   <div
     class="input"
-    :class="`input--${mergedData.size} ${chips && chipsModel.length === 0 ? 'no-items' : ''} ${
-      chips && chipsModel.length ? 'con-chips' : ''
+    :class="`input--${mergedData.size} ${mergedData.chips && chipsModel.length === 0 ? 'no-items' : ''} ${
+      mergedData.chips && chipsModel.length ? 'con-chips' : ''
     }`"
     :style="getStyleVars"
   >
+
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -31,21 +31,18 @@
           type !== 'number',
       }"
     >
-      <!--      todo chips ??? -->
-      <!--      todo v-if -->
-      <!--      todo emit -->
+
       <div
         v-for="selected in chipsModel"
         class="con-vs-chip"
-        :style="{ display: 'flex', alignItems: 'center' }"
+        :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
       >
         <span class="text-chip vs-chip--text selected">
-          {{ selected[chipsShownKey] }}
+          {{ selected[mergedData.shownKey] }}
         </span>
-        <b-icon icon="x-lg" @click.stop="$emit('delete-option', selected)" />
+        <b-icon icon="x-lg" class="vs-chip--close" @click.stop="$emit('delete-option', selected)" />
       </div>
 
-      <!--      todo class -->
       <input
         :id="mergedData.id"
         :type="mergedData.type === 'search' ? 'text' : newType"
@@ -57,7 +54,7 @@
         :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
           mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
-          chips ? 'con-chips--input' : '',
+          mergedData.chips ? 'con-chips--input' : '',
         ]"
         v-model="newValue"
         @input="inputHandler"
@@ -136,7 +133,6 @@ export default {
     BIcon: BootstrapIcon,
   },
   props: {
-    // prop or in data
     data: {
       type: Object,
       default: () => {},
@@ -145,19 +141,14 @@ export default {
       type: Object,
       default: () => {},
     },
-    // todo props ?
-    chips: {
-      type: Boolean,
-      default: false,
-    },
     chipsModel: {
       type: Array,
       default: () => [],
     },
-    chipsShownKey: {
-      type: String,
-      default: 'name',
-    },
+    chipsInlineStyle: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
@@ -197,6 +188,8 @@ export default {
           inputMaxLength: undefined,
           readonly: false,
           clearable: true,
+          chips: false,
+          shownKey: 'name'
         },
         this.data,
       )
@@ -349,6 +342,16 @@ input[type='number'] {
     .subtract-button {
       bottom: 14px;
     }
+
+    //.con-chips--input {
+    //
+    //    height: 32px;
+    //  }
+    //  .subtract-button {
+    //    bottom: 9px;
+    //  }
+
+
     .icon {
       top: 14px;
       width: 16px;
@@ -382,6 +385,14 @@ input[type='number'] {
     .subtract-button {
       bottom: 10px;
     }
+    //
+    //.con-chips--input {
+    //    height: 24px;
+    //  }
+    //  .subtract-button {
+    //    bottom: 5px;
+    //  }
+
     .icon {
       top: 11px;
       width: 14px;
@@ -415,6 +426,14 @@ input[type='number'] {
     .subtract-button {
       bottom: 7px;
     }
+
+    //.con-chips--input {
+    //    height: 12px;
+    //  }
+    //  .subtract-button {
+    //    bottom: 2px;
+    //  }
+
     .icon {
       width: 10px;
       height: 10px;
@@ -593,7 +612,7 @@ input[type='number'] {
   overflow: hidden;
   //padding: 5px;
   background-color: var(--search-background-color);
-  padding: 7px 10px;
+  //padding: 6px 10px;
 
   color: var(--value-color);
 
@@ -660,15 +679,13 @@ input[type='number'] {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  min-height: 28px;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--value-font-color);
   position: relative;
-  margin-right: 2px;
   float: left;
   margin-top: 0;
   margin-bottom: 0;
+  margin-right: 5px;
   padding: 2px;
-  color: rgba(0, 0, 0, 0.7);
 
   &.closable {
     padding-right: 0;
@@ -694,53 +711,29 @@ input[type='number'] {
     -ms-flex-pack: center;
     justify-content: center;
     margin-left: 10px;
+    font-size: var(--value-font-size);
+    font-weight: var(--value-font-weight);
+    font-family: var(--font-family);
 
-    font-size: 16px;
-    // todo
-    // font-size: var(--value-font-size);
-
-    // todo
-    font-weight: inherit;
-    font-family: inherit;
 
     &.selected {
       display: flex;
       align-items: center;
-      margin-right: 10px;
+      margin-right: 9px;
       span {
         margin-right: 8px;
         white-space: nowrap;
       }
-      .bi {
-        width: 8px;
-        height: 8px;
-        cursor: pointer;
-        margin-bottom: 0;
-        color: var(--cross-color);
-      }
     }
+
   }
 
   .vs-chip--close {
-    width: 20px;
-    height: 20px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 0;
-    margin: 0 4px;
+    width: 8px;
+    height: 8px;
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.15);
-    color: #fff;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
+    margin-bottom: 0;
+
   }
 }
 </style>
