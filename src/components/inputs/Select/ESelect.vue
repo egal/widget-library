@@ -43,9 +43,53 @@
       </div>
     </div>
 
+    <!--    v-else-if="mergedData.searchableInput && selectModel.length && mergedData.multiple" -->
+    <!--    :class="{ 'no-items': mergedData.multiple && selectModel.length == 0 }" -->
+    <!--      class="con-chips" -->
+    <div
+      v-else-if="mergedData.searchableInput && selectModel.length && mergedData.multiple"
+      :style="getStyleVars"
+    >
+      <!--      todo    iconLeft: 'search', -->
+      <!--      :class="{ 'con-chips--input': mergedData.searchableInput && mergedData.multiple }" -->
+      <!--      modelValue: chipInputValue,-->
+      <EInput
+        class="input-search"
+        @click="showDropdown = !showDropdown"
+        @keydown.enter="
+          (v) => {
+            if (mergedData.searchableInput && mergedData.multiple) {
+              selectOption(v.target.value)
+            }
+          }
+        "
+        @delete-option="(option) => deleteOption(option)"
+        v-click-outside="close"
+        @update:modelValue="filterOptions"
+        :chips="true"
+        :chipsModel="selectModel"
+        :data="{
+          clearable: mergedData.clearable,
+          placeholder: mergedData.searchPlaceholder,
+          showFilled: false,
+          type: 'search',
+          iconLeft: mergedData.iconLeft,
+          size: mergedData.size,
+          modelValue: chipInputValue,
+        }"
+        :style-config="{
+          backgroundColor: '#F7FAFC',
+          borderColor: '#E2E8F0',
+          iconColor: '#CBD5E0',
+          placeholderColor: '#CBD5E0',
+          ...inputSearchStyleConfig,
+        }"
+      />
+    </div>
+
     <EInput
       class="input-search"
-      v-else-if="mergedData.searchableInput"
+      v-else-if="mergedData.searchableInput && !mergedData.multiple"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
       @update:modelValue="filterOptions"
@@ -144,6 +188,7 @@ export default {
       errorMessage: '',
       searchValue: '',
       filteredOptions: this.data?.options ?? [],
+      chipInputValue: '',
     }
   },
   computed: {
@@ -156,6 +201,7 @@ export default {
           clearable: true,
           searchable: false,
           multiple: false,
+          increaseHeight: false, // todo added + name, Запрет увеличения высоты извне. По дефолту если multi = true, увеличивает высоту, иначе - нет
           options: [],
           isLocalOptions: true,
           nonLocalOptionsTotalCount: 0,
@@ -216,6 +262,8 @@ export default {
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
         '--focus-box-shadow':
           this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
+        '--search-background-color':
+          this.inputSearchStyleConfig?.searchBackgroundColor || '#f7fafc',
       }
     },
 
@@ -238,9 +286,16 @@ export default {
       this.showDropdown = false
     },
     selectOption(option) {
+      console.log(option)
       if (this.mergedData.multiple) {
         if (this.deleteOption(option)) {
           return
+        }
+        if (this.mergedData.searchableInput && this.mergedData.multiple) {
+          let obj = {}
+          obj[this.mergedData.shownKey] = option
+          this.selectModel.push(obj)
+          this.chipInputValue = ''
         }
         this.selectModel.push(option)
         this.$emit('update:modelValue', this.selectModel)
@@ -279,6 +334,9 @@ export default {
      * @param value
      */
     filterOptions(value) {
+      // console.log(value)
+      // todo
+      this.chipInputValue = value
       this.showDropdown = true
       if (!value) {
         this.filteredOptions = this.mergedData.options
@@ -501,4 +559,169 @@ export default {
     }
   }
 }
+
+//// ---------------------
+//.con-chips {
+//  width: 100%;
+//  position: relative;
+//  display: -webkit-box;
+//  display: -ms-flexbox;
+//  display: flex;
+//  -webkit-box-align: center;
+//  -ms-flex-align: center;
+//  align-items: center;
+//  -webkit-box-pack: end;
+//  -ms-flex-pack: end;
+//  justify-content: flex-end;
+//  -ms-flex-wrap: wrap;
+//  flex-wrap: wrap;
+//
+//  border-radius: 5px;
+//  overflow: hidden;
+//  //padding: 5px;
+//  background-color: var(--search-background-color);
+//  padding: 7px 9px;
+//
+//  .con-chips--input {
+//    display: inline-block;
+//    -webkit-box-flex: 1;
+//    -ms-flex: 1;
+//    flex: 1;
+//    color: inherit;
+//    //padding: 9px;
+//    -webkit-box-sizing: border-box;
+//    box-sizing: border-box;
+//    min-width: 100px; // todo ?
+//    border: 0;
+//    margin-left: 2px;
+//
+//    ::v-deep(.input-container > input) {
+//      //display: inline-block;
+//      //-webkit-box-flex: 1;
+//      //-ms-flex: 1;
+//      //flex: 1;
+//      //
+//      ////padding: 9px;
+//      //-webkit-box-sizing: border-box;
+//      //box-sizing: border-box;
+//      //min-width: 80px;
+//      border: 0;
+//      //margin-left: 2px;
+//    }
+//
+//    // todo
+//    ::v-deep(.input-container) {
+//      margin-right: -9px;
+//
+//      //outline: none;
+//      //  .con-chips {
+//      //    outline: 2px solid red;
+//      //  }
+//    }
+//  }
+//
+//  &.no-items {
+//    .con-chips--input {
+//      padding-left: 10px;
+//    }
+//  }
+//}
+//
+//// todo вынести чипсы в инпут ,?
+//// todo other sizes
+//::v-deep(.input--lg) {
+//  input {
+//    height: 32px;
+//  }
+//  .subtract-button {
+//    bottom: 9px;
+//  }
+//}
+//
+//.con-vs-chip {
+//  border-radius: 20px;
+//  display: -webkit-box;
+//  display: -ms-flexbox;
+//  display: flex;
+//  -webkit-box-align: center;
+//  -ms-flex-align: center;
+//  align-items: center;
+//  font-size: 0.7rem;
+//  -webkit-box-pack: center;
+//  -ms-flex-pack: center;
+//  justify-content: center;
+//  min-height: 28px;
+//  color: rgba(0, 0, 0, 0.7);
+//  position: relative;
+//  margin-right: 2px;
+//  float: left;
+//  margin-top: 0;
+//  margin-bottom: 0;
+//  padding: 2px;
+//  color: rgba(0, 0, 0, 0.7);
+//
+//  &.closable {
+//    padding-right: 0;
+//  }
+//
+//  .vs-chip--text {
+//    display: -webkit-box;
+//    display: -ms-flexbox;
+//    display: flex;
+//    -webkit-box-align: center;
+//    -ms-flex-align: center;
+//    align-items: center;
+//    -webkit-box-pack: center;
+//    -ms-flex-pack: center;
+//    justify-content: center;
+//    margin-left: 10px;
+//
+//    font-size: 16px;
+//    // todo
+//    //font-size: var(--value-font-size);
+//
+//    // todo
+//    font-weight: inherit;
+//    font-family: inherit;
+//
+//    &.selected {
+//      display: flex;
+//      align-items: center;
+//      margin-right: 10px;
+//      span {
+//        margin-right: 8px;
+//        white-space: nowrap;
+//      }
+//      .bi {
+//        width: 8px;
+//        height: 8px;
+//        cursor: pointer;
+//        margin-bottom: 0;
+//        color: var(--cross-color);
+//      }
+//    }
+//  }
+//
+//  .vs-chip--close {
+//    width: 20px;
+//    height: 20px;
+//    display: -webkit-box;
+//    display: -ms-flexbox;
+//    display: flex;
+//    -webkit-box-align: center;
+//    -ms-flex-align: center;
+//    align-items: center;
+//    -webkit-box-pack: center;
+//    -ms-flex-pack: center;
+//    justify-content: center;
+//    border-radius: 50%;
+//    border: 0;
+//    margin: 0 4px;
+//    cursor: pointer;
+//    background: rgba(0, 0, 0, 0.15);
+//    color: #fff;
+//    -webkit-transition: all 0.3s ease;
+//    transition: all 0.3s ease;
+//  }
+//}
 </style>

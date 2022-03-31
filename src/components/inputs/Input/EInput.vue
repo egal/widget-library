@@ -1,5 +1,12 @@
 <template>
-  <div class="input" :class="`input--${mergedData.size}`" :style="getStyleVars">
+  <!--  // todo conditional class-->
+  <div
+    class="input"
+    :class="`input--${mergedData.size} ${chips && chipsModel.length === 0 ? 'no-items' : ''} ${
+      chips && chipsModel.length ? 'con-chips' : ''
+    }`"
+    :style="getStyleVars"
+  >
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -7,6 +14,7 @@
       v-if="mergedData.label"
       >{{ mergedData.label }}</label
     >
+
     <div
       class="input-container"
       :class="{
@@ -23,6 +31,21 @@
           type !== 'number',
       }"
     >
+      <!--      todo chips ??? -->
+      <!--      todo v-if -->
+      <!--      todo emit -->
+      <div
+        v-for="selected in chipsModel"
+        class="con-vs-chip"
+        :style="{ display: 'flex', alignItems: 'center' }"
+      >
+        <span class="text-chip vs-chip--text selected">
+          {{ selected[chipsShownKey] }}
+        </span>
+        <b-icon icon="x-lg" @click.stop="$emit('delete-option', selected)" />
+      </div>
+
+      <!--      todo class -->
       <input
         :id="mergedData.id"
         :type="mergedData.type === 'search' ? 'text' : newType"
@@ -34,6 +57,7 @@
         :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
           mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
+          chips ? 'con-chips--input' : '',
         ]"
         v-model="newValue"
         @input="inputHandler"
@@ -112,6 +136,7 @@ export default {
     BIcon: BootstrapIcon,
   },
   props: {
+    // prop or in data
     data: {
       type: Object,
       default: () => {},
@@ -119,6 +144,19 @@ export default {
     styleConfig: {
       type: Object,
       default: () => {},
+    },
+    // todo props ?
+    chips: {
+      type: Boolean,
+      default: false,
+    },
+    chipsModel: {
+      type: Array,
+      default: () => [],
+    },
+    chipsShownKey: {
+      type: String,
+      default: 'name',
     },
   },
   data() {
@@ -547,5 +585,162 @@ input[type='number'] {
 }
 .success + .helper-text {
   color: var(--success-color);
+}
+
+// ---------------------
+.con-chips {
+  border-radius: 5px;
+  overflow: hidden;
+  //padding: 5px;
+  background-color: var(--search-background-color);
+  padding: 7px 10px;
+
+  color: var(--value-color);
+
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  font-weight: var(--value-font-weight);
+  //padding: 5px 0;
+
+  .input-container {
+    width: 100%;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .subtract-button {
+      right: 5px;
+    }
+  }
+
+  .con-chips--input {
+    display: inline-block;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    color: inherit;
+
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 100px; // todo ?
+
+    margin-left: 2px;
+    border: 0;
+
+    margin-right: -9px;
+
+    &:focus,
+    &:active {
+      outline: none;
+    }
+  }
+
+  &.no-items {
+    .con-chips--input {
+      padding-left: 10px;
+    }
+  }
+}
+
+.con-vs-chip {
+  border-radius: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 0.7rem;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  min-height: 28px;
+  color: rgba(0, 0, 0, 0.7);
+  position: relative;
+  margin-right: 2px;
+  float: left;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 2px;
+  color: rgba(0, 0, 0, 0.7);
+
+  &.closable {
+    padding-right: 0;
+  }
+  // todo other sizes
+  .input--lg {
+    input {
+      height: 32px;
+    }
+    .subtract-button {
+      bottom: 9px;
+    }
+  }
+
+  .vs-chip--text {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-left: 10px;
+
+    font-size: 16px;
+    // todo
+    // font-size: var(--value-font-size);
+
+    // todo
+    font-weight: inherit;
+    font-family: inherit;
+
+    &.selected {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+      span {
+        margin-right: 8px;
+        white-space: nowrap;
+      }
+      .bi {
+        width: 8px;
+        height: 8px;
+        cursor: pointer;
+        margin-bottom: 0;
+        color: var(--cross-color);
+      }
+    }
+  }
+
+  .vs-chip--close {
+    width: 20px;
+    height: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 0;
+    margin: 0 4px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.15);
+    color: #fff;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
 }
 </style>
