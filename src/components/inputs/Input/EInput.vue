@@ -1,5 +1,12 @@
 <template>
-  <div class="input" :class="`input--${mergedData.size}`" :style="getStyleVars">
+  <div
+    class="input"
+    :class="`input--${mergedData.size} ${mergedData.chips && chipsModel.length === 0 ? 'no-items' : ''} ${
+      mergedData.chips && chipsModel.length ? 'con-chips' : ''
+    }`"
+    :style="getStyleVars"
+  >
+
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -7,6 +14,7 @@
       v-if="mergedData.label"
       >{{ mergedData.label }}</label
     >
+
     <div
       class="input-container"
       :class="{
@@ -23,6 +31,18 @@
           type !== 'number',
       }"
     >
+
+      <div
+        v-for="selected in chipsModel"
+        class="con-chip"
+        :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
+      >
+        <span class="text-chip chip--text selected">
+          {{ selected[mergedData.shownKey] }}
+        </span>
+        <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
+      </div>
+
       <input
         :id="mergedData.id"
         :type="mergedData.type === 'search' ? 'text' : newType"
@@ -34,6 +54,7 @@
         :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
           mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
+          mergedData.chips ? 'con-chips--input' : '',
         ]"
         v-model="newValue"
         @input="inputHandler"
@@ -120,6 +141,14 @@ export default {
       type: Object,
       default: () => {},
     },
+    chipsModel: {
+      type: Array,
+      default: () => [],
+    },
+    chipsInlineStyle: {
+      type: Object,
+      default: () => {},
+    }
   },
   data() {
     return {
@@ -159,6 +188,8 @@ export default {
           inputMaxLength: undefined,
           readonly: false,
           clearable: true,
+          chips: false,
+          shownKey: 'name'
         },
         this.data,
       )
@@ -311,6 +342,7 @@ input[type='number'] {
     .subtract-button {
       bottom: 14px;
     }
+
     .icon {
       top: 14px;
       width: 16px;
@@ -344,6 +376,7 @@ input[type='number'] {
     .subtract-button {
       bottom: 10px;
     }
+
     .icon {
       top: 11px;
       width: 14px;
@@ -377,6 +410,7 @@ input[type='number'] {
     .subtract-button {
       bottom: 7px;
     }
+
     .icon {
       width: 10px;
       height: 10px;
@@ -547,5 +581,119 @@ input[type='number'] {
 }
 .success + .helper-text {
   color: var(--success-color);
+}
+
+// chips styles
+.con-chips {
+  overflow: hidden;
+  background-color: var(--search-background-color);
+  color: var(--value-color);
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  font-weight: var(--value-font-weight);
+  .input-container {
+    width: 100%;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .subtract-button {
+      right: 5px;
+    }
+  }
+
+  .con-chips--input {
+    display: inline-block;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    color: inherit;
+
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 100px;
+
+    margin-left: 2px;
+    border: 0;
+
+    margin-right: -9px;
+
+    &:focus,
+    &:active {
+      outline: none;
+    }
+  }
+
+  &.no-items {
+    .con-chips--input {
+      padding-left: 10px;
+    }
+  }
+}
+
+.con-chip {
+  border-radius: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 0.7rem;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  color: var(--value-font-color);
+  position: relative;
+  float: left;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 5px;
+  padding: 2px;
+
+  &.closable {
+    padding-right: 0;
+  }
+
+  .chip--text {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-left: 10px;
+    font-size: var(--value-font-size);
+    font-weight: var(--value-font-weight);
+    font-family: var(--font-family);
+
+
+    &.selected {
+      display: flex;
+      align-items: center;
+      margin-right: 9px;
+      span {
+        margin-right: 8px;
+        white-space: nowrap;
+      }
+    }
+
+  }
+
+  .chip--close {
+    width: 8px;
+    height: 8px;
+    cursor: pointer;
+    margin-bottom: 0;
+
+  }
 }
 </style>

@@ -22,7 +22,7 @@
         <div class="placeholder" v-show="!filled">
           {{ mergedData.placeholder }}
         </div>
-        <div class="selected" v-if="mergedData.multiple" v-for="option in selectModel">
+        <div class="selected" v-if="mergedData.multiple" v-for="option in selectModel" :style='chipsStyleVars'>
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
@@ -43,9 +43,48 @@
       </div>
     </div>
 
+
+    <div
+      v-else-if="mergedData.searchableInput && mergedData.multiple"
+      :style="getStyleVars"
+    >
+      <EInput
+        class="input-search"
+        @click="showDropdown = !showDropdown"
+        @keydown.enter="
+          onEnter
+        "
+        @delete-option="(option) => deleteOption(option)"
+        v-click-outside="close"
+        @update:modelValue="filterOptions"
+
+        :chipsModel="selectModel"
+        :data="{
+          clearable: mergedData.clearable,
+          placeholder: mergedData.searchPlaceholder,
+          showFilled: false,
+          type: 'search',
+          iconLeft: mergedData.iconLeft,
+          iconRight: mergedData.iconRight,
+          size: mergedData.size,
+          modelValue: chipInputValue,
+          chips: mergedData.multiple && mergedData.searchableInput,
+          shownKey: mergedData.shownKey,
+        }"
+        :style-config="{
+          backgroundColor: '#F7FAFC',
+          borderColor: '#E2E8F0',
+          iconColor: '#CBD5E0',
+          placeholderColor: '#CBD5E0',
+          ...inputSearchStyleConfig,
+        }"
+        :chips-inline-style="chipsStyleConfig"
+      />
+    </div>
+
     <EInput
       class="input-search"
-      v-else-if="mergedData.searchableInput"
+      v-else-if="mergedData.searchableInput && !mergedData.multiple"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
       @update:modelValue="filterOptions"
@@ -54,7 +93,8 @@
         placeholder: mergedData.searchPlaceholder,
         showFilled: false,
         type: 'search',
-        iconLeft: 'search',
+        iconLeft: mergedData.iconLeft,
+        iconRight: mergedData.iconRight,
         size: mergedData.size,
         modelValue: selectModel[mergedData.shownKey],
       }"
@@ -135,8 +175,12 @@ export default {
       type: Object,
       default: () => {},
     },
+    chipsStyleConfig: {
+      type: Object,
+      default: () => {},
+    }
   },
-  emits: ['update:modelValue', 'error', 'show-more'],
+  emits: ['update:modelValue', 'error', 'show-more', 'input'],
   data() {
     return {
       selectModel: [],
@@ -144,6 +188,7 @@ export default {
       errorMessage: '',
       searchValue: '',
       filteredOptions: this.data?.options ?? [],
+      chipInputValue: '',
     }
   },
   computed: {
@@ -216,6 +261,8 @@ export default {
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
         '--focus-box-shadow':
           this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
+        '--search-background-color':
+          this.inputSearchStyleConfig?.searchBackgroundColor || '#f7fafc',
       }
     },
 
@@ -234,13 +281,32 @@ export default {
     this.selectModel = this.mergedData.modelValue
   },
   methods: {
+    onEnter(event) {
+       if (this.mergedData.searchableInput && this.mergedData.multiple) {
+
+        if (this.selectModel.find(i => i.name === event.target.value)) {
+          return
+        }
+
+         if (this.mergedData.searchableInput && this.mergedData.multiple && event.target.value ) {
+           let obj = {}
+           obj[this.mergedData.shownKey] = event.target.value
+           this.selectModel.push(obj)
+           this.$emit('input', { target: {
+             value: ''
+             } })
+           this.$emit('update:modelValue', this.selectModel)
+           this.filterOptions('')
+         }
+       }
+    },
     close() {
       this.showDropdown = false
     },
     selectOption(option) {
       if (this.mergedData.multiple) {
         if (this.deleteOption(option)) {
-          return
+            return
         }
         this.selectModel.push(option)
         this.$emit('update:modelValue', this.selectModel)
@@ -279,13 +345,18 @@ export default {
      * @param value
      */
     filterOptions(value) {
+      this.chipInputValue = value
       this.showDropdown = true
       if (!value) {
         this.filteredOptions = this.mergedData.options
-        this.selectModel = []
+
+        if (!this.mergedData.multiple && !this.mergedData.searchableInput) {
+          this.selectModel = []
+        }
         this.$emit('update:modelValue', this.selectModel)
         return
       }
+
 
       if (!this.mergedData.isLocalOptions) {
         this.filteredOptions = this.mergedData.options
@@ -298,6 +369,7 @@ export default {
             option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
         )
       } else {
+
         this.filteredOptions = this.mergedData.options.map((group) => {
           const filteredGroupsOptions = group.options.filter(
             (option) =>
@@ -501,4 +573,5 @@ export default {
     }
   }
 }
+
 </style>
