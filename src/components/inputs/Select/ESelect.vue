@@ -305,12 +305,12 @@ export default {
     },
     selectOption(option) {
       if (this.mergedData.multiple) {
-          if (this.deleteOption(option)) {
+        if (this.deleteOption(option)) {
             return
-          }
-          this.selectModel.push(option)
-          this.$emit('update:modelValue', this.selectModel)
-          return
+        }
+        this.selectModel.push(option)
+        this.$emit('update:modelValue', this.selectModel)
+        return
       }
       this.selectModel = option
       this.$emit('update:modelValue', this.selectModel)

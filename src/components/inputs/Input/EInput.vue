@@ -34,13 +34,13 @@
 
       <div
         v-for="selected in chipsModel"
-        class="con-vs-chip"
+        class="con-chip"
         :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
       >
-        <span class="text-chip vs-chip--text selected">
+        <span class="text-chip chip--text selected">
           {{ selected[mergedData.shownKey] }}
         </span>
-        <b-icon icon="x-lg" class="vs-chip--close" @click.stop="$emit('delete-option', selected)" />
+        <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
       </div>
 
       <input
@@ -343,15 +343,6 @@ input[type='number'] {
       bottom: 14px;
     }
 
-    //.con-chips--input {
-    //
-    //    height: 32px;
-    //  }
-    //  .subtract-button {
-    //    bottom: 9px;
-    //  }
-
-
     .icon {
       top: 14px;
       width: 16px;
@@ -385,13 +376,6 @@ input[type='number'] {
     .subtract-button {
       bottom: 10px;
     }
-    //
-    //.con-chips--input {
-    //    height: 24px;
-    //  }
-    //  .subtract-button {
-    //    bottom: 5px;
-    //  }
 
     .icon {
       top: 11px;
@@ -426,13 +410,6 @@ input[type='number'] {
     .subtract-button {
       bottom: 7px;
     }
-
-    //.con-chips--input {
-    //    height: 12px;
-    //  }
-    //  .subtract-button {
-    //    bottom: 2px;
-    //  }
 
     .icon {
       width: 10px;
@@ -606,23 +583,15 @@ input[type='number'] {
   color: var(--success-color);
 }
 
-// ---------------------
+// chips styles
 .con-chips {
-  border-radius: 5px;
   overflow: hidden;
-  //padding: 5px;
   background-color: var(--search-background-color);
-  //padding: 6px 10px;
-
   color: var(--value-color);
-
-  background-color: var(--background-color);
   border: 1px solid var(--border-color);
   box-sizing: border-box;
   border-radius: var(--border-radius);
   font-weight: var(--value-font-weight);
-  //padding: 5px 0;
-
   .input-container {
     width: 100%;
     position: relative;
@@ -647,7 +616,7 @@ input[type='number'] {
 
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    min-width: 100px; // todo ?
+    min-width: 100px;
 
     margin-left: 2px;
     border: 0;
@@ -667,7 +636,7 @@ input[type='number'] {
   }
 }
 
-.con-vs-chip {
+.con-chip {
   border-radius: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -690,17 +659,8 @@ input[type='number'] {
   &.closable {
     padding-right: 0;
   }
-  // todo other sizes
-  .input--lg {
-    input {
-      height: 32px;
-    }
-    .subtract-button {
-      bottom: 9px;
-    }
-  }
 
-  .vs-chip--text {
+  .chip--text {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -728,7 +688,7 @@ input[type='number'] {
 
   }
 
-  .vs-chip--close {
+  .chip--close {
     width: 8px;
     height: 8px;
     cursor: pointer;
