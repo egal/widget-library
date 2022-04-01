@@ -38,7 +38,7 @@
         :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
       >
         <span class="text-chip chip--text selected">
-          {{ selected[mergedData.shownKey] }}
+          {{ truncateString(selected[mergedData.shownKey]) }}
         </span>
         <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
       </div>
@@ -225,6 +225,15 @@ export default {
     this.newType = this.mergedData.type
   },
   methods: {
+    /**
+     * Truncate value in string if it is longer than 15 symbols
+     */
+    truncateString(str) {
+      if (str.length <= 15) {
+        return str
+      }
+      return str.slice(0, 15) + '...'
+    },
     /**
      * Handle Input data based on Input type
      */
