@@ -31,17 +31,18 @@
           type !== 'number',
       }"
     >
-
-      <div
-        v-for="selected in chipsModel"
-        class="con-chip"
-        :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
-      >
+<div class="chips-container">
+  <div
+      v-for="selected in chipsModel"
+      class="con-chip"
+      :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
+  >
         <span class="text-chip chip--text selected">
           {{ truncateString(selected[mergedData.shownKey]) }}
         </span>
-        <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
-      </div>
+    <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
+  </div>
+</div>
 
       <input
         :id="mergedData.id"
@@ -698,8 +699,8 @@ input[type='number'] {
   }
 
   .chip--close {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     cursor: pointer;
     margin-bottom: 0;
 
