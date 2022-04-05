@@ -22,7 +22,12 @@
         <div class="placeholder" v-show="!filled">
           {{ mergedData.placeholder }}
         </div>
-        <div class="selected" v-if="mergedData.multiple" v-for="option in selectModel" :style='chipsStyleVars'>
+        <div
+          class="selected"
+          v-if="mergedData.multiple"
+          v-for="option in selectModel"
+          :style="chipsStyleConfig"
+        >
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
@@ -43,21 +48,14 @@
       </div>
     </div>
 
-
-    <div
-      v-else-if="mergedData.searchableInput && mergedData.multiple"
-      :style="getStyleVars"
-    >
+    <div v-else-if="mergedData.searchableInput && mergedData.multiple" :style="getStyleVars">
       <EInput
         class="input-search"
         @click="showDropdown = !showDropdown"
-        @keydown.enter="
-          onEnter
-        "
+        @keydown.enter="onEnter"
         @delete-option="(option) => deleteOption(option)"
         v-click-outside="close"
         @update:modelValue="filterOptions"
-
         :chipsModel="selectModel"
         :data="{
           clearable: mergedData.clearable,
@@ -178,7 +176,7 @@ export default {
     chipsStyleConfig: {
       type: Object,
       default: () => {},
-    }
+    },
   },
   emits: ['update:modelValue', 'error', 'show-more', 'input'],
   data() {
@@ -216,6 +214,7 @@ export default {
           dropdownPosition: 'bottom',
           showMoreButtonDisplay: false,
           showMoreButtonText: 'Show more...',
+          closeDropdownAfterSelection: true,
         },
         this.data,
       )
@@ -282,23 +281,24 @@ export default {
   },
   methods: {
     onEnter(event) {
-       if (this.mergedData.searchableInput && this.mergedData.multiple) {
-
-        if (this.selectModel.find(i => i.name === event.target.value)) {
+      if (this.mergedData.searchableInput && this.mergedData.multiple) {
+        if (this.selectModel.find((i) => i.name === event.target.value)) {
           return
         }
 
-         if (this.mergedData.searchableInput && this.mergedData.multiple && event.target.value ) {
-           let obj = {}
-           obj[this.mergedData.shownKey] = event.target.value
-           this.selectModel.push(obj)
-           this.$emit('input', { target: {
-             value: ''
-             } })
-           this.$emit('update:modelValue', this.selectModel)
-           this.filterOptions('')
-         }
-       }
+        if (this.mergedData.searchableInput && this.mergedData.multiple && event.target.value) {
+          let obj = {}
+          obj[this.mergedData.shownKey] = event.target.value
+          this.selectModel.push(obj)
+          this.$emit('input', {
+            target: {
+              value: '',
+            },
+          })
+          this.$emit('update:modelValue', this.selectModel)
+          this.filterOptions('')
+        }
+      }
     },
     close() {
       this.showDropdown = false
@@ -306,7 +306,7 @@ export default {
     selectOption(option) {
       if (this.mergedData.multiple) {
         if (this.deleteOption(option)) {
-            return
+          return
         }
         this.selectModel.push(option)
         this.$emit('update:modelValue', this.selectModel)
@@ -314,6 +314,10 @@ export default {
       }
       this.selectModel = option
       this.$emit('update:modelValue', this.selectModel)
+
+      if (this.mergedData.closeDropdownAfterSelection && !this.mergedData.multiple) {
+        this.showDropdown = false
+      }
     },
     /**
      * Delete option if we have this option and return true, otherwise return false
@@ -357,7 +361,6 @@ export default {
         return
       }
 
-
       if (!this.mergedData.isLocalOptions) {
         this.filteredOptions = this.mergedData.options
         return
@@ -369,7 +372,6 @@ export default {
             option[this.mergedData.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
         )
       } else {
-
         this.filteredOptions = this.mergedData.options.map((group) => {
           const filteredGroupsOptions = group.options.filter(
             (option) =>
@@ -573,5 +575,4 @@ export default {
     }
   }
 }
-
 </style>
