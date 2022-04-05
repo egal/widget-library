@@ -133,6 +133,7 @@
         @select="selectOption"
         @show-more="$emit('show-more')"
         @click.native.stop
+        @touchstart.native.stop
       />
     </div>
   </div>
