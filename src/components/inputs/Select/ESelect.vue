@@ -26,7 +26,7 @@
           class="selected"
           v-if="mergedData.multiple"
           v-for="option in selectModel"
-          :style="chipsStyleVars"
+          :style="chipsStyleConfig"
         >
           <span>{{ option[mergedData.shownKey] }}</span>
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
