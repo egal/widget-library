@@ -26,7 +26,7 @@
             :class="{ active: isActive(option) }"
             v-for="option in group.options"
             @click.stop="$emit('select', option)"
-            @touchstart="$emit('select', option)"
+            @touchstart.prevent="$emit('select', option)"
           >
             {{ option[shownKey] }}
           </div>
@@ -44,7 +44,7 @@
         :class="{ active: isActive(option) }"
         v-for="option in filteredOptions"
         @click.stop="$emit('select', option)"
-        @touchstart="$emit('select', option)"
+        @touchstart.prevent="$emit('select', option)"
       >
         {{ option[shownKey] }}
       </div>

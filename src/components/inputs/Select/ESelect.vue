@@ -51,7 +51,7 @@
     <div v-else-if="mergedData.searchableInput && mergedData.multiple" :style="getStyleVars">
       <EInput
         class="input-search"
-        @click="showDropdown = !showDropdown"
+        @click="showDropdown = true"
         @keydown.enter="onEnter"
         @delete-option="(option) => deleteOption(option)"
         v-click-outside="close"
@@ -83,7 +83,7 @@
     <EInput
       class="input-search"
       v-else-if="mergedData.searchableInput && !mergedData.multiple"
-      @click="showDropdown = !showDropdown"
+      @click="showDropdown = true"
       v-click-outside="close"
       @update:modelValue="filterOptions"
       :data="{
@@ -133,6 +133,7 @@
         @select="selectOption"
         @show-more="$emit('show-more')"
         @click.native.stop
+        @touchstart.native.stop
       />
     </div>
   </div>
@@ -572,6 +573,7 @@ export default {
     .dropdown-component {
       position: absolute;
       width: 100%;
+      z-index: 10;
     }
   }
 }
