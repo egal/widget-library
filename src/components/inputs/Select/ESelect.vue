@@ -309,12 +309,20 @@ export default {
       this.showDropdown = false
     },
     selectOption(option) {
-      if (this.mergedData.multiple) {
+      if (this.mergedData.multiple && !this.mergedData.searchableInput) {
         if (this.deleteOption(option)) {
           return
         }
         this.selectModel.push(option)
         this.$emit('update:modelValue', this.selectModel)
+        return
+      } else if (this.mergedData.searchableInput && this.mergedData.multiple) {
+        if (this.deleteOption(option)) {
+          return
+        }
+        this.selectModel.push(option)
+        this.$emit('update:modelValue', this.selectModel)
+        this.filterOptions('')
         return
       }
       this.selectModel = option
