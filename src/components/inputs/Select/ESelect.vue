@@ -216,9 +216,13 @@ export default {
           showMoreButtonDisplay: false,
           showMoreButtonText: 'Show more...',
           closeDropdownAfterSelection: true,
+          openDropdown: false,
         },
         this.data,
       )
+    },
+    openDropdown() {
+      return this.mergedData.openDropdown
     },
     filled() {
       if (this.mergedData.multiple) {
@@ -399,7 +403,14 @@ export default {
       },
       deep: true,
     },
-
+    closeDropDown() {
+      if (!this.mergedData.openDropdown) {
+        this.showDropdown = false
+      }
+    },
+    'mergedData.openDropdown'(value) {
+      this.showDropdown = !value
+    },
     'mergedData.modelValue'(value) {
       this.selectModel = value
     },
