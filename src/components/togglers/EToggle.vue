@@ -17,6 +17,8 @@
       class="e-toggle__text text"
       :class="{ 'e-toggle__text--empty': hasSlotData }"
       :style="mergedCustomStyles"
+      @mouseover="!isDisabled ? (isHover = true) : ''"
+      @mouseout="isHover = false"
     >
       <slot></slot>
     </span>
@@ -26,6 +28,7 @@
 <script>
 export default {
   name: 'EToggle',
+  emits: ['change'],
   props: {
     data: {
       type: Object,
@@ -38,6 +41,11 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      isHover: false,
+    }
+  },
   computed: {
     mergedData() {
       return Object.assign(
@@ -46,7 +54,6 @@ export default {
           disabled: false,
           size: 'md',
           toggleRight: false,
-          labelStyle: {},
         },
         this.data,
       )
@@ -61,13 +68,58 @@ export default {
       return !this.$slots?.default
     },
 
+    isDisabled() {
+      return this.mergedData.disabled
+    },
+
+    isActive() {
+      return this.mergedData.active
+    },
+
     /**
      * Объединяет объект стилей для лэйбла с объектом CSS переменныx
      * для чекбокса и возвращет полученный результат
      * @returns {object}
      */
     mergedCustomStyles() {
-      return Object.assign({}, this.mergedData.labelStyle, this.inputStyleVariables)
+      if (!this.styleConfig?.labelStyle) {
+        return Object.assign({}, this.inputStyleVariables)
+      }
+
+      const styleProperties = Object.keys(this.styleConfig.labelStyle)
+
+      // Возвращает объект стилей для лейбла без свойств hover, checked, disabled
+      const styles = Object.fromEntries(
+        Object.entries(this.styleConfig.labelStyle).filter(
+          (prop) => prop[0] !== 'hover' && prop[0] !== 'checked' && prop[0] !== 'disabled',
+        ),
+      )
+
+      // Возвращает объекты стилей для состояний disabled, checked или hover
+      if (styleProperties.includes('disabled') && this.isDisabled) {
+        return Object.assign(
+          {},
+          styles,
+          this.inputStyleVariables,
+          this.styleConfig.labelStyle.disabled,
+        )
+      } else if (styleProperties.includes('active') && this.isActive) {
+        return Object.assign(
+          {},
+          styles,
+          this.inputStyleVariables,
+          this.styleConfig.labelStyle.active,
+        )
+      } else if (styleProperties.includes('hover') && this.isHover) {
+        return Object.assign(
+          {},
+          styles,
+          this.inputStyleVariables,
+          this.styleConfig.labelStyle.hover,
+        )
+      } else {
+        return Object.assign({}, this.styleConfig.labelStyle, this.inputStyleVariables)
+      }
     },
 
     /**
