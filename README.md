@@ -1,4 +1,4 @@
-## Изменения ECheckbox:
+## Изменения ECheckbox, ERadio:
 1. В `:data` теперь **не нужно передавать** `labelStyle`. 
 2. `labelStyle` **передается в пропе `:style-config`**, вместе со всеми стилями. Пример передаваемого объекта `styleConfig`:
 ````javascript
