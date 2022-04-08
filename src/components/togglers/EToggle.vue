@@ -9,7 +9,7 @@
     <input
       type="checkbox"
       class="e-toggle__input input"
-      :checked="mergedData.active"
+      :checked="mergedData.checked"
       :disabled="mergedData.disabled"
       @change="(ev) => $emit('change', ev.target.checked)"
     />
@@ -17,8 +17,10 @@
       class="e-toggle__text text"
       :class="{ 'e-toggle__text--empty': hasSlotData }"
       :style="mergedCustomStyles"
-      @mouseover="!isDisabled ? (isHover = true) : ''"
-      @mouseout="isHover = false"
+      @mouseover="isHover = true"
+      @mouseout=";(isHover = false), (isActive = false)"
+      @mousedown="isActive = true"
+      @mouseup="isActive = false"
     >
       <slot></slot>
     </span>
@@ -44,13 +46,14 @@ export default {
   data() {
     return {
       isHover: false,
+      isActive: false,
     }
   },
   computed: {
     mergedData() {
       return Object.assign(
         {
-          active: false,
+          checked: false,
           disabled: false,
           size: 'md',
           toggleRight: false,
@@ -72,8 +75,8 @@ export default {
       return this.mergedData.disabled
     },
 
-    isActive() {
-      return this.mergedData.active
+    isChecked() {
+      return this.mergedData.checked
     },
 
     /**
@@ -91,7 +94,11 @@ export default {
       // Возвращает объект стилей для лейбла без свойств hover, checked, disabled
       const styles = Object.fromEntries(
         Object.entries(this.styleConfig.labelStyle).filter(
-          (prop) => prop[0] !== 'hover' && prop[0] !== 'checked' && prop[0] !== 'disabled',
+          (prop) =>
+            prop[0] !== 'hover' &&
+            prop[0] !== 'checked' &&
+            prop[0] !== 'active' &&
+            prop[0] !== 'disabled',
         ),
       )
 
@@ -102,6 +109,13 @@ export default {
           styles,
           this.inputStyleVariables,
           this.styleConfig.labelStyle.disabled,
+        )
+      } else if (styleProperties.includes('checked') && this.isChecked) {
+        return Object.assign(
+          {},
+          styles,
+          this.inputStyleVariables,
+          this.styleConfig.labelStyle.checked,
         )
       } else if (styleProperties.includes('active') && this.isActive) {
         return Object.assign(

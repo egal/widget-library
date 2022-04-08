@@ -19,8 +19,10 @@
       class="e-radio__text text"
       :class="{ 'e-radio__text--empty': hasSlotData }"
       :style="mergedCustomStyles"
-      @mouseover="!isDisabled ? (isHover = true) : ''"
-      @mouseout="isHover = false"
+      @mouseover="isHover = true"
+      @mouseout=";(isHover = false), (isActive = false)"
+      @mousedown="isActive = true"
+      @mouseup="isActive = false"
     >
       <slot></slot>
     </span>
@@ -46,6 +48,7 @@ export default {
   data() {
     return {
       isHover: false,
+      isActive: false,
     }
   },
   computed: {
@@ -95,7 +98,11 @@ export default {
       // Возвращает объект стилей для лейбла без свойств hover, checked, disabled
       const styles = Object.fromEntries(
         Object.entries(this.styleConfig.labelStyle).filter(
-          (prop) => prop[0] !== 'hover' && prop[0] !== 'checked' && prop[0] !== 'disabled',
+          (prop) =>
+            prop[0] !== 'hover' &&
+            prop[0] !== 'checked' &&
+            prop[0] !== 'active' &&
+            prop[0] !== 'disabled',
         ),
       )
 
@@ -113,6 +120,13 @@ export default {
           styles,
           this.inputStyleVariables,
           this.styleConfig.labelStyle.checked,
+        )
+      } else if (styleProperties.includes('active') && this.isActive) {
+        return Object.assign(
+          {},
+          styles,
+          this.inputStyleVariables,
+          this.styleConfig.labelStyle.active,
         )
       } else if (styleProperties.includes('hover') && this.isHover) {
         return Object.assign(
