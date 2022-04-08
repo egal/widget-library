@@ -9,7 +9,7 @@
     <input
       type="radio"
       class="e-radio__input input"
-      :name="name"
+      :name="mergedData.name"
       :checked="mergedData.checked"
       :value="mergedData.value"
       :disabled="mergedData.disabled"
