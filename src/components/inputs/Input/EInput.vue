@@ -1,12 +1,11 @@
 <template>
   <div
     class="input"
-    :class="`input--${mergedData.size} ${mergedData.chips && chipsModel.length === 0 ? 'no-items' : ''} ${
-      mergedData.chips && chipsModel.length ? 'con-chips' : ''
-    }`"
+    :class="`input--${mergedData.size} ${
+      mergedData.chips && chipsModel.length === 0 ? 'no-items' : ''
+    } ${mergedData.chips && chipsModel.length ? 'con-chips' : ''}`"
     :style="getStyleVars"
   >
-
     <label
       class="input-label"
       :class="{ 'input-label--required': mergedData.required }"
@@ -15,6 +14,7 @@
       >{{ mergedData.label }}</label
     >
 
+    <!--    todo also inherit fron input-container-->
     <div
       class="input-container"
       :class="{
@@ -31,18 +31,18 @@
           type !== 'number',
       }"
     >
-<div class="chips-container">
-  <div
-      v-for="selected in chipsModel"
-      class="con-chip"
-      :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
-  >
-        <span class="text-chip chip--text selected">
-          {{ truncateString(selected[mergedData.shownKey]) }}
-        </span>
-    <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
-  </div>
-</div>
+      <div class="chips-container">
+        <div
+          v-for="selected in chipsModel"
+          class="con-chip"
+          :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
+        >
+          <span class="text-chip chip--text selected">
+            {{ truncateString(selected[mergedData.shownKey]) }}
+          </span>
+          <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
+        </div>
+      </div>
 
       <input
         :id="mergedData.id"
@@ -55,6 +55,7 @@
         :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
           mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
+          mergedData.postfix ? 'has-postfix' : '',
           mergedData.chips ? 'con-chips--input' : '',
         ]"
         v-model="newValue"
@@ -69,11 +70,19 @@
         :icon="mergedData.iconLeft"
         v-if="mergedData.iconLeft"
       />
+      <!--      /todo v-ifs-->
       <b-icon
         :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
         :icon="mergedData.iconRight"
         v-if="mergedData.iconRight"
       />
+      <!--      todo max length ?? -->
+      <!--       todo classes -->
+      <!--      todo ff -->
+      <!--      todo clear btn -->
+      <span :class="['icon', 'icon--right', '?', 'postfix']" v-if="mergedData.postfix">{{
+        mergedData.postfix
+      }}</span>
       <b-icon
         class="icon icon--password"
         :icon="passwordShown ? 'eye' : 'eye-fill'"
@@ -149,7 +158,7 @@ export default {
     chipsInlineStyle: {
       type: Object,
       default: () => {},
-    }
+    },
   },
   data() {
     return {
@@ -180,6 +189,7 @@ export default {
           helperText: null,
           iconLeft: null,
           iconRight: null,
+          postfix: '', // todo added
           size: 'md',
           showError: true,
           required: false,
@@ -190,7 +200,7 @@ export default {
           readonly: false,
           clearable: true,
           chips: false,
-          shownKey: 'name'
+          shownKey: 'name',
         },
         this.data,
       )
@@ -442,6 +452,19 @@ input[type='number'] {
       }
     }
   }
+
+  .postfix {
+    // todo sizes
+    top: 8px;
+    width: auto;
+    height: auto;
+
+    //  todo
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--value-color);
+    font-weight: var(--value-font-weight);
+  }
 }
 .input-label {
   display: block;
@@ -543,6 +566,10 @@ input[type='number'] {
     }
   }
   .bi {
+    color: var(--filled-font-color);
+  }
+
+  .postfix {
     color: var(--filled-font-color);
   }
 }
@@ -685,7 +712,6 @@ input[type='number'] {
     font-weight: var(--value-font-weight);
     font-family: var(--font-family);
 
-
     &.selected {
       display: flex;
       align-items: center;
@@ -695,7 +721,6 @@ input[type='number'] {
         white-space: nowrap;
       }
     }
-
   }
 
   .chip--close {
@@ -703,7 +728,6 @@ input[type='number'] {
     height: 12px;
     cursor: pointer;
     margin-bottom: 0;
-
   }
 }
 </style>
