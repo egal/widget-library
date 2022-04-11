@@ -14,7 +14,6 @@
       >{{ mergedData.label }}</label
     >
 
-    <!--    todo also inherit fron input-container-->
     <div
       class="input-container"
       :class="{
@@ -70,17 +69,14 @@
         :icon="mergedData.iconLeft"
         v-if="mergedData.iconLeft"
       />
-      <!--      /todo v-ifs-->
       <b-icon
         :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
         :icon="mergedData.iconRight"
         v-if="mergedData.iconRight"
       />
-      <!--      todo max length ?? -->
-      <!--       todo classes -->
-      <!--      todo ff -->
-      <!--      todo clear btn -->
-      <span :class="['icon', 'icon--right', '?', 'postfix']" v-if="mergedData.postfix">{{
+
+      <!--       todo padding -->
+      <span :class="['icon--right', 'postfix']" v-else-if="mergedData.postfix">{{
         mergedData.postfix
       }}</span>
       <b-icon
@@ -167,6 +163,7 @@ export default {
       errorMessage: '',
       passwordShown: false,
       type: '',
+      postfixWidth: '0px',
     }
   },
   computed: {
@@ -189,7 +186,7 @@ export default {
           helperText: null,
           iconLeft: null,
           iconRight: null,
-          postfix: '', // todo added
+          postfix: '',
           size: 'md',
           showError: true,
           required: false,
@@ -234,6 +231,8 @@ export default {
   mounted() {
     this.newValue = this.mergedData.modelValue
     this.newType = this.mergedData.type
+
+    this.calculatePostfixWidth()
   },
   methods: {
     /**
@@ -325,6 +324,14 @@ export default {
         }
       }
     },
+
+    calculatePostfixWidth() {
+      if (document.getElementsByClassName('postfix').length !== 0) {
+        this.postfixWidth = document.getElementsByClassName('postfix')[0].clientWidth + 20 + 'px'
+      } else {
+        this.postfixWidth = '0px'
+      }
+    },
   },
   watch: {
     modelValue(value) {
@@ -350,6 +357,20 @@ input[type='number'] {
   flex-direction: column;
   align-items: flex-start;
   font-family: var(--font-family);
+
+  .postfix {
+    top: 8px;
+    width: auto !important;
+    height: auto;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--value-color);
+    font-weight: var(--value-font-weight);
+    //padding-left: 10px;
+    background-color: var(--background-color);
+    z-index: 2;
+  }
+
   &--lg {
     .input-label {
       font-size: 14px;
@@ -359,6 +380,12 @@ input[type='number'] {
       height: 46px;
       font-size: 16px;
     }
+
+    .postfix {
+      font-size: 16px;
+      top: 14px;
+    }
+
     .subtract-button {
       bottom: 14px;
     }
@@ -376,6 +403,11 @@ input[type='number'] {
         padding-right: 40px;
       }
     }
+
+    .has-postfix {
+      padding-right: v-bind(postfixWidth);
+    }
+
     .arrow-icons {
       top: 13px;
       .bi {
@@ -393,6 +425,12 @@ input[type='number'] {
       height: 36px;
       font-size: 14px;
     }
+
+    .postfix {
+      font-size: 14px;
+      top: 10px;
+    }
+
     .subtract-button {
       bottom: 10px;
     }
@@ -427,6 +465,12 @@ input[type='number'] {
       height: 26px;
       font-size: 10px;
     }
+
+    .postfix {
+      font-size: 10px;
+      top: 8px;
+    }
+
     .subtract-button {
       bottom: 7px;
     }
@@ -452,19 +496,6 @@ input[type='number'] {
       }
     }
   }
-
-  .postfix {
-    // todo sizes
-    top: 8px;
-    width: auto;
-    height: auto;
-
-    //  todo
-    font-family: inherit;
-    font-size: inherit;
-    color: var(--value-color);
-    font-weight: var(--value-font-weight);
-  }
 }
 .input-label {
   display: block;
@@ -481,6 +512,7 @@ input[type='number'] {
   position: relative;
   width: 100%;
   input {
+    font-family: inherit;
     color: var(--value-color);
     width: 100%;
     background-color: var(--background-color);
@@ -499,6 +531,9 @@ input[type='number'] {
       background: var(--background-disabled-color);
       &::placeholder {
         color: var(--placeholder-disabled-color);
+      }
+      & + .postfix {
+        background: var(--background-disabled-color);
       }
     }
     &:disabled + .icon,
@@ -563,14 +598,19 @@ input[type='number'] {
     &:focus {
       background-color: var(--background-color);
       color: var(--value-color);
+
+      & + .postfix {
+        background-color: var(--background-color);
+        color: var(--value-color);
+      }
     }
   }
   .bi {
     color: var(--filled-font-color);
   }
-
   .postfix {
     color: var(--filled-font-color);
+    background-color: var(--filled-background-color);
   }
 }
 .search {
@@ -596,6 +636,9 @@ input[type='number'] {
   .helper-text {
     color: var(--error-color);
   }
+  .postfix {
+    color: var(--error-color);
+  }
 }
 .error + .helper-text {
   color: var(--error-color);
@@ -613,6 +656,9 @@ input[type='number'] {
     color: var(--success-color);
   }
   .helper-text {
+    color: var(--success-color);
+  }
+  .postfix {
     color: var(--success-color);
   }
 }
