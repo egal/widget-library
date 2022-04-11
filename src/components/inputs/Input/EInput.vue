@@ -14,7 +14,6 @@
       >{{ mergedData.label }}</label
     >
 
-    <!--    todo also inherit fron input-container-->
     <div
       class="input-container"
       :class="{
@@ -70,17 +69,13 @@
         :icon="mergedData.iconLeft"
         v-if="mergedData.iconLeft"
       />
-      <!--      /todo v-ifs-->
       <b-icon
         :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
         :icon="mergedData.iconRight"
         v-if="mergedData.iconRight"
       />
-      <!--      todo max length ?? -->
-      <!--       todo classes -->
-      <!--      todo ff -->
-      <!--      todo clear btn -->
-      <span :class="['icon', 'icon--right', '?', 'postfix']" v-if="mergedData.postfix">{{
+
+      <span :class="['icon--right', 'postfix']" v-else-if="mergedData.postfix">{{
         mergedData.postfix
       }}</span>
       <b-icon
@@ -189,7 +184,7 @@ export default {
           helperText: null,
           iconLeft: null,
           iconRight: null,
-          postfix: '', // todo added
+          postfix: '',
           size: 'md',
           showError: true,
           required: false,
@@ -350,6 +345,17 @@ input[type='number'] {
   flex-direction: column;
   align-items: flex-start;
   font-family: var(--font-family);
+
+  .postfix {
+    top: 8px;
+    width: auto !important;
+    height: auto;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--value-color);
+    font-weight: var(--value-font-weight);
+  }
+
   &--lg {
     .input-label {
       font-size: 14px;
@@ -359,6 +365,12 @@ input[type='number'] {
       height: 46px;
       font-size: 16px;
     }
+
+    .postfix {
+      font-size: 16px;
+      top: 14px;
+    }
+
     .subtract-button {
       bottom: 14px;
     }
@@ -393,6 +405,12 @@ input[type='number'] {
       height: 36px;
       font-size: 14px;
     }
+
+    .postfix {
+      font-size: 14px;
+      top: 10px;
+    }
+
     .subtract-button {
       bottom: 10px;
     }
@@ -427,6 +445,12 @@ input[type='number'] {
       height: 26px;
       font-size: 10px;
     }
+
+    .postfix {
+      font-size: 10px;
+      top: 8px;
+    }
+
     .subtract-button {
       bottom: 7px;
     }
@@ -452,19 +476,6 @@ input[type='number'] {
       }
     }
   }
-
-  .postfix {
-    // todo sizes
-    top: 8px;
-    width: auto;
-    height: auto;
-
-    //  todo
-    font-family: inherit;
-    font-size: inherit;
-    color: var(--value-color);
-    font-weight: var(--value-font-weight);
-  }
 }
 .input-label {
   display: block;
@@ -481,6 +492,7 @@ input[type='number'] {
   position: relative;
   width: 100%;
   input {
+    font-family: inherit;
     color: var(--value-color);
     width: 100%;
     background-color: var(--background-color);
@@ -568,7 +580,6 @@ input[type='number'] {
   .bi {
     color: var(--filled-font-color);
   }
-
   .postfix {
     color: var(--filled-font-color);
   }
@@ -596,6 +607,9 @@ input[type='number'] {
   .helper-text {
     color: var(--error-color);
   }
+  .postfix {
+    color: var(--error-color);
+  }
 }
 .error + .helper-text {
   color: var(--error-color);
@@ -613,6 +627,9 @@ input[type='number'] {
     color: var(--success-color);
   }
   .helper-text {
+    color: var(--success-color);
+  }
+  .postfix {
     color: var(--success-color);
   }
 }
