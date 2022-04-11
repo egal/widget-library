@@ -75,7 +75,6 @@
         v-if="mergedData.iconRight"
       />
 
-      <!--       todo padding -->
       <span :class="['icon--right', 'postfix']" v-else-if="mergedData.postfix">{{
         mergedData.postfix
       }}</span>
@@ -366,7 +365,6 @@ input[type='number'] {
     font-size: inherit;
     color: var(--value-color);
     font-weight: var(--value-font-weight);
-    //padding-left: 10px;
     background-color: var(--background-color);
     z-index: 2;
   }
