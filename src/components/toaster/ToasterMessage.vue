@@ -14,7 +14,12 @@
     <div class="toast__content-container">
       <span class="toast__title" :style="styleConfig?.title">{{ title }}</span>
       <span class="toast__message" :style="styleConfig?.message">{{ message }}</span>
-      <span class="toast__text" v-html="rawHtml" v-if="rawHtml" :style="styleConfig.rawHtml"></span>
+      <span
+        class="toast__text"
+        v-html="rawHtml"
+        v-if="rawHtml"
+        :style="styleConfig?.rawHtml"
+      ></span>
       <button
         class="toast__button toast__button--primary"
         @click="emitActionEvent('primary')"
