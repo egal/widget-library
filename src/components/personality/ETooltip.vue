@@ -11,7 +11,10 @@
     <div class="tooltip__component" v-else>
       <slot name="element"></slot>
     </div>
-    <div :class="`tooltip__text --position-${mergedData.position || 'top'}`">
+    <div
+      v-if="hasSlotTooltipText"
+      :class="`tooltip__text --position-${mergedData.position || 'top'}`"
+    >
       <slot></slot>
     </div>
   </div>
@@ -50,6 +53,14 @@ export default {
         '--font': this.mergedData.font,
         '--font-weight': this.mergedData.weight,
       }
+    },
+
+    /**
+     * Check if text for tooltip is passed to default slot
+     * @return {boolean}
+     */
+    hasSlotTooltipText() {
+      return !!this.$slots?.default
     },
   },
 }
@@ -96,9 +107,6 @@ export default {
 .tooltip-component {
   position: relative;
   display: inline-block;
-  background-color: $gray-500;
-  border-radius: 50%;
-  margin-left: 300px;
   z-index: 1;
 
   &.--size {
@@ -134,13 +142,13 @@ export default {
     &.--position-top {
       bottom: calc(100% + 20px);
       right: 50%;
-      transform: translate(50%, 40px);
+      transform: translate(50%, 15px);
     }
 
     &.--position-bottom {
       top: calc(100% + 20px);
       right: 50%;
-      transform: translate(50%, -40px);
+      transform: translate(50%, -15px);
     }
 
     &.--position-left {
