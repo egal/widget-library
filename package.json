@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "@dvuckovic/vue3-bootstrap-icons": "^1.0.4",
+    "@egalteam/framework": "^2.0.3",
     "@rollup/plugin-typescript": "^8.3.0",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
@@ -26,7 +27,8 @@
     "vue-router": "^4.0.0-0",
     "vue-svg-inline-loader": "^2.1.2",
     "vue-svg-inline-plugin": "^2.2.0",
-    "vue-upload-component": "^3.0.50"
+    "vue-upload-component": "^3.0.50",
+    "date-fns": "^2.27.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
