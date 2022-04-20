@@ -39,7 +39,6 @@ export default defineComponent({
           this.order = 'desc'
       }
       let sortColumn = [this.cell.path, this.order]
-      // console.log(sortColumn)
       eventBus.$emit('sort-column', sortColumn)
     }
   }

@@ -1,5 +1,8 @@
 <template>
-  <Table :table="table"></Table>
+  <Table :table="table" is-row-expandable>
+    <template v-slot:expandedRow>
+    </template>
+  </Table>
 </template>
 
 <script lang="ts">

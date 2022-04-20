@@ -6,6 +6,7 @@
     <div class="header-cell" v-for="(cell, index) in headerContent" :key="index">
       <TableHeaderCell :cell="cell"></TableHeaderCell>
     </div>
+    <div v-if="isExpandable" style="width: 16px"></div>
   </div>
 </template>
 
@@ -35,6 +36,10 @@ export default defineComponent({
     },
     grid: {
       type: String
+    },
+    isExpandable: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['check-all-boxes'],
@@ -45,7 +50,6 @@ export default defineComponent({
   },
   methods: {
     checkAllBoxes(value: any) {
-      console.log(value)
       eventBus.$emit('check-all-boxes', value.srcElement.checked)
     }
   }

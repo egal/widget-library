@@ -141,6 +141,7 @@ export default class Table {
         let item = {}
         let path: string
         this.tableItems.forEach((rowData, rowIndex) => {
+            this.tableData.items.push({ id: rowData.id, values: {} })
             this.metadata.fields.forEach((field) => {
                 if(field.path.includes('[]')){
                     path = field.path.split('[')[0]
@@ -153,7 +154,7 @@ export default class Table {
                 tableFieldArray.push(justStrings)
             })
             item = Object.assign({}, ...tableFieldArray)
-            this.tableData.items.push(item)
+            this.tableData.items[rowIndex].values = item
         })
     }
 }

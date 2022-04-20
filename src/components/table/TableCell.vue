@@ -1,10 +1,10 @@
 <template>
-  <div v-if="Array.isArray(value) && value.length">
-    <div v-for="cell in value" :key="cell">
+  <div v-if="Array.isArray(value) && value.length" class="cell-container">
+    <div v-for="cell in value" :key="cell" class="array-cell">
       <span>{{ cell }}</span>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="cell">
     <span>{{ value }} </span>
   </div>
 </template>

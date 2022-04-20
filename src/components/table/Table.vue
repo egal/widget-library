@@ -52,6 +52,7 @@
         :header-content="tableConstructor?.tableData?.headers"
         :show-checkbox="showCheckbox"
         :grid="setGrid"
+        :is-expandable="isRowExpandable"
       ></TableHeader>
       <div class="table-row-container">
         <div v-for="item in tableConstructor?.tableData?.items" class="table-row">
@@ -61,7 +62,12 @@
               :show-checkbox="showCheckbox"
               :check-box="checkBox"
               :grid="setGrid"
-          ></TableRow>
+              :is-expandable="isRowExpandable"
+          >
+            <template v-slot:expandedRow>
+              <slot name="expandedRow"></slot>
+            </template>
+          </TableRow>
         </div>
       </div>
     </div>
@@ -122,6 +128,10 @@ export default defineComponent({
       type: Object,
       default: {},
     },
+    isRowExpandable: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -169,6 +179,12 @@ export default defineComponent({
     })
     eventBus.$on('check-all-boxes', (value: boolean) => {
       this.checkBox = value
+    })
+    eventBus.$on('set-active-row', (item: object) => {
+
+    })
+    eventBus.$on('uncheck-row', (item: object) => {
+      console.log(item)
     })
   },
   methods: {
