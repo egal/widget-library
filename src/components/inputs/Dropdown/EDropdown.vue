@@ -49,7 +49,9 @@
         {{ option[shownKey] }}
       </div>
       <div v-if="showMoreButtonDisplay" class="dropdown-button">
-        <button @click="$emit('show-more')" class="show-more-btn">{{ showMoreButtonText }}</button>
+        <button @click="$emit('show-more')" class="show-more-btn">
+          {{ showMoreButtonText }}
+        </button>
       </div>
     </div>
   </div>
@@ -127,10 +129,13 @@ export default {
         '--option-hover-background-color':
           this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
         '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
-        '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
+        '--active-background-color':
+          this.styleConfig?.activeBackgroundColor || '#3385ff',
+        '--active-option-color':
+          this.styleConfig?.activeOptionColor || '#ffffff',
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
-        '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
+        '--group-name-font-weight':
+          this.styleConfig?.groupNameFontWeight || 700,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
@@ -148,7 +153,11 @@ export default {
      */
     isActive(option) {
       if (Array.isArray(this.value)) {
-        return this.value.findIndex((item) => item[this.shownKey] === option[this.shownKey]) !== -1
+        return (
+          this.value.findIndex(
+            (item) => item[this.shownKey] === option[this.shownKey],
+          ) !== -1
+        )
       }
       return this.value[this.shownKey] === option[this.shownKey]
     },
@@ -163,7 +172,9 @@ export default {
         return
       }
       this.filteredOptions = this.options.filter(
-        (option) => option[this.shownKey].toLowerCase().indexOf(value.toLowerCase()) !== -1,
+        (option) =>
+          option[this.shownKey].toLowerCase().indexOf(value.toLowerCase()) !==
+          -1,
       )
     },
   },

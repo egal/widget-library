@@ -4,13 +4,17 @@
       v-for="date in dates"
       :key="date"
       :class="{
-        '--current': isDateInCurMonth(date, currentMonth) && currentDay && date === currentDay,
+        '--current':
+          isDateInCurMonth(date, currentMonth) &&
+          currentDay &&
+          date === currentDay,
         '--active': isDateSelected(date),
         '--beyond-active': isBeyondOrOnDateSelected(date, 'beyond'),
         '--on-active': isBeyondOrOnDateSelected(date, 'on'),
         '--in-range': isInDateRange(date) && !isDateSelected(date),
         '--not-cur-month': !isDateInCurMonth(date, currentMonth),
-        '--past': isDateInCurMonth(date, currentMonth) && date < this.selectedDays[0],
+        '--past':
+          isDateInCurMonth(date, currentMonth) && date < this.selectedDays[0],
       }"
       @click="$emit('select-date', date)"
       @mouseenter="$emit('mouse-enter', date)"
@@ -67,7 +71,10 @@ export default defineComponent({
     },
 
     //Определяет, находится ли дата над или под выбранной датой, нужно для верстки
-    isBeyondOrOnDateSelected(day: ISODate, mode: 'beyond' | 'on' = 'beyond'): boolean {
+    isBeyondOrOnDateSelected(
+      day: ISODate,
+      mode: 'beyond' | 'on' = 'beyond',
+    ): boolean {
       const [max, min] = this.selectedDays
         .map((el: any) => new Date(el))
         .sort((a, b) => a.getTime() - b.getTime())
@@ -85,7 +92,9 @@ export default defineComponent({
 
     //Определяет, находится ли дата в диапазоне междувыбранных дат
     isInDateRange(day: ISODate): boolean {
-      const [min, max] = this.selectedDays.map((el: any) => new Date(el).getTime()).sort()
+      const [min, max] = this.selectedDays
+        .map((el: any) => new Date(el).getTime())
+        .sort()
       const dayTime = new Date(day).getTime()
       return dayTime >= min && dayTime <= max
     },

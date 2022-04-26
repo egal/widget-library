@@ -12,7 +12,10 @@
         :key="link.to"
       >
         <li
-          :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active']"
+          :class="[
+            isActive && 'router-link-active',
+            isExactActive && 'router-link-exact-active',
+          ]"
         >
           <a :href="href" @click="navigate"
             ><BootstrapIcon :icon="link.icon" />

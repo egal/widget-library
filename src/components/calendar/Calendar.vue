@@ -2,62 +2,66 @@
   <div class="calendar" :style="getStyleVars">
     <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
       <Controls
-        :data="data"
-        :month-to-display="curMonth"
-        @change-month="(value) => changeMonth(value)"
+          :data="data"
+          :month-to-display="curMonth"
+          @change-month="(value) => changeMonth(value)"
       />
       <ul class="calendar__weekdays">
         <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
       </ul>
       <Days
-        :dates="dates"
-        :current-month="curMonth"
-        :selected-days="selectedDays"
-        :locale="data?.locale"
-        @select-date="(date) => selectDate(date)"
-        @mouse-enter="(date) => queryHover(date)"
+          :dates="dates"
+          :current-month="curMonth"
+          :selected-days="selectedDays"
+          :locale="data?.locale"
+          @select-date="(date) => selectDate(date)"
+          @mouse-enter="(date) => queryHover(date)"
       />
 
       <SelectTime
-        v-if="data?.timePicker"
-        :config="data?.timePicker"
-        :hours="getHoursFromTimestamp(data?.data?.date_from)?.hours"
-        :minutes="getMinutesFromTimestamp(data?.data?.date_from)"
-        :format="getHoursFromTimestamp(data?.data?.date_from)?.format"
-        :is-disabled="selectedDays.length === 0"
-        :select-style-config="selectStyleConfig"
-        type="from"
-        @select="setTime"
+          v-if="data?.timePicker"
+          :config="data?.timePicker"
+          :hours="getHoursFromTimestamp(data?.data?.date_from)?.hours"
+          :minutes="getMinutesFromTimestamp(data?.data?.date_from)"
+          :format="getHoursFromTimestamp(data?.data?.date_from)?.format"
+          :is-disabled="selectedDays.length === 0"
+          :select-style-config="selectStyleConfig"
+          type="from"
+          @select="setTime"
       />
     </div>
-    <div class="right" v-if="data?.isDouble" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
+    <div
+        class="right"
+        v-if="data?.isDouble"
+        :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
+    >
       <Controls
-        :data="data"
-        :month-to-display="nextMonth"
-        @change-month="(value) => changeMonth(value)"
+          :data="data"
+          :month-to-display="nextMonth"
+          @change-month="(value) => changeMonth(value)"
       />
       <ul class="calendar__weekdays">
         <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
       </ul>
       <Days
-        :dates="nextMonthDates"
-        :current-month="nextMonth"
-        :selected-days="selectedDays"
-        :locale="data?.locale"
-        @select-date="(date) => selectDate(date)"
-        @mouse-enter="(date) => queryHover(date)"
+          :dates="nextMonthDates"
+          :current-month="nextMonth"
+          :selected-days="selectedDays"
+          :locale="data?.locale"
+          @select-date="(date) => selectDate(date)"
+          @mouse-enter="(date) => queryHover(date)"
       />
 
       <SelectTime
-        v-if="data?.timePicker"
-        :config="data?.timePicker"
-        :hours="getHoursFromTimestamp(data?.data?.date_to)?.hours"
-        :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
-        :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
-        :is-disabled="selectedDays.length <= 1"
-        :select-style-config="selectStyleConfig"
-        type="to"
-        @select="setTime"
+          v-if="data?.timePicker"
+          :config="data?.timePicker"
+          :hours="getHoursFromTimestamp(data?.data?.date_to)?.hours"
+          :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
+          :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
+          :is-disabled="selectedDays.length <= 1"
+          :select-style-config="selectStyleConfig"
+          type="to"
+          @select="setTime"
       />
     </div>
   </div>
@@ -68,7 +72,7 @@ import SelectTime from '@/components/calendar/components/SelectTime.vue'
 import Controls from '@/components/calendar/components/Controls.vue'
 import Days from '@/components/calendar/components/Days.vue'
 
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import {
   addLeadingZeros,
   capitalize,
@@ -114,18 +118,24 @@ type dataProp = {
 }
 
 export default defineComponent({
-  name: 'OptionsCalendar',
-  components: { SelectTime, Controls, Days },
+  name: 'ECalendar',
+  components: {SelectTime, Controls, Days},
   props: {
     data: {
       type: Object as () => dataProp,
-      default: () => {},
+      default: () => {
+      },
     },
     // проп со стилями для ESelect
     selectStyleConfig: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
+    table: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -147,7 +157,8 @@ export default defineComponent({
     getStyleVars(): Props {
       return {
         '--active-color': this.data?.activeColor || '#0066FF',
-        '--active-background-color': this.data?.activeBackgroundColor || '#E5F0FF',
+        '--active-background-color':
+            this.data?.activeBackgroundColor || '#E5F0FF',
         '--font-family': this.data?.fontFamily || 'Raleway',
         '--font-weight': this.data?.fontWeight || 'normal',
         '--font-size': this.data?.fontSize || '14px',
@@ -157,14 +168,14 @@ export default defineComponent({
 
     weekdays(): string[] {
       return new Array(7)
-        .fill(new Date())
-        .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
-        .map((weekday) => {
-          return weekday.toLocaleString(this.data?.locale ?? 'en-US', {
-            weekday: 'short',
+          .fill(new Date())
+          .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
+          .map((weekday) => {
+            return weekday.toLocaleString(this.data?.locale ?? 'en-US', {
+              weekday: 'short',
+            })
           })
-        })
-        .map((weekday) => capitalize(weekday))
+          .map((weekday) => capitalize(weekday))
     },
   },
   mounted() {
@@ -175,14 +186,20 @@ export default defineComponent({
   methods: {
     setInitSelectedValues(): void {
       if (this.data?.data?.date_from) {
-        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_from))
+        this.selectedDays.push(
+            this.getDateFromTimestamp(this.data?.data?.date_from),
+        )
       }
       if (this.data?.data?.date_to) {
-        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_to))
+        this.selectedDays.push(
+            this.getDateFromTimestamp(this.data?.data?.date_to),
+        )
       }
 
       if (this.selectedDays.length !== 0) {
-        this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
+        this.formattedDateTimes = this.selectedDays.map((day) =>
+            new Date(`${day}`).toISOString(),
+        )
       }
     },
 
@@ -260,35 +277,42 @@ export default defineComponent({
     //Генерация массива дат на месяц
     generateDates(curMonth: Date | ISODate): ISODate[] {
       return Array.from(
-        new Set(
-          new Array(31)
-            .fill(1)
-            .map(() => new Date(curMonth))
-            .map((el, i) => {
-              el.setDate(i + 1)
-              return el
-            })
-            .filter((el) => isDateInCurMonth(el, curMonth))
-            .map((el) => new Array(7).fill(el).map(this.generateWeekDaysFromIterator))
-            .flat()
-            .map(formatToISODate),
-        ),
+          new Set(
+              new Array(31)
+                  .fill(1)
+                  .map(() => new Date(curMonth))
+                  .map((el, i) => {
+                    el.setDate(i + 1)
+                    return el
+                  })
+                  .filter((el) => isDateInCurMonth(el, curMonth))
+                  .map((el) =>
+                      new Array(7).fill(el).map(this.generateWeekDaysFromIterator),
+                  )
+                  .flat()
+                  .map(formatToISODate),
+          ),
       )
     },
 
     //Выбор даты
     selectDate(dateString: ISODate): void {
       ;(this.selectedDays.length == 1 || this.selectedDays.length >= 2) &&
-        !this.mouseMayEnter &&
-        this.declineSelect()
+      !this.mouseMayEnter &&
+      this.declineSelect()
 
       this.selectedDays.push(dateString)
       this.selectedDays = Array.from(new Set(this.selectedDays)).sort()
       this.mouseMayEnter = !this.mouseMayEnter
 
-      this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
-
-      this.$emit('update:dateValue', this.formattedDateTimes)
+      this.formattedDateTimes = this.selectedDays.map((day) =>
+          new Date(`${day}`).toISOString(),
+      )
+      if (this.table) {
+        this.$emit('update:dateValue', {name: 'calendar', value: this.formattedDateTimes})
+      } else {
+        this.$emit('update:dateValue', this.formattedDateTimes)
+      }
     },
 
     declineSelect(): void {
@@ -306,24 +330,29 @@ export default defineComponent({
 
     setTime(val): void {
       if (!this.data?.isDouble) {
-        this.formattedDateTimes.map((item) => new Date(`${item} ${val.time}`).toISOString())
+        this.formattedDateTimes.map((item) =>
+            new Date(`${item} ${val.time}`).toISOString(),
+        )
       } else {
         switch (val.type) {
           case 'to':
             this.formattedDateTimes[1] = new Date(
-              `${this.selectedDays[1]} ${val.time}`,
+                `${this.selectedDays[1]} ${val.time}`,
             ).toISOString()
             break
           case 'from':
           default:
             this.formattedDateTimes[0] = new Date(
-              `${this.selectedDays[0]} ${val.time}`,
+                `${this.selectedDays[0]} ${val.time}`,
             ).toISOString()
             break
         }
       }
-
-      this.$emit('update:dateValue', this.formattedDateTimes)
+      if (this.table) {
+        this.$emit('update:dateValue', {name: 'calendar', value: this.formattedDateTimes})
+      } else {
+        this.$emit('update:dateValue', this.formattedDateTimes)
+      }
     },
   },
   watch: {},
@@ -332,6 +361,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import '../../assets/variables.scss';
+
 .calendar {
   display: flex;
   flex-direction: row;
@@ -340,22 +370,27 @@ export default defineComponent({
   font-family: var(--font-family);
   box-shadow: $shadow-2xl;
   border-radius: 20px;
+
   .left,
   .right {
     display: flex;
     flex-direction: column;
   }
+
   .left {
     ::v-deep(.calendar__controls-right.hidden) {
       visibility: hidden;
     }
   }
+
   .right {
     margin-left: 40px;
+
     ::v-deep(.calendar__controls-left) {
       visibility: hidden;
     }
   }
+
   ::v-deep(.calendar__controls) {
     display: flex;
     list-style: none;
@@ -373,12 +408,15 @@ export default defineComponent({
       height: 36px;
       justify-content: center;
       align-items: center;
+
       .bi {
         color: $gray-600;
         transition: 0.3s ease color;
       }
+
       &:hover {
         cursor: pointer;
+
         .bi {
           color: $gray-800;
         }
@@ -393,12 +431,14 @@ export default defineComponent({
       color: $gray-800;
     }
   }
+
   ::v-deep(.calendar__weekdays) {
     font-size: calc(var(--font-size) - 2px);
     font-weight: normal;
     line-height: 120%;
     color: $gray-500;
   }
+
   ::v-deep(.calendar__weekdays),
   ::v-deep(.calendar__days) {
     display: grid;
@@ -407,6 +447,7 @@ export default defineComponent({
     padding: 0;
     margin: 0;
     column-gap: 4px;
+
     li {
       display: flex;
       justify-content: center;
@@ -414,6 +455,7 @@ export default defineComponent({
       width: 40px;
       height: 40px;
       position: relative;
+
       &::before,
       &::after {
         position: absolute;
@@ -426,6 +468,7 @@ export default defineComponent({
       }
     }
   }
+
   ::v-deep(.calendar__days) {
     margin-bottom: auto;
 
@@ -435,21 +478,25 @@ export default defineComponent({
       font-weight: var(--font-weight);
       line-height: 150%;
       box-sizing: border-box;
+
       &.--current {
         border: 1px solid var(--active-color);
         color: var(--active-color);
         background-color: $base-white;
       }
+
       &:hover {
         cursor: pointer;
         background-color: var(--active-background-color);
         color: var(--active-color);
       }
+
       &.--active {
         background-color: var(--active-color);
         color: white;
         z-index: 1;
       }
+
       &.--in-range {
         position: relative;
         border-radius: 0;
@@ -457,27 +504,34 @@ export default defineComponent({
         color: var(--active-color);
         border: none;
         transition: 0s all;
+
         &:hover {
           cursor: default;
         }
+
         &::before,
         &::after {
           background-color: var(--active-background-color);
         }
+
         &::before {
           left: -8px;
           bottom: 0;
         }
+
         &::after {
           right: -8px;
           top: 0;
         }
+
         &:nth-child(7n + 1)::before {
           display: none;
         }
+
         &:nth-child(7n)::after {
           display: none;
         }
+
         &.--beyond-active:nth-child(7n)::before {
           display: block;
           width: 100%;
@@ -487,6 +541,7 @@ export default defineComponent({
           right: 0;
           top: -8px;
         }
+
         &.--beyond-active:nth-child(7n + 1)::before {
           display: block;
           width: 100%;
@@ -494,18 +549,22 @@ export default defineComponent({
           left: 0;
           top: -8px;
         }
+
         &.--on-active:nth-child(7n)::after {
           display: none;
         }
       }
+
       &.--not-cur-month {
         color: $gray-300;
       }
+
       &.--past {
         color: $gray-500;
       }
     }
   }
+
   ::v-deep(.footer > .label) {
     font-size: calc(var(--font-size) - 2px);
   }

@@ -1,5 +1,9 @@
 <template>
-  <div class="file-uploader" :class="`file-uploader--${mergedData.size}`" :style="getStyleVars">
+  <div
+    class="file-uploader"
+    :class="`file-uploader--${mergedData.size}`"
+    :style="getStyleVars"
+  >
     <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
     <div class="upload-zone">
       <icon icon="upload" />
@@ -19,18 +23,29 @@
       </file-upload>
     </div>
     <div class="file-preview" v-show="newFiles.length">
-      <div class="file" v-for="file in newFiles" :key="file.id" @click="openFile(file.file_url)">
+      <div
+        class="file"
+        v-for="file in newFiles"
+        :key="file.id"
+        @click="openFile(file.file_url)"
+      >
         <div class="file-icon">
           <icon icon="file-earmark" />
         </div>
         <div class="file-name">{{ file.name || 'No name' }}</div>
         <div class="file-size">{{ fileSize(file.size) }}</div>
-        <div class="file-delete" @click.stop="deleteFile(file.id)" v-show="mergedData.deletable">
+        <div
+          class="file-delete"
+          @click.stop="deleteFile(file.id)"
+          v-show="mergedData.deletable"
+        >
           <icon icon="x-lg" />
         </div>
       </div>
     </div>
-    <span class="helper-text" v-if="mergedData.helperText">{{ mergedData.helperText }}</span>
+    <span class="helper-text" v-if="mergedData.helperText">{{
+      mergedData.helperText
+    }}</span>
   </div>
 </template>
 
@@ -84,7 +99,8 @@ export default {
     getStyleVars() {
       return {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--file-background-color': this.styleConfig?.fileBackgroundColor || '#f7fafc',
+        '--file-background-color':
+          this.styleConfig?.fileBackgroundColor || '#f7fafc',
         '--file-border-radius': this.styleConfig?.fileBorderRadius || '4px',
         '--file-icon-color': this.styleConfig?.fileIconColor || '#a0aec0',
         '--file-name-font-weight': this.styleConfig?.fileNameFontWeight || 500,
@@ -96,15 +112,19 @@ export default {
         '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
         '--label-font-size': this.styleConfig?.labelFontSize || '14px',
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
-        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
+        '--helper-text-font-weight':
+          this.styleConfig?.helperTextFontWeight || 500,
+        '--helper-text-font-size':
+          this.styleConfig?.helperTextFontSize || '12px',
         '--border-color': this.styleConfig?.borderColor || '#cbd5e0',
         '--border-radius': this.styleConfig?.borderRadius || '4px',
         '--icon-color': this.styleConfig?.iconColor || '#718096',
         '--drop-label-color': this.styleConfig?.dropLabelColor || '#718096',
         '--browse-label-color': this.styleConfig?.browseLabelColor || '#3385ff',
-        '--uploader-labels-font-weight': this.styleConfig?.uploaderLabelsFontWeight || 500,
-        '--uploader-labels-font-size': this.styleConfig?.uploderLabelsFontSize || '14px',
+        '--uploader-labels-font-weight':
+          this.styleConfig?.uploaderLabelsFontWeight || 500,
+        '--uploader-labels-font-size':
+          this.styleConfig?.uploderLabelsFontSize || '14px',
       }
     },
   },
@@ -354,15 +374,18 @@ export default {
       }
       this.createUploadPath(file.name).then((createPathResponse) => {
         this.createChunks(file).then((chunks) => {
-          this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
-            () => {
-              this.completeChunksUpload(createPathResponse.upload_id, createPathResponse.path).then(
-                (path) => {
-                  this.createFile(path)
-                },
-              )
-            },
-          )
+          this.uploadChunk(
+            chunks,
+            createPathResponse.upload_id,
+            createPathResponse.path,
+          ).then(() => {
+            this.completeChunksUpload(
+              createPathResponse.upload_id,
+              createPathResponse.path,
+            ).then((path) => {
+              this.createFile(path)
+            })
+          })
         })
       })
     },

@@ -14,7 +14,10 @@
     <p
       v-if="!mergedData.imgUrl || mergedData.isNameRequired"
       class="avatar__name"
-      :class="{ '--darken': mergedData.darken, '--transparent': mergedData.imgUrl }"
+      :class="{
+        '--darken': mergedData.darken,
+        '--transparent': mergedData.imgUrl,
+      }"
     >
       {{ getShortName }}
     </p>

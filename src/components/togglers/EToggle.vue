@@ -67,7 +67,11 @@ export default {
      * @returns {object}
      */
     mergedCustomStyles() {
-      return Object.assign({}, this.mergedData.labelStyle, this.inputStyleVariables)
+      return Object.assign(
+        {},
+        this.mergedData.labelStyle,
+        this.inputStyleVariables,
+      )
     },
 
     /**
@@ -78,14 +82,22 @@ export default {
       return {
         '--input-border-color': this.styleConfig.borderColor || null,
         '--input-background-color': this.styleConfig.backgroundColor || null,
-        '--input-border-color-hover': this.styleConfig.hover?.borderColor || null,
-        '--input-background-color-hover': this.styleConfig.hover?.backgroundColor || null,
-        '--input-border-color-active': this.styleConfig.active?.borderColor || null,
-        '--input-background-color-active': this.styleConfig.active?.backgroundColor || null,
-        '--input-border-color-checked': this.styleConfig.checked?.borderColor || null,
-        '--input-background-color-checked': this.styleConfig.checked?.backgroundColor || null,
-        '--input-border-color-disabled': this.styleConfig.disabled?.borderColor || null,
-        '--input-background-color-disabled': this.styleConfig.disabled?.backgroundColor || null,
+        '--input-border-color-hover':
+          this.styleConfig.hover?.borderColor || null,
+        '--input-background-color-hover':
+          this.styleConfig.hover?.backgroundColor || null,
+        '--input-border-color-active':
+          this.styleConfig.active?.borderColor || null,
+        '--input-background-color-active':
+          this.styleConfig.active?.backgroundColor || null,
+        '--input-border-color-checked':
+          this.styleConfig.checked?.borderColor || null,
+        '--input-background-color-checked':
+          this.styleConfig.checked?.backgroundColor || null,
+        '--input-border-color-disabled':
+          this.styleConfig.disabled?.borderColor || null,
+        '--input-background-color-disabled':
+          this.styleConfig.disabled?.backgroundColor || null,
       }
     },
   },

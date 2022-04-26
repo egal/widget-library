@@ -1,15 +1,21 @@
 <template>
-  <div class="counter" :class="`counter--${mergedData.size}`" :style="getStyleVars">
-    <div class="counter-label" v-if="mergedData.label">{{ mergedData.label }}</div>
+  <div
+      class="counter"
+      :class="`counter--${mergedData.size}`"
+      :style="getStyleVars"
+  >
+    <div class="counter-label" v-if="mergedData.label">
+      {{ mergedData.label }}
+    </div>
     <div class="counter-container">
       <div class="counter-container__minus">
-        <b-icon icon="dash-lg" @click="decreaseValue" />
+        <b-icon icon="dash-lg" @click="decreaseValue"/>
       </div>
       <div class="counter-container__value">
         {{ newValue }}
       </div>
       <div class="counter-container__plus">
-        <b-icon icon="plus-lg" @click="increaseValue" />
+        <b-icon icon="plus-lg" @click="increaseValue"/>
       </div>
     </div>
     <div class="counter-helper-text" v-if="mergedData.helperText">
@@ -29,12 +35,18 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     styleConfig: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
+    table: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -44,15 +56,15 @@ export default {
   computed: {
     mergedData() {
       return Object.assign(
-        {
-          label: 'label',
-          helperText: '',
-          modelValue: 0,
-          max: null,
-          min: null,
-          size: 'md',
-        },
-        this.data,
+          {
+            label: 'label',
+            helperText: '',
+            modelValue: 0,
+            max: null,
+            min: null,
+            size: 'md',
+          },
+          this.data,
       )
     },
     getStyleVars() {
@@ -63,7 +75,8 @@ export default {
         '--label-color': this.styleConfig?.labelColor || '#4a5568',
         '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
+        '--helper-text-font-weight':
+            this.styleConfig?.helperTextFontWeight || 500,
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
@@ -75,16 +88,30 @@ export default {
   },
   methods: {
     increaseValue() {
-      if (!this.mergedData.max || (this.mergedData.max && newValue < this.mergedData.max)) {
+      if (
+          !this.mergedData.max ||
+          (this.mergedData.max && newValue < this.mergedData.max)
+      ) {
         this.newValue++
       }
-      this.$emit('update:modelValue', this.newValue)
+      if (this.table) {
+        this.$emit('update:modelValue', {name: 'counter', value: this.newValue})
+      } else {
+        this.$emit('update:modelValue', this.newValue)
+      }
     },
     decreaseValue() {
-      if (!this.mergedData.min || (this.mergedData.min && this.newValue > this.mergedData.min)) {
+      if (
+          !this.mergedData.min ||
+          (this.mergedData.min && this.newValue > this.mergedData.min)
+      ) {
         this.newValue--
       }
-      this.$emit('update:modelValue', this.newValue)
+      if (this.table) {
+        this.$emit('update:modelValue', {name: 'counter', value: this.newValue})
+      } else {
+        this.$emit('update:modelValue', this.newValue)
+      }
     },
   },
   watch: {
@@ -97,6 +124,7 @@ export default {
 
 <style scoped lang="scss">
 @import 'src/assets/variables';
+
 .counter {
   display: flex;
   flex-direction: column;
@@ -104,11 +132,13 @@ export default {
   justify-content: center;
   user-select: none;
   font-family: var(--font-family);
+
   &-label {
     color: var(--label-color);
     font-weight: var(--label-font-weight);
     margin-bottom: 4px;
   }
+
   &-container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -138,6 +168,7 @@ export default {
       align-self: center;
     }
   }
+
   &-helper-text {
     font-size: 10px;
     font-weight: var(--helper-text-font-weight);
@@ -148,10 +179,12 @@ export default {
     .counter-label {
       font-size: 14px;
     }
+
     .counter-container {
       height: 46px;
       padding: 6px 12px;
       grid-column-gap: 22px;
+
       &__minus,
       &__plus {
         .bi {
@@ -161,10 +194,12 @@ export default {
       }
     }
   }
+
   &--md {
     .counter-label {
       font-size: 12px;
     }
+
     .counter-container {
       height: 36px;
       grid-column-gap: 18px;
@@ -179,10 +214,12 @@ export default {
       }
     }
   }
+
   &--sm {
     .counter-label {
       font-size: 10px;
     }
+
     .counter-container {
       height: 26px;
       grid-column-gap: 16px;

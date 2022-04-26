@@ -14,7 +14,8 @@
     .control-buttons {
       display: flex;
       justify-content: flex-end;
-      .edit-button, .save-button {
+      .edit-button,
+      .save-button {
         margin-right: 16px;
       }
     }
@@ -36,9 +37,10 @@
       grid-template-columns: min-content;
       padding: 18px 24px;
       position: sticky;
-      top:0;
+      top: 0;
       background: $base-white;
       border-bottom: 1px solid $gray-200;
+      z-index: 20;
       .header-cell {
         display: flex;
         justify-content: center;
@@ -62,7 +64,7 @@
     }
     .table-row-container {
       .table-row:not(:first-child) {
-        border-top:1px solid $gray-200;
+        border-top: 1px solid $gray-200;
       }
       .table-row {
         text-align: center;
@@ -72,7 +74,8 @@
           grid-template-columns: min-content;
           cursor: pointer;
           padding: 24px;
-          .table-cell-container, .row__checkbox {
+          .table-cell-container,
+          .row__checkbox {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -80,6 +83,8 @@
           .row-open-icon {
             display: flex;
             align-items: center;
+            width: 43px;
+            justify-content: flex-end;
             button {
               background: none;
               border: none;
@@ -87,7 +92,7 @@
               svg.bi.icon.icon--open {
                 width: 16px;
                 height: 16px;
-                color:$gray-600;
+                color: $gray-600;
                 transition: all 0.1s ease-in;
               }
               .rotate {
@@ -97,17 +102,20 @@
           }
         }
         .row-container.active {
-          background: $default-secondary;
+          background: $gray-200;
+        }
+        .row-container:hover {
+          background: $gray-100;
         }
         .slot-container.collapse-content {
           min-height: 0;
           overflow: hidden;
-          transition: min-height .5s;
+          transition: min-height 0.5s;
         }
         .expand-content {
           min-height: 250px;
           height: auto;
-          transition: min-height .5s;
+          transition: min-height 0.5s;
         }
       }
     }

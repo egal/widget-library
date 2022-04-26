@@ -1,6 +1,11 @@
 <template>
   <teleport to="body">
-    <transition-group class="toaster" :class="`toaster--${position}`" name="toaster" tag="div">
+    <transition-group
+      class="toaster"
+      :class="`toaster--${position}`"
+      name="toaster"
+      tag="div"
+    >
       <ToasterMessage
         class="toaster__toast"
         v-for="toast in toasts"
@@ -117,8 +122,15 @@ export default defineComponent({
         id: `toast-${this.toastsCounter}`,
         rawHtml: params.rawHtml ?? '',
         title:
-          params.title ?? (params.type === 'info' ? this.globalInfoTitle : this.globalDangerTitle),
-        icon: params.icon ?? (params.type === 'info' ? this.globalInfoIcon : this.globalDangerIcon),
+          params.title ??
+          (params.type === 'info'
+            ? this.globalInfoTitle
+            : this.globalDangerTitle),
+        icon:
+          params.icon ??
+          (params.type === 'info'
+            ? this.globalInfoIcon
+            : this.globalDangerIcon),
         variant: params.variant || this.globalVariant,
         message: params.message ?? '',
         type: params.type,

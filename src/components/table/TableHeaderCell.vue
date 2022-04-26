@@ -2,27 +2,27 @@
   <span>{{ cell.label }}</span>
   <button @click.stop="sortColumn()" v-if="cell.sortable">
     <b-icon
-        class="icon icon--sort"
-        :icon="sortItemUp ? 'sort-up' : 'sort-down'"
+      class="icon icon--sort"
+      :icon="sortItemUp ? 'sort-up' : 'sort-down'"
     />
   </button>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
-import eventBus from "@/helpers/eventBus";
+import eventBus from '@/helpers/eventBus'
 export default defineComponent({
-  name: "TableHeaderCell",
-  components: {BIcon: BootstrapIcon},
+  name: 'TableHeaderCell',
+  components: { BIcon: BootstrapIcon },
   props: {
     cell: {
       type: Object,
-      default: {}
+      default: {},
     },
   },
   emits: ['sort-column'],
-  data(){
+  data() {
     return {
       sortItemUp: false,
       order: 'desc',
@@ -40,8 +40,8 @@ export default defineComponent({
       }
       let sortColumn = [this.cell.path, this.order]
       eventBus.$emit('sort-column', sortColumn)
-    }
-  }
+    },
+  },
 })
 </script>
 

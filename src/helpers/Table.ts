@@ -1,6 +1,5 @@
-import {ActionConstructor, loginIntoService} from '@egalteam/framework'
-import {Logger} from "sass";
-
+import {ActionConstructor} from '@egalteam/framework'
+import {tableStore} from "@/components/table/storage/TableStore";
 type TableData = {
     currentPage: number
     perPage: number
@@ -29,7 +28,8 @@ export default class Table {
     userFilter: any
     url: string = ''
     egalConstructor: ActionConstructor
-    tableItems: Array<object>
+    tableItems: Array<object> = []
+    filterableFields: Array<object> = []
     tableData: TableData = {
         currentPage: 1,
         perPage: 10,
@@ -61,6 +61,8 @@ export default class Table {
             .catch((error) => {
                 return error
             })
+        tableStore.setUrl(this.url)
+        tableStore.setMicroserviceName(this.microserviceName)
     }
 
     getTableMetadata(): Promise<any> {
@@ -143,11 +145,7 @@ export default class Table {
         this.tableItems.forEach((rowData, rowIndex) => {
             this.tableData.items.push({ id: rowData.id, values: {} })
             this.metadata.fields.forEach((field) => {
-                if(field.path.includes('[]')){
-                    path = field.path.split('[')[0]
-                } else {
-                    path = field.path
-                }
+                path = field.path.includes('[]') ? field.path.split('[')[0] : field.path
                 const asArray = Object.entries(rowData);
                 const filtered = asArray.filter(([key, value]) => path === key);
                 const justStrings = Object.fromEntries(filtered);
@@ -156,5 +154,14 @@ export default class Table {
             item = Object.assign({}, ...tableFieldArray)
             this.tableData.items[rowIndex].values = item
         })
+        this.setTableFilters()
+    }
+    setTableFilters() {
+        this.metadata.fields.forEach((field) => {
+            if(field.filterable) {
+                this.filterableFields.push(field)
+            }
+        })
+        console.log(this.filterableFields)
     }
 }

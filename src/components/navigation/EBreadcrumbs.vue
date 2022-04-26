@@ -1,9 +1,15 @@
 <template>
-  <div :class="`breadcrumbs --size-${mergedData.size || 'md'}`" :style="getVars">
+  <div
+    :class="`breadcrumbs --size-${mergedData.size || 'md'}`"
+    :style="getVars"
+  >
     <template v-for="(link, i) in parsedLinks" :key="link.path">
-      <router-link class="breadcrumbs__link" :class="{ inactive: !link.path }" :to="link.path">{{
-        link.name
-      }}</router-link>
+      <router-link
+        class="breadcrumbs__link"
+        :class="{ inactive: !link.path }"
+        :to="link.path"
+        >{{ link.name }}</router-link
+      >
 
       <BootstrapIcon
         class="breadcrumbs__icon"

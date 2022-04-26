@@ -7,7 +7,9 @@
     ]"
     :style="getStyleVars"
   >
-    <div class="textarea-label" v-if="mergedData.label">{{ mergedData.label }}</div>
+    <div class="textarea-label" v-if="mergedData.label">
+      {{ mergedData.label }}
+    </div>
     <textarea
       @input="inputHandler"
       v-model="newValue"
@@ -37,6 +39,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    table: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     mergedData() {
@@ -64,7 +70,8 @@ export default {
         '--label-color': this.styleConfig?.labelColor || '#2d3748',
         '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--helper-text-font-weight':
+          this.styleConfig?.helperTextFontWeight || 400,
         '--border-color': this.styleConfig?.borderColor || '#edf2f7',
         '--border-radius': this.styleConfig?.borderRadius || '8px',
         '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
@@ -87,7 +94,11 @@ export default {
         this.errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', this.errorMessage)
       }
-      this.$emit('update:modelValue', this.newValue)
+      if (this.table) {
+        this.$emit('update:modelValue', {name: 'textarea', value: this.newValue})
+      } else {
+        this.$emit('update:modelValue', this.newValue)
+      }
     },
   },
   watch: {

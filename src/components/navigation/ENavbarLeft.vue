@@ -1,5 +1,10 @@
 <template>
-  <div class="navbar" :class="{ '--big': active }" :style="getVars" ref="navbar">
+  <div
+    class="navbar"
+    :class="{ '--big': active }"
+    :style="getVars"
+    ref="navbar"
+  >
     <div class="navbar__logo-group">
       <img
         :src="mergedData.smallLogo"
@@ -8,7 +13,12 @@
         alt="logo"
         @click="openMenu"
       />
-      <img :src="mergedData.logo" class="navbar__logo-group__small-logo" v-if="active" alt="logo" />
+      <img
+        :src="mergedData.logo"
+        class="navbar__logo-group__small-logo"
+        v-if="active"
+        alt="logo"
+      />
       <BootstrapIcon
         @click="closeMenu"
         class="navbar__logo-group__chevron"
@@ -18,7 +28,11 @@
     </div>
 
     <ul class="navbar__links">
-      <li v-for="link in mergedData.links" :key="link.to" class="navbar__links__list-item">
+      <li
+        v-for="link in mergedData.links"
+        :key="link.to"
+        class="navbar__links__list-item"
+      >
         <ENavbarLeftItem
           :link="link"
           :active="active"
@@ -90,7 +104,8 @@ export default {
           this.styleConfig?.active?.backgroundColor || 'transparent',
         '--hover-list-item-background-color':
           this.styleConfig?.hover?.backgroundColor || 'transparent',
-        '--list-item-background-color': this.styleConfig?.backgroundColor || 'transparent',
+        '--list-item-background-color':
+          this.styleConfig?.backgroundColor || 'transparent',
         '--list-item-border-radius': this.styleConfig?.borderRadius || '0',
         '--list-item-padding': this.styleConfig?.listItemPadding || '10px 0',
 

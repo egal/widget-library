@@ -31,7 +31,9 @@
             <li
               class="--dots"
               v-else-if="[2, mergedData.numberOfPages - 1].includes(page)"
-              @click="setPage(page > currentPage ? currentPage + 3 : currentPage - 3)"
+              @click="
+                setPage(page > currentPage ? currentPage + 3 : currentPage - 3)
+              "
             >
               ...
             </li>
@@ -56,7 +58,9 @@
     <div
       v-if="minimalisticVersion"
       class="per-page"
-      :class="`--size-${mergedData.size || 'md'} --style-${mergedData.componentStyle || 'normal'}`"
+      :class="`--size-${mergedData.size || 'md'} --style-${
+        mergedData.componentStyle || 'normal'
+      }`"
     >
       <p class="per-page__text">Show:</p>
       <ESelect
@@ -72,7 +76,11 @@
         }"
         :style-config="{
           placeholderFontSize:
-            mergedData.size === 'lg' ? '14px' : mergedData.size === 'md' ? '12px' : '10px',
+            mergedData.size === 'lg'
+              ? '14px'
+              : mergedData.size === 'md'
+              ? '12px'
+              : '10px',
           fontFamily: mergedData.font,
           ...selectStyleConfig,
         }"
@@ -200,7 +208,9 @@ export default {
 
     isInPageGroup(page) {
       return (
-        [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(page) ||
+        [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(
+          page,
+        ) ||
         (this.currentPage < 4 && page <= 4) ||
         (this.currentPage > this.mergedData.numberOfPages - 3 &&
           page >= this.mergedData.numberOfPages - 3) ||

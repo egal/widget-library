@@ -1,6 +1,9 @@
 <template>
   <ul class="calendar__controls">
-    <li class="calendar__controls-left" @click="$emit('change-month', data?.isDouble ? -2 : -1)">
+    <li
+      class="calendar__controls-left"
+      @click="$emit('change-month', data?.isDouble ? -2 : -1)"
+    >
       <BootstrapIcon icon="chevron-left" />
     </li>
     <li class="calendar__controls-month">

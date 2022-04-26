@@ -1,8 +1,10 @@
 <template>
   <div
-    :class="`${mergedData.displayIcon ? 'tooltip' : 'tooltip-component'} --size-${
-      mergedData.size || 'md'
-    } --style-${mergedData.componentStyle || 'normal'}`"
+    :class="`${
+      mergedData.displayIcon ? 'tooltip' : 'tooltip-component'
+    } --size-${mergedData.size || 'md'} --style-${
+      mergedData.componentStyle || 'normal'
+    }`"
     :style="getVars"
   >
     <div class="tooltip__icon" v-if="mergedData.displayIcon">

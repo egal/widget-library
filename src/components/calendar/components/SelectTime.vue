@@ -103,7 +103,9 @@ export default defineComponent({
       const twelveHoursOptions = this.generateTimeOptions(1, 11)
       twelveHoursOptions.unshift({ name: '12' })
 
-      return this.config?.isAMPM ? twelveHoursOptions : this.generateTimeOptions(0, 23)
+      return this.config?.isAMPM
+        ? twelveHoursOptions
+        : this.generateTimeOptions(0, 23)
     },
 
     minutesOptions() {
@@ -143,7 +145,9 @@ export default defineComponent({
           break
       }
 
-      let time = `${this.selectedHours?.name || '00'}:${this.selectedMinutes?.name || '00'}`
+      let time = `${this.selectedHours?.name || '00'}:${
+        this.selectedMinutes?.name || '00'
+      }`
 
       if (this.config?.isAMPM) {
         time += ` ${this.selectedAmPm?.name || 'AM'}`

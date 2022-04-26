@@ -1,7 +1,14 @@
 <template>
-  <div class="mask-icon-container" :class="`mask-icon-container--${size}`" :style="getStyleVars">
+  <div
+    class="mask-icon-container"
+    :class="`mask-icon-container--${size}`"
+    :style="getStyleVars"
+  >
     <button
-      :class="['mask-icon-subtract', { error: error, success: success, filled: filled }]"
+      :class="[
+        'mask-icon-subtract',
+        { error: error, success: success, filled: filled },
+      ]"
       :disabled="disabled"
       @click.stop="$emit('delete')"
     />

@@ -81,7 +81,10 @@ export default {
       // Возвращает объект стилей без свойств hover, active, disabled
       const styles = Object.fromEntries(
         Object.entries(this.styleConfig).filter(
-          (prop) => prop[0] !== 'hover' && prop[0] !== 'active' && prop[0] !== 'disabled',
+          (prop) =>
+            prop[0] !== 'hover' &&
+            prop[0] !== 'active' &&
+            prop[0] !== 'disabled',
         ),
       )
 
@@ -107,10 +110,18 @@ export default {
   @include button();
 
   &--sm {
-    @include button($font-size: 10px, $padding: 8px 16px, $radius: $all-sides-small);
+    @include button(
+      $font-size: 10px,
+      $padding: 8px 16px,
+      $radius: $all-sides-small
+    );
   }
   &--lg {
-    @include button($font-size: $h6-font-size, $padding: 16px 24px, $radius: $all-sides-large);
+    @include button(
+      $font-size: $h6-font-size,
+      $padding: 16px 24px,
+      $radius: $all-sides-large
+    );
   }
 
   &--soft {

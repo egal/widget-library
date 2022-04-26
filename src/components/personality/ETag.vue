@@ -11,7 +11,11 @@
     <p class="tag__text">
       <slot></slot>
     </p>
-    <BootstrapIcon v-if="mergedData.crossIcon" icon="x-lg" class="tag__close-icon" />
+    <BootstrapIcon
+      v-if="mergedData.crossIcon"
+      icon="x-lg"
+      class="tag__close-icon"
+    />
   </div>
 </template>
 

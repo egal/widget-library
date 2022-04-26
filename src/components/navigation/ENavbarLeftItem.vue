@@ -1,5 +1,9 @@
 <template>
-  <router-link :to="link.to ?? ''" v-slot="{ href, navigate, isActive, isExactActive }" custom>
+  <router-link
+    :to="link.to ?? ''"
+    v-slot="{ href, navigate, isActive, isExactActive }"
+    custom
+  >
     <div
       class="nav-link"
       @click.stop="link.links && openNestedLinks()"
@@ -8,7 +12,9 @@
       :class="{
         'router-link-exact-active': link.to && isExactActive,
         'router-link-exact-active nested':
-          link.links && linksOpen && link.links.map((i) => i.to).includes($route.path),
+          link.links &&
+          linksOpen &&
+          link.links.map((i) => i.to).includes($route.path),
       }"
     >
       <div
