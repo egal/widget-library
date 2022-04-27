@@ -1,14 +1,11 @@
-<template>
-  <Calendar></Calendar>
-</template>
+<template></template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Calendar from '@/components/calendar/Calendar'
 
 export default defineComponent({
   name: 'App',
-  components: { Calendar },
+  components: {},
   data() {
     return {}
   },
