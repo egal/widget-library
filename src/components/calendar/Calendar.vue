@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import SelectTime from '@/components/calendar/components/SelectTime.vue'
 import Controls from '@/components/calendar/components/Controls.vue'
 import Days from '@/components/calendar/components/Days.vue'
@@ -74,51 +74,14 @@ import {
   capitalize,
   formatToISODate,
   isDateInCurMonth,
-} from '@/assets/calendar/helpers.ts'
-
-// Тип для ISOString, формально строка, но для невозможности пробросить просто string сделан этот тип
-// Нужно кастить этот тип к строке ISOString, сделано для более выраженной типизации
-interface ISODateDifferentiator extends String {
-  [key: string]: unknown
-}
-
-export type ISODate = ISODateDifferentiator & string
-
-type Props = {
-  '--font-family'?: string
-  '--font-weight'?: string | number
-  '--font-size'?: string
-  '--active-color'?: string
-  '--active-background-color'?: string
-  '--width'?: string
-}
-
-type dataProp = {
-  fontFamily?: string
-  fontWeight?: string | number
-  fontSize?: string
-  color?: string
-  activeColor?: string
-  activeBackgroundColor?: string
-  isAdaptiveSize: boolean
-  isDouble?: boolean
-  locale?: string
-  timePicker?: {
-    isAMPM?: boolean
-    label?: string
-  }
-  data?: {
-    date_from?: string | ISODate
-    date_to?: string | ISODate
-  }
-}
+} from '@/assets/calendar/helpers'
 
 export default defineComponent({
-  name: 'OptionsCalendar',
+  name: 'Calendar',
   components: { SelectTime, Controls, Days },
   props: {
     data: {
-      type: Object as () => dataProp,
+      type: Object,
       default: () => {},
     },
     // проп со стилями для ESelect
@@ -134,17 +97,17 @@ export default defineComponent({
       isDateInCurMonth,
       formatToISODate,
       modelValue: {},
-      curMonth: {} as any,
-      dates: [] as ISODate[],
-      selectedDays: [] as string[],
+      curMonth: {},
+      dates: [],
+      selectedDays: [],
       mouseMayEnter: false,
-      nextMonth: {} as any,
-      nextMonthDates: [] as ISODate[],
-      formattedDateTimes: [] as string[],
+      nextMonth: {},
+      nextMonthDates: [],
+      formattedDateTimes: [],
     }
   },
   computed: {
-    getStyleVars(): Props {
+    getStyleVars() {
       return {
         '--active-color': this.data?.activeColor || '#0066FF',
         '--active-background-color': this.data?.activeBackgroundColor || '#E5F0FF',
@@ -155,7 +118,7 @@ export default defineComponent({
       }
     },
 
-    weekdays(): string[] {
+    weekdays() {
       return new Array(7)
         .fill(new Date())
         .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
@@ -173,7 +136,7 @@ export default defineComponent({
   },
 
   methods: {
-    setInitSelectedValues(): void {
+    setInitSelectedValues() {
       if (this.data?.data?.date_from) {
         this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_from))
       }
@@ -186,7 +149,7 @@ export default defineComponent({
       }
     },
 
-    renderCalendarDays(): void {
+    renderCalendarDays() {
       this.dates = this.generateDates(new Date())
 
       const day = new Date()
@@ -204,17 +167,14 @@ export default defineComponent({
       }
     },
 
-    getDateFromTimestamp(isostr: ISODate | string): ISODate {
+    getDateFromTimestamp(isostr) {
       return formatToISODate(new Date(isostr))
     },
 
-    isContainsTime(isostr: string): boolean {
+    isContainsTime(isostr) {
       return isostr.includes('T')
     },
-    getHoursFromTimestamp(isostr: ISODate): {
-      hours: number | string
-      format: string
-    } | null {
+    getHoursFromTimestamp(isostr) {
       if (!isostr || !this.isContainsTime(isostr)) {
         return null
       }
@@ -234,18 +194,18 @@ export default defineComponent({
       }
     },
 
-    getMinutesFromTimestamp(isostr: ISODate): string | number {
+    getMinutesFromTimestamp(isostr) {
       if (!isostr || !this.isContainsTime(isostr)) {
         return ''
       }
       return new Date(Date.parse(isostr)).getMinutes()
     },
 
-    generateWeekDaysFromIterator(weekday: Date, i: number): Date {
+    generateWeekDaysFromIterator(weekday, i) {
       return new Date(weekday.setDate(weekday.getDate() - weekday.getDay() + i))
     },
 
-    changeMonth(shift: number): void {
+    changeMonth(shift) {
       this.curMonth.setMonth(this.curMonth.getMonth() + shift)
       this.curMonth = new Date(this.curMonth)
       this.dates = this.generateDates(this.curMonth)
@@ -258,7 +218,7 @@ export default defineComponent({
     },
 
     //Генерация массива дат на месяц
-    generateDates(curMonth: Date | ISODate): ISODate[] {
+    generateDates(curMonth) {
       return Array.from(
         new Set(
           new Array(31)
@@ -277,8 +237,8 @@ export default defineComponent({
     },
 
     //Выбор даты
-    selectDate(dateString: ISODate): void {
-      ;(this.selectedDays.length == 1 || this.selectedDays.length >= 2) &&
+    selectDate(dateString) {
+      ;(this.selectedDays.length === 1 || this.selectedDays.length >= 2) &&
         !this.mouseMayEnter &&
         this.declineSelect()
 
@@ -291,20 +251,20 @@ export default defineComponent({
       this.$emit('update:dateValue', this.formattedDateTimes)
     },
 
-    declineSelect(): void {
+    declineSelect() {
       this.selectedDays = []
       this.formattedDateTimes = []
     },
 
     //Hover для даты
-    queryHover(dateString: ISODate): void {
+    queryHover(dateString) {
       if (this.mouseMayEnter) {
         this.selectedDays[1] = dateString
         this.selectedDays = [...this.selectedDays]
       }
     },
 
-    setTime(val): void {
+    setTime(val) {
       if (!this.data?.isDouble) {
         this.formattedDateTimes.map((item) => new Date(`${item} ${val.time}`).toISOString())
       } else {
