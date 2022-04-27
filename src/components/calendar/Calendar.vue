@@ -1,5 +1,6 @@
 <template>
   <div class="calendar" :style="getStyleVars">
+    <!--    todo if showInput - > EInput+Calendar, else - Calendar -->
     <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
       <Controls
         :data="data"
@@ -13,24 +14,28 @@
         :dates="dates"
         :current-month="curMonth"
         :selected-days="selectedDays"
-        :locale="data?.locale"
+        :locale="mergedData?.locale"
         @select-date="(date) => selectDate(date)"
         @mouse-enter="(date) => queryHover(date)"
       />
 
       <SelectTime
-        v-if="data?.timePicker"
-        :config="data?.timePicker"
-        :hours="getHoursFromTimestamp(data?.data?.date_from)?.hours"
-        :minutes="getMinutesFromTimestamp(data?.data?.date_from)"
-        :format="getHoursFromTimestamp(data?.data?.date_from)?.format"
+        v-if="mergedData?.timePicker"
+        :config="mergedData?.timePicker"
+        :hours="getHoursFromTimestamp(mergedData?.date?.date_from)?.hours"
+        :minutes="getMinutesFromTimestamp(mergedData?.date?.date_from)"
+        :format="getHoursFromTimestamp(mergedData?.date?.date_from)?.format"
         :is-disabled="selectedDays.length === 0"
         :select-style-config="selectStyleConfig"
         type="from"
         @select="setTime"
       />
     </div>
-    <div class="right" v-if="data?.isDouble" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
+    <div
+      class="right"
+      v-if="mergedData?.isDouble"
+      :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
+    >
       <Controls
         :data="data"
         :month-to-display="nextMonth"
@@ -43,17 +48,17 @@
         :dates="nextMonthDates"
         :current-month="nextMonth"
         :selected-days="selectedDays"
-        :locale="data?.locale"
+        :locale="mergedData?.locale"
         @select-date="(date) => selectDate(date)"
         @mouse-enter="(date) => queryHover(date)"
       />
 
       <SelectTime
-        v-if="data?.timePicker"
-        :config="data?.timePicker"
-        :hours="getHoursFromTimestamp(data?.data?.date_to)?.hours"
-        :minutes="getMinutesFromTimestamp(data?.data?.date_to)"
-        :format="getHoursFromTimestamp(data?.data?.date_to)?.format"
+        v-if="mergedData?.timePicker"
+        :config="mergedData?.timePicker"
+        :hours="getHoursFromTimestamp(mergedData?.date?.date_to)?.hours"
+        :minutes="getMinutesFromTimestamp(mergedData?.date?.date_to)"
+        :format="getHoursFromTimestamp(mergedData?.date?.date_to)?.format"
         :is-disabled="selectedDays.length <= 1"
         :select-style-config="selectStyleConfig"
         type="to"
@@ -107,14 +112,40 @@ export default defineComponent({
     }
   },
   computed: {
+    mergedData() {
+      return Object.assign(
+        {
+          fontFamily: 'Open Sans',
+          fontWeight: '500',
+          fontSize: '14px',
+          activeColor: '#0066FF',
+          activeBackgroundColor: '#E5F0FF',
+          isAdaptiveSize: true, // todo false ?
+
+          showInput: true, // todo added
+          isDouble: false, // todo handle inputs and double calendar ??
+          locale: 'en-US',
+          timePicker: {
+            isAMPM: true,
+            label: '',
+          },
+          date: {
+            date_from: '',
+            date_to: '',
+          },
+        },
+        this.data,
+      )
+    },
+
     getStyleVars() {
       return {
-        '--active-color': this.data?.activeColor || '#0066FF',
-        '--active-background-color': this.data?.activeBackgroundColor || '#E5F0FF',
-        '--font-family': this.data?.fontFamily || 'Raleway',
-        '--font-weight': this.data?.fontWeight || 'normal',
-        '--font-size': this.data?.fontSize || '14px',
-        '--width': this.data?.isAdaptiveSize ? '' : 'fit-content',
+        '--active-color': this.mergedData?.activeColor || '#0066FF',
+        '--active-background-color': this.mergedData?.activeBackgroundColor || '#E5F0FF',
+        '--font-family': this.mergedData?.fontFamily || 'Raleway',
+        '--font-weight': this.mergedData?.fontWeight || 'normal',
+        '--font-size': this.mergedData?.fontSize || '14px',
+        '--width': this.mergedData?.isAdaptiveSize ? '' : 'fit-content',
       }
     },
 
@@ -123,7 +154,7 @@ export default defineComponent({
         .fill(new Date())
         .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
         .map((weekday) => {
-          return weekday.toLocaleString(this.data?.locale ?? 'en-US', {
+          return weekday.toLocaleString(this.mergedData?.locale ?? 'en-US', {
             weekday: 'short',
           })
         })
@@ -137,11 +168,11 @@ export default defineComponent({
 
   methods: {
     setInitSelectedValues() {
-      if (this.data?.data?.date_from) {
-        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_from))
+      if (this.mergedData?.date?.date_from) {
+        this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_from))
       }
-      if (this.data?.data?.date_to) {
-        this.selectedDays.push(this.getDateFromTimestamp(this.data?.data?.date_to))
+      if (this.mergedData?.date?.date_to) {
+        this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_to))
       }
 
       if (this.selectedDays.length !== 0) {
@@ -156,7 +187,7 @@ export default defineComponent({
       day.setDate(1)
       this.curMonth = day
 
-      if (this.data?.isDouble) {
+      if (this.mergedData?.isDouble) {
         const newDay = new Date()
         let dayCopy = newDay
         dayCopy.setDate(1)
@@ -182,7 +213,7 @@ export default defineComponent({
       let hours = new Date(Date.parse(isostr)).getHours()
       let format = ''
 
-      if (this.data?.timePicker?.isAMPM) {
+      if (this.mergedData?.timePicker?.isAMPM) {
         format = hours >= 12 ? 'PM' : 'AM'
         hours = hours % 12
         hours = hours > 0 ? hours : 12
@@ -210,7 +241,7 @@ export default defineComponent({
       this.curMonth = new Date(this.curMonth)
       this.dates = this.generateDates(this.curMonth)
 
-      if (this.data?.isDouble) {
+      if (this.mergedData?.isDouble) {
         this.nextMonth.setMonth(this.nextMonth.getMonth() + shift)
         this.nextMonth = new Date(this.nextMonth)
         this.nextMonthDates = this.generateDates(this.nextMonth)
@@ -265,7 +296,7 @@ export default defineComponent({
     },
 
     setTime(val) {
-      if (!this.data?.isDouble) {
+      if (!this.mergedData?.isDouble) {
         this.formattedDateTimes.map((item) => new Date(`${item} ${val.time}`).toISOString())
       } else {
         switch (val.type) {
