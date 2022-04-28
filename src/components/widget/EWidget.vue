@@ -99,9 +99,21 @@ export default {
     setCheckbox(value) {
 
     },
-    checkValue(value) {
-      eventBus.$emit('updated-value', value)
-      console.log(value, 'check value')
+    checkValue(updatedValue) {
+      let updatedItems = []
+      Object.entries(this.item.values).forEach(entry => {
+        let path = this.field.path.includes('[]') ? this.field.path.split('[')[0] : this.field.path
+        const [key, value] = entry;
+        if (key === path) {
+          updatedItems.push(
+              {
+                id: this.item.id,
+                [key]: updatedValue.value
+              }
+          )
+        }
+      });
+      eventBus.$emit('updated-value')
     },
     checkError(value) {
     }

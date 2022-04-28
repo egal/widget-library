@@ -1,19 +1,22 @@
 import {ActionConstructor} from '@egalteam/framework'
 import {tableStore} from "@/components/table/storage/TableStore";
+
 type TableData = {
     currentPage: number
     perPage: number
     totalCount: number
     headers: Array<object>
-    items: Array<object>
+    items: Array<{[key:string]: any}>
     fields: Array<object>
     filters: Array<object>
     orders: Array<object>
+    search: Array<string>
 }
 
 type TableMetadata = {
     filter: string[]
     order: string[][]
+    search: string[]
     fields: object[]
     label: string
     relations: string[]
@@ -24,10 +27,18 @@ export default class Table {
     microserviceName: string = ''
     modelName: string = ''
     metadataName: string = ''
-    metadata: TableMetadata
+    metadata: TableMetadata = {
+        filter: [],
+        order: [],
+        search: [],
+        fields: [],
+        label: '',
+        relations: [],
+        role_access: [],
+    }
     userFilter: any
     url: string = ''
-    egalConstructor: ActionConstructor
+    egalConstructor: any = undefined
     tableItems: Array<object> = []
     filterableFields: Array<object> = []
     tableData: TableData = {
@@ -39,6 +50,7 @@ export default class Table {
         fields: [],
         filters: [],
         orders: [],
+        search: []
     }
 
     initTable(
@@ -70,14 +82,15 @@ export default class Table {
             this.egalConstructor
                 .custom(this.microserviceName, this.modelName, 'getTablesMetadata', {})
                 .call()
-                .then((response) => {
+                .then((response: any) => {
                     this.tableData.headers = response[this.metadataName].fields
                     this.metadata = response[this.metadataName]
                     this.tableData.orders = response[this.metadataName].order
                     this.tableData.filters = response[this.metadataName].filter
+                    this.tableData.search = response[this.metadataName].search
                     resolve(response)
                 })
-                .catch((error) => {
+                .catch((error:any) => {
                     reject(error)
                     console.log(error)
                 })
@@ -106,7 +119,7 @@ export default class Table {
         //         }
         //     })
         // }
-        let ordersArr: string[][] | string[] = []
+        let ordersArr: Array<any> = []
         if (orders) {
             ordersArr = orders
         } else if (Object.keys(this.tableData.orders).length) {
@@ -121,7 +134,7 @@ export default class Table {
             .setPagination(this.tableData.perPage, this.tableData.currentPage)
             .order([ordersArr])
             .call()
-            .then((response) => {
+            .then((response:any) => {
                 this.tableData.currentPage = response.current_page
                 this.tableData.perPage = response.per_page
                 this.tableData.totalCount = response.total_count
@@ -133,18 +146,19 @@ export default class Table {
                     // tableStore.setTableData(this.tableData)
                 }
             })
-            .catch((error) => {
+            .catch((error:any) => {
                 console.log(error)
             })
     }
+
     setTable() {
         this.tableData.items = []
         let tableFieldArray: Array<object> = []
         let item = {}
         let path: string
-        this.tableItems.forEach((rowData, rowIndex) => {
-            this.tableData.items.push({ id: rowData.id, values: {} })
-            this.metadata.fields.forEach((field) => {
+        this.tableItems.forEach((rowData:{[key:string]: any}, rowIndex) => {
+            this.tableData.items.push({id: rowData.id, values: {}})
+            this.metadata.fields.forEach((field:{[key:string]: any}) => {
                 path = field.path.includes('[]') ? field.path.split('[')[0] : field.path
                 const asArray = Object.entries(rowData);
                 const filtered = asArray.filter(([key, value]) => path === key);
@@ -156,12 +170,44 @@ export default class Table {
         })
         this.setTableFilters()
     }
+
     setTableFilters() {
-        this.metadata.fields.forEach((field) => {
-            if(field.filterable) {
+        this.metadata.fields.forEach((field:{[key:string]: any}) => {
+            if (field.filterable) {
                 this.filterableFields.push(field)
             }
         })
         console.log(this.filterableFields)
+    }
+
+    deleteSelectedValues() {
+        let valuesForDeletion:{[key:string]: any} = tableStore.getState().selectedItems
+        let ids = []
+        let deleteParams = {}
+        if (valuesForDeletion.length === 1) {
+            deleteParams = {
+                id: valuesForDeletion[0].id
+            }
+            this.egalConstructor.delete(this.microserviceName, this.modelName, deleteParams).call().then((response:any) => {
+
+            }).catch((error:any) => {
+
+            })
+        } else {
+            for (let i in valuesForDeletion) {
+                ids.push(valuesForDeletion[i].id)
+            }
+            deleteParams = {
+                ids: ids
+            }
+            this.egalConstructor.deleteMany(this.microserviceName, this.modelName, deleteParams).call().then((response:any) => {
+
+            }).catch((error:any) => {
+
+            })
+        }
+
+    }
+    updateSelectedValues() {
     }
 }

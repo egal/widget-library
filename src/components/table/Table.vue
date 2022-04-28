@@ -2,70 +2,71 @@
   <div class="table-container">
     <slot name="additionalHeaderContent"></slot>
     <div class="table-header">
-<!--      <div class="table-filters" v-if="tableConstructor?.filterableFields.length">-->
-<!--        <Filters :fields="tableConstructor?.filterableFields"></Filters>-->
-<!--      </div>-->
+      <!--      <div class="table-filters" v-if="tableConstructor?.filterableFields.length">-->
+      <!--        <Filters :fields="tableConstructor?.filterableFields"></Filters>-->
+      <!--      </div>-->
       <div class="control-buttons">
         <div class="edit-mode-off-buttons" v-if="!editActive">
           <EButton
-            class="edit-button"
-            :data="{
+              class="edit-button"
+              :data="{
               leftIcon: 'pencil-square',
               size: 'lg',
+              disabled: !selectedRows.length
             }"
-            @click="editRow()"
-            >Edit
+              @click="editRow()"
+          >Edit
           </EButton>
           <EButton
-            :data="{
+              :data="{
               leftIcon: 'trash',
               softColors: true,
               size: 'lg',
             }"
-            @click="deleteRow()"
-            >Delete
+              @click="showDeleteModal()"
+          >Delete
           </EButton>
         </div>
         <div class="edit-mode-on-buttons" v-if="editActive">
           <EButton
-            class="save-button"
-            :data="{
+              class="save-button"
+              :data="{
               leftIcon: 'pencil-square',
               size: 'lg',
             }"
-            @cilck="saveEdit()"
-            >Save
+              @cilck="showConfirmModal('save')"
+          >Save
           </EButton>
           <EButton
-            :data="{
+              :data="{
               leftIcon: 'trash',
               softColors: true,
               size: 'lg',
             }"
-            @click="cancelEdit"
-            >Cancel
+              @click="showConfirmModal('cancel')"
+          >Cancel
           </EButton>
         </div>
       </div>
     </div>
     <div class="table">
       <TableHeader
-        :header-content="tableConstructor?.tableData?.headers"
-        :show-checkbox="showCheckbox"
-        :grid="setGrid"
-        :is-expandable="isRowExpandable"
+          :header-content="tableConstructor?.tableData?.headers"
+          :show-checkbox="showCheckbox"
+          :grid="setGrid"
+          :is-expandable="isRowExpandable"
       ></TableHeader>
       <div class="table-row-container">
         <div
-          v-for="item in tableConstructor?.tableData?.items"
-          class="table-row"
+            v-for="item in tableConstructor?.tableData?.items"
+            class="table-row"
         >
           <TableRow
-            :item="item"
-            :fields="tableConstructor?.tableData?.headers"
-            :show-checkbox="showCheckbox"
-            :grid="setGrid"
-            :is-expandable="isRowExpandable"
+              :item="item"
+              :fields="tableConstructor?.tableData?.headers"
+              :show-checkbox="showCheckbox"
+              :grid="setGrid"
+              :is-expandable="isRowExpandable"
           >
             <template v-slot:expandedRow>
               <slot name="expandedRow"></slot>
@@ -76,9 +77,9 @@
     </div>
     <div class="pagination">
       <EPagination
-        class="table-pagination"
-        minimalistic-version
-        :data="{
+          class="table-pagination"
+          minimalistic-version
+          :data="{
           size: 'lg',
           weight: '500',
           perPage: tableConstructor.tableData?.perPage,
@@ -86,23 +87,25 @@
           numberOfPages: numberOfPages,
           dropdownPosition: 'top',
         }"
-        :select-style-config="{
+          :select-style-config="{
           filledBackgroundColor: '#fff',
           valueColor: '#CBD5E0',
           filledFontColor: '#CBD5E0',
           valueFontWeight: '400',
           fontFamily: 'Open Sans',
         }"
-        @click.stop
-        @update:modelValue="changePage"
-        @update:perPageValue="changePerPageOption"
+          @click.stop
+          @update:modelValue="changePage"
+          @update:perPageValue="changePerPageOption"
       ></EPagination>
     </div>
   </div>
+  <TableModal ref="confirmModal"></TableModal>
+  <TableModal ref="deleteModal"></TableModal>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import {defineComponent} from 'vue'
 import Filters from '@/components/table/Filters/Filters.vue'
 import TableRow from '@/components/table/TableRow.vue'
 import TableHeader from '@/components/table/TableHeader.vue'
@@ -111,6 +114,8 @@ import EPagination from '@/components/navigation/EPagination.vue'
 import EButton from '@/components/togglers/EButton.vue'
 import Table from '@/helpers/Table'
 import eventBus from '@/helpers/eventBus'
+import {tableStore} from "@/components/table/storage/TableStore";
+import vClickOutside from 'click-outside-vue3'
 
 export default defineComponent({
   name: 'Table',
@@ -121,6 +126,9 @@ export default defineComponent({
     TableHeader,
     TableModal,
     EButton,
+  },
+  directives: {
+    ClickOutside: vClickOutside.directive,
   },
   props: {
     showCheckbox: {
@@ -145,8 +153,11 @@ export default defineComponent({
         value: false,
         id: null,
       },
-      selectedRows: [],
+      selectedRows: [] as any,
       activeRows: [],
+      modalOpen: true,
+      isDeleteActive: false,
+      isConfirmActive: false,
     }
   },
   computed: {
@@ -177,37 +188,41 @@ export default defineComponent({
   mounted() {
     this.tableConstructor = new Table()
     this.tableConstructor.initTable(
-      this.table.microserviceName,
-      this.table.modelName,
-      this.table.tableName,
-      this.table.url,
+        this.table.microserviceName,
+        this.table.modelName,
+        this.table.tableName,
+        this.table.url,
     )
     eventBus.$on('sort-column', (order: Array<string>) => {
       this.tableConstructor.getTableItems(
-        this.currentPage,
-        this.perPage,
-        undefined,
-        order,
+          this.currentPage,
+          this.perPage,
+          undefined,
+          order,
       )
     })
     eventBus.$on('check-all-boxes', (value: boolean) => {
       this.selectedRows = []
       for (let i in this.tableConstructor.tableData.items) {
         this.selectedRows.push(this.tableConstructor.tableData.items[i])
+        tableStore.setSelectedValues(this.tableConstructor.tableData.items[i])
       }
-      if(this.selectedRows.length === this.tableConstructor.tableData.items.length) {
+      if (this.selectedRows.length === this.tableConstructor.tableData.items.length) {
         this.checkBox.value = value
       }
     })
     eventBus.$on('set-active-row', (item: object) => {
-      this.activeRows.push(item)
-      console.log(this.activeRows)
+      tableStore.setSelectedValues(item)
+      this.selectedRows.push(item)
     })
-    eventBus.$on('uncheck-row', (item: object) => {
-      this.selectedRows = this.selectedRows.filter((row) => item.id !== row.id)
-      if(this.tableConstructor.tableData.items.length !== this.selectedRows.length) {
+    eventBus.$on('uncheck-row', (item: { [key: string]: any }) => {
+      this.selectedRows = this.selectedRows.filter((row: { [key: string]: any }) => item.id !== row.id)
+      if (this.tableConstructor.tableData.items.length !== this.selectedRows.length) {
         eventBus.$emit('uncheck-all', {value: false, item: item})
       }
+    })
+    eventBus.$on('updated-value', (item: object) => {
+      this.setEditedItem(item)
     })
   },
   methods: {
@@ -226,9 +241,63 @@ export default defineComponent({
       this.editActive = !this.editActive
       eventBus.$emit('edit-row', this.editActive)
     },
-    deleteRow() {},
-    saveEdit() {},
-    cancelEdit() {},
+    setEditedItem(item: {[key:string]: any}) {
+      let updatedObject = {}
+      tableStore.getState().selectedItems.forEach((selectedItem: {[key:string]: any}) => {
+        if (selectedItem.id === item.id) {
+        }
+        console.log(updatedObject, 'updated object')
+      })
+    },
+    showDeleteModal() {
+      this.isDeleteActive = true
+      let deleteModalOptions = {
+        title: 'Вы уверены, что хотите удалить данный параметр?',
+        message: '',
+        confirmButton: 'Удалить',
+        rejectButton: 'Отменить',
+      };
+      (this.$refs['deleteModal'] as any)
+          .showModal(deleteModalOptions)
+          .then((answer: boolean) => {
+            if (!!answer) {
+              this.tableConstructor.deleteSelectedValues()
+              this.isDeleteActive = false;
+              (this.$refs['deleteModal'] as any).close()
+            } else {
+              tableStore.removeSelectedValue()
+              this.isDeleteActive = false;
+              (this.$refs['deleteModal'] as any).close()
+            }
+          })
+    },
+    showConfirmModal(modalType: string) {
+      this.isConfirmActive = true
+      let confirmModalOptions = {
+        title: '',
+        message: '',
+        confirmButton: '',
+        rejectButton: 'Отменить',
+      }
+      if (modalType === 'cancel') {
+        confirmModalOptions.title = 'Вы уверены, что хотите отменить действие?'
+        confirmModalOptions.confirmButton = 'Подтвердить'
+      } else {
+        confirmModalOptions.title = 'Вы уверены, что хотите сохранить изменения в данном параметре?'
+        confirmModalOptions.confirmButton = 'Сохранить'
+      };
+      (this.$refs['confirmModal'] as any)
+          .showModal(confirmModalOptions)
+          .then((answer: boolean) => {
+            console.log('promise', answer)
+            if (answer) {
+              this.isConfirmActive = false;
+              (this.$refs['confirmModal'] as any).close()
+            }
+          })
+    },
+    cancelEdit() {
+    },
   },
 })
 </script>

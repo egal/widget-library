@@ -43,10 +43,11 @@ import ECheckbox from '@/components/togglers/ECheckbox.vue'
 import EWidget from "@/components/widget/EWidget.vue";
 import { format } from 'date-fns'
 import eventBus from '@/helpers/eventBus'
+import {tableStore} from "@/components/table/storage/TableStore";
 export default defineComponent({
   name: 'TableRow',
   components: { ECheckbox, TableCell, BIcon: BootstrapIcon, EWidget },
-  emits: ['set-active-row'],
+  emits: ['set-active-row', 'uncheck-row'],
   data() {
     return {
       isActive: false,
@@ -98,6 +99,7 @@ export default defineComponent({
       this.isActive = value.srcElement.checked
       console.log(this.isActive)
       if (this.isActive) {
+        tableStore.setSelectedValues(this.item)
         eventBus.$emit('set-active-row', this.item)
       } else {
         eventBus.$emit('uncheck-row', this.item)
