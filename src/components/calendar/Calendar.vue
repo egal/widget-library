@@ -1,69 +1,96 @@
 <template>
-  <div class="calendar" :style="getStyleVars">
-    <!--    todo if showInput - > EInput+Calendar, else - Calendar -->
-    <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
-      <Controls
-        :data="data"
-        :month-to-display="curMonth"
-        @change-month="(value) => changeMonth(value)"
-      />
-      <ul class="calendar__weekdays">
-        <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
-      </ul>
-      <Days
-        :dates="dates"
-        :current-month="curMonth"
-        :selected-days="selectedDays"
-        :locale="mergedData?.locale"
-        @select-date="(date) => selectDate(date)"
-        @mouse-enter="(date) => queryHover(date)"
-      />
+  <div class="calendar-wrapper">
+    <!--      todo v-if ?? -->
+    <EInput
+      class="calendar__input left"
+      :style-config="inputStyleConfig"
+      :data="mergedInputData"
+      v-if="mergedData.showInput"
+      @error="handleInputError"
+      @update:modelValue="handleModelUpdate"
+      @click="toggleCalendar"
+    />
+    <!--      todo handle props + mergedInputData for this input -->
+    <!--      todo v-if ?? -->
+    <EInput
+      class="calendar__input right"
+      :style-config="inputStyleConfig"
+      :data="mergedInputData"
+      v-if="mergedData.showInput && mergedData?.isDouble"
+      @error="handleInputError"
+      @update:modelValue="handleModelUpdate"
+      @click="toggleCalendar"
+    />
+    {{ mergedData?.isDouble }}
 
-      <SelectTime
-        v-if="mergedData?.timePicker"
-        :config="mergedData?.timePicker"
-        :hours="getHoursFromTimestamp(mergedData?.date?.date_from)?.hours"
-        :minutes="getMinutesFromTimestamp(mergedData?.date?.date_from)"
-        :format="getHoursFromTimestamp(mergedData?.date?.date_from)?.format"
-        :is-disabled="selectedDays.length === 0"
-        :select-style-config="selectStyleConfig"
-        type="from"
-        @select="setTime"
-      />
-    </div>
-    <div
-      class="right"
-      v-if="mergedData?.isDouble"
-      :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
-    >
-      <Controls
-        :data="data"
-        :month-to-display="nextMonth"
-        @change-month="(value) => changeMonth(value)"
-      />
-      <ul class="calendar__weekdays">
-        <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
-      </ul>
-      <Days
-        :dates="nextMonthDates"
-        :current-month="nextMonth"
-        :selected-days="selectedDays"
-        :locale="mergedData?.locale"
-        @select-date="(date) => selectDate(date)"
-        @mouse-enter="(date) => queryHover(date)"
-      />
+    <!--    todo add transition on toggle-->
+    <div class="calendar" :style="getStyleVars" v-show="isOpen">
+      <!--    todo if showInput - > EInput+Calendar, else - Calendar -->
+      <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
+        <Controls
+          :data="data"
+          :month-to-display="curMonth"
+          @change-month="(value) => changeMonth(value)"
+        />
+        <ul class="calendar__weekdays">
+          <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
+        </ul>
+        <Days
+          :dates="dates"
+          :current-month="curMonth"
+          :selected-days="selectedDays"
+          :locale="mergedData?.locale"
+          @select-date="(date) => selectDate(date)"
+          @mouse-enter="(date) => queryHover(date)"
+        />
 
-      <SelectTime
-        v-if="mergedData?.timePicker"
-        :config="mergedData?.timePicker"
-        :hours="getHoursFromTimestamp(mergedData?.date?.date_to)?.hours"
-        :minutes="getMinutesFromTimestamp(mergedData?.date?.date_to)"
-        :format="getHoursFromTimestamp(mergedData?.date?.date_to)?.format"
-        :is-disabled="selectedDays.length <= 1"
-        :select-style-config="selectStyleConfig"
-        type="to"
-        @select="setTime"
-      />
+        <SelectTime
+          v-if="mergedData?.timePicker"
+          :config="mergedData?.timePicker"
+          :hours="getHoursFromTimestamp(mergedData?.date?.date_from)?.hours"
+          :minutes="getMinutesFromTimestamp(mergedData?.date?.date_from)"
+          :format="getHoursFromTimestamp(mergedData?.date?.date_from)?.format"
+          :is-disabled="selectedDays.length === 0"
+          :select-style-config="selectStyleConfig"
+          type="from"
+          @select="setTime"
+        />
+      </div>
+
+      <div
+        class="right"
+        v-if="mergedData?.isDouble"
+        :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
+      >
+        <Controls
+          :data="data"
+          :month-to-display="nextMonth"
+          @change-month="(value) => changeMonth(value)"
+        />
+        <ul class="calendar__weekdays">
+          <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
+        </ul>
+        <Days
+          :dates="nextMonthDates"
+          :current-month="nextMonth"
+          :selected-days="selectedDays"
+          :locale="mergedData?.locale"
+          @select-date="(date) => selectDate(date)"
+          @mouse-enter="(date) => queryHover(date)"
+        />
+
+        <SelectTime
+          v-if="mergedData?.timePicker"
+          :config="mergedData?.timePicker"
+          :hours="getHoursFromTimestamp(mergedData?.date?.date_to)?.hours"
+          :minutes="getMinutesFromTimestamp(mergedData?.date?.date_to)"
+          :format="getHoursFromTimestamp(mergedData?.date?.date_to)?.format"
+          :is-disabled="selectedDays.length <= 1"
+          :select-style-config="selectStyleConfig"
+          type="to"
+          @select="setTime"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +99,7 @@
 import SelectTime from '@/components/calendar/components/SelectTime.vue'
 import Controls from '@/components/calendar/components/Controls.vue'
 import Days from '@/components/calendar/components/Days.vue'
+import EInput from '@/components/inputs/Input/EInput'
 
 import { defineComponent } from 'vue'
 import {
@@ -83,14 +111,22 @@ import {
 
 export default defineComponent({
   name: 'Calendar',
-  components: { SelectTime, Controls, Days },
+  components: { SelectTime, Controls, Days, EInput },
   props: {
     data: {
       type: Object,
       default: () => {},
     },
-    // проп со стилями для ESelect
+    // todo addaed (not done)
+    styleConfig: {
+      type: Object,
+      default: () => {},
+    },
     selectStyleConfig: {
+      type: Object,
+      default: () => {},
+    },
+    inputStyleConfig: {
       type: Object,
       default: () => {},
     },
@@ -109,19 +145,38 @@ export default defineComponent({
       nextMonth: {},
       nextMonthDates: [],
       formattedDateTimes: [],
+      isOpen: true,
     }
   },
   computed: {
-    mergedData() {
+    mergedInputData() {
       return Object.assign(
+        {
+          id: 'calendar-input',
+          type: 'text',
+          // modelValue	[String, Number]	null	Любая строка и число	Значение инпута (можно использовать v-model) // todo
+          size: 'md',
+          clearable: false, // todo ?
+          iconRight: 'calendar',
+        },
+        this.data?.inputData,
+      ) // todo add in Readme new data property
+    },
+
+    mergedData() {
+      // const newData = {}
+      return Object.assign(
+        // newData,
         {
           fontFamily: 'Open Sans',
           fontWeight: '500',
           fontSize: '14px',
           activeColor: '#0066FF',
           activeBackgroundColor: '#E5F0FF',
-          isAdaptiveSize: true, // todo false ?
+          isAdaptiveSize: false,
 
+          inputData: {}, // todo added - данные для инпута
+          isOpen: false,
           showInput: true, // todo added
           isDouble: false, // todo handle inputs and double calendar ??
           locale: 'en-US',
@@ -136,8 +191,25 @@ export default defineComponent({
         },
         this.data,
       )
+
+      // if (this.data?.showInput || this.data?.showInput === undefined) {
+      //   newData.isOpen = false
+      //
+      //   if (this.data?.isOpen !== undefined) {
+      //     newData.isOpen = this.data.isOpen
+      //   }
+      //
+      //   this.isOpen = newData.isOpen
+      // }
+
+      // return newData
     },
 
+    isCalendarOpen() {
+      return this.data.isOpen
+    },
+
+    // todo get from style config
     getStyleVars() {
       return {
         '--active-color': this.mergedData?.activeColor || '#0066FF',
@@ -164,9 +236,26 @@ export default defineComponent({
   mounted() {
     this.renderCalendarDays()
     this.setInitSelectedValues()
+
+    if (this.data?.isOpen === undefined) {
+      this.isOpen = false
+    }
   },
 
   methods: {
+    //todo add to Readme
+    toggleCalendar() {
+      this.isOpen = !this.isOpen
+      this.$emit('toggle', this.isOpen)
+    },
+    handleModelUpdate(value) {
+      //  todo $emit
+      this.$emit('update:inputModelValue', value)
+    },
+    handleInputError(error) {
+      //  todo $emit
+      this.$emit('error:inputModelValue', error)
+    },
     setInitSelectedValues() {
       if (this.mergedData?.date?.date_from) {
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_from))
@@ -317,7 +406,19 @@ export default defineComponent({
       this.$emit('update:dateValue', this.formattedDateTimes)
     },
   },
-  watch: {},
+  watch: {
+    // 'data.showInput'(value) {
+    //   console.log('showInput: ', value)
+    //   newData.isOpen = false
+    // },
+    // 'data.isOpen'(value) {
+    //   console.log('isopen', value)
+    //   this.isOpen = value
+    // },
+    isCalendarOpen(value) {
+      this.isOpen = value
+    },
+  },
 })
 </script>
 
@@ -500,5 +601,9 @@ export default defineComponent({
   ::v-deep(.footer > .label) {
     font-size: calc(var(--font-size) - 2px);
   }
+}
+
+.calendar__input {
+  margin-bottom: 8px;
 }
 </style>

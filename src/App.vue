@@ -1,5 +1,13 @@
 <template>
-  <Calendar></Calendar>
+  <div :style="{ width: '300px' }">
+    <Calendar
+      :data="calendarData"
+      @toggle="foo"
+      @update:inputModelValue="(value) => (calendarData.inputData.modelValue = value)"
+    ></Calendar>
+
+    <button @click="calendarData.isOpen = !calendarData.isOpen">Toggle Calendar</button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -10,9 +18,20 @@ export default defineComponent({
   name: 'App',
   components: { Calendar },
   data() {
-    return {}
+    return {
+      calendarData: {
+        isOpen: true,
+        isDouble: true,
+        showInput: true, // handle double + input
+        inputData: {
+          modelValue: '',
+        },
+      },
+    }
   },
-  methods: {},
+  methods: {
+    foo() {},
+  },
 })
 </script>
 
