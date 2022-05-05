@@ -344,7 +344,7 @@ export default {
             })
           }
           if (this.table) {
-            this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+            this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
           } else {
             this.$emit('update:modelValue', this.selectModel)
           }
@@ -362,7 +362,7 @@ export default {
         }
         this.selectModel.push(option)
         if (this.table) {
-          this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+          this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
         } else {
           this.$emit('update:modelValue', this.selectModel)
         }
@@ -373,7 +373,7 @@ export default {
         }
         this.selectModel.push(option)
         if (this.table) {
-          this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+          this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
         } else {
           this.$emit('update:modelValue', this.selectModel)
         }
@@ -382,7 +382,7 @@ export default {
       }
       this.selectModel = option
       if (this.table) {
-        this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+        this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
       } else {
         this.$emit('update:modelValue', this.selectModel)
       }
@@ -407,7 +407,7 @@ export default {
       if (index !== -1) {
         this.selectModel.splice(index, 1)
         if (this.table) {
-          this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+          this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
         } else {
           this.$emit('update:modelValue', this.selectModel)
         }
@@ -419,7 +419,7 @@ export default {
       if (this.mergedData.multiple) {
         this.selectModel = []
         if (this.table) {
-          this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+          this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
         } else {
           this.$emit('update:modelValue', this.selectModel)
         }
@@ -427,7 +427,7 @@ export default {
       }
       this.selectModel = {}
       if (this.table) {
-        this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+        this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
       } else {
         this.$emit('update:modelValue', this.selectModel)
       }
@@ -446,7 +446,7 @@ export default {
           this.selectModel = []
         }
         if (this.table) {
-          this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+          this.$emit('update:modelValue', {name: 'select', value: this.selectModel})
         } else {
           this.$emit('update:modelValue', this.selectModel)
         }
@@ -488,7 +488,7 @@ export default {
         if (this.mergedData.validators) {
           this.errorMessage = validate(this.mergedData.validators, value)
           if (this.table) {
-            this.$emit('update:modelValue', {name: 'select', value: this.newValue})
+            this.$emit('error', {name: 'select', value: this.errorMessage})
           } else {
             this.$emit('error', {name: 'select', value: this.errorMessage})
           }

@@ -6,7 +6,7 @@ type TableData = {
     perPage: number
     totalCount: number
     headers: Array<object>
-    items: Array<{[key:string]: any}>
+    items: Array<{ [key: string]: any }>
     fields: Array<object>
     filters: Array<object>
     orders: Array<object>
@@ -16,7 +16,7 @@ type TableData = {
 type TableMetadata = {
     filter: string[]
     order: string[][]
-    search: string[]
+    search: string
     fields: object[]
     label: string
     relations: string[]
@@ -50,7 +50,7 @@ export default class Table {
         fields: [],
         filters: [],
         orders: [],
-        search: []
+        search: ''
     }
 
     initTable(
@@ -75,6 +75,7 @@ export default class Table {
             })
         tableStore.setUrl(this.url)
         tableStore.setMicroserviceName(this.microserviceName)
+        tableStore.setModelName(this.modelName)
     }
 
     getTableMetadata(): Promise<any> {
@@ -90,7 +91,7 @@ export default class Table {
                     this.tableData.search = response[this.metadataName].search
                     resolve(response)
                 })
-                .catch((error:any) => {
+                .catch((error: any) => {
                     reject(error)
                     console.log(error)
                 })
@@ -134,19 +135,24 @@ export default class Table {
             .setPagination(this.tableData.perPage, this.tableData.currentPage)
             .order([ordersArr])
             .call()
-            .then((response:any) => {
+            .then((response: any) => {
                 this.tableData.currentPage = response.current_page
                 this.tableData.perPage = response.per_page
                 this.tableData.totalCount = response.total_count
                 this.tableItems = response.items
+                tableStore.setTableData({
+                    tableTitle: response[this.metadataName],
+                    fields: this.tableData.headers,
+                    items: this.tableItems,
+                    filters: this.tableData.filters
+                })
                 if (this.metadata && !this.tableData.headers.length) {
                     this.setTable()
                 } else if (this.metadata && this.tableData.items) {
                     this.setTable()
-                    // tableStore.setTableData(this.tableData)
                 }
             })
-            .catch((error:any) => {
+            .catch((error: any) => {
                 console.log(error)
             })
     }
@@ -156,9 +162,9 @@ export default class Table {
         let tableFieldArray: Array<object> = []
         let item = {}
         let path: string
-        this.tableItems.forEach((rowData:{[key:string]: any}, rowIndex) => {
+        this.tableItems.forEach((rowData: { [key: string]: any }, rowIndex) => {
             this.tableData.items.push({id: rowData.id, values: {}})
-            this.metadata.fields.forEach((field:{[key:string]: any}) => {
+            this.metadata.fields.forEach((field: { [key: string]: any }) => {
                 path = field.path.includes('[]') ? field.path.split('[')[0] : field.path
                 const asArray = Object.entries(rowData);
                 const filtered = asArray.filter(([key, value]) => path === key);
@@ -172,25 +178,51 @@ export default class Table {
     }
 
     setTableFilters() {
-        this.metadata.fields.forEach((field:{[key:string]: any}) => {
+        this.metadata.fields.forEach((field: { [key: string]: any }) => {
             if (field.filterable) {
                 this.filterableFields.push(field)
+                tableStore.setFilterableFields(this.filterableFields)
             }
         })
         console.log(this.filterableFields)
     }
 
+    searchTable(value: any) {
+        let timeoutID: number
+            const filter = value
+                ? [
+                    {
+                        field: this.tableData.search,
+                        operator: 'swi',
+                        value: value,
+                    },
+                ]
+                : []
+            clearTimeout(timeoutID)
+
+            timeoutID = setTimeout(() => {
+                this.egalConstructor.getItems(this.microserviceName, this.modelName)
+                    .filter(filter)
+                    .call()
+                    .then((response: any) => {
+                        this.tableItems = response.items
+                        this.setTable()
+                        clearTimeout(timeoutID)
+                    })
+            }, 300)
+    }
+
     deleteSelectedValues() {
-        let valuesForDeletion:{[key:string]: any} = tableStore.getState().selectedItems
+        let valuesForDeletion: { [key: string]: any } = tableStore.getState().selectedItems
         let ids = []
         let deleteParams = {}
         if (valuesForDeletion.length === 1) {
             deleteParams = {
                 id: valuesForDeletion[0].id
             }
-            this.egalConstructor.delete(this.microserviceName, this.modelName, deleteParams).call().then((response:any) => {
+            this.egalConstructor.delete(this.microserviceName, this.modelName, deleteParams).call().then((response: any) => {
 
-            }).catch((error:any) => {
+            }).catch((error: any) => {
 
             })
         } else {
@@ -200,14 +232,15 @@ export default class Table {
             deleteParams = {
                 ids: ids
             }
-            this.egalConstructor.deleteMany(this.microserviceName, this.modelName, deleteParams).call().then((response:any) => {
+            this.egalConstructor.deleteMany(this.microserviceName, this.modelName, deleteParams).call().then((response: any) => {
 
-            }).catch((error:any) => {
+            }).catch((error: any) => {
 
             })
         }
 
     }
+
     updateSelectedValues() {
     }
 }

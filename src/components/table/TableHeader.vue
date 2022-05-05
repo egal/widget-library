@@ -65,13 +65,13 @@ export default defineComponent({
   },
   methods: {
     checkAllBoxes(value: any) {
-      // console.log(this.checked)
-      // if (!!value.srcElement.checked) {
-      //   eventBus.$emit('uncheck-all-boxes', value.srcElement.checked )
-      // } else {
+      if (!value.srcElement.checked) {
+        eventBus.$emit('uncheck-all-boxes', value.srcElement.checked )
+      } else {
         this.checked = value.srcElement.checked
+        console.log(this.checked)
         eventBus.$emit('check-all-boxes', value.srcElement.checked)
-
+      }
     },
   },
 })

@@ -3,14 +3,16 @@ import {Store} from './Store'
 interface Table extends Object {
     tableData: {
         tableTitle: string
-        headers: Array<Record<string, unknown>>
-        fields: Array<Record<string, unknown>>
-        items: Array<Record<string, unknown>>
+        fields: Array<object>
+        items: Array<object>
+        filters: Array<object>
     }
     selectedItem: object
     url: string
     microserviceName: string
+    modelName: string,
     selectedItems: Array<object>
+    filterableFields: Array<object>
 }
 
 class TableStore extends Store<Table> {
@@ -18,22 +20,24 @@ class TableStore extends Store<Table> {
         return {
             tableData: {
                 tableTitle: '',
-                headers: [],
                 fields: [],
                 items: [],
+                filters: [],
             },
             selectedItem: {},
             selectedItems: [],
             url: '',
-            microserviceName: ''
+            microserviceName: '',
+            modelName: '',
+            filterableFields: []
         }
     }
 
     public setTableData(tableData: {
         tableTitle: string
-        headers: Array<Record<string, unknown>>
-        fields: Array<Record<string, unknown>>
-        items: Array<Record<string, unknown>>
+        fields: Array<object>
+        items: Array<object>
+        filters: Array<object>
     }) {
         this.state.tableData = tableData
     }
@@ -50,13 +54,20 @@ class TableStore extends Store<Table> {
         this.state.microserviceName = name
     }
 
+    public setModelName(name: string) {
+        this.state.modelName = name
+    }
+
     public setSelectedValues(value: any) {
         this.state.selectedItems.push(value)
-
     }
 
     public removeSelectedValue() {
         this.state.selectedItems = []
+    }
+
+    public setFilterableFields(fields: any) {
+        this.state.filterableFields = fields
     }
 }
 

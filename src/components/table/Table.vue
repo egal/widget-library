@@ -1,10 +1,13 @@
 <template>
   <div class="table-container">
     <slot name="additionalHeaderContent"></slot>
+          <div class="table-filters" v-if="tableConstructor?.filterableFields.length">
+            <Filters :fields="tableConstructor?.filterableFields"></Filters>
+          </div>
     <div class="table-header">
-      <!--      <div class="table-filters" v-if="tableConstructor?.filterableFields.length">-->
-      <!--        <Filters :fields="tableConstructor?.filterableFields"></Filters>-->
-      <!--      </div>-->
+      <div class="table-search" v-if="tableConstructor?.tableData?.search">
+        <EInput :data="{ size: 'lg', iconLeft: 'search', type: 'search' }" @update:modelValue="value => searchTable(value)"></EInput>
+      </div>
       <div class="control-buttons">
         <div class="edit-mode-off-buttons" v-if="!editActive">
           <EButton
@@ -22,6 +25,7 @@
               leftIcon: 'trash',
               softColors: true,
               size: 'lg',
+              disabled: !selectedRows.length
             }"
               @click="showDeleteModal()"
           >Delete
@@ -116,7 +120,7 @@ import Table from '@/helpers/Table'
 import eventBus from '@/helpers/eventBus'
 import {tableStore} from "@/components/table/storage/TableStore";
 import vClickOutside from 'click-outside-vue3'
-
+import EInput from "@/components/inputs/Input/EInput.vue";
 export default defineComponent({
   name: 'Table',
   components: {
@@ -126,6 +130,7 @@ export default defineComponent({
     TableHeader,
     TableModal,
     EButton,
+    EInput
   },
   directives: {
     ClickOutside: vClickOutside.directive,
@@ -185,7 +190,7 @@ export default defineComponent({
       return this.tableConstructor.tableData.perPage
     },
   },
-  mounted() {
+  created(){
     this.tableConstructor = new Table()
     this.tableConstructor.initTable(
         this.table.microserviceName,
@@ -193,6 +198,15 @@ export default defineComponent({
         this.table.tableName,
         this.table.url,
     )
+  },
+  mounted() {
+    // this.tableConstructor = new Table()
+    // this.tableConstructor.initTable(
+    //     this.table.microserviceName,
+    //     this.table.modelName,
+    //     this.table.tableName,
+    //     this.table.url,
+    // )
     eventBus.$on('sort-column', (order: Array<string>) => {
       this.tableConstructor.getTableItems(
           this.currentPage,
@@ -218,8 +232,14 @@ export default defineComponent({
     eventBus.$on('uncheck-row', (item: { [key: string]: any }) => {
       this.selectedRows = this.selectedRows.filter((row: { [key: string]: any }) => item.id !== row.id)
       if (this.tableConstructor.tableData.items.length !== this.selectedRows.length) {
+        this.selectedRows = []
+        tableStore.setSelectedValues([])
         eventBus.$emit('uncheck-all', {value: false, item: item})
       }
+    })
+    eventBus.$on('uncheck-all-boxes', () => {
+      this.selectedRows = []
+      tableStore.setSelectedValues([])
     })
     eventBus.$on('updated-value', (item: object) => {
       this.setEditedItem(item)
@@ -231,11 +251,13 @@ export default defineComponent({
         this.tableConstructor.getTableItems(selectedPage, this.perPage)
       }
     },
-
     changePerPageOption(perPage: Record<string, number>): void {
       if (perPage.name !== this.perPage) {
         this.tableConstructor.getTableItems(this.currentPage, perPage.name)
       }
+    },
+    searchTable(value: string) {
+      this.tableConstructor.searchTable(value)
     },
     editRow() {
       this.editActive = !this.editActive
@@ -244,8 +266,8 @@ export default defineComponent({
     setEditedItem(item: {[key:string]: any}) {
       let updatedObject = {}
       tableStore.getState().selectedItems.forEach((selectedItem: {[key:string]: any}) => {
-        if (selectedItem.id === item.id) {
-        }
+        // if (selectedItem.id === item.id) {
+        // }
         console.log(updatedObject, 'updated object')
       })
     },

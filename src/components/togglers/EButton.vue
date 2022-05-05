@@ -21,6 +21,7 @@
     <slot></slot>
     <BootstrapIcon
       class="egal-button__icon egal-button__icon--right"
+      :class="{'rotate-right-icon': mergedData.rotateRightIcon}"
       :icon="mergedData.rightIcon"
       v-if="mergedData.rightIcon"
     ></BootstrapIcon>
@@ -67,6 +68,7 @@ export default {
           softColors: false,
           leftIcon: '',
           rightIcon: '',
+          rotateRightIcon: false
         },
         this.data,
       )
