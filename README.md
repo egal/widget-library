@@ -69,11 +69,18 @@ styleConfig = {
 ````vue
 <template>
   <div :style="{ width: '700px' }">
-    <Calendar :data="calendarData" :style-config="{ fontFamily: "Raleway",
-    fontSize: "14px",
-    fontWeight: "regular",
-    activeColor: "#0066FF",
-    activeBackgroundColor: "#E5F0FF",}" @update:dateValue="setDate"></Calendar>
+    <Calendar
+        :data="calendarData"
+        :style-config="{
+        fontFamily: 'Raleway',
+        fontSize: '14px',
+        fontWeight: 'regular',
+        activeColor: '#0066FF',
+        activeBackgroundColor: '#E5F0FF',
+      }"
+        @update:dateValue="(v) => setDate(v)"
+        @onError:inputValue="(errorMsg) => handleError(errorMsg)"
+    ></Calendar>
   </div>
 </template>
 
@@ -109,6 +116,7 @@ export default defineComponent({
         },
         inputData: {
           showFilled: false,
+          validators: [this.required],
         },
         rightInputData: {
           showFilled: false,
@@ -120,6 +128,12 @@ export default defineComponent({
     }
   },
   methods: {
+    required(value) {
+      return !value ? 'Обязательное поле' : ''
+    },
+    handleError(error) {
+      // ...
+    },
     setDate() {
       // ...
     },
