@@ -13,7 +13,8 @@
       class="select-container"
       :class="{
         focus: showDropdown,
-        filled: filled && !showDropdown && !mergedData.error && !errorMessage,
+        filled:
+          mergedData.showFilled && filled && !showDropdown && !mergedData.error && !errorMessage,
       }"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
@@ -217,6 +218,7 @@ export default {
           showMoreButtonText: 'Show more...',
           closeDropdownAfterSelection: true,
           openDropdown: false,
+          showFilled: true,
         },
         this.data,
       )
@@ -500,7 +502,8 @@ export default {
   .filled {
     background-color: var(--filled-background-color);
     color: var(--filled-font-color);
-    .selected {
+    .selected,
+    .select-container__arrow {
       .bi {
         color: var(--filled-font-color);
       }

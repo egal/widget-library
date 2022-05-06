@@ -5,6 +5,7 @@
       <BootstrapIcon icon="clock" />
       <ESelect
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: hoursOptions,
           modelValue: selectedHours,
@@ -17,6 +18,7 @@
       <span style="margin: 0 5px">:</span>
       <ESelect
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: minutesOptions,
           modelValue: selectedMinutes,
@@ -30,6 +32,7 @@
         v-if="config?.isAMPM"
         class="ampm"
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: [
             { name: 'AM' },
@@ -47,7 +50,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import ESelect from '@/components/inputs/Select/ESelect.vue'
 import { defineComponent } from 'vue'
@@ -84,10 +87,19 @@ export default defineComponent({
       default: '',
     },
 
-    // проп со стилями для ESelect
+    selectData: {
+      type: Object,
+      default: {},
+    },
+
     selectStyleConfig: {
       type: Object,
       default: () => {},
+    },
+
+    clear: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -95,15 +107,26 @@ export default defineComponent({
       selectedHours: this.hours ? { name: this.hours } : {},
       selectedMinutes: this.minutes ? { name: this.minutes } : {},
       selectedAmPm: this.format ? { name: this.format } : { name: 'AM' },
-      selectedTime: [] as string[],
+      selectedTime: [],
     }
   },
   computed: {
-    hoursOptions() {
-      const twelveHoursOptions = this.generateTimeOptions(1, 11)
-      twelveHoursOptions.unshift({ name: '12' })
+    mergedSelectData() {
+      return this.selectData
+    },
 
-      return this.config?.isAMPM ? twelveHoursOptions : this.generateTimeOptions(0, 23)
+    isClearValues() {
+      return this.clear
+    },
+
+    hoursOptions() {
+      if (this.config?.isAMPM) {
+        const twelveHoursOptions = this.generateTimeOptions(1, 11)
+        twelveHoursOptions.unshift({ name: '12' })
+        return twelveHoursOptions
+      } else {
+        return this.generateTimeOptions(0, 23)
+      }
     },
 
     minutesOptions() {
@@ -112,8 +135,9 @@ export default defineComponent({
   },
   mounted() {},
   methods: {
-    generateTimeOptions(min: number, max: number) {
-      let arr: any[] = []
+    // Генерация опций для селектов
+    generateTimeOptions(min, max) {
+      let arr = []
       for (let i = min - 1; i++, i <= max; ) {
         let obj = {
           name: i < 10 ? `0${i}` : `${i}`,
@@ -124,7 +148,7 @@ export default defineComponent({
       return arr
     },
 
-    setTime(val: any, type: string): void {
+    setTime(val, type) {
       if (this.isDisabled) {
         return
       }
@@ -132,9 +156,16 @@ export default defineComponent({
       switch (type) {
         case 'hour':
           this.selectedHours = val
+          if (!this.selectedMinutes?.name) {
+            this.selectedMinutes = { name: '00' }
+          }
           break
         case 'minutes':
           this.selectedMinutes = val
+          if (!this.selectedHours?.name) {
+            this.selectedHours = { name: '00' }
+          }
+
           break
         case 'ampm':
           this.selectedAmPm = val
@@ -156,7 +187,26 @@ export default defineComponent({
       })
     },
   },
-  watch: {},
+  watch: {
+    isClearValues(value) {
+      if (value) {
+        this.selectedHours = {}
+        this.selectedMinutes = {}
+      }
+    },
+
+    hours(value) {
+      this.selectedHours = { name: value }
+    },
+
+    minutes(value) {
+      this.selectedMinutes = { name: value }
+    },
+
+    format(value) {
+      this.selectedAmPm = { name: value }
+    },
+  },
 })
 </script>
 

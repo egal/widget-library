@@ -1,71 +1,130 @@
-<p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
-<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
-<p align="center">
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://badge.fury.io/js/%40egalteam%2Fwidget-library.svg"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/dt/@egalteam/widget-library"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/l/@egalteam/widget-library"></a>
-</p>
+- поправлены стили в ESelect
+- изменения в SelectTime
+
+### ! Изменения в других компонентах: 
+- ESelect: в data добавлен проп showFilled: true (как у EInputа, для отображения "заполненного" состояние селекта)
 
 
-## Новости
-
-Следить за обновлениями можно в нашем телеграм канале:
-
-[![](https://img.shields.io/badge/Channel%20on-Telegram-informational)](https://t.me/egalbox)
+Обновленный ReadMe (добавлен styleConfig, 4 новых свойства у объекта data (в самом низу таблицы), 3 новых эмита, убран пример json, т.к. уже не очень актуальный):
 
 
-## Документация
+------------------------------------
 
-С подробной документацией по продукту можно ознакомиться
-[здесь](https://docs.egal.pro/#/).
+## Calendar
+
+Определяется тэгом:
+```vue
+<e-calendar></e-calendar>
+```
+
+Принимает  2 параметра в качестве пропа: 
+1. объект data, содержимое описано в таблице ниже
+
+### Параметры объекта data
+| Параметр                  |       Тип        | Возможные значения                                                                                              | Описание                                                                                                                                                     |
+|---------------------------|:----------------:|:----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ``fontFamily``            |      String      | Любая строка                                                                                                    | font-family текста                                                                                                                                           |
+| ``fontWeight``            | [String, Number] | ``'regular'``, ``800``                                                                                          | font-weight текста                                                                                                                                           |
+| ``fontSize``              |      String      | ``'14px'``                                                                                                      | font-size текста                                                                                                                                             |                                                     
+| ``activeColor``           |      String      | ``"#0066FF"``                                                                                                   | Цвет фона выбранного дня (или первого и последнего дня, если выбран диапазон дней)                                                                           |                                                 
+| ``activeBackgroundColor`` |      String      | ``"#E5F0FF"``                                                                                                   | Цвет фона дней внутри выбранного диапазона, также цвет фона при наведении                                                                                    |                                                          
+| ``isAdaptiveSize``        |     Boolean      | ``true``, ``false``                                                                                             | Должен ли календарь растягиваться по ширине контейнера. Еслм значение - ``false``, календарь будет иметь дефолтные ширину и высоту                           | 
+| ``isDouble``              |     Boolean      | ``true``, ``false``                                                                                             | Отображать ли "двойной" календарь (по умолчанию ``false``)                                                                                                   |
+| ``locale``                |      String      | ``'en-US'``                                                                                                     | Заданная локаль влияет на язык, на котором будут отображаться названия дней недели и месяца                                                                  |
+| ``localeOptions``         |      Object      |                                                                                                                 | Опции для форматирования даты (для передачи в ``toLocaleString()``), чтобы кастомизировать отображение даты и времени в инпуте                               |
+| ``timePicker``            |      Object      |                                                                                                                 | Объект с параметрами для инпута с выбором времени                                                                                                            |
+| ``timePicker.isAMPM``     |     Boolean      | ``true``, ``false``                                                                                             | Отображать время в 12-часовом или 24-часовом формате. Если значение - ``true``, время отображается в 12-часовом формате (добавляется селект с выбором AM/PM) | 
+| ``timePicker.label``      |      String      | Любая строка                                                                                                    | Текст лейбла над селектом                                                                                                                                    |
+| ``data``                  |      Object      |                                                                                                                 | Объект с данными (выбранные даты)                                                                                                                            |
+| ``data.date_from``        |      String      | Дата или дата и время в формате ISO (``"2022-03-02T04:28:12.089Z"`` или ``"2022-03-02"``, если время не задано) | Начальная дата (если выбран диапазон) или выбранная                                                                                                          |
+| ``data.date_to``          |      String      | Дата или дата и время в формате ISO                                                                             | Размер инпута                                                                    Конечная дата                                                               |
+| ``inputData``             |      Object      |                                                                                                                 | Объект, передаваемый в инпут как проп :data, для настройки инпута                                                                                            |
+| ``rightInputData``        |      Object      |                                                                                                                 | Объект, передаваемый во второй инпут (появляется если в календаре можно выбирать диапазон дат) как проп :data, для настройки инпута                          |
+| ``showInput``             |     Boolean      | ``true``, ``false``                                                                                             | Определяет, отображать ли инпут для выбора даты и времени над календарем                                                                                     |
+| ``isRangePicker``         |     Boolean      | ``true``, ``false``                                                                                             | Определяет, можно ли выбрать диапазон дат, вместо одной. Если ``isDouble = true``, по умолчанию всегда можно выбрать диапазон                                |
+
+2. объект styleConfig: Набор стилей для кастомизация календаря.
+
+### Пример styleConfig (в примере указаны дефолтные значения)
+````javascript
+styleConfig = {
+  fontFamily: 'Open Sans',
+  fontWeight: 'normal',
+  activeColor: '#0066FF', // цвет выбранной даты
+  activeBackgroundColor: '#E5F0FF', // цвет при наведении на дату в календаре
+  fontSize: '14px'
+}
+````
+
+### События
+| Название               | Тип параметров | Описание                                                                                                                  |
+|------------------------|:--------------:|---------------------------------------------------------------------------------------------------------------------------|
+| ``update:dateValue``   |     String     | Возвращает массив выбранных дат и времени                                                                                 |
+| ``onError:inputValue`` |     String     | Возвращает ошибку из инпута, если в него были переданы какие-либо валидаторы (через ``inputData`` или ``rightInputData``) |
+| ``close``              |     String     | Срабатывает при закрытии календаря                                                                                        |
+| ``open``               |     String     | Срабатывает при открытии календаря                                                                                        |
 
 
-## Поддержка
+#### Пример использования
+````vue
+<template>
+  <div :style="{ width: '700px' }">
+    <Calendar :data="calendarData" :style-config="{ fontFamily: "Raleway",
+    fontSize: "14px",
+    fontWeight: "regular",
+    activeColor: "#0066FF",
+    activeBackgroundColor: "#E5F0FF",}" @update:dateValue="setDate"></Calendar>
+  </div>
+</template>
 
-Нам важно Ваше мнение и обратная связь.
+<script lang="ts">
+import { defineComponent } from 'vue'
+import Calendar from '@/components/calendar/Calendar.vue'
 
-Задать вопрос:
+export default defineComponent({
+  name: 'App',
+  components: { Calendar },
+  data() {
+    return {
+      calendarData: {
+        isAdaptiveSize: false,
+        isDouble: false,
+        isRangePicker: false,
+        showInput: true,
+        localeOptions: {
+          year: '2-digit',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        },
+        locale: 'en-US',
+        timePicker: {
+          isAMPM: false,
+          label: 'Choose time',
+        },
+        date: {
+          date_from: "2022-03-02T04:28:12.089Z",
+          date_to: "2022-03-05"
+        },
+        inputData: {
+          showFilled: false,
+        },
+        rightInputData: {
+          showFilled: false,
+        },
+        timeSelectData: {
+          showFilled: false,
+        },
+      },
+    }
+  },
+  methods: {
+    setDate() {
+      // ...
+    },
+  },
+})
+</script>
+````
 
-[![](https://img.shields.io/badge/Chat%20on-Telegram-blue)](https://t.me/joinchat/n175xzBrCUswMWU6)
-[![](https://img.shields.io/badge/Mail%20to-egal%40sputnikfund.ru-red)](mailto:egal@sputnikfund.ru)
-
-
-## Экосистема
-
-| Проект                       |                                    Статус                                     | Описание                                                                       |
-|:-----------------------------|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
-| [Docs]                       |                       [![Docs Status]][Docs Status URL]                       | Документация проекта Egal                                                      |
-| [Egal/Framework PHP Package] | [![Egal/Framework PHP Package Status]][Egal/Framework PHP Package Status URL] | Egal/Framework PHP библиотека                                                  |
-| [Egal/Framework NPM Package] | [![Egal/Framework NPM Package Status]][Egal/Framework NPM Package Status URL] | Egal/Framework NPM библиотека                                                  |
-| [Egal/Egal PHP Project]      |      [![Egal/Egal PHP Project Status]][Egal/Egal PHP Project Status URL]      | PHP проект (шаблон) сервиса для Egal экосистемы                                |
-| [Web Service]                |                [![Web Service Status]][Web Service Status URL]                | Сервис Egal экосистемы, реализующий адаптацию HTTP запросов к сервисам         |
-| [Auth Service]               |               [![Auth Service Status]][Auth Service Status URL]               | Сервис Egal экосистемы, реализующий базовые функции авторизации                |
-| [Interface Service]          |          [![Interface Service Status]][Interface Service Status URL]          | Сервис Egal экосистемы, предназначенный для управления метаданными интерфейсов |
-| [Postgres]                   |                   [![Postgres Status]][Postgres Status URL]                   | Надстроенная Система управления базами данных PostgreSQL для Egal экосистемы   |
-
-[Docs]: https://github.com/egal/egal-docs
-[Egal/Framework PHP Package]: https://github.com/egal/egal-framework-php-package
-[Egal/Framework NPM Package]:https://github.com/egal/egal-framework-npm-package
-[Egal/Egal PHP Project]:https://github.com/egal/egal-egal-php-project
-[Web Service]:https://github.com/egal/egal-web-service
-[Auth Service]:https://github.com/egal/egal-auth-service
-[Interface Service]: https://github.com/egal/egal-interface-service
-[Postgres]: https://github.com/egal/postgres
-
-[Docs Status]: https://img.shields.io/website?url=https%3A%2F%2Fegal.github.io%2Fegal-docs%2F%23%2F
-[Egal/Framework PHP Package Status]: https://img.shields.io/packagist/v/egal/framework?include_prereleases
-[Egal/Framework NPM Package Status]: https://img.shields.io/npm/v/@egalteam/framework
-[Egal/Egal PHP Project Status]: https://img.shields.io/packagist/v/egal/egal?include_prereleases
-[Web Service Status]: https://img.shields.io/docker/v/egalbox/web-service?label=dockerhub
-[Auth Service Status]: https://img.shields.io/docker/v/egalbox/auth-service?label=dockerhub
-[Interface Service Status]: https://img.shields.io/docker/v/egalbox/interface-service?label=dockerhub
-[Postgres Status]: https://img.shields.io/docker/v/egalbox/postgres?label=dockerhub
-
-[Docs Status URL]: https://egal.github.io/egal-docs/
-[Egal/Framework PHP Package Status URL]: https://packagist.org/packages/egal/framework
-[Egal/Framework NPM Package Status URL]: https://www.npmjs.com/package/@egalteam/framework
-[Egal/Egal PHP Project Status URL]: https://packagist.org/packages/egal/egal
-[Web Service Status URL]: https://hub.docker.com/r/egalbox/web-service
-[Auth Service Status URL]: https://hub.docker.com/r/egalbox/auth-service
-[Interface Service Status URL]: https://hub.docker.com/r/egalbox/interface-service
-[Postgres Status URL]: https://hub.docker.com/r/egalbox/postgres

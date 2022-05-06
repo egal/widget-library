@@ -1,31 +1,28 @@
 <template>
-  <div class="calendar-wrapper">
-    <!--      todo v-if ?? -->
-    <EInput
-      class="calendar__input left"
-      :style-config="inputStyleConfig"
-      :data="mergedInputData"
-      v-if="mergedData.showInput"
-      @error="handleInputError"
-      @update:modelValue="handleModelUpdate"
-      @click="toggleCalendar"
-    />
-    <!--      todo handle props + mergedInputData for this input -->
-    <!--      todo v-if ?? -->
-    <EInput
-      class="calendar__input right"
-      :style-config="inputStyleConfig"
-      :data="mergedInputData"
-      v-if="mergedData.showInput && mergedData?.isDouble"
-      @error="handleInputError"
-      @update:modelValue="handleModelUpdate"
-      @click="toggleCalendar"
-    />
-    {{ mergedData?.isDouble }}
+  <div class="calendar-wrapper" v-click-outside="close">
+    <div class="date-inputs-container">
+      <EInput
+        class="calendar__input left"
+        :style-config="inputStyleConfig"
+        :data="mergedLeftInputData"
+        v-if="mergedData.showInput"
+        @error="(error) => handleInputError(error, 'from')"
+        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
+        @click="open"
+      />
 
-    <!--    todo add transition on toggle-->
-    <div class="calendar" :style="getStyleVars" v-show="isOpen">
-      <!--    todo if showInput - > EInput+Calendar, else - Calendar -->
+      <EInput
+        class="calendar__input right"
+        :style-config="inputStyleConfig"
+        :data="mergedRightInputData"
+        v-if="mergedData.showInput && (mergedData?.isRangePicker || mergedData?.isDouble)"
+        @error="(error) => handleInputError(error, 'to')"
+        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
+        @click="open"
+      />
+    </div>
+
+    <div class="calendar" :style="getStyleVars" v-if="isOpen">
       <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
         <Controls
           :data="data"
@@ -47,11 +44,17 @@
         <SelectTime
           v-if="mergedData?.timePicker"
           :config="mergedData?.timePicker"
-          :hours="getHoursFromTimestamp(mergedData?.date?.date_from)?.hours"
-          :minutes="getMinutesFromTimestamp(mergedData?.date?.date_from)"
-          :format="getHoursFromTimestamp(mergedData?.date?.date_from)?.format"
-          :is-disabled="selectedDays.length === 0"
+          :hours="getHoursFromTimestamp(leftSelectTime)?.hours"
+          :minutes="
+            getHoursFromTimestamp(leftSelectTime)?.hours && !getMinutesFromTimestamp(leftSelectTime)
+              ? '00'
+              : getMinutesFromTimestamp(leftSelectTime)
+          "
+          :format="getHoursFromTimestamp(leftSelectTime)?.format ?? ''"
+          :is-disabled="isSelectTimeDisabled"
           :select-style-config="selectStyleConfig"
+          :select-data="mergedSelectData"
+          :clear="isClearTimeSelect"
           type="from"
           @select="setTime"
         />
@@ -82,11 +85,18 @@
         <SelectTime
           v-if="mergedData?.timePicker"
           :config="mergedData?.timePicker"
-          :hours="getHoursFromTimestamp(mergedData?.date?.date_to)?.hours"
-          :minutes="getMinutesFromTimestamp(mergedData?.date?.date_to)"
-          :format="getHoursFromTimestamp(mergedData?.date?.date_to)?.format"
-          :is-disabled="selectedDays.length <= 1"
+          :hours="getHoursFromTimestamp(rightSelectTime)?.hours"
+          :minutes="
+            getHoursFromTimestamp(rightSelectTime)?.hours &&
+            !getMinutesFromTimestamp(rightSelectTime)
+              ? '00'
+              : getMinutesFromTimestamp(rightSelectTime)
+          "
+          :format="getHoursFromTimestamp(rightSelectTime)?.format ?? ''"
+          :is-disabled="isSelectTimeDisabled"
           :select-style-config="selectStyleConfig"
+          :select-data="mergedSelectData"
+          :clear="isClearTimeSelect"
           type="to"
           @select="setTime"
         />
@@ -100,7 +110,7 @@ import SelectTime from '@/components/calendar/components/SelectTime.vue'
 import Controls from '@/components/calendar/components/Controls.vue'
 import Days from '@/components/calendar/components/Days.vue'
 import EInput from '@/components/inputs/Input/EInput'
-
+import vClickOutside from 'click-outside-vue3'
 import { defineComponent } from 'vue'
 import {
   addLeadingZeros,
@@ -112,12 +122,16 @@ import {
 export default defineComponent({
   name: 'Calendar',
   components: { SelectTime, Controls, Days, EInput },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  emits: ['', 'open', 'update:dateValue', 'onError:inputValue'],
   props: {
     data: {
       type: Object,
       default: () => {},
     },
-    // todo addaed (not done)
+
     styleConfig: {
       type: Object,
       default: () => {},
@@ -145,28 +159,49 @@ export default defineComponent({
       nextMonth: {},
       nextMonthDates: [],
       formattedDateTimes: [],
-      isOpen: true,
+      isOpen: false,
+      leftInputValue: '',
+      rightInputValue: '',
+      isClearTimeSelect: false,
+      leftSelectTime: this.data?.date?.date_from ?? undefined,
+      rightSelectTime: this.data?.date?.date_to ?? undefined,
     }
   },
   computed: {
-    mergedInputData() {
+    mergedSelectData() {
+      return Object.assign({}, this.data?.timeSelectData)
+    },
+
+    mergedLeftInputData() {
       return Object.assign(
         {
-          id: 'calendar-input',
+          id: 'calendar-input--from',
           type: 'text',
-          // modelValue	[String, Number]	null	Любая строка и число	Значение инпута (можно использовать v-model) // todo
+          modelValue: this.leftInputValue,
           size: 'md',
-          clearable: false, // todo ?
-          iconRight: 'calendar',
+          clearable: false,
+          iconLeft: 'calendar',
         },
         this.data?.inputData,
-      ) // todo add in Readme new data property
+      )
+    },
+
+    mergedRightInputData() {
+      return Object.assign(
+        {
+          id: 'calendar-input--to',
+          type: 'text',
+          modelValue: this.rightInputValue,
+          size: 'md',
+          clearable: false,
+          iconLeft: 'calendar',
+        },
+        this.data?.rightInputData,
+      )
     },
 
     mergedData() {
-      // const newData = {}
       return Object.assign(
-        // newData,
         {
           fontFamily: 'Open Sans',
           fontWeight: '500',
@@ -174,16 +209,18 @@ export default defineComponent({
           activeColor: '#0066FF',
           activeBackgroundColor: '#E5F0FF',
           isAdaptiveSize: false,
-
-          inputData: {}, // todo added - данные для инпута
-          isOpen: false,
-          showInput: true, // todo added
-          isDouble: false, // todo handle inputs and double calendar ??
-          locale: 'en-US',
-          timePicker: {
-            isAMPM: true,
-            label: '',
+          inputData: {},
+          rightInputData: {},
+          showInput: true,
+          isRangePicker: false,
+          isDouble: false,
+          locale: 'ru-RU',
+          localeOptions: {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
           },
+          timePicker: undefined, //  { isAMPM: true, label: '' }
           date: {
             date_from: '',
             date_to: '',
@@ -191,33 +228,25 @@ export default defineComponent({
         },
         this.data,
       )
-
-      // if (this.data?.showInput || this.data?.showInput === undefined) {
-      //   newData.isOpen = false
-      //
-      //   if (this.data?.isOpen !== undefined) {
-      //     newData.isOpen = this.data.isOpen
-      //   }
-      //
-      //   this.isOpen = newData.isOpen
-      // }
-
-      // return newData
     },
 
-    isCalendarOpen() {
-      return this.data.isOpen
+    // Селекты заблокированы если выбрано меншье чем 1 дата (или меньше чем 2 для диапазона дат)
+    isSelectTimeDisabled() {
+      return (
+        ((this.mergedData.isRangePicker || this.mergedData.isDouble) &&
+          Object.keys(this.selectedDays).length < 2) ||
+        (!this.mergedData.isRangePicker && Object.keys(this.selectedDays).length < 1)
+      )
     },
 
-    // todo get from style config
     getStyleVars() {
       return {
-        '--active-color': this.mergedData?.activeColor || '#0066FF',
-        '--active-background-color': this.mergedData?.activeBackgroundColor || '#E5F0FF',
-        '--font-family': this.mergedData?.fontFamily || 'Raleway',
-        '--font-weight': this.mergedData?.fontWeight || 'normal',
-        '--font-size': this.mergedData?.fontSize || '14px',
-        '--width': this.mergedData?.isAdaptiveSize ? '' : 'fit-content',
+        '--active-color': this.styleConfig?.activeColor || '#0066FF',
+        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#E5F0FF',
+        '--font-family': this.styleConfig?.fontFamily || 'Raleway',
+        '--font-weight': this.styleConfig?.fontWeight || 'normal',
+        '--font-size': this.styleConfig?.fontSize || '14px',
+        '--width': this.styleConfig?.isAdaptiveSize ? '' : 'fit-content',
       }
     },
 
@@ -226,7 +255,7 @@ export default defineComponent({
         .fill(new Date())
         .map((weekday, i) => this.generateWeekDaysFromIterator(weekday, i))
         .map((weekday) => {
-          return weekday.toLocaleString(this.mergedData?.locale ?? 'en-US', {
+          return weekday.toLocaleDateString(this.mergedData?.locale ?? 'en-US', {
             weekday: 'short',
           })
         })
@@ -237,30 +266,105 @@ export default defineComponent({
     this.renderCalendarDays()
     this.setInitSelectedValues()
 
-    if (this.data?.isOpen === undefined) {
-      this.isOpen = false
+    if (this.mergedData.showInput === false) {
+      this.isOpen = true
     }
   },
 
   methods: {
-    //todo add to Readme
-    toggleCalendar() {
-      this.isOpen = !this.isOpen
-      this.$emit('toggle', this.isOpen)
+    close() {
+      this.isOpen = false
+      this.$emit('close')
     },
-    handleModelUpdate(value) {
-      //  todo $emit
-      this.$emit('update:inputModelValue', value)
+
+    open() {
+      if (this.isOpen) {
+        return
+      }
+      this.isClearTimeSelect = false
+      this.isOpen = true
+      this.$emit('open', this.isOpen)
     },
-    handleInputError(error) {
-      //  todo $emit
-      this.$emit('error:inputModelValue', error)
+
+    // Обновляет значения выбранного времени\даты после изменений в инпуте
+    handleModelUpdate(value, inputType = 'from') {
+      this.isClearTimeSelect = false
+
+      // check if Invalid Date:
+      if (new Date(value) instanceof Date && isNaN(new Date(value).getTime())) {
+        this.handleInputError('Invalid Date', inputType)
+        return
+      }
+
+      if (inputType === 'from') {
+        this.selectedDays[0] = this.getDateFromTimestamp(new Date(value))
+        this.formattedDateTimes[0] = new Date(value).toISOString()
+        this.leftSelectTime = new Date(value).toISOString()
+      } else if (inputType === 'to') {
+        this.selectedDays[1] = this.getDateFromTimestamp(new Date(value))
+        this.formattedDateTimes[1] = new Date(value).toISOString()
+        this.rightSelectTime = new Date(value).toISOString()
+      }
+
+      this.$emit('update:dateValue', this.formattedDateTimes)
     },
+
+    // Clear all fields if error
+    handleInputError(error, inputType = 'from') {
+      if (inputType === 'from') {
+        this.formattedDateTimes[0] = null
+        this.leftInputValue = ''
+        this.leftSelectTime = undefined
+      } else if (inputType === 'to') {
+        this.formattedDateTimes[1] = null
+        this.rightInputValue = ''
+        this.rightSelectTime = undefined
+      }
+
+      this.selectedDays = []
+      this.isClearTimeSelect = true
+      this.$emit('onError:inputValue', error)
+    },
+
+    // Устанавливает начальные значения даты и времени (из пропсов)
     setInitSelectedValues() {
+      const dateOptions = this.mergedData.localeOptions
+
+      if (this.mergedData?.timePicker === undefined) {
+        delete dateOptions.hour12
+        delete dateOptions.hour
+        delete dateOptions.minute
+      }
+
       if (this.mergedData?.date?.date_from) {
+        dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+
+        if (this.isContainsTime(this.mergedData?.date?.date_from)) {
+          dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+          dateOptions.hour = '2-digit'
+          dateOptions.minute = '2-digit'
+        }
+
+        this.leftInputValue = new Date(this.mergedData?.date?.date_from).toLocaleString(
+          this.mergedData.locale,
+          dateOptions,
+        )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_from))
       }
+
       if (this.mergedData?.date?.date_to) {
+        dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+
+        if (this.isContainsTime(this.mergedData?.date?.date_to)) {
+          dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+          dateOptions.hour = '2-digit'
+          dateOptions.minute = '2-digit'
+        }
+
+        this.rightInputValue = new Date(this.mergedData?.date?.date_to).toLocaleString(
+          this.mergedData.locale,
+          dateOptions,
+        )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_to))
       }
 
@@ -294,6 +398,7 @@ export default defineComponent({
     isContainsTime(isostr) {
       return isostr.includes('T')
     },
+
     getHoursFromTimestamp(isostr) {
       if (!isostr || !this.isContainsTime(isostr)) {
         return null
@@ -306,6 +411,7 @@ export default defineComponent({
         format = hours >= 12 ? 'PM' : 'AM'
         hours = hours % 12
         hours = hours > 0 ? hours : 12
+        hours = hours < 10 ? `0${hours}` : hours
       }
 
       return {
@@ -318,7 +424,10 @@ export default defineComponent({
       if (!isostr || !this.isContainsTime(isostr)) {
         return ''
       }
-      return new Date(Date.parse(isostr)).getMinutes()
+
+      let minutes = new Date(Date.parse(isostr)).getMinutes()
+      minutes = minutes < 10 ? `0${minutes}` : minutes
+      return minutes
     },
 
     generateWeekDaysFromIterator(weekday, i) {
@@ -356,17 +465,41 @@ export default defineComponent({
       )
     },
 
+    setInputValues(options) {
+      let tempFormattedDateTimes = undefined
+
+      tempFormattedDateTimes = this.formattedDateTimes.map((date) =>
+        new Date(date).toLocaleString(this.mergedData.locale, options),
+      )
+
+      this.leftInputValue = tempFormattedDateTimes[0] ?? ''
+      this.rightInputValue = tempFormattedDateTimes[1] ?? ''
+    },
+
     //Выбор даты
     selectDate(dateString) {
-      ;(this.selectedDays.length === 1 || this.selectedDays.length >= 2) &&
-        !this.mouseMayEnter &&
+      this.isClearTimeSelect = false
+
+      if (this.selectedDays.length >= 2 && !this.mouseMayEnter) {
         this.declineSelect()
+      }
+
+      if (this.selectedDays.length === 1 && !this.mergedData.isRangePicker) {
+        this.declineSelect()
+      }
 
       this.selectedDays.push(dateString)
       this.selectedDays = Array.from(new Set(this.selectedDays)).sort()
-      this.mouseMayEnter = !this.mouseMayEnter
+
+      if (!this.mergedData.isRangePicker && !this.mergedData.isDouble) {
+        this.mouseMayEnter = false
+      } else {
+        this.mouseMayEnter = !this.mouseMayEnter
+      }
 
       this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
+
+      this.setInputValues(this.mergedData.localeOptions)
 
       this.$emit('update:dateValue', this.formattedDateTimes)
     },
@@ -385,8 +518,12 @@ export default defineComponent({
     },
 
     setTime(val) {
+      this.isClearTimeSelect = false
+
       if (!this.mergedData?.isDouble) {
-        this.formattedDateTimes.map((item) => new Date(`${item} ${val.time}`).toISOString())
+        this.formattedDateTimes = this.selectedDays.map((item) =>
+          new Date(`${item} ${val.time}`).toISOString(),
+        )
       } else {
         switch (val.type) {
           case 'to':
@@ -403,207 +540,216 @@ export default defineComponent({
         }
       }
 
+      this.setInputValues({
+        ...this.mergedData.localeOptions,
+        hour12: this.mergedData?.timePicker?.isAMPM,
+        hour: '2-digit',
+        minute: '2-digit',
+      })
       this.$emit('update:dateValue', this.formattedDateTimes)
     },
   },
-  watch: {
-    // 'data.showInput'(value) {
-    //   console.log('showInput: ', value)
-    //   newData.isOpen = false
-    // },
-    // 'data.isOpen'(value) {
-    //   console.log('isopen', value)
-    //   this.isOpen = value
-    // },
-    isCalendarOpen(value) {
-      this.isOpen = value
-    },
-  },
+  watch: {},
 })
 </script>
 
 <style scoped lang="scss">
 @import '../../assets/variables.scss';
-.calendar {
-  display: flex;
-  flex-direction: row;
-  width: var(--width);
-  padding: 24px 30px;
-  font-family: var(--font-family);
-  box-shadow: $shadow-2xl;
-  border-radius: 20px;
-  .left,
-  .right {
-    display: flex;
-    flex-direction: column;
-  }
-  .left {
-    ::v-deep(.calendar__controls-right.hidden) {
-      visibility: hidden;
-    }
-  }
-  .right {
-    margin-left: 40px;
-    ::v-deep(.calendar__controls-left) {
-      visibility: hidden;
-    }
-  }
-  ::v-deep(.calendar__controls) {
-    display: flex;
-    list-style: none;
-    justify-content: space-between;
-    align-items: center;
-    font-size: $p5-font-size;
-    margin: 0;
-    padding: 0;
-    height: 36px;
+.calendar-wrapper {
+  position: relative;
 
-    .calendar__controls-left,
-    .calendar__controls-right {
+  .date-inputs-container {
+    display: flex;
+  }
+  .calendar__input {
+    margin-bottom: 8px;
+
+    &.right {
+      margin-left: 15px;
+    }
+  }
+
+  .calendar {
+    display: flex;
+    flex-direction: row;
+    width: var(--width);
+    padding: 24px 30px;
+    font-family: var(--font-family);
+    box-shadow: $shadow-2xl;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 2;
+    background-color: white;
+
+    .left,
+    .right {
       display: flex;
-      width: 36px;
+      flex-direction: column;
+    }
+    .left {
+      ::v-deep(.calendar__controls-right.hidden) {
+        visibility: hidden;
+      }
+    }
+    .right {
+      margin-left: 40px;
+      ::v-deep(.calendar__controls-left) {
+        visibility: hidden;
+      }
+    }
+    ::v-deep(.calendar__controls) {
+      display: flex;
+      list-style: none;
+      justify-content: space-between;
+      align-items: center;
+      font-size: $p5-font-size;
+      margin: 0;
+      padding: 0;
       height: 36px;
-      justify-content: center;
-      align-items: center;
-      .bi {
-        color: $gray-600;
-        transition: 0.3s ease color;
-      }
-      &:hover {
-        cursor: pointer;
+
+      .calendar__controls-left,
+      .calendar__controls-right {
+        display: flex;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+        align-items: center;
         .bi {
-          color: $gray-800;
+          color: $gray-600;
+          transition: 0.3s ease color;
         }
-      }
-    }
-
-    .calendar__controls-month {
-      font-style: normal;
-      font-weight: var(--font-weight);
-      font-size: var(--font-size);
-      line-height: 171%;
-      color: $gray-800;
-    }
-  }
-  ::v-deep(.calendar__weekdays) {
-    font-size: calc(var(--font-size) - 2px);
-    font-weight: normal;
-    line-height: 120%;
-    color: $gray-500;
-  }
-  ::v-deep(.calendar__weekdays),
-  ::v-deep(.calendar__days) {
-    display: grid;
-    grid-template: 'a a a a a a a';
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    column-gap: 4px;
-    li {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      position: relative;
-      &::before,
-      &::after {
-        position: absolute;
-        content: '';
-        display: block;
-        background-color: transparent;
-        z-index: 0;
-        width: 12px;
-        height: 100%;
-      }
-    }
-  }
-  ::v-deep(.calendar__days) {
-    margin-bottom: auto;
-
-    li {
-      font-size: var(--font-size);
-      border-radius: 4px;
-      font-weight: var(--font-weight);
-      line-height: 150%;
-      box-sizing: border-box;
-      &.--current {
-        border: 1px solid var(--active-color);
-        color: var(--active-color);
-        background-color: $base-white;
-      }
-      &:hover {
-        cursor: pointer;
-        background-color: var(--active-background-color);
-        color: var(--active-color);
-      }
-      &.--active {
-        background-color: var(--active-color);
-        color: white;
-        z-index: 1;
-      }
-      &.--in-range {
-        position: relative;
-        border-radius: 0;
-        background-color: var(--active-background-color);
-        color: var(--active-color);
-        border: none;
-        transition: 0s all;
         &:hover {
-          cursor: default;
+          cursor: pointer;
+          .bi {
+            color: $gray-800;
+          }
         }
+      }
+
+      .calendar__controls-month {
+        font-style: normal;
+        font-weight: var(--font-weight);
+        font-size: var(--font-size);
+        line-height: 171%;
+        color: $gray-800;
+      }
+    }
+    ::v-deep(.calendar__weekdays) {
+      font-size: calc(var(--font-size) - 2px);
+      font-weight: normal;
+      line-height: 120%;
+      color: $gray-500;
+    }
+    ::v-deep(.calendar__weekdays),
+    ::v-deep(.calendar__days) {
+      display: grid;
+      grid-template: 'a a a a a a a';
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      column-gap: 4px;
+      li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        position: relative;
         &::before,
         &::after {
-          background-color: var(--active-background-color);
-        }
-        &::before {
-          left: -8px;
-          bottom: 0;
-        }
-        &::after {
-          right: -8px;
-          top: 0;
-        }
-        &:nth-child(7n + 1)::before {
-          display: none;
-        }
-        &:nth-child(7n)::after {
-          display: none;
-        }
-        &.--beyond-active:nth-child(7n)::before {
+          position: absolute;
+          content: '';
           display: block;
-          width: 100%;
-          height: 12px;
-          left: unset;
-          bottom: unset;
-          right: 0;
-          top: -8px;
+          background-color: transparent;
+          z-index: 0;
+          width: 12px;
+          height: 100%;
         }
-        &.--beyond-active:nth-child(7n + 1)::before {
-          display: block;
-          width: 100%;
-          height: 12px;
-          left: 0;
-          top: -8px;
-        }
-        &.--on-active:nth-child(7n)::after {
-          display: none;
-        }
-      }
-      &.--not-cur-month {
-        color: $gray-300;
-      }
-      &.--past {
-        color: $gray-500;
       }
     }
-  }
-  ::v-deep(.footer > .label) {
-    font-size: calc(var(--font-size) - 2px);
-  }
-}
+    ::v-deep(.calendar__days) {
+      margin-bottom: auto;
 
-.calendar__input {
-  margin-bottom: 8px;
+      li {
+        font-size: var(--font-size);
+        border-radius: 4px;
+        font-weight: var(--font-weight);
+        line-height: 150%;
+        box-sizing: border-box;
+        &.--current {
+          border: 1px solid var(--active-color);
+          color: var(--active-color);
+          background-color: $base-white;
+        }
+        &:hover {
+          cursor: pointer;
+          background-color: var(--active-background-color);
+          color: var(--active-color);
+        }
+        &.--active {
+          background-color: var(--active-color);
+          color: white;
+          z-index: 1;
+        }
+        &.--in-range {
+          position: relative;
+          border-radius: 0;
+          background-color: var(--active-background-color);
+          color: var(--active-color);
+          border: none;
+          transition: 0s all;
+          &:hover {
+            cursor: default;
+          }
+          &::before,
+          &::after {
+            background-color: var(--active-background-color);
+          }
+          &::before {
+            left: -8px;
+            bottom: 0;
+          }
+          &::after {
+            right: -8px;
+            top: 0;
+          }
+          &:nth-child(7n + 1)::before {
+            display: none;
+          }
+          &:nth-child(7n)::after {
+            display: none;
+          }
+          &.--beyond-active:nth-child(7n)::before {
+            display: block;
+            width: 100%;
+            height: 12px;
+            left: unset;
+            bottom: unset;
+            right: 0;
+            top: -8px;
+          }
+          &.--beyond-active:nth-child(7n + 1)::before {
+            display: block;
+            width: 100%;
+            height: 12px;
+            left: 0;
+            top: -8px;
+          }
+          &.--on-active:nth-child(7n)::after {
+            display: none;
+          }
+        }
+        &.--not-cur-month {
+          color: $gray-300;
+        }
+        &.--past {
+          color: $gray-500;
+        }
+      }
+    }
+    ::v-deep(.footer > .label) {
+      font-size: calc(var(--font-size) - 2px);
+    }
+  }
 }
 </style>

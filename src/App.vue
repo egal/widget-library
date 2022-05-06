@@ -1,12 +1,10 @@
 <template>
-  <div :style="{ width: '300px' }">
+  <div :style="{ width: '700px' }">
     <Calendar
       :data="calendarData"
-      @toggle="foo"
-      @update:inputModelValue="(value) => (calendarData.inputData.modelValue = value)"
+      @update:dateValue="(v) => check(v)"
+      :style-config="{ activeBackgroundColor: 'grey' }"
     ></Calendar>
-
-    <button @click="calendarData.isOpen = !calendarData.isOpen">Toggle Calendar</button>
   </div>
 </template>
 
@@ -20,17 +18,41 @@ export default defineComponent({
   data() {
     return {
       calendarData: {
-        isOpen: true,
-        isDouble: true,
-        showInput: true, // handle double + input
+        isDouble: false,
+        isRangePicker: false,
+        showInput: false, // handle double + input
+
+        localeOptions: {
+          year: '2-digit',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        },
+        locale: 'en-US',
+        timePicker: {
+          isAMPM: false,
+          label: 'Choose time',
+        },
+        date: {
+          date_from: '2022-05-07',
+        },
         inputData: {
-          modelValue: '',
+          showFilled: false,
+        },
+        rightInputData: {
+          showFilled: false,
+        },
+        timeSelectData: {
+          showFilled: false,
         },
       },
     }
   },
   methods: {
-    foo() {},
+    check(v) {
+      // console.log(v)
+    },
   },
 })
 </script>
