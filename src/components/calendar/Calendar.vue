@@ -23,7 +23,7 @@
     </div>
 
     <div class="calendar" :style="getStyleVars" v-if="isOpen">
-      <div class="left" :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }">
+      <div class="left" :style="{ 'flex-grow': data?.isExpanded ? 1 : 0 }">
         <Controls
           :data="data"
           :month-to-display="curMonth"
@@ -63,7 +63,7 @@
       <div
         class="right"
         v-if="mergedData?.isDouble"
-        :style="{ 'flex-grow': data?.isAdaptiveSize ? 1 : 0 }"
+        :style="{ 'flex-grow': data?.isExpanded ? 1 : 0 }"
       >
         <Controls
           :data="data"
@@ -208,7 +208,7 @@ export default defineComponent({
           fontSize: '14px',
           activeColor: '#0066FF',
           activeBackgroundColor: '#E5F0FF',
-          isAdaptiveSize: false,
+          isExpanded: false,
           inputData: {},
           rightInputData: {},
           showInput: true,
@@ -246,7 +246,7 @@ export default defineComponent({
         '--font-family': this.styleConfig?.fontFamily || 'Raleway',
         '--font-weight': this.styleConfig?.fontWeight || 'normal',
         '--font-size': this.styleConfig?.fontSize || '14px',
-        '--width': this.styleConfig?.isAdaptiveSize ? '' : 'fit-content',
+        '--width': this.styleConfig?.isExpanded ? '' : 'fit-content',
       }
     },
 
