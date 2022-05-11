@@ -15,7 +15,7 @@
         class="calendar__input right"
         :style-config="inputStyleConfig"
         :data="mergedRightInputData"
-        v-if="mergedData.showInput && (mergedData?.isRangePicker || mergedData?.isDouble)"
+        v-if="mergedData.showInput && (mergedData?.isRange || mergedData?.isDouble)"
         @error="(error) => handleInputError(error, 'to')"
         @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
         @click="open"
@@ -212,7 +212,7 @@ export default defineComponent({
           inputData: {},
           rightInputData: {},
           showInput: true,
-          isRangePicker: false,
+          isRange: false,
           isDouble: false,
           locale: 'ru-RU',
           localeOptions: {
@@ -233,9 +233,9 @@ export default defineComponent({
     // Селекты заблокированы если выбрано меншье чем 1 дата (или меньше чем 2 для диапазона дат)
     isSelectTimeDisabled() {
       return (
-        ((this.mergedData.isRangePicker || this.mergedData.isDouble) &&
+        ((this.mergedData.isRange || this.mergedData.isDouble) &&
           Object.keys(this.selectedDays).length < 2) ||
-        (!this.mergedData.isRangePicker && Object.keys(this.selectedDays).length < 1)
+        (!this.mergedData.isRange && Object.keys(this.selectedDays).length < 1)
       )
     },
 
@@ -484,14 +484,14 @@ export default defineComponent({
         this.declineSelect()
       }
 
-      if (this.selectedDays.length === 1 && !this.mergedData.isRangePicker) {
+      if (this.selectedDays.length === 1 && !this.mergedData.isRange) {
         this.declineSelect()
       }
 
       this.selectedDays.push(dateString)
       this.selectedDays = Array.from(new Set(this.selectedDays)).sort()
 
-      if (!this.mergedData.isRangePicker && !this.mergedData.isDouble) {
+      if (!this.mergedData.isRange && !this.mergedData.isDouble) {
         this.mouseMayEnter = false
       } else {
         this.mouseMayEnter = !this.mouseMayEnter

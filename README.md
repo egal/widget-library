@@ -37,7 +37,7 @@
 | ``inputData``             |      Object      |                                                                                                                 | Объект, передаваемый в инпут как проп :data, для настройки инпута                                                                                            |
 | ``rightInputData``        |      Object      |                                                                                                                 | Объект, передаваемый во второй инпут (появляется если в календаре можно выбирать диапазон дат) как проп :data, для настройки инпута                          |
 | ``showInput``             |     Boolean      | ``true``, ``false``                                                                                             | Определяет, отображать ли инпут для выбора даты и времени над календарем                                                                                     |
-| ``isRangePicker``         |     Boolean      | ``true``, ``false``                                                                                             | Определяет, можно ли выбрать диапазон дат, вместо одной. Если ``isDouble = true``, по умолчанию всегда можно выбрать диапазон                                |
+| ``isRange``               |     Boolean      | ``true``, ``false``                                                                                             | Определяет, можно ли выбрать диапазон дат, вместо одной. Если ``isDouble = true``, по умолчанию всегда можно выбрать диапазон                                |
 
 2. объект styleConfig: Набор стилей для кастомизация календаря.
 
@@ -92,7 +92,7 @@ export default defineComponent({
       calendarData: {
         isExpanded: false,
         isDouble: false,
-        isRangePicker: false,
+        isRange: false,
         showInput: true,
         localeOptions: {
           year: '2-digit',
