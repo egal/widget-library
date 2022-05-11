@@ -97,6 +97,11 @@ export default defineComponent({
       default: () => {},
     },
 
+    minutesStep: {
+      type: Number,
+      default: 1,
+    },
+
     clear: {
       type: Boolean,
       default: false,
@@ -130,13 +135,13 @@ export default defineComponent({
     },
 
     minutesOptions() {
-      return this.generateTimeOptions(0, 60)
+      return this.generateTimeOptions(0, 60, this.minutesStep)
     },
   },
   mounted() {},
   methods: {
     // Генерация опций для селектов
-    generateTimeOptions(min, max) {
+    generateTimeOptions(min, max, step = 1) {
       let arr = []
       for (let i = min - 1; i++, i <= max; ) {
         let obj = {

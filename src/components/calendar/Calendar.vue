@@ -97,6 +97,7 @@
           :select-style-config="selectStyleConfig"
           :select-data="mergedSelectData"
           :clear="isClearTimeSelect"
+          :minutes-step="mergedData?.minuteIncrement"
           type="to"
           @select="setTime"
         />
@@ -225,6 +226,7 @@ export default defineComponent({
             date_from: '',
             date_to: '',
           },
+          minuteIncrement: 1,
         },
         this.data,
       )
