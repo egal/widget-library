@@ -14,6 +14,7 @@
     "dist/*"
   ],
   "dependencies": {
+    "@egalteam/framework": "^2.0.0",
     "@dvuckovic/vue3-bootstrap-icons": "^1.0.4",
     "@rollup/plugin-typescript": "^8.3.0",
     "click-outside-vue3": "^4.0.1",

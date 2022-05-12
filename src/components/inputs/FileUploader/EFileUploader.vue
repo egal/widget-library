@@ -1,9 +1,9 @@
 <template>
   <div class="file-uploader" :class="`file-uploader--${mergedData.size}`" :style="getStyleVars">
     <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
-    <div class="upload-zone">
+    <div class="upload-zone" :class="{ disabled: mergedData.disabled }">
       <icon icon="upload" />
-      <span class="drop-label">Drop file here or</span>
+      <span class="drop-label">{{ mergedData.text }}</span>
       <file-upload
         :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
         :multiple="mergedData.multiple"
@@ -15,7 +15,7 @@
         @input-file="fileHandler"
         v-show="mergedData.multiple || !newFiles.length"
       >
-        <span class="browse-label">Browse file</span>
+        <span class="browse-label">{{ mergedData.actionText }}</span>
       </file-upload>
     </div>
     <div class="file-preview" v-show="newFiles.length">
@@ -38,6 +38,8 @@
 import VueUploadComponent from 'vue-upload-component/dist/vue-upload-component'
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import { validate } from '@/helpers/validators'
+import { ActionConstructor } from '@egalteam/framework'
+
 export default {
   name: 'EFileUploader',
   components: {
@@ -57,6 +59,8 @@ export default {
   data() {
     return {
       newFiles: [],
+      chunkSize: 5242880, // 5mb
+      EgalActionConstructor: null,
     }
   },
   computed: {
@@ -77,6 +81,8 @@ export default {
           domain: 'http://127.0.0.1:88',
           microservice: 'core',
           model: 'Document',
+          text: 'Drop file here or',
+          actionText: 'Browse file',
         },
         this.data,
       )
@@ -110,6 +116,7 @@ export default {
   },
   mounted() {
     this.newFiles = this.mergedData.modelValue
+    this.EgalActionConstructor = new ActionConstructor(this.mergedData.domain)
   },
   methods: {
     /**
@@ -127,9 +134,15 @@ export default {
      * @param fileId
      */
     deleteFile(fileId) {
-      fetch(
-        `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/delete/${fileId}`,
+      this.EgalActionConstructor.delete(
+        this.mergedData.microservice,
+        this.mergedData.model,
+
+        {
+          id: fileId,
+        },
       )
+        .call()
         .then(() => {
           this.$emit('on:delete', fileId)
         })
@@ -156,16 +169,15 @@ export default {
      */
     createUploadPath(fileName) {
       return new Promise((resolve, reject) => {
-        fetch(
-          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/createMultipartUpload`,
+        this.EgalActionConstructor.custom(
+          this.mergedData.microservice,
+          this.mergedData.model,
+          'createMultipartUpload',
           {
-            method: 'POST',
-            body: JSON.stringify({
-              file_basename: fileName,
-            }),
-            headers: { 'Content-Type': 'application/json' },
+            file_basename: fileName,
           },
         )
+          .call()
           .then((response) => response.json())
           .then((data) => {
             resolve(data.action_result.data)
@@ -194,20 +206,21 @@ export default {
     createChunks(file) {
       return new Promise((resolve) => {
         this.getBinaryString(file.file).then((resp) => {
-          if (resp.length < 5242880) {
-            this.uploadFile(resp, file.name).then((path) => {
-              this.createFile(path)
-            })
-            return
-          }
-          const chunkSize = 5242880 // 5mb
+          //todo ???
+          // if (resp.length < this.chunkSize) {
+          //   this.uploadFile(resp, file.name).then((path) => {
+          //     this.createFile(path)
+          //   })
+          //   return
+          // }
+
           let chunkStart = 0
           let chunkEnd = 0
           let chunkArray = []
-          while (chunkStart + chunkSize < resp.length) {
-            chunkEnd = chunkStart + chunkSize
+          while (chunkStart + this.chunkSize < resp.length) {
+            chunkEnd = chunkStart + this.chunkSize
             chunkArray.push(resp.slice(chunkStart, chunkEnd))
-            chunkStart += chunkSize
+            chunkStart += this.chunkSize
           }
           chunkArray.push(resp.slice(chunkStart, resp.length))
           resolve(chunkArray)
@@ -221,24 +234,23 @@ export default {
      */
     uploadFile(file, fileName) {
       return new Promise((resolve, reject) => {
-        fetch(
-          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/upload`,
+        this.EgalActionConstructor.custom(
+          this.mergedData.microservice,
+          this.mergedData.model,
+          'upload',
           {
-            method: 'POST',
-            body: JSON.stringify({
-              file_basename: fileName,
-              contents: file,
-            }),
-            headers: { 'Content-Type': 'application/json' },
+            file_basename: fileName,
+            contents: file,
           },
         )
+          .call()
           .then((response) => response.json())
           .then((data) => {
             resolve(data.action_result.data.path)
           })
           .catch((error) => {
-            reject(error)
             this.$emit('error:upload', error)
+            reject(error)
           })
       })
     },
@@ -252,19 +264,18 @@ export default {
       return new Promise((resolve, reject) => {
         upload(this, 0)
         function upload(self, index) {
-          fetch(
-            `${self.mergedData.domain}/${self.mergedData.microservice}/${self.mergedData.model}/uploadPart`,
+          this.EgalActionConstructor.custom(
+            self.mergedData.microservice,
+            self.mergedData.model,
+            'uploadPart',
             {
-              method: 'POST',
-              body: JSON.stringify({
-                upload_id: uploadId,
-                path,
-                part_number: index,
-                contents: chunks[index],
-              }),
-              headers: { 'Content-Type': 'application/json' },
+              upload_id: uploadId,
+              path,
+              part_number: index,
+              contents: chunks[index],
             },
           )
+            .call()
             .then((resp) => resp.json())
             .then((response) => {
               if (response.action_error || response.error_message) {
@@ -292,17 +303,16 @@ export default {
      */
     completeChunksUpload(uploadId, path) {
       return new Promise((resolve, reject) => {
-        fetch(
-          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/completeMultipartUpload`,
+        this.EgalActionConstructor.custom(
+          this.mergedData.microservice,
+          this.mergedData.model,
+          'completeMultipartUpload',
           {
-            method: 'POST',
-            body: JSON.stringify({
-              upload_id: uploadId,
-              path,
-            }),
-            headers: { 'Content-Type': 'application/json' },
+            upload_id: uploadId,
+            path,
           },
         )
+          .call()
           .then((response) => response.json())
           .then((data) => resolve(data.action_result.data.path))
           .catch((error) => {
@@ -317,18 +327,15 @@ export default {
      */
     createFile(path) {
       return new Promise((resolve, reject) => {
-        fetch(
-          `${this.mergedData.domain}/${this.mergedData.microservice}/${this.mergedData.model}/create`,
+        this.EgalActionConstructor.create(
+          this.mergedData.microservice,
+          this.mergedData.model,
+
           {
-            method: 'POST',
-            body: JSON.stringify({
-              attributes: {
-                file_path: path,
-              },
-            }),
-            headers: { 'Content-Type': 'application/json' },
+            file_path: path,
           },
         )
+          .call()
           .then((response) => response.json())
           .then((data) => {
             this.$emit('on:upload', data.action_result.data.id)
@@ -352,19 +359,31 @@ export default {
           return
         }
       }
-      this.createUploadPath(file.name).then((createPathResponse) => {
-        this.createChunks(file).then((chunks) => {
-          this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
-            () => {
-              this.completeChunksUpload(createPathResponse.upload_id, createPathResponse.path).then(
-                (path) => {
-                  this.createFile(path)
-                },
-              )
-            },
-          )
+
+      if (file.size < this.chunkSize) {
+        this.getBinaryString(file.file).then((response) => {
+          // todo ?
+          // this.uploadFile(response, file.name)
+          this.uploadFile(response, file.name).then((path) => {
+            this.createFile(path)
+          })
         })
-      })
+      } else {
+        this.createUploadPath(file.name).then((createPathResponse) => {
+          this.createChunks(file).then((chunks) => {
+            this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
+              () => {
+                this.completeChunksUpload(
+                  createPathResponse.upload_id,
+                  createPathResponse.path,
+                ).then((path) => {
+                  this.createFile(path)
+                })
+              },
+            )
+          })
+        })
+      }
     },
   },
   watch: {
