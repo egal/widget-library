@@ -1,4 +1,6 @@
 ## Изменения
+Добавлена зависимость @egalteam/framework
+
 В передаваемый объект `:data` добавлены свойства:
 
 | Параметр    |   Тип   |    По умолчанию     | Возможные значения | Описание                                                                                             |
@@ -9,17 +11,48 @@
 [//]: # (TODO) domain по умолчанию - 'http://127.0.0.1:88'
 domain	String	''	Любая строка	Домейн для интеграции загрузки и удаления
 
-## Описание использования
-Максимальный размер загружаемого файла - 5МБ.
-Если файл меньше 5МБ - отправляется запрос на `domain/microservice/model/upload`
-Если файл больше 5МБ: 
-    1. отправляется запрос на `domain/microservice/model/createMultipartUpload`, запрос возвращает некоторый `createPath(Response)`
+## Пример использования
+````vue
+<template>
+  <div>
+    <EFileUploader
+      :data="{
+        modelValue: [],
+        label: '',
+        helperText: '',
+        multiple: false,
+        size: 'sm',
+        validators: [],
+        accept: [],
+        maxFiles: 1,
+        maxSize: 0,
+        disabled: false,
+        deletable: true,
+        domain: 'http://127.0.0.1:88',
+        microservice: 'core',
+        model: 'Image',
+        text: 'Выберите файл или',
+        actionText: 'Загрузите файл',
+      }"
+      @on:delete="deleteFile"
+      @on:upload="uploadFile"
+    />
+  </div>
+</template>
 
-[//]: # (    2. Создаются чанки. Если чанк меньше 5МБ - отправляется запрос на `domain/microservice/model/upload`)
-
-[//]: # (    3. После того как все чанки отправлены, передается запрос на создание файла в базе данных - `domain/microservice/model/create`)
-2. Создается массив чанков
-3. Каждый элемент массива отправляется на `domain/microservice/model/uploadPart`
-4. После того как все элементы отправлены - передается запрос на завершение загрузки нескольких элементов `domain/microservice/model/completeMultipartUpload`
-5. Отправляется запрос на создание файла в базе данных - `domain/microservice/model/create`
-## Пример использование
+<script lang="ts">
+import { defineComponent } from 'vue'
+import EFileUploader from '@/components/inputs/FileUploader/EFileUploader.vue'
+export default defineComponent({
+  name: 'App',
+  components: { EFileUploader },
+  data() {
+    return {}
+  },
+  methods: {
+    deleteFile() {},
+    uploadFile() {},
+  },
+})
+</script>
+````

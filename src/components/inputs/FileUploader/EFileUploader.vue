@@ -206,14 +206,6 @@ export default {
     createChunks(file) {
       return new Promise((resolve) => {
         this.getBinaryString(file.file).then((resp) => {
-          //todo ???
-          // if (resp.length < this.chunkSize) {
-          //   this.uploadFile(resp, file.name).then((path) => {
-          //     this.createFile(path)
-          //   })
-          //   return
-          // }
-
           let chunkStart = 0
           let chunkEnd = 0
           let chunkArray = []
@@ -362,8 +354,6 @@ export default {
 
       if (file.size < this.chunkSize) {
         this.getBinaryString(file.file).then((response) => {
-          // todo ?
-          // this.uploadFile(response, file.name)
           this.uploadFile(response, file.name).then((path) => {
             this.createFile(path)
           })

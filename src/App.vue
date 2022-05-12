@@ -3,16 +3,24 @@
     <EFileUploader
       :data="{
         modelValue: [],
+        label: '',
+        helperText: '',
+        multiple: false,
+        size: 'sm',
+        validators: [],
+        accept: [],
+        maxFiles: 1,
+        maxSize: 0,
+        disabled: false,
+        deletable: true,
+        domain: 'http://127.0.0.1:88',
+        microservice: 'core',
+        model: 'Image',
         text: 'Выберите файл или',
         actionText: 'Загрузите файл',
-        domain: 'http://development.ow-apcs.sputnikfund.ru/api',
-        model: 'Image',
-        contentType: 'application/json',
-        authToken:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoidXN0IiwiYXV0aF9pbmZvcm1hdGlvbiI6eyJpZCI6IjQ0YTVkMDYyLWFlNWEtMTFlYy1iOTA5LTAyNDJhYzEyMDAwMiIsImNyZWF0ZWRfYXQiOm51bGwsInVwZGF0ZWRfYXQiOm51bGwsInBob25lIjoiODExMTExMTExMTEiLCJhdXRoX2lkZW50aWZpY2F0aW9uIjoiNDRhNWQwNjItYWU1YS0xMWVjLWI5MDktMDI0MmFjMTIwMDAyIiwicm9sZXMiOlsiYWRtaW4iXSwicGVybWlzc2lvbnMiOlsiYXV0aGVudGljYXRlIl19LCJhbGl2ZV91bnRpbCI6IjIwMjItMDUtMTJUMDU6MTg6NDcuNjIzNzE5WiJ9.t36BFzxzs2uKYg3jtlPJ0nqbi0yMKH_Z8yemZx0o2sU',
       }"
-      @deleteFile="deleteFile"
-      @createUploadChunkPath="createUploadChunkPath"
+      @on:delete="deleteFile"
+      @on:upload="createUploadChunkPath"
     />
   </div>
 </template>
