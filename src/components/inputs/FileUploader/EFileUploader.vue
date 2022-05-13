@@ -3,7 +3,7 @@
     <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
     <div class="upload-zone" :class="{ disabled: mergedData.disabled }">
       <icon icon="upload" />
-      <span class="drop-label">{{ mergedData.text }}</span>
+      <span class="drop-label">{{ mergedData.innerText }}</span>
       <file-upload
         :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
         :multiple="mergedData.multiple"
@@ -15,7 +15,7 @@
         @input-file="fileHandler"
         v-show="mergedData.multiple || !newFiles.length"
       >
-        <span class="browse-label">{{ mergedData.actionText }}</span>
+        <span class="browse-label">{{ mergedData.actionInnerText }}</span>
       </file-upload>
     </div>
     <div class="file-preview" v-show="newFiles.length">
@@ -81,8 +81,8 @@ export default {
           domain: 'http://127.0.0.1:88',
           microservice: 'core',
           model: 'Document',
-          text: 'Drop file here or',
-          actionText: 'Browse file',
+          innerText: 'Drop file here or',
+          actionInnerText: 'Browse file',
         },
         this.data,
       )
