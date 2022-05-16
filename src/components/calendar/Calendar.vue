@@ -733,10 +733,6 @@ export default defineComponent({
           &:hover {
             cursor: default;
           }
-          //&::before,
-          //&::after {
-          //  background-color: var(--active-background-color);
-          //}
           &::before {
             left: -8px;
             bottom: 0;

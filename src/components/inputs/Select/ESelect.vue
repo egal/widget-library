@@ -585,7 +585,6 @@ export default {
   &-dropdown {
     position: relative;
     z-index: 2;
-
     width: calc(100% + 14%);
 
     &.search-input {
