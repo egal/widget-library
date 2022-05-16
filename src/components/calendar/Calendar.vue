@@ -3,20 +3,10 @@
     <div class="date-inputs-container">
       <EInput
         class="calendar__input left"
-        :style-config="inputStyleConfig"
+        :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"
         @error="(error) => handleInputError(error, 'from')"
-        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
-        @click="open"
-      />
-
-      <EInput
-        class="calendar__input right"
-        :style-config="inputStyleConfig"
-        :data="mergedRightInputData"
-        v-if="mergedData.showInput && (mergedData?.isRange || mergedData?.isDouble)"
-        @error="(error) => handleInputError(error, 'to')"
         @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
         @click="open"
       />
@@ -37,10 +27,11 @@
           :current-month="curMonth"
           :selected-days="selectedDays"
           :locale="mergedData?.locale"
+          :is-range-fully-completed="formattedDateTimes.length === 2"
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
-
+        {{ formattedDateTimes.length }}
         <SelectTime
           v-if="mergedData?.timePicker"
           :config="mergedData?.timePicker"
@@ -78,6 +69,7 @@
           :current-month="nextMonth"
           :selected-days="selectedDays"
           :locale="mergedData?.locale"
+          :is-range-fully-completed="formattedDateTimes.length === 2"
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
@@ -126,7 +118,7 @@ export default defineComponent({
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  emits: ['', 'open', 'update:dateValue', 'onError:inputValue'],
+  emits: ['close', 'open', 'update:dateValue', 'onError:inputValue'],
   props: {
     data: {
       type: Object,
@@ -162,7 +154,6 @@ export default defineComponent({
       formattedDateTimes: [],
       isOpen: false,
       leftInputValue: '',
-      rightInputValue: '',
       isClearTimeSelect: false,
       leftSelectTime: this.data?.date?.date_from ?? undefined,
       rightSelectTime: this.data?.date?.date_to ?? undefined,
@@ -179,49 +170,30 @@ export default defineComponent({
           id: 'calendar-input--from',
           type: 'text',
           modelValue: this.leftInputValue,
-          size: 'md',
+          size: 'sm',
           clearable: false,
           iconLeft: 'calendar',
+          readonly: true,
         },
         this.data?.inputData,
-      )
-    },
-
-    mergedRightInputData() {
-      return Object.assign(
-        {
-          id: 'calendar-input--to',
-          type: 'text',
-          modelValue: this.rightInputValue,
-          size: 'md',
-          clearable: false,
-          iconLeft: 'calendar',
-        },
-        this.data?.rightInputData,
       )
     },
 
     mergedData() {
       return Object.assign(
         {
-          fontFamily: 'Open Sans',
-          fontWeight: '500',
-          fontSize: '14px',
-          activeColor: '#0066FF',
-          activeBackgroundColor: '#E5F0FF',
           isExpanded: false,
           inputData: {},
-          rightInputData: {},
           showInput: true,
           isRange: false,
           isDouble: false,
-          locale: 'ru-RU',
+          locale: 'en-US',
           localeOptions: {
             year: 'numeric',
-            month: 'numeric',
+            month: 'short',
             day: 'numeric',
           },
-          timePicker: undefined, //  { isAMPM: true, label: '' }
+          timePicker: undefined,
           date: {
             date_from: '',
             date_to: '',
@@ -244,12 +216,25 @@ export default defineComponent({
     getStyleVars() {
       return {
         '--active-color': this.styleConfig?.activeColor || '#0066FF',
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#E5F0FF',
+        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#e6f0ff',
+        '--current-day-border-color': this.styleConfig?.currentDayBorderColor || '#b3d1ff',
         '--font-family': this.styleConfig?.fontFamily || 'Raleway',
-        '--font-weight': this.styleConfig?.fontWeight || 'normal',
+        '--font-weight': this.styleConfig?.fontWeight || '500',
         '--font-size': this.styleConfig?.fontSize || '14px',
         '--width': this.styleConfig?.isExpanded ? '' : 'fit-content',
       }
+    },
+
+    mergedInputStyles() {
+      return Object.assign(
+        {
+          valueColor: '#718096',
+          valueFontWeight: '400',
+          fontFamily: this.styleConfig?.fontFamily,
+          fontSize: '10px',
+        },
+        this.inputStyleConfig,
+      )
     },
 
     weekdays() {
@@ -281,6 +266,7 @@ export default defineComponent({
 
     open() {
       if (this.isOpen) {
+        this.close()
         return
       }
       this.isClearTimeSelect = false
@@ -319,13 +305,12 @@ export default defineComponent({
         this.leftSelectTime = undefined
       } else if (inputType === 'to') {
         this.formattedDateTimes[1] = null
-        this.rightInputValue = ''
         this.rightSelectTime = undefined
       }
 
       this.selectedDays = []
       this.isClearTimeSelect = true
-      this.$emit('onError:inputValue', error)
+      // this.$emit('onError:inputValue', error)
     },
 
     // Устанавливает начальные значения даты и времени (из пропсов)
@@ -363,10 +348,12 @@ export default defineComponent({
           dateOptions.minute = '2-digit'
         }
 
-        this.rightInputValue = new Date(this.mergedData?.date?.date_to).toLocaleString(
-          this.mergedData.locale,
-          dateOptions,
-        )
+        this.leftInputValue +=
+          ' - ' +
+          new Date(this.mergedData?.date?.date_to).toLocaleString(
+            this.mergedData.locale,
+            dateOptions,
+          )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_to))
       }
 
@@ -474,8 +461,15 @@ export default defineComponent({
         new Date(date).toLocaleString(this.mergedData.locale, options),
       )
 
-      this.leftInputValue = tempFormattedDateTimes[0] ?? ''
-      this.rightInputValue = tempFormattedDateTimes[1] ?? ''
+      if (tempFormattedDateTimes.length !== 0) {
+        if (tempFormattedDateTimes.length === 1) {
+          this.leftInputValue = tempFormattedDateTimes[0]
+        } else if (tempFormattedDateTimes.length > 1) {
+          this.leftInputValue = tempFormattedDateTimes[0] + ' - ' + tempFormattedDateTimes[1]
+        }
+      } else {
+        this.leftInputValue = ''
+      }
     },
 
     //Выбор даты
@@ -561,13 +555,15 @@ export default defineComponent({
   position: relative;
 
   .date-inputs-container {
-    display: flex;
+    width: fit-content;
   }
   .calendar__input {
     margin-bottom: 8px;
 
-    &.right {
-      margin-left: 15px;
+    ::v-deep(input) {
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
@@ -575,10 +571,10 @@ export default defineComponent({
     display: flex;
     flex-direction: row;
     width: var(--width);
-    padding: 24px 30px;
+    padding: 16px 18px 16px 18px;
     font-family: var(--font-family);
-    box-shadow: $shadow-2xl;
-    border-radius: 20px;
+    box-shadow: $shadow-lg;
+    border-radius: 8px;
     position: absolute;
     z-index: 2;
     background-color: white;
@@ -605,19 +601,18 @@ export default defineComponent({
       justify-content: space-between;
       align-items: center;
       font-size: $p5-font-size;
-      margin: 0;
       padding: 0;
-      height: 36px;
+      margin: 0 auto 16px auto;
+      width: 97%;
 
       .calendar__controls-left,
       .calendar__controls-right {
         display: flex;
-        width: 36px;
-        height: 36px;
+        height: 17px;
         justify-content: center;
         align-items: center;
         .bi {
-          color: $gray-600;
+          color: $gray-800;
           transition: 0.3s ease color;
         }
         &:hover {
@@ -632,15 +627,20 @@ export default defineComponent({
         font-style: normal;
         font-weight: var(--font-weight);
         font-size: var(--font-size);
-        line-height: 171%;
+        line-height: 125%;
         color: $gray-800;
       }
     }
     ::v-deep(.calendar__weekdays) {
       font-size: calc(var(--font-size) - 2px);
-      font-weight: normal;
+      font-weight: 500;
       line-height: 120%;
-      color: $gray-500;
+      color: $gray-600;
+
+      li {
+        margin-bottom: 8px;
+        margin-top: 0;
+      }
     }
     ::v-deep(.calendar__weekdays),
     ::v-deep(.calendar__days) {
@@ -654,9 +654,10 @@ export default defineComponent({
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 40px;
-        height: 40px;
+        width: 28px;
+
         position: relative;
+
         &::before,
         &::after {
           position: absolute;
@@ -673,20 +674,22 @@ export default defineComponent({
       margin-bottom: auto;
 
       li {
-        font-size: var(--font-size);
+        font-size: calc(var(--font-size) - 2px);
         border-radius: 4px;
         font-weight: var(--font-weight);
         line-height: 150%;
         box-sizing: border-box;
+        height: 28px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+
         &.--current {
-          border: 1px solid var(--active-color);
-          color: var(--active-color);
+          border: 1.5px solid var(--current-day-border-color);
           background-color: $base-white;
         }
         &:hover {
           cursor: pointer;
-          background-color: var(--active-background-color);
-          color: var(--active-color);
+          background-color: #edf2f7;
         }
         &.--active {
           background-color: var(--active-color);
@@ -696,17 +699,44 @@ export default defineComponent({
         &.--in-range {
           position: relative;
           border-radius: 0;
-          background-color: var(--active-background-color);
-          color: var(--active-color);
+          background-color: #edf2f7;
           border: none;
           transition: 0s all;
+
+          &::before,
+          &::after {
+            background-color: #edf2f7;
+          }
+
+          &-completed {
+            background-color: var(--active-background-color);
+            color: var(--active-color);
+
+            &::before,
+            &::after {
+              background-color: var(--active-background-color);
+            }
+          }
+          &.--current {
+            border: 1.5px solid var(--current-day-border-color);
+            border-radius: 4px;
+            z-index: 2;
+
+            &::before,
+            &::after {
+              width: 0;
+            }
+          }
+          &.--not-cur-month {
+            color: #cbd5e0;
+          }
           &:hover {
             cursor: default;
           }
-          &::before,
-          &::after {
-            background-color: var(--active-background-color);
-          }
+          //&::before,
+          //&::after {
+          //  background-color: var(--active-background-color);
+          //}
           &::before {
             left: -8px;
             bottom: 0;
@@ -721,31 +751,16 @@ export default defineComponent({
           &:nth-child(7n)::after {
             display: none;
           }
-          &.--beyond-active:nth-child(7n)::before {
-            display: block;
-            width: 100%;
-            height: 12px;
-            left: unset;
-            bottom: unset;
-            right: 0;
-            top: -8px;
-          }
-          &.--beyond-active:nth-child(7n + 1)::before {
-            display: block;
-            width: 100%;
-            height: 12px;
-            left: 0;
-            top: -8px;
-          }
-          &.--on-active:nth-child(7n)::after {
-            display: none;
-          }
         }
         &.--not-cur-month {
           color: $gray-300;
         }
         &.--past {
           color: $gray-500;
+
+          &.--active {
+            color: white;
+          }
         }
       }
     }
