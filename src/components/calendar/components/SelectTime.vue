@@ -2,7 +2,6 @@
   <div class="footer">
     <p class="label">{{ config?.label || '' }}</p>
     <div class="picker" :class="{ disabled: isDisabled }">
-      <BootstrapIcon icon="clock" />
       <ESelect
         :data="{
           ...mergedSelectData,
@@ -11,11 +10,12 @@
           modelValue: selectedHours,
           shownKey: selectedHours.name,
           placeholder: 12,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
-      <span style="margin: 0 5px">:</span>
+      <span class="colon" style="margin: 0 5px">:</span>
       <ESelect
         :data="{
           ...mergedSelectData,
@@ -24,8 +24,9 @@
           modelValue: selectedMinutes,
           shownKey: selectedMinutes.name,
           placeholder: 30,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
       <ESelect
@@ -42,8 +43,9 @@
           ],
           shownKey: selectedAmPm.name,
           modelValue: selectedAmPm,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'ampm')"
       />
     </div>
@@ -51,14 +53,13 @@
 </template>
 
 <script>
-import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import ESelect from '@/components/inputs/Select/ESelect.vue'
 import { defineComponent } from 'vue'
 import { formatAMPM } from '@/assets/calendar/helpers'
 
 export default defineComponent({
   name: 'SelectTime',
-  components: { ESelect, BootstrapIcon },
+  components: { ESelect },
   props: {
     config: {
       type: Object,
@@ -118,6 +119,15 @@ export default defineComponent({
   computed: {
     mergedSelectData() {
       return this.selectData
+    },
+
+    mergedStyleConfig() {
+      return Object.assign(
+        {
+          valueColor: '#718096',
+        },
+        this.selectStyleConfig,
+      )
     },
 
     isClearValues() {
@@ -220,8 +230,8 @@ export default defineComponent({
 
 .footer {
   border-top: 1px solid $gray-200;
-  padding-top: 20px;
-  margin-top: 14px;
+  padding-top: 15px;
+  margin-top: 16px;
   .label {
     font-style: normal;
     font-weight: 500;
@@ -234,6 +244,9 @@ export default defineComponent({
   .picker {
     display: flex;
     align-items: center;
+    ::v-deep(.select-label) {
+      display: none;
+    }
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
@@ -244,6 +257,14 @@ export default defineComponent({
         opacity: 0.5;
       }
     }
+  }
+
+  .colon {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #718096;
   }
 }
 

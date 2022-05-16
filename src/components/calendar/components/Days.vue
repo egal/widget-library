@@ -9,6 +9,8 @@
         '--beyond-active': isBeyondOrOnDateSelected(date, 'beyond'),
         '--on-active': isBeyondOrOnDateSelected(date, 'on'),
         '--in-range': isInDateRange(date) && !isDateSelected(date),
+        '--in-range-completed':
+          isInDateRange(date) && !isDateSelected(date) && isRangeFullyCompleted,
         '--not-cur-month': !isDateInCurMonth(date, currentMonth),
         '--past': isDateInCurMonth(date, currentMonth) && date < this.computedSelectedDays[0],
       }"
@@ -43,6 +45,10 @@ export default defineComponent({
     locale: {
       type: String,
       default: 'en-US',
+    },
+    isRangeFullyCompleted: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
