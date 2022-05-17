@@ -1,16 +1,16 @@
 /// <reference types="cypress" />
-// import { mount } from '@cypress/vue'
-import EInput from '../../../src/components/inputs/Input/EInput.vue'
-import { mountCallback } from '@cypress/vue'
+import { mount } from '@cypress/vue'
+import EInput from './EInput.vue'
+// import { mountCallback } from '@cypress/vue'
 
 describe('first test', () => {
-  beforeEach(mountCallback(EInput))
+  //  beforeEach(mountCallback(EInput))
 
   it('loads the app', () => {
     // console.log(EInput)
     // // console.log(cy)
     // // cy.get('.todoapp').should('be.visible')
-    // mount(EInput, {
+    mount(EInput)
     //   propsData: {
     //     id: 'from-cypress',
     //   },

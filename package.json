@@ -7,6 +7,7 @@
     "serve": "vite prnmeview",
     "build": "tsc && vite build",
     "dev": "vite",
+    "test": "cypress open-ct",
     "cypress:open": "node_modules/.bin/cypress open",
     "cypress:run": "node_modules/.bin/cypress run",
     "cypress:run:chrome": "../../node_modules/.bin/cypress run --browser chrome",
@@ -38,6 +39,7 @@
     "vue-upload-component": "^3.0.50"
   },
   "devDependencies": {
+    "@bahmutov/cy-rollup": "^2.0.0",
     "@cypress/vue": "^3.1.2",
     "@cypress/webpack-dev-server": "^1.8.4",
     "@rollup/plugin-commonjs": "^21.0.1",
