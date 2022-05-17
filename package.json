@@ -7,12 +7,7 @@
     "serve": "vite prnmeview",
     "build": "tsc && vite build",
     "dev": "vite",
-    "test": "cypress open-ct",
-    "cypress:open": "node_modules/.bin/cypress open",
-    "cypress:run": "node_modules/.bin/cypress run",
-    "cypress:run:chrome": "../../node_modules/.bin/cypress run --browser chrome",
-    "cypress:run:chrome:headless": "../../node_modules/.bin/cypress run --browser chrome --headless",
-    "cypress:run:record": "../../node_modules/.bin/cypress run --record"
+    "test": "cypress open-ct"
   },
   "main": "./dist/egal-widgets-build.umd.js",
   "module": "./dist/egal-widgets-build.es.js",
