@@ -1,10 +1,20 @@
-<template></template>
+<template>
+  <!--  <div style="width: 500px">-->
+  <!--    sdfsdf-->
+  <!--    <EInput-->
+  <!--      :data="{-->
+  <!--        id: 'test-input',-->
+  <!--      }"-->
+  <!--    />-->
+  <!--  </div>-->
+</template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+// import EInput from '../src/components/inputs/Input/EInput.vue'
 export default defineComponent({
   name: 'App',
-  components: {},
+  // components: { EInput },
   data() {
     return {}
   },
