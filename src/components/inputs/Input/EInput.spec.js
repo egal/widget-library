@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import { mount, mountCallback } from '@cypress/vue'
+import { mount } from '@cypress/vue'
 import EInput from './EInput.vue'
 
 const modelValue = ''
@@ -31,29 +31,16 @@ const propsData = {
   chips: false,
   shownKey: 'name',
 }
-//
-// const WrapperComp = {
-//   template: `
-//     <div :style="{width: '350px'}">
-//       <EInput  />
-//     </div>
-//   `,
-//   components: {
-//     EInput
-//   }
-// }
 
-function preMount(props) {
-  // beforeEach(() => {
-  mount(EInput, {
+function preMount(data) {
+  return mount(EInput, {
     props: {
-      data: props,
+      data,
     },
   })
-  // })
 }
 
-describe('Styles test', () => {
+describe('Styles', () => {
   it('renders EInput', () => {
     preMount(propsData)
     cy.get('input#test-input').should('be.visible')
@@ -81,20 +68,7 @@ describe('Styles test', () => {
     cy.get('.input-container').should('have.class', 'error')
   })
 
-  // todo
-  //   it('emits "increment" event on click', () => {
-  //     const spy = cy.spy()
-  //     Cypress.vue.$on('increment', spy)
-  //     cy.get('button')
-  //       .click()
-  //       .click()
-  //       .then(() => {
-  //         expect(spy).to.be.calledTwice
-  //       })
-  //   })
-  // })
-
-  it('should allow setted maxLength', () => {
+  it('only allows maxLength value length', () => {
     mount(EInput, {
       props: {
         data: { ...propsData, type: 'number', inputMaxLength: 3 },
@@ -104,14 +78,9 @@ describe('Styles test', () => {
     cy.get('#test-input').type(1).type(2).type(3).type(4)
     cy.get('#test-input').should('have.value', 123)
   })
-
-  // rreadonly
-  // chips
-  // postfix
-  //   icons
 })
 
-describe('Features test', () => {
+describe('Features', () => {
   it('displays validation error', () => {
     const errorText = 'The field is required'
     const inputText = 'Some text'
@@ -130,16 +99,28 @@ describe('Features test', () => {
     preMount({ ...propsData, clearable: true, type: 'text', showArrows: false })
 
     const inputText = 'Some text'
-
     cy.get('#test-input').type(inputText)
     cy.get('.mask-icon-subtract').should('be.visible')
     cy.get('.subtract-button').click()
+
     cy.get('#test-input').should('have.value', '')
     cy.get('.mask-icon-subtract').should('not.be.visible')
   })
+
+  it('has no ClearButton when has a Postfix', () => {
+    preMount({ ...propsData, postfix: 'gr' })
+    cy.get('.subtract-button').should('not.be.visible')
+    cy.get('.icon--right.postfix').should('be.visible')
+  })
+
+  it('has no ClearButton when has a Postfix and set as "clearable"', () => {
+    preMount({ ...propsData, postfix: 'gr', clearable: true })
+    cy.get('.subtract-button').should('not.be.visible')
+    cy.get('.icon--right.postfix').should('be.visible')
+  })
 })
 
-describe('Type=number test', () => {
+describe('Number type', () => {
   it('has min value limit if type is "number"', () => {
     preMount({ ...propsData, type: 'number', min: 2, showArrows: true, clearable: false })
 
@@ -160,9 +141,6 @@ describe('Type=number test', () => {
 
     cy.get('#test-input').type('80')
     cy.get('#test-input').should('have.value', '5')
-
-    cy.get('#test-input').type('2')
-    cy.get('#test-input').should('have.value', '52')
   })
 
   it('arrows decrease/increase value', () => {
@@ -178,9 +156,15 @@ describe('Type=number test', () => {
     cy.get('.bi.icon.icon--decrease').click().click()
     cy.get('#test-input').should('have.value', 2)
   })
-
-  //todo проверить работу с 0, -5, -5.5, -5,5
 })
 
-//check password type
-// check search type
+describe('Password type', () => {
+  it('shows and hides password', () => {
+    preMount({ ...propsData, type: 'password' })
+    cy.get('#test-input').type('12345')
+    cy.get('#test-input').should('have.attr', 'type', 'password')
+
+    cy.get('.bi.icon.icon--password').click()
+    cy.get('#test-input').should('have.attr', 'type', 'text')
+  })
+})

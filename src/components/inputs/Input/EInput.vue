@@ -96,6 +96,7 @@
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
         v-show="
           mergedData.clearable &&
+          !mergedData.postfix &&
           newValue &&
           mergedData.type !== 'number' &&
           mergedData.type !== 'search' &&
