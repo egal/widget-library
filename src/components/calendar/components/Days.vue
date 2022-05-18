@@ -75,7 +75,6 @@ export default defineComponent({
     this.currentDay = formatToISODate(today)
   },
   methods: {
-
     //Определяет, выбрана ли дата
     isDateSelected(day) {
       return this.computedSelectedDays.includes(day)
