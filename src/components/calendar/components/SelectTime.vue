@@ -145,7 +145,7 @@ export default defineComponent({
     },
 
     minutesOptions() {
-      return this.generateTimeOptions(0, 60, this.minutesStep)
+      return this.generateTimeOptions(0, 59, this.minutesStep)
     },
   },
   mounted() {},
