@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-wrapper" v-click-outside="close" :class="{ double: mergedData.data }">
+  <div class="calendar-wrapper" v-click-outside="close">
     <div class="date-inputs-container">
       <EInput
         class="calendar__input left"
@@ -28,6 +28,7 @@
           :selected-days="selectedDays"
           :locale="mergedData?.locale"
           :is-range-fully-completed="formattedDateTimes.length === 2"
+          :is-double="mergedData.isDouble"
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
@@ -70,6 +71,7 @@
           :selected-days="selectedDays"
           :locale="mergedData?.locale"
           :is-range-fully-completed="formattedDateTimes.length === 2"
+          :is-double="mergedData.isDouble"
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
@@ -727,9 +729,7 @@ export default defineComponent({
               width: 0;
             }
           }
-          &.--not-cur-month {
-            color: #cbd5e0;
-          }
+
           &:hover {
             cursor: default;
           }
@@ -748,8 +748,19 @@ export default defineComponent({
             display: none;
           }
         }
-        &.--not-cur-month {
+        &.--not-cur-month,
+        &.--not-cur-month.--in-range {
           color: $gray-300;
+          background-color: white;
+
+          &:hover {
+            cursor: default;
+            background-color: transparent;
+          }
+          &::before,
+          &::after {
+            background-color: transparent;
+          }
         }
         &.--past {
           color: $gray-500;
@@ -759,13 +770,37 @@ export default defineComponent({
           }
         }
       }
+
+      &.single {
+        li.--in-range {
+          &.--not-cur-month {
+            color: $gray-400;
+            background-color: #edf2f7;
+
+            &:hover {
+              cursor: pointer;
+              color: white;
+              background-color: var(--active-color);
+            }
+            &::before,
+            &::after {
+              background-color: #edf2f7;
+            }
+          }
+        }
+
+        li.--active {
+          &.--not-cur-month {
+            color: white;
+            background-color: var(--active-color);
+          }
+        }
+      }
     }
+
     ::v-deep(.footer > .label) {
       font-size: calc(var(--font-size) - 2px);
     }
-  }
-
-  &.double {
   }
 }
 </style>

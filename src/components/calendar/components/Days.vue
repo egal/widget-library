@@ -1,11 +1,13 @@
 <template>
-  <ul class="calendar__days">
+  <ul class="calendar__days" :class="{ single: !isDouble }">
     <li
       v-for="date in dates"
       :key="date"
       :class="{
         '--current': isDateInCurMonth(date, currentMonth) && currentDay && date === currentDay,
-        '--active': isDateSelected(date),
+        '--active':
+          (isDateSelected(date) && !isDouble) ||
+          (isDateSelected(date) && isDouble && isDateInCurMonth(date, currentMonth)),
         '--beyond-active': isBeyondOrOnDateSelected(date, 'beyond'),
         '--on-active': isBeyondOrOnDateSelected(date, 'on'),
         '--in-range': isInDateRange(date) && !isDateSelected(date),
@@ -50,6 +52,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isDouble: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -69,6 +75,7 @@ export default defineComponent({
     this.currentDay = formatToISODate(today)
   },
   methods: {
+
     //Определяет, выбрана ли дата
     isDateSelected(day) {
       return this.computedSelectedDays.includes(day)
