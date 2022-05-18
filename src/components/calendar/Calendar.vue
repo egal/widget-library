@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-wrapper" v-click-outside="close">
+  <div class="calendar-wrapper" v-click-outside="close" :class="{ double: mergedData.data }">
     <div class="date-inputs-container">
       <EInput
         class="calendar__input left"
@@ -31,7 +31,7 @@
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
-        {{ formattedDateTimes.length }}
+
         <SelectTime
           v-if="mergedData?.timePicker"
           :config="mergedData?.timePicker"
@@ -763,6 +763,9 @@ export default defineComponent({
     ::v-deep(.footer > .label) {
       font-size: calc(var(--font-size) - 2px);
     }
+  }
+
+  &.double {
   }
 }
 </style>
