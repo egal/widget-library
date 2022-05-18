@@ -84,11 +84,10 @@
         v-if="newValue && mergedData.type === 'password'"
         @click.stop="showPassword"
       />
-<!--      // todo find bug-->
-<!--      remove type from data & use newType ?-->
+
       <div class="arrow-icons" v-if="mergedData.type === 'number' && mergedData.showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
-<!--        todo bug -->
+
         <b-icon class="icon icon--decrease" icon="caret-down-fill" @click="decreaseValue" />
       </div>
       <ClearButton

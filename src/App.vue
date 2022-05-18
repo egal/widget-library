@@ -1,22 +1,33 @@
 <template>
-<!--  <main>-->
+  <main>
     <div class="container">
       <EInput
         :data="{
           id: 'test-input',
-
+          type: 'number',
+          max: 5,
+          showArrows: true,
+          clearable: false,
         }"
       />
     </div>
-<!--    <div class='container'>-->
-<!--      <ECalendar />-->
-<!--    </div>-->
-<!--  </main>-->
+    <div class="container">
+      <ECalendar
+        :data="{
+          isDouble: true,
+          timePicker: {
+            isAMPM: true,
+            label: 'dsfsd',
+          },
+        }"
+      />
+    </div>
+  </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-// import ECalendar from '@/components/calendar/Calendar.vue'
+import ECalendar from '@/components/calendar/Calendar.vue'
 // //inputs
 import EInput from '@/components/inputs/Input/EInput.vue'
 // import ClearButton from '@/components/inputs/ClearButton/ClearButton.vue'
@@ -48,7 +59,8 @@ export default defineComponent({
   name: 'App',
   components: {
     EInput,
-    // ECalendar, ECounter, EDropdown, EFileUploader, ESelect,ETextArea, ClearButton,
+    ECalendar,
+    // ECounter, EDropdown, EFileUploader, ESelect,ETextArea, ClearButton,
     // EBreadcrumbs, ENavbarLeft, ENavbarLeftItem, ENavbarTop, EPagination, EAvatar, ETag, ETooltip,
     // EButton, ECheckbox, ERadio, EToggle
   },
