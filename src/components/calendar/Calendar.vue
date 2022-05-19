@@ -17,6 +17,7 @@
       />
       <EInput
         class="calendar__input right"
+        :class="{ ampm: this?.mergedData?.timePicker?.isAMPM }"
         :style-config="mergedInputStyles"
         :data="mergedRightInputData"
         v-if="mergedData.showInput && mergedData.timePicker && !mergedData.isDouble"
@@ -630,6 +631,7 @@ export default defineComponent({
 .calendar-wrapper {
   position: relative;
   width: fit-content;
+  font-feature-settings: 'pnum' on, 'lnum' on;
 
   .calendar__input {
     margin-bottom: 8px;
@@ -724,6 +726,12 @@ export default defineComponent({
           ::v-deep(.bi.icon.icon--left) {
             left: 5px;
           }
+
+          &.ampm {
+            ::v-deep(input) {
+              width: 104px;
+            }
+          }
         }
       }
       &.date-inputs--md {
@@ -743,6 +751,12 @@ export default defineComponent({
 
           ::v-deep(.bi.icon.icon--left) {
             left: 5px;
+          }
+
+          &.ampm {
+            ::v-deep(input) {
+              width: 100px;
+            }
           }
         }
       }
@@ -768,6 +782,12 @@ export default defineComponent({
 
           ::v-deep(.bi.icon.icon--left) {
             left: 5px;
+          }
+
+          &.ampm {
+            ::v-deep(input) {
+              width: 76px;
+            }
           }
         }
       }
