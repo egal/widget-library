@@ -14,7 +14,7 @@
         '--in-range-completed':
           isInDateRange(date) && !isDateSelected(date) && isRangeFullyCompleted,
         '--not-cur-month': !isDateInCurMonth(date, currentMonth),
-        '--past': isDateInCurMonth(date, currentMonth) && date < this.computedSelectedDays[0],
+
       }"
       @click="$emit('select-date', date)"
       @mouseenter="$emit('mouse-enter', date)"
