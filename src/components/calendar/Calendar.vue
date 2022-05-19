@@ -1,14 +1,30 @@
 <template>
   <div class="calendar-wrapper" v-click-outside="close">
-    <EInput
-      class="calendar__input left"
-      :style-config="mergedInputStyles"
-      :data="mergedLeftInputData"
-      v-if="mergedData.showInput"
-      @error="(error) => handleInputError(error, 'from')"
-      @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
-      @click="open"
-    />
+    <div
+      :class="`date-inputs date-inputs--${mergedData?.inputData?.size ?? 'sm'} ${
+        imitateInputsFocus ? 'focused' : ''
+      } ${mergedData.showInput && mergedData.timePicker && !mergedData.isDouble ? 'doubled' : ''}`"
+      :style="getInputFocusStyle"
+    >
+      <EInput
+        class="calendar__input left"
+        :style-config="mergedInputStyles"
+        :data="mergedLeftInputData"
+        v-if="mergedData.showInput"
+        @error="(error) => handleInputError(error, 'date')"
+        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'date')"
+        @mouseup="open"
+      />
+      <EInput
+        class="calendar__input right"
+        :style-config="mergedInputStyles"
+        :data="mergedRightInputData"
+        v-if="mergedData.showInput && mergedData.timePicker && !mergedData.isDouble"
+        @error="(error) => handleInputError(error, 'time')"
+        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'time')"
+        @mouseup="open"
+      />
+    </div>
 
     <div class="calendar" :style="getStyleVars" v-if="isOpen">
       <div class="left">
@@ -45,7 +61,7 @@
           :select-style-config="selectStyleConfig"
           :select-data="mergedSelectData"
           :clear="isClearTimeSelect"
-          type="from"
+          type="time"
           @select="setTime"
         />
       </div>
@@ -70,25 +86,25 @@
           @mouse-enter="(date) => queryHover(date)"
         />
 
-        <SelectTime
-          v-if="mergedData?.timePicker && !mergedData.isDouble"
-          :config="mergedData?.timePicker"
-          :hours="getHoursFromTimestamp(rightSelectTime)?.hours"
-          :minutes="
-            getHoursFromTimestamp(rightSelectTime)?.hours &&
-            !getMinutesFromTimestamp(rightSelectTime)
-              ? '00'
-              : getMinutesFromTimestamp(rightSelectTime)
-          "
-          :format="getHoursFromTimestamp(rightSelectTime)?.format ?? ''"
-          :is-disabled="isSelectTimeDisabled"
-          :select-style-config="selectStyleConfig"
-          :select-data="mergedSelectData"
-          :clear="isClearTimeSelect"
-          :minutes-step="mergedData?.minuteIncrement"
-          type="to"
-          @select="setTime"
-        />
+        <!--        <SelectTime-->
+        <!--          v-if="mergedData?.timePicker && !mergedData.isDouble"-->
+        <!--          :config="mergedData?.timePicker"-->
+        <!--          :hours="getHoursFromTimestamp(rightSelectTime)?.hours"-->
+        <!--          :minutes="-->
+        <!--            getHoursFromTimestamp(rightSelectTime)?.hours &&-->
+        <!--            !getMinutesFromTimestamp(rightSelectTime)-->
+        <!--              ? '00'-->
+        <!--              : getMinutesFromTimestamp(rightSelectTime)-->
+        <!--          "-->
+        <!--          :format="getHoursFromTimestamp(rightSelectTime)?.format ?? ''"-->
+        <!--          :is-disabled="isSelectTimeDisabled"-->
+        <!--          :select-style-config="selectStyleConfig"-->
+        <!--          :select-data="mergedSelectData"-->
+        <!--          :clear="isClearTimeSelect"-->
+        <!--          :minutes-step="mergedData?.minuteIncrement"-->
+        <!--          type="to"-->
+        <!--          @select="setTime"-->
+        <!--        />-->
       </div>
     </div>
   </div>
@@ -150,14 +166,16 @@ export default defineComponent({
       formattedDateTimes: [],
       isOpen: false,
       leftInputValue: '',
+      rightInputValue: '',
       isClearTimeSelect: false,
       leftSelectTime: this.data?.date?.date_from ?? undefined,
       rightSelectTime: this.data?.date?.date_to ?? undefined,
       localeOptions: {
-        year: '2-digit',
+        year: 'numeric',
         month: 'short',
         day: 'numeric',
       },
+      imitateInputsFocus: false,
     }
   },
   computed: {
@@ -168,15 +186,32 @@ export default defineComponent({
     mergedLeftInputData() {
       return Object.assign(
         {
-          id: 'calendar-input--from',
+          id: 'calendar-input--date',
           type: 'text',
-          modelValue: this.leftInputValue,
+
           size: 'sm',
           clearable: false,
           iconLeft: 'calendar',
           readonly: true,
         },
         this.data?.inputData,
+        { modelValue: this.leftInputValue },
+      )
+    },
+
+    mergedRightInputData() {
+      return Object.assign(
+        {
+          id: 'calendar-input--time',
+          type: 'text',
+
+          size: 'sm',
+          clearable: false,
+          iconLeft: 'clock',
+          readonly: true,
+        },
+        this.data?.inputData,
+        { modelValue: this.rightInputValue },
       )
     },
 
@@ -224,6 +259,13 @@ export default defineComponent({
       }
     },
 
+    getInputFocusStyle() {
+      return {
+        '--focus-input-border-color': this.mergedInputStyles?.focusBorderColor || '#76ACFB',
+        '--border-radius': this.styleConfig?.borderRadius || '6px',
+      }
+    },
+
     mergedInputStyles() {
       return Object.assign(
         {
@@ -249,7 +291,6 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.renderCalendarDays()
     this.setInitSelectedValues()
 
     if (this.mergedData.showInput === false) {
@@ -259,6 +300,7 @@ export default defineComponent({
 
   methods: {
     close() {
+      this.imitateInputsFocus = false
       this.isOpen = false
       this.$emit('close')
     },
@@ -268,13 +310,14 @@ export default defineComponent({
         this.close()
         return
       }
+      this.imitateInputsFocus = true
       this.isClearTimeSelect = false
       this.isOpen = true
       this.$emit('open', this.isOpen)
     },
 
     // Обновляет значения выбранного времени\даты после изменений в инпуте
-    handleModelUpdate(value, inputType = 'from') {
+    handleModelUpdate(value, inputType = 'date') {
       this.isClearTimeSelect = false
 
       // check if Invalid Date:
@@ -283,11 +326,11 @@ export default defineComponent({
         return
       }
 
-      if (inputType === 'from') {
+      if (inputType === 'date') {
         this.selectedDays[0] = this.getDateFromTimestamp(new Date(value))
         this.formattedDateTimes[0] = new Date(value).toISOString()
         this.leftSelectTime = new Date(value).toISOString()
-      } else if (inputType === 'to') {
+      } else if (inputType === 'time') {
         this.selectedDays[1] = this.getDateFromTimestamp(new Date(value))
         this.formattedDateTimes[1] = new Date(value).toISOString()
         this.rightSelectTime = new Date(value).toISOString()
@@ -297,12 +340,12 @@ export default defineComponent({
     },
 
     // Clear all fields if error
-    handleInputError(error, inputType = 'from') {
-      if (inputType === 'from') {
+    handleInputError(error, inputType = 'date') {
+      if (inputType === 'date') {
         this.formattedDateTimes[0] = null
         this.leftInputValue = ''
         this.leftSelectTime = undefined
-      } else if (inputType === 'to') {
+      } else if (inputType === 'time') {
         this.formattedDateTimes[1] = null
         this.rightSelectTime = undefined
       }
@@ -322,24 +365,44 @@ export default defineComponent({
         delete dateOptions.minute
       }
 
+      if (!this.mergedData?.date?.date_to && !this.mergedData?.date?.date_from) {
+        console.log(1)
+        this.renderCalendarDays()
+      }
+
       if (this.mergedData?.date?.date_from) {
         dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+        this.curMonth = new Date(this.mergedData?.date?.date_from)
+        this.dates = this.generateDates(this.curMonth)
 
         if (this.isContainsTime(this.mergedData?.date?.date_from)) {
           dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
           dateOptions.hour = '2-digit'
           dateOptions.minute = '2-digit'
+
+          const fromISOToLocaleDate = new Date(this.mergedData?.date?.date_from).toLocaleString(
+            this.mergedData.locale,
+            dateOptions,
+          )
+
+          let [date, time] = fromISOToLocaleDate.split(', ')
+
+          this.leftInputValue = date
+          this.rightInputValue = time
+        } else {
+          this.leftInputValue = new Date(this.mergedData?.date?.date_from).toLocaleString(
+            this.mergedData.locale,
+            dateOptions,
+          )
         }
 
-        this.leftInputValue = new Date(this.mergedData?.date?.date_from).toLocaleString(
-          this.mergedData.locale,
-          dateOptions,
-        )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_from))
       }
 
       if (this.mergedData?.date?.date_to) {
         dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
+        this.nextMonth = new Date(this.mergedData?.date?.date_to)
+        this.nextMonthDates = this.generateDates(this.nextMonth)
 
         if (this.isContainsTime(this.mergedData?.date?.date_to)) {
           dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
@@ -354,6 +417,13 @@ export default defineComponent({
             dateOptions,
           )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_to))
+      } else {
+        let dayCopy = new Date()
+        dayCopy.setDate(1)
+        dayCopy.setMonth(this.curMonth.getMonth() + 1)
+        this.nextMonth = dayCopy
+
+        this.nextMonthDates = this.generateDates(this.nextMonth)
       }
 
       if (this.selectedDays.length !== 0) {
@@ -367,6 +437,17 @@ export default defineComponent({
       const day = new Date()
       day.setDate(1)
       this.curMonth = day
+
+      const inputDate = new Date().toLocaleString(this.mergedData?.locale ?? 'en-US', {
+        ...this.localeOptions,
+        hour12: this.mergedData?.timePicker?.isAMPM,
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+
+      let [date, time] = inputDate.split(', ')
+      this.leftInputValue = date
+      this.rightInputValue = time
 
       if (this.mergedData?.isDouble) {
         const newDay = new Date()
@@ -462,7 +543,14 @@ export default defineComponent({
 
       if (tempFormattedDateTimes.length !== 0) {
         if (tempFormattedDateTimes.length === 1) {
-          this.leftInputValue = tempFormattedDateTimes[0]
+          // сли в дате есть время (т.е. переданы соответсвующие поции) - записать его в правй инпут
+          if (options?.hour || options?.hour12 || options?.minute) {
+            let [inputDate, inputTime] = tempFormattedDateTimes[0].split(', ')
+            this.leftInputValue = inputDate
+            this.rightInputValue = inputTime
+          } else {
+            this.leftInputValue = tempFormattedDateTimes[0]
+          }
         } else if (tempFormattedDateTimes.length > 1) {
           this.leftInputValue = tempFormattedDateTimes[0] + ' - ' + tempFormattedDateTimes[1]
         }
@@ -520,19 +608,8 @@ export default defineComponent({
           new Date(`${item} ${val.time}`).toISOString(),
         )
       } else {
-        switch (val.type) {
-          case 'to':
-            this.formattedDateTimes[1] = new Date(
-              `${this.selectedDays[1]} ${val.time}`,
-            ).toISOString()
-            break
-          case 'from':
-          default:
-            this.formattedDateTimes[0] = new Date(
-              `${this.selectedDays[0]} ${val.time}`,
-            ).toISOString()
-            break
-        }
+        this.formattedDateTimes[0] = new Date(`${this.selectedDays[0]} ${val.time}`).toISOString()
+        // this.rightSelectTime = val.time
       }
 
       this.setInputValues({
@@ -552,6 +629,7 @@ export default defineComponent({
 @import '../../assets/variables.scss';
 .calendar-wrapper {
   position: relative;
+  width: fit-content;
 
   .calendar__input {
     margin-bottom: 8px;
@@ -559,6 +637,139 @@ export default defineComponent({
     ::v-deep(input) {
       &:hover {
         cursor: pointer;
+      }
+    }
+  }
+
+  .date-inputs {
+    display: flex;
+    border-radius: var(--border-radius);
+    margin-bottom: 8px;
+
+    &--lg {
+      .left {
+        ::v-deep(input) {
+          width: 165px;
+          padding-right: 0;
+        }
+      }
+    }
+    &--md {
+      .left {
+        ::v-deep(input) {
+          width: 144px;
+          padding-right: 0;
+        }
+      }
+    }
+    &--sm {
+      .left {
+        ::v-deep(input) {
+          width: 99px;
+          padding-right: 0;
+          padding-left: 23px;
+        }
+
+        ::v-deep(.bi.icon.icon--left) {
+          left: 9px;
+        }
+      }
+    }
+
+    &.doubled {
+      &.focused {
+        outline: 2px solid var(--focus-input-border-color);
+      }
+
+      .left,
+      .right {
+        margin-bottom: 0;
+
+        ::v-deep(input) {
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .left {
+        ::v-deep(input) {
+          border-right: none;
+          border-radius: var(--border-radius) 0 0 var(--border-radius);
+        }
+      }
+
+      .right {
+        ::v-deep(input) {
+          border-left: none;
+          border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+      }
+
+      &.date-inputs--lg {
+        .left {
+          ::v-deep(input) {
+            width: 153px;
+            padding-right: 0;
+          }
+        }
+
+        .right {
+          ::v-deep(input) {
+            width: 84px;
+            padding-left: 30px;
+            padding-right: 0;
+          }
+
+          ::v-deep(.bi.icon.icon--left) {
+            left: 5px;
+          }
+        }
+      }
+      &.date-inputs--md {
+        .left {
+          ::v-deep(input) {
+            width: 138px;
+            padding-right: 0;
+          }
+        }
+
+        .right {
+          ::v-deep(input) {
+            width: 76px;
+            padding-left: 25px;
+            padding-right: 0;
+          }
+
+          ::v-deep(.bi.icon.icon--left) {
+            left: 5px;
+          }
+        }
+      }
+      &.date-inputs--sm {
+        .left {
+          ::v-deep(input) {
+            width: 93px;
+            padding-right: 0;
+            padding-left: 23px;
+          }
+
+          ::v-deep(.bi.icon.icon--left) {
+            left: 9px;
+          }
+        }
+
+        .right {
+          ::v-deep(input) {
+            width: 56px;
+            padding-left: 20px;
+            padding-right: 0;
+          }
+
+          ::v-deep(.bi.icon.icon--left) {
+            left: 5px;
+          }
+        }
       }
     }
   }
