@@ -11,7 +11,7 @@
     />
 
     <div class="calendar" :style="getStyleVars" v-if="isOpen">
-      <div class="left" :style="{ 'flex-grow': data?.isExpanded ? 1 : 0 }">
+      <div class="left">
         <Controls
           :data="data"
           :month-to-display="curMonth"
@@ -50,11 +50,7 @@
         />
       </div>
 
-      <div
-        class="right"
-        v-if="mergedData?.isDouble"
-        :style="{ 'flex-grow': data?.isExpanded ? 1 : 0 }"
-      >
+      <div class="right" v-if="mergedData?.isDouble">
         <Controls
           :data="data"
           :month-to-display="nextMonth"
@@ -187,7 +183,6 @@ export default defineComponent({
     mergedData() {
       return Object.assign(
         {
-          isExpanded: false,
           inputData: {},
           showInput: true,
           isRange: false,
@@ -226,7 +221,6 @@ export default defineComponent({
         '--font-family': this.styleConfig?.fontFamily || 'Raleway',
         '--font-weight': this.styleConfig?.fontWeight || '500',
         '--font-size': this.styleConfig?.fontSize || '14px',
-        '--width': this.styleConfig?.isExpanded ? '' : 'fit-content',
       }
     },
 
@@ -572,7 +566,7 @@ export default defineComponent({
   .calendar {
     display: flex;
     flex-direction: row;
-    width: var(--width);
+    width: fit-content;
     padding: 16px 18px 16px 18px;
     font-family: var(--font-family);
     box-shadow: $shadow-lg;
@@ -585,6 +579,7 @@ export default defineComponent({
     .right {
       display: flex;
       flex-direction: column;
+      flex-grow: 0;
     }
     .left {
       ::v-deep(.calendar__controls-right.hidden) {
