@@ -1,16 +1,14 @@
 <template>
   <div class="calendar-wrapper" v-click-outside="close">
-    <div class="date-inputs-container">
-      <EInput
-        class="calendar__input left"
-        :style-config="mergedInputStyles"
-        :data="mergedLeftInputData"
-        v-if="mergedData.showInput"
-        @error="(error) => handleInputError(error, 'from')"
-        @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
-        @click="open"
-      />
-    </div>
+    <EInput
+      class="calendar__input left"
+      :style-config="mergedInputStyles"
+      :data="mergedLeftInputData"
+      v-if="mergedData.showInput"
+      @error="(error) => handleInputError(error, 'from')"
+      @keyup.enter="(event) => handleModelUpdate(event.target.value, 'from')"
+      @click="open"
+    />
 
     <div class="calendar" :style="getStyleVars" v-if="isOpen">
       <div class="left" :style="{ 'flex-grow': data?.isExpanded ? 1 : 0 }">
@@ -34,7 +32,7 @@
         />
 
         <SelectTime
-          v-if="mergedData?.timePicker"
+          v-if="mergedData?.timePicker && !mergedData.isDouble"
           :config="mergedData?.timePicker"
           :hours="getHoursFromTimestamp(leftSelectTime)?.hours"
           :minutes="
@@ -77,7 +75,7 @@
         />
 
         <SelectTime
-          v-if="mergedData?.timePicker"
+          v-if="mergedData?.timePicker && !mergedData.isDouble"
           :config="mergedData?.timePicker"
           :hours="getHoursFromTimestamp(rightSelectTime)?.hours"
           :minutes="
@@ -159,6 +157,11 @@ export default defineComponent({
       isClearTimeSelect: false,
       leftSelectTime: this.data?.date?.date_from ?? undefined,
       rightSelectTime: this.data?.date?.date_to ?? undefined,
+      localeOptions: {
+        year: '2-digit',
+        month: 'short',
+        day: 'numeric',
+      },
     }
   },
   computed: {
@@ -190,11 +193,11 @@ export default defineComponent({
           isRange: false,
           isDouble: false,
           locale: 'en-US',
-          localeOptions: {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          },
+          // localeOptions: {
+          //   year: '2-digit',
+          //   month: 'short',
+          //   day: 'numeric',
+          // },
           timePicker: undefined,
           date: {
             date_from: '',
@@ -317,7 +320,7 @@ export default defineComponent({
 
     // Устанавливает начальные значения даты и времени (из пропсов)
     setInitSelectedValues() {
-      const dateOptions = this.mergedData.localeOptions
+      const dateOptions = this.localeOptions
 
       if (this.mergedData?.timePicker === undefined) {
         delete dateOptions.hour12
@@ -497,7 +500,7 @@ export default defineComponent({
 
       this.formattedDateTimes = this.selectedDays.map((day) => new Date(`${day}`).toISOString())
 
-      this.setInputValues(this.mergedData.localeOptions)
+      this.setInputValues(this.localeOptions)
 
       this.$emit('update:dateValue', this.formattedDateTimes)
     },
@@ -539,7 +542,7 @@ export default defineComponent({
       }
 
       this.setInputValues({
-        ...this.mergedData.localeOptions,
+        ...this.localeOptions,
         hour12: this.mergedData?.timePicker?.isAMPM,
         hour: '2-digit',
         minute: '2-digit',
@@ -556,9 +559,6 @@ export default defineComponent({
 .calendar-wrapper {
   position: relative;
 
-  .date-inputs-container {
-    width: fit-content;
-  }
   .calendar__input {
     margin-bottom: 8px;
 
