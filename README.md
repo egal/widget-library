@@ -109,11 +109,15 @@ export default defineComponent({
           date_from: "2022-03-02T04:28:12.089Z",
           date_to: "2022-03-05"
         },
+        // можно передавать параметры для инпута с датой
+        // возможные передаваемые параметры описаны в документации по EInput, объект :data
         inputData: {
-          size: 'lg',
+          size: 'md',
           showFilled: false,
           validators: [this.required],
         },
+        // можно передавать параметры для селекта со временем
+        // возможные передаваемые параметры описаны в документации по ESelect, объект :data
         timeSelectData: {
           showFilled: false,
         },
