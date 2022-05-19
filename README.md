@@ -110,11 +110,9 @@ export default defineComponent({
           date_to: "2022-03-05"
         },
         inputData: {
+          size: 'lg',
           showFilled: false,
           validators: [this.required],
-        },
-        rightInputData: {
-          showFilled: false,
         },
         timeSelectData: {
           showFilled: false,
