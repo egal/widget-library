@@ -67,17 +67,6 @@ describe('Styles', () => {
     preMount({ ...propsData, error: 'Some error text', modelValue: 'text' })
     cy.get('.input-container').should('have.class', 'error')
   })
-
-  it('only allows maxLength value length', () => {
-    mount(EInput, {
-      props: {
-        data: { ...propsData, type: 'number', inputMaxLength: 3 },
-      },
-    })
-
-    cy.get('#test-input').type(1).type(2).type(3).type(4)
-    cy.get('#test-input').should('have.value', 123)
-  })
 })
 
 describe('Features', () => {
@@ -117,6 +106,13 @@ describe('Features', () => {
     preMount({ ...propsData, postfix: 'gr', clearable: true })
     cy.get('.subtract-button').should('not.be.visible')
     cy.get('.icon--right.postfix').should('be.visible')
+  })
+
+  it('only allows maxLength value length', () => {
+    preMount({ ...propsData, type: 'number', inputMaxLength: 3 })
+
+    cy.get('#test-input').type(1).type(2).type(3).type(4)
+    cy.get('#test-input').should('have.value', 123)
   })
 })
 
