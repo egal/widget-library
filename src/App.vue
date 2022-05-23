@@ -1,14 +1,59 @@
-<template></template>
+<template>
+  <div>
+    <button @click="toggle">fsdf</button>
+
+    <div :style="{ marginLeft: '350px' }">
+      <EDotMenu
+        :data="{
+          items: [
+            {
+              label: 'Удалить',
+              icon: 'trash',
+              onClickHandler: openDeleteModal,
+              checked: true, // this prop for what ?
+            },
+            {
+              label: 'divider',
+            },
+            {
+              label: 'Редактировать',
+              onClickHandler: setEditMode,
+            },
+          ],
+          vertical: false,
+          disabled: false,
+          isOpen: isOpen,
+          size: 'sm',
+        }"
+      />
+    </div>
+  </div>
+</template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import EDotMenu from '@/components/navigation/EDotMenu.vue'
 export default defineComponent({
   name: 'App',
-  components: {},
+  components: { EDotMenu },
   data() {
-    return {}
+    return {
+      isOpen: false,
+    }
   },
-  methods: {},
+  methods: {
+    openDeleteModal() {
+      console.log('openDeleteModal')
+    },
+    setEditMode() {
+      console.log('setEditMode')
+    },
+    toggle() {
+      setInterval(() => {
+        this.isOpen = !this.isOpen
+      }, 1000)
+    },
+  },
 })
 </script>
 
