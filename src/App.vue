@@ -1,50 +1,43 @@
 <template>
-  <div>
-    <Calendar
-      :data="calendarData"
-      :style-config="{
-        fontFamily: 'Raleway',
-        fontSize: '14px',
-        fontWeight: 'regular',
-        activeColor: '#0066FF',
-        activeBackgroundColor: '#E5F0FF',
-      }"
-      @update:dateValue="(v) => check(v)"
-      @onError:inputValue="(errorMsg) => handleError(errorMsg)"
-    ></Calendar>
+  <div :style="{ width: '300px' }">
+    <button @click="selectdata.closeDropdown = !selectdata.closeDropdown">dfg</button>
+
+    <ESelect
+      :data="selectdata"
+      @update:modelValue="upd"
+      @show-more="addMore"
+      @input="
+        ($event) => {
+          searchOptions($event.target.value)
+        }
+      "
+      @error="fff"
+    ></ESelect>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Calendar from '@/components/calendar/Calendar.vue'
-
+import ESelect from '@/components/inputs/Select/ESelect.vue'
 export default defineComponent({
   name: 'App',
-  components: { Calendar },
+  components: { ESelect },
   data() {
     return {
-      calendarData: {
-        isDouble: false,
-        isRangePicker: false,
-        showInput: true,
-
-        locale: 'ru-RU',
-        timePicker: {
-          isAMPM: true,
-          label: 'Choose time',
-        },
-
-        inputData: {
-          size: 'md',
-          modelValue: new Date('05 May 2022 04:05 UTC').toISOString(),
-          showFilled: false,
-          validators: [this.required],
-        },
-
-        timeSelectData: {
-          showFilled: false,
-        },
+      ttt: true,
+      selectdata: {
+        size: 'lg',
+        multiple: true,
+        searchable: false,
+        modelValue: [{ name: 'gggggggg' }],
+        options: [{ name: 'jki' }, { name: 'ii' }],
+        isLocalOptions: false,
+        nonLocalOptionsTotalCount: 20,
+        showMoreButtonDisplay: true,
+        showMoreButtonText: 'Показать больше...',
+        validators: [this.required],
+        closeDropdownAfterSelection: false,
+        closeDropdown: false,
       },
     }
   },
@@ -52,11 +45,33 @@ export default defineComponent({
     required(value) {
       return !value ? 'Обязательное поле' : ''
     },
-    handleError(error) {
+    fff(error) {
       console.log(error)
     },
-    check(v) {
-      console.log('check', v)
+    upd(v) {
+      console.log('on update ', v)
+      this.selectdata.modelValue = v
+      this.selectdata.closeDropdown = true
+    },
+    addMore() {
+      this.selectdata.options.push({
+        name: '3333',
+      })
+      this.selectdata.options.push({
+        name: '33433',
+      })
+      this.selectdata.options.push({
+        name: '366',
+      })
+      this.selectdata.options.push({
+        name: '356',
+      })
+      this.selectdata.options.push({
+        name: '44',
+      })
+    },
+    searchOptions(v) {
+      this.selectdata.options = this.selectdata.options.filter((i) => i.name.includes(v))
     },
   },
 })

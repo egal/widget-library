@@ -78,6 +78,25 @@ describe('Dropdown', () => {
     cy.get('.dropdown-items .dropdown-item').first().click()
     cy.get('.dropdown-component').should('not.be.visible')
   })
+
+  it('not closing dropdown after select (with closeDropdownAfterSelection prop)', () => {
+    preMount({ ...propsData, closeDropdownAfterSelection: false })
+
+    cy.get('.select-container').click()
+    cy.get('.dropdown-component').should('be.visible')
+
+    cy.get('.dropdown-items .dropdown-item').first().click()
+    cy.get('.dropdown-component').should('be.visible')
+  })
+
+  it('renders empty dropdown text', () => {
+    preMount({ ...propsData, emptyDropdownText: 'Empty', options: [] })
+    cy.get('.select-container').click()
+
+    cy.get('.dropdown-item')
+      .should('have.class', 'dropdown-item--empty')
+      .should('have.text', 'Empty')
+  })
 })
 
 describe('Select', () => {
@@ -282,56 +301,57 @@ describe('Grouped', () => {
 })
 
 describe('Show More', () => {
-  it('renders Show More button', () => {
-    // todo Show More condition only for non local
+  it('renders Show More button correctly', () => {
+    // todo check this btn works
     preMount({
       ...propsData,
       showMoreButtonDisplay: true,
       isLocalOptions: false,
-      nonLocalOptionsTotalCount: 10,
-      nonlocalOptions: [{ name: 'First' }, { name: 'Second' }, { name: 'Third' }],
+      nonLocalOptionsTotalCount: 5,
+      showMoreButtonText: 'Показать больше',
     })
 
     cy.get('.select-container').click()
 
-    cy.get('.dropdown-button .show-more-btn').should('exist')
+    cy.get('.dropdown-button .show-more-btn').should('exist').should('have.text', 'Показать больше')
 
     //  todo @click - emits
-    cy.get('.show-more-btn').click()
-
-    // todo
-    // cy.window().then((win) => {
-    //   console.log(win)
-    //   const component = win.ESelect
-    //   const Vue = component.$root
-    //   Vue.$set(component, 'nonlocalOptions', [
-    //     { name: 'First' },
-    //     { name: 'First4 43' },
-    //     { name: 'Second' },
-    //     { name: 'Third' },
-    //   ])
-    //   Vue.$set(component, 'nonLocalOptionsTotalCount', 2)
-    // })
+    // cy.get('.show-more-btn')
+    //   .click()
+    //   .then(() => {
+    //     propsData.options.push({ name: '1' }, { name: '2' }, { name: '3' })
+    //   })
   })
 })
 // showMoreButtonDisplay, showMoreButtonText
 
-// describe('Searchable Input')
+//todo
+describe('Searchable Input', () => {
+  it('searchableInput', () => {
+    preMount({ ...propsData, searchableInput: true })
+
+    cy.get('.input-container.search input#input-text').click()
+    cy.get('.dropdown-component').should('be.visible')
+
+    cy.get('.input-container.search input#input-text').type('secon')
+    cy.get('.dropdown-items .dropdown-item').should('have.length', 1)
+  })
+
+  it('searchableInput VS searchable', () => {
+    preMount({ ...propsData, searchableInput: true, searchable: true })
+  })
+})
+
 // describe('Is Local Options')
 //nonLocalOptionsTotalCount
-// describe('Validators')
-// describe('Empty Dropdown Text')
-// describe('Dropdown Position')
 
-// describe('closeDropdownAfterSelection')
+// describe('Validators')
+
+// describe('Dropdown Position')
 
 //     searchableInput: false,
 //     isLocalOptions: true,
 //     nonLocalOptionsTotalCount: 0,
 //     validators: [],
-//     emptyDropdownText: 'no data',
 //     dropdownPosition: 'bottom',
-//     showMoreButtonDisplay: false,
-//     showMoreButtonText: 'Show more...',
-//     closeDropdownAfterSelection: true,
 //     openDropdown: false,
