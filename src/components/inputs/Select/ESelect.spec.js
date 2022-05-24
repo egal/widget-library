@@ -410,7 +410,7 @@ describe('Show More', () => {
 })
 
 describe('Searchable Input', () => {
-  it('should have searchable Input', () => {
+  it('should search via searchable Input', () => {
     preMount({ ...fixtures.ESelectProps, searchableInput: true })
 
     cy.get('.input-container.search input#input-text').click()
@@ -418,6 +418,13 @@ describe('Searchable Input', () => {
 
     cy.get('.input-container.search input#input-text').type('secon')
     cy.get('.dropdown-items .dropdown-item').should('have.length', 1)
+
+    cy.get('.dropdown-items .dropdown-item')
+      .first()
+      .click()
+      .then(() => {
+        cy.wrap(Cypress.vueWrapper.emitted()).should('have.property', 'update:modelValue')
+      })
   })
 })
 
