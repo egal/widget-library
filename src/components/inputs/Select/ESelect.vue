@@ -120,7 +120,7 @@
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
         :search-placeholder="mergedData.searchPlaceholder"
-        :style-config="{ ...dropdownStyleConfig, optionColor: this.styleConfig.valueColor }"
+        :style-config="{ ...dropdownStyleConfig, optionColor: this.styleConfig?.valueColor }"
         :dropdown-position="mergedData.dropdownPosition"
         :show-more-button-display="isDisplayShowMore"
         :show-more-button-text="mergedData.showMoreButtonText"
