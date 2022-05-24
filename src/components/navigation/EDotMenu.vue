@@ -25,7 +25,6 @@
             <BootstrapIcon class="menu__icon" :icon="item.icon" v-if="item.icon" />
             {{ item.label }}
           </span>
-          <BootstrapIcon class="check__icon" icon="check-lg" v-if="item?.checked" />
         </div>
       </div>
     </div>
@@ -140,7 +139,6 @@ export default defineComponent({
   transition: all 0.2s;
 
   &:hover {
-    //todo спросить про ховер
     background: rgba(0, 0, 0, 0.02);
     cursor: pointer;
   }

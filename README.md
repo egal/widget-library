@@ -25,7 +25,6 @@
 | ``label``          |  String  |      да      | Любая строка                           | Текст элемента списка                                                         |
 | ``icon``           |  String  |     нет      | Строка с названием иконки из Bootstrap | Иконка элемента                                                               |
 | ``onClickHandler`` | Function |     нет      | Функция                                | Функция, определяющая что должно проийзоти после клика на этот элемент списка |
-| ``checked``        | Boolean  |     нет      | ``true``, ``false``                    | // todo                                                                       |
 
 
 ## Divider
@@ -60,7 +59,6 @@
           label: 'Удалить',
           icon: 'trash',
           onClickHandler: openDeleteModal,
-          checked: true, // todo ? 
         },
         {
           label: 'separator', 
