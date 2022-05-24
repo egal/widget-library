@@ -264,6 +264,7 @@ export default defineComponent({
       return {
         '--focus-input-border-color': this.mergedInputStyles?.focusBorderColor || '#76ACFB',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
+        '--filled-input-background-color': this.styleConfig?.filledBackgroundColor || '#DEEBFC',
       }
     },
 
@@ -687,9 +688,12 @@ export default defineComponent({
       .right {
         margin-bottom: 0;
 
+        border-radius: var(--border-radius);
+
         ::v-deep(input) {
           &:focus {
             outline: none;
+            background-color: var(--filled-input-background-color);
           }
         }
       }
