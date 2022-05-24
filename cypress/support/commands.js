@@ -23,3 +23,9 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+// ESelect
+import fixtures from '../fixtures/fixtures'
+
+Cypress.Commands.add('openSelect', () => {
+  cy.get('.select-container').click()
+})

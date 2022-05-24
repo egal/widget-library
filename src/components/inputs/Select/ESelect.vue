@@ -276,6 +276,7 @@ export default {
     },
 
     isDisplayShowMore() {
+      console.log(this.nonlocalOptions)
       return this.mergedData.showMoreButtonDisplay
         ? this.mergedData.isLocalOptions === false &&
             this.nonlocalOptions.length < this.mergedData.nonLocalOptionsTotalCount
