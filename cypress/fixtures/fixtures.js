@@ -24,6 +24,21 @@ const ESelectProps = {
   openDropdown: false,
 }
 
+const ECalendarProps = {
+  inputData: {}, // common data for both inputs
+  showInput: true,
+  isRange: false,
+  isDouble: false,
+  locale: 'en-US',
+  timePicker: {},
+  date: {
+    date_from: '',
+    date_to: '',
+  },
+  minuteIncrement: 1,
+}
+
 export default {
   ESelectProps,
+  ECalendarProps,
 }
