@@ -2,34 +2,38 @@
   <div class="footer">
     <p class="label">{{ config?.label || '' }}</p>
     <div class="picker" :class="{ disabled: isDisabled }">
-      <BootstrapIcon icon="clock" />
       <ESelect
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: hoursOptions,
           modelValue: selectedHours,
           shownKey: selectedHours.name,
           placeholder: 12,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
-      <span style="margin: 0 5px">:</span>
+      <span class="colon" style="margin: 0 5px">:</span>
       <ESelect
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: minutesOptions,
           modelValue: selectedMinutes,
           shownKey: selectedMinutes.name,
           placeholder: 30,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
       <ESelect
         v-if="config?.isAMPM"
         class="ampm"
         :data="{
+          ...mergedSelectData,
           clearable: false,
           options: [
             { name: 'AM' },
@@ -39,23 +43,23 @@
           ],
           shownKey: selectedAmPm.name,
           modelValue: selectedAmPm,
+          size: 'sm',
         }"
-        :style-config="selectStyleConfig"
+        :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'ampm')"
       />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+<script>
 import ESelect from '@/components/inputs/Select/ESelect.vue'
 import { defineComponent } from 'vue'
 import { formatAMPM } from '@/assets/calendar/helpers'
 
 export default defineComponent({
   name: 'SelectTime',
-  components: { ESelect, BootstrapIcon },
+  components: { ESelect },
   props: {
     config: {
       type: Object,
@@ -84,10 +88,24 @@ export default defineComponent({
       default: '',
     },
 
-    // проп со стилями для ESelect
+    selectData: {
+      type: Object,
+      default: {},
+    },
+
     selectStyleConfig: {
       type: Object,
       default: () => {},
+    },
+
+    minutesStep: {
+      type: Number,
+      default: 1,
+    },
+
+    clear: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -95,25 +113,46 @@ export default defineComponent({
       selectedHours: this.hours ? { name: this.hours } : {},
       selectedMinutes: this.minutes ? { name: this.minutes } : {},
       selectedAmPm: this.format ? { name: this.format } : { name: 'AM' },
-      selectedTime: [] as string[],
+      selectedTime: [],
     }
   },
   computed: {
-    hoursOptions() {
-      const twelveHoursOptions = this.generateTimeOptions(1, 11)
-      twelveHoursOptions.unshift({ name: '12' })
+    mergedSelectData() {
+      return this.selectData
+    },
 
-      return this.config?.isAMPM ? twelveHoursOptions : this.generateTimeOptions(0, 23)
+    mergedStyleConfig() {
+      return Object.assign(
+        {
+          valueColor: '#718096',
+        },
+        this.selectStyleConfig,
+      )
+    },
+
+    isClearValues() {
+      return this.clear
+    },
+
+    hoursOptions() {
+      if (this.config?.isAMPM) {
+        const twelveHoursOptions = this.generateTimeOptions(1, 11)
+        twelveHoursOptions.unshift({ name: '12' })
+        return twelveHoursOptions
+      } else {
+        return this.generateTimeOptions(0, 23)
+      }
     },
 
     minutesOptions() {
-      return this.generateTimeOptions(0, 60)
+      return this.generateTimeOptions(0, 59, this.minutesStep)
     },
   },
   mounted() {},
   methods: {
-    generateTimeOptions(min: number, max: number) {
-      let arr: any[] = []
+    // Генерация опций для селектов
+    generateTimeOptions(min, max, step = 1) {
+      let arr = []
       for (let i = min - 1; i++, i <= max; ) {
         let obj = {
           name: i < 10 ? `0${i}` : `${i}`,
@@ -124,7 +163,7 @@ export default defineComponent({
       return arr
     },
 
-    setTime(val: any, type: string): void {
+    setTime(val, type) {
       if (this.isDisabled) {
         return
       }
@@ -132,9 +171,16 @@ export default defineComponent({
       switch (type) {
         case 'hour':
           this.selectedHours = val
+          if (!this.selectedMinutes?.name) {
+            this.selectedMinutes = { name: '00' }
+          }
           break
         case 'minutes':
           this.selectedMinutes = val
+          if (!this.selectedHours?.name) {
+            this.selectedHours = { name: '00' }
+          }
+
           break
         case 'ampm':
           this.selectedAmPm = val
@@ -156,7 +202,26 @@ export default defineComponent({
       })
     },
   },
-  watch: {},
+  watch: {
+    isClearValues(value) {
+      if (value) {
+        this.selectedHours = {}
+        this.selectedMinutes = {}
+      }
+    },
+
+    hours(value) {
+      this.selectedHours = { name: value }
+    },
+
+    minutes(value) {
+      this.selectedMinutes = { name: value }
+    },
+
+    format(value) {
+      this.selectedAmPm = { name: value }
+    },
+  },
 })
 </script>
 
@@ -165,8 +230,8 @@ export default defineComponent({
 
 .footer {
   border-top: 1px solid $gray-200;
-  padding-top: 20px;
-  margin-top: 14px;
+  padding-top: 15px;
+  margin-top: 16px;
   .label {
     font-style: normal;
     font-weight: 500;
@@ -179,6 +244,9 @@ export default defineComponent({
   .picker {
     display: flex;
     align-items: center;
+    ::v-deep(.select-label) {
+      display: none;
+    }
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
@@ -189,6 +257,14 @@ export default defineComponent({
         opacity: 0.5;
       }
     }
+  }
+
+  .colon {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: #718096;
   }
 }
 

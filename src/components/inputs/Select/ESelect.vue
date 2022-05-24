@@ -13,7 +13,8 @@
       class="select-container"
       :class="{
         focus: showDropdown,
-        filled: filled && !showDropdown && !mergedData.error && !errorMessage,
+        filled:
+          mergedData.showFilled && filled && !showDropdown && !mergedData.error && !errorMessage,
       }"
       @click="showDropdown = !showDropdown"
       v-click-outside="close"
@@ -120,7 +121,7 @@
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
         :search-placeholder="mergedData.searchPlaceholder"
-        :style-config="dropdownStyleConfig"
+        :style-config="{ ...dropdownStyleConfig, optionColor: this.styleConfig.valueColor }"
         :dropdown-position="mergedData.dropdownPosition"
         :show-more-button-display="isDisplayShowMore"
         :show-more-button-text="mergedData.showMoreButtonText"
@@ -218,6 +219,7 @@ export default {
           showMoreButtonText: 'Show more...',
           closeDropdownAfterSelection: true,
           openDropdown: false,
+          showFilled: true,
         },
         this.data,
       )
@@ -469,6 +471,7 @@ export default {
         display: flex;
         align-items: center;
         margin-right: 10px;
+        color: var(--value-color);
         span {
           margin-right: 8px;
           white-space: nowrap;
@@ -501,7 +504,8 @@ export default {
   .filled {
     background-color: var(--filled-background-color);
     color: var(--filled-font-color);
-    .selected {
+    .selected,
+    .select-container__arrow {
       .bi {
         color: var(--filled-font-color);
       }
@@ -582,7 +586,6 @@ export default {
   &-dropdown {
     position: relative;
     z-index: 2;
-    margin-top: 8px;
     width: calc(100% + 14%);
 
     &.search-input {
@@ -594,6 +597,7 @@ export default {
       position: absolute;
       width: 100%;
       z-index: 10;
+      top: 8px;
     }
   }
 }
