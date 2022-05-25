@@ -12,6 +12,7 @@
           placeholder: 12,
           size: 'sm',
         }"
+        class="select--hours"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
@@ -26,7 +27,7 @@
           placeholder: 30,
           size: 'sm',
         }"
-        class="select--date"
+        class="select--minutes"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
@@ -46,7 +47,6 @@
           modelValue: selectedAmPm,
           size: 'sm',
         }"
-        class="select--time"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'ampm')"
       />

@@ -534,9 +534,15 @@ export default defineComponent({
         if (tempFormattedDateTimes.length === 1) {
           // если в дате есть время (т.е. переданы соответсвующие опции) - записать его в правый инпут
           if (this.mergedData?.timePicker && Object.keys(this.mergedData?.timePicker).length > 0) {
-            let [inputDate, inputYear, inputTime] = tempFormattedDateTimes[0].split(', ')
-            this.leftInputValue = inputDate + ', ' + inputYear
-            this.rightInputValue = inputTime
+            if (this.mergedData?.locale === 'ru-RU') {
+              let [inputDate, inputTime] = tempFormattedDateTimes[0].split(', ')
+              this.leftInputValue = inputDate
+              this.rightInputValue = inputTime
+            } else {
+              let [inputDate, inputYear, inputTime] = tempFormattedDateTimes[0].split(', ')
+              this.leftInputValue = inputDate + ', ' + inputYear
+              this.rightInputValue = inputTime
+            }
           } else {
             this.leftInputValue = tempFormattedDateTimes[0]
           }
