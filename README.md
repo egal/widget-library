@@ -1,71 +1,117 @@
-<p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
-<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
-<p align="center">
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://badge.fury.io/js/%40egalteam%2Fwidget-library.svg"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/dt/@egalteam/widget-library"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/l/@egalteam/widget-library"></a>
-</p>
+## Dot Menu
+Определяется тегом:
+````javascript
+<e-dot-menu></e-dot-menu>
+````
+
+### Параметры
+Компонент Dot Menu принимает 2 параметра в качество пропов:
+1. Объект `data`, который может содержать следующие параметры:
+
+| Параметр         |   Тип   | По умолчанию | Возможные значения                           | Описание                                                                                                       |
+|------------------|:-------:|:------------:|----------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| ``items``        |  Array  |    ``[]``    | Массив объектов для отрисовки элементов меню | Описание передаваемых объектов представлено ниже                                                               |
+| ``vertical``     | Boolean |   ``true``   | ``true``, ``false``                          | Определяет положение иконки с тремя точками (горизонтальное/вертикальное)                                      |
+| ``disabled``     | Boolean |  ``false``   | ``true``, ``false``                          | Состояние меню (заблокировано/разблокировано)                                                                  |
+| ``isOpen``       | Boolean |  ``false``   | ``true``, ``false``                          | Определяет, открыто ли меню изначально. Позволяет влиять на открытие/закрытие меню из родительского компонента |
+| ``size``         | String  |   ``'md'``   | ``'sm'``, ``'md'``, ``'lg'``                 | Размер меню                                                                                                    |
+
+## Передача параметров для отрисовки списка элементов в выпадающем меню
+Содержимое выпадающего меню определяется объектами, передаваемыми в свойстве `items` 
+Объект может содержать следющие свойства: 
+
+| Параметр           |   Тип    | Обязательный | Возможные значения                     | Описание                                                                      |
+|--------------------|:--------:|:------------:|----------------------------------------|-------------------------------------------------------------------------------|
+| ``label``          |  String  |      да      | Любая строка                           | Текст элемента списка                                                         |
+| ``icon``           |  String  |     нет      | Строка с названием иконки из Bootstrap | Иконка элемента                                                               |
+| ``onClickHandler`` | Function |     нет      | Функция                                | Функция, определяющая что должно проийзоти после клика на этот элемент списка |
 
 
-## Новости
+## Divider
+Чтобы отрисовать разделитель между элементами в списке меню, нужно передать в массив `items` объект вида:
+````javascript
+{
+    label: 'divider'
+}
+````
 
-Следить за обновлениями можно в нашем телеграм канале:
+2. Объект `styleConfig`: Набор стилей для кастомизации
 
-[![](https://img.shields.io/badge/Channel%20on-Telegram-informational)](https://t.me/egalbox)
+| Параметр                     |  По умолчанию   | Описание                                                                                                      |
+|------------------------------|:---------------:|---------------------------------------------------------------------------------------------------------------|
+| ``fontFamily``               | ``'Open Sans'`` | Шрифт текста в выпадаеющем меню                                                                               |
+| ``fontWeight``               |     ``''``      | Свойство font-weight текста в выпадаеющем меню                                                                |
+| ``textColor``                |     ``''``      | Цвет текста в выпадающем меню                                                                                 |
+| ``backgroundHover``          |    ``'md'``     | Цвет фона при наведении на один из элементов списка меню                                                      |
+| ``backgroundColor``          |    ``'md'``     | Цвет фона в выпадающем меню и у кнопки с 3мя точками                                                          |
+| ``iconColor``                |    ``'md'``     | Цвет иконки с 3мя точками                                                                                     |
+| ``disabled``                 |    ``'md'``     | Объект, содержащий стили для заблокированного состояния. Содержит 2 свойства: `iconColor` и `backgroundColor` |
+| ``disabled.iconColor``       |    ``'md'``     | Цвет иконки с 3мя точками в заблокированном состоянии                                                         |
+| ``disabled.backgroundColor`` |    ``'md'``     | Цвет фона у кнопки с 3мя точками в заблокированном состоянии                                                  |
 
+## Пример использования
+````vue
+<template>
+  <EDotMenu
+    :data="{
+      items: [
+        {
+          label: 'Удалить',
+          icon: 'trash',
+          onClickHandler: openDeleteModal,
+        },
+        {
+          label: 'separator', 
+        },
+        {
+          label: 'Редактировать',
+          icon: 'pencil-square',
+          onClickHandler: setEditMode,
+        },
+      ],
+      vertical: false,
+      disabled: false,
+      isOpen: false,
+      size: 'lg',
+    }"
+    :style-config="{
+      fontFamily: 'Raleway',
+      iconColor: '#000000',
+      disabled: {
+        iconColor: '#4A5568',
+        backgroundColor: 'grey'
+      },
+    }"
+  />
+</template>
 
-## Документация
+<script lang="ts">
+import { defineComponent } from 'vue'
+import EDotMenu from '@/components/navigation/EDotMenu.vue'
+export default defineComponent({
+  name: 'App',
+  components: { EDotMenu },
+  data() {
+    return {
+      
+    }
+  },
+  methods: {
+    openDeleteModal() {
+      // opening Modal Window
+    },
+    setEditMode() {
+      // setting Edit Mode...
+    },
+  },
+})
+</script>
+````
 
-С подробной документацией по продукту можно ознакомиться
-[здесь](https://docs.egal.pro/#/).
+### События
 
+| Название              | Тип параметров | Описание                                                                                                     |
+|-----------------------|:--------------:|--------------------------------------------------------------------------------------------------------------|
+| ``open``              |     Event      | Эмитит событие открытия выпадающего меню (если необходимо отследить это событие в родительском компоненте)   |
+| ``close``             |     Event      | Эмитит событие закрытия выпадающего меню (если необходимо отследить это событие в родительском компоненте)   |
 
-## Поддержка
-
-Нам важно Ваше мнение и обратная связь.
-
-Задать вопрос:
-
-[![](https://img.shields.io/badge/Chat%20on-Telegram-blue)](https://t.me/joinchat/n175xzBrCUswMWU6)
-[![](https://img.shields.io/badge/Mail%20to-egal%40sputnikfund.ru-red)](mailto:egal@sputnikfund.ru)
-
-
-## Экосистема
-
-| Проект                       |                                    Статус                                     | Описание                                                                       |
-|:-----------------------------|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
-| [Docs]                       |                       [![Docs Status]][Docs Status URL]                       | Документация проекта Egal                                                      |
-| [Egal/Framework PHP Package] | [![Egal/Framework PHP Package Status]][Egal/Framework PHP Package Status URL] | Egal/Framework PHP библиотека                                                  |
-| [Egal/Framework NPM Package] | [![Egal/Framework NPM Package Status]][Egal/Framework NPM Package Status URL] | Egal/Framework NPM библиотека                                                  |
-| [Egal/Egal PHP Project]      |      [![Egal/Egal PHP Project Status]][Egal/Egal PHP Project Status URL]      | PHP проект (шаблон) сервиса для Egal экосистемы                                |
-| [Web Service]                |                [![Web Service Status]][Web Service Status URL]                | Сервис Egal экосистемы, реализующий адаптацию HTTP запросов к сервисам         |
-| [Auth Service]               |               [![Auth Service Status]][Auth Service Status URL]               | Сервис Egal экосистемы, реализующий базовые функции авторизации                |
-| [Interface Service]          |          [![Interface Service Status]][Interface Service Status URL]          | Сервис Egal экосистемы, предназначенный для управления метаданными интерфейсов |
-| [Postgres]                   |                   [![Postgres Status]][Postgres Status URL]                   | Надстроенная Система управления базами данных PostgreSQL для Egal экосистемы   |
-
-[Docs]: https://github.com/egal/egal-docs
-[Egal/Framework PHP Package]: https://github.com/egal/egal-framework-php-package
-[Egal/Framework NPM Package]:https://github.com/egal/egal-framework-npm-package
-[Egal/Egal PHP Project]:https://github.com/egal/egal-egal-php-project
-[Web Service]:https://github.com/egal/egal-web-service
-[Auth Service]:https://github.com/egal/egal-auth-service
-[Interface Service]: https://github.com/egal/egal-interface-service
-[Postgres]: https://github.com/egal/postgres
-
-[Docs Status]: https://img.shields.io/website?url=https%3A%2F%2Fegal.github.io%2Fegal-docs%2F%23%2F
-[Egal/Framework PHP Package Status]: https://img.shields.io/packagist/v/egal/framework?include_prereleases
-[Egal/Framework NPM Package Status]: https://img.shields.io/npm/v/@egalteam/framework
-[Egal/Egal PHP Project Status]: https://img.shields.io/packagist/v/egal/egal?include_prereleases
-[Web Service Status]: https://img.shields.io/docker/v/egalbox/web-service?label=dockerhub
-[Auth Service Status]: https://img.shields.io/docker/v/egalbox/auth-service?label=dockerhub
-[Interface Service Status]: https://img.shields.io/docker/v/egalbox/interface-service?label=dockerhub
-[Postgres Status]: https://img.shields.io/docker/v/egalbox/postgres?label=dockerhub
-
-[Docs Status URL]: https://egal.github.io/egal-docs/
-[Egal/Framework PHP Package Status URL]: https://packagist.org/packages/egal/framework
-[Egal/Framework NPM Package Status URL]: https://www.npmjs.com/package/@egalteam/framework
-[Egal/Egal PHP Project Status URL]: https://packagist.org/packages/egal/egal
-[Web Service Status URL]: https://hub.docker.com/r/egalbox/web-service
-[Auth Service Status URL]: https://hub.docker.com/r/egalbox/auth-service
-[Interface Service Status URL]: https://hub.docker.com/r/egalbox/interface-service
-[Postgres Status URL]: https://hub.docker.com/r/egalbox/postgres
