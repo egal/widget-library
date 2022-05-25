@@ -11,14 +11,6 @@ function preMount(data) {
   })
 }
 
-// Функционал Даты
-// 1. Можно выбрать одну дату и она корректно отобразится в инпуте + эмит
-// 2. Можно выбрать диапазон дат и они корректно отобразится в инпуте + эмит
-// 3. отображение в инпуте корректно для одной даты
-// 4. отображение в инпуте корректно для диапазона дат
-// 5. отображение в инпуте корректно даты + время
-// 6. отображение в инпуте корректно диапазона даты + время
-
 // Диапазон
 // 1. Выбор диапазона с прошедшей даты до текущей в этом месяце
 // 2. Выбор диапазона между двмя прощедщими датами в этом месяце
@@ -42,117 +34,202 @@ function preMount(data) {
 // Двойной календарь и условия со временм и диапазоном
 // что там было
 
-describe('Styles + Render', () => {
-  // it('should render ECalendar', () => {
-  //   preMount(fixtures.ECalendarProps)
-  //
-  //   cy.get('input#calendar-input--date').should('exist').should('be.visible')
-  //
-  //   cy.get('input#calendar-input--date').click()
-  //   cy.get('.calendar').should('exist').should('be.visible')
-  //
-  //   cy.get('.calendar__controls').should('exist').should('be.visible')
-  //   cy.get('.calendar__controls-left').should('exist').should('be.visible')
-  //   cy.get('.calendar__controls-month').should('exist').should('be.visible')
-  //   cy.get('.calendar__controls-right').should('exist').should('be.visible')
-  //   cy.get('.calendar__weekdays').should('exist').should('be.visible')
-  //   cy.get('.calendar__days').should('exist').should('be.visible')
-  //   // cy.get('.calendar__days li').should('have.text', 34)
-  //   cy.get('.footer .picker').should('exist').should('be.visible')
-  //
-  //   cy.get('input#calendar-input--date').click()
-  //   cy.get('.calendar').should('not.exist')
-  // })
-  //
-  // it('should render correct month, weekdays and days', () => {
-  //   preMount(fixtures.ECalendarProps)
-  //
-  //   cy.get('input#calendar-input--date').click()
-  //   const currentDate = new Date().toLocaleDateString('en-US', {
-  //     year: 'numeric',
-  //     month: 'short',
-  //     day: 'numeric',
-  //   })
-  //   let [currentMonth, currentDay, currentYear] = currentDate.split(' ')
-  //   currentDay = new Date().getDate()
-  //
-  //   cy.get('.calendar__controls-month').should('have.text', `${currentMonth} ${currentYear}`)
-  //   cy.get('.calendar__weekdays li').should('have.length', 7)
-  //   cy.get('.calendar__days li.--current').should('exist').should('have.text', `${currentDay}`)
-  //
-  //   //todo how to check if Days rendered correctly with weekdays
-  //   // console.log(new Date().getDay())
-  //   // const newDay = new Date()
-  //   // let dayCopy = newDay
-  //   // dayCopy.setDate(1)
-  //   // console.log(dayCopy.getDay())
-  // })
-  //
-  // it('should render weekdays depending on locale', () => {
-  //   preMount({ ...fixtures.ECalendarProps, locale: 'ru-RU' })
-  //
-  //   cy.get('input#calendar-input--date').click()
-  //   cy.get('.calendar__weekdays li').first().should('have.text', 'Вс')
-  // })
-
-  // 1. проверка что при клике стили остаются filled,если showFilled = true
-  // 2. проверка что при фокусе стили остаются filled,если showFilled = true
-  // 3. проверка что при клике стилей нет,если showFilled = false
-  // 4. проверка что при фокусе стилей нет,если showFilled = false
-  it('should ste "filled" class to both date and time inputs on focus', () => {
-    preMount(fixtures.ECalendarProps)
-
-    cy.get('input#calendar-input--date').click()
-    cy.get('.calendar__days li').first().click()
-    cy.get('.footer .picker .select').first().click()
-    cy.get('.dropdown-items .dropdown-item').first().click()
-
-    cy.get('.footer .picker .select').first().click()
-    cy.get('.footer .picker .select').first().next().next().click()
-
-    cy.get('.dropdown-items .dropdown-item').eq(2).click()
-  })
-})
-
-// describe('Features', () => {
-//   it('displays validation error', () => {
-//     const errorText = 'The field is required'
-//     const inputText = 'Some text'
-//     const validator = (value) => {
-//       return value ? '' : errorText
-//     }
+// describe('Styles + Render', () => {
+//   it('should render ECalendar', () => {
+//     preMount(fixtures.ECalendarProps)
 //
-//     preMount({ ...propsData, validators: [validator] })
+//     cy.get('input#calendar-input--date').should('exist').should('be.visible')
 //
-//     cy.get('#test-input').type(inputText)
-//     cy.get('#test-input').clear()
-//     cy.get('.helper-text.helper-text--error').should('be.visible').should('have.text', errorText)
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.calendar').should('exist').should('be.visible')
+//
+//     cy.get('.calendar__controls').should('exist').should('be.visible')
+//     cy.get('.calendar__controls-left').should('exist').should('be.visible')
+//     cy.get('.calendar__controls-month').should('exist').should('be.visible')
+//     cy.get('.calendar__controls-right').should('exist').should('be.visible')
+//     cy.get('.calendar__weekdays').should('exist').should('be.visible')
+//     cy.get('.calendar__days').should('exist').should('be.visible')
+//     // cy.get('.calendar__days li').should('have.text', 34)
+//     cy.get('.footer .picker').should('exist').should('be.visible')
+//
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.calendar').should('not.exist')
 //   })
 //
-//   it('renders ClearButton and clears input value', () => {
-//     preMount({ ...propsData, clearable: true, type: 'text', showArrows: false })
+//   it('should render correct month, weekdays and days', () => {
+//     preMount(fixtures.ECalendarProps)
 //
-//     const inputText = 'Some text'
-//     cy.get('#test-input').type(inputText)
-//     cy.get('.mask-icon-subtract').should('be.visible')
-//     cy.get('.subtract-button').click()
+//     cy.get('input#calendar-input--date').click()
+//     const currentDate = new Date().toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//     })
+//     let [currentMonth, currentDay, currentYear] = currentDate.split(' ')
+//     currentDay = new Date().getDate()
 //
-//     cy.get('#test-input').should('have.value', '')
-//     cy.get('.mask-icon-subtract').should('not.be.visible')
+//     cy.get('.calendar__controls-month').should('have.text', `${currentMonth} ${currentYear}`)
+//     cy.get('.calendar__weekdays li').should('have.length', 7)
+//     cy.get('.calendar__days li.--current').should('exist').should('have.text', `${currentDay}`)
+//
+//     //todo how to check if Days rendered correctly with weekdays
+//     // console.log(new Date().getDay())
+//     // const newDay = new Date()
+//     // let dayCopy = newDay
+//     // dayCopy.setDate(1)
+//     // console.log(dayCopy.getDay())
 //   })
 //
-//   it('has no ClearButton when has a Postfix', () => {
-//     preMount({ ...propsData, postfix: 'gr' })
-//     cy.get('.subtract-button').should('not.be.visible')
-//     cy.get('.icon--right.postfix').should('be.visible')
+//   it('should render weekdays depending on locale', () => {
+//     preMount({ ...fixtures.ECalendarProps, locale: 'ru-RU' })
+//
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.calendar__weekdays li').first().should('have.text', 'Вс')
 //   })
 //
-//   it('has no ClearButton when has a Postfix and set as "clearable"', () => {
-//     preMount({ ...propsData, postfix: 'gr', clearable: true })
-//     cy.get('.subtract-button').should('not.be.visible')
-//     cy.get('.icon--right.postfix').should('be.visible')
+//   it('should have "filled" class to both date and time inputs on focus', () => {
+//     preMount(fixtures.ECalendarProps)
+//     cy.selectDateTime()
+//     cy.get('.input.left .input-container').should('have.class', 'filled')
+//     cy.get('.input.right .input-container').should('have.class', 'filled')
+//
+//     cy.get('input#calendar-input--date').click().click()
+//     cy.get('.input.left .input-container').should('have.class', 'filled')
+//     cy.get('.input.right .input-container').should('have.class', 'filled')
+//   })
+//
+//   it('should have "focused" class on inputs container on click', () => {
+//     preMount(fixtures.ECalendarProps)
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.date-inputs').should('have.class', 'focused')
+//   })
+//
+//   it('should not have "doubled" class if there are no time selectors', () => {
+//     preMount({ ...fixtures.ECalendarProps, timePicker: null })
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.date-inputs').should('not.have.class', 'doubled')
+//   })
+//
+//   it('should not have "filled" class to both date and time inputs on focus ( showFilled: false )', () => {
+//     preMount({
+//       ...fixtures.ECalendarProps,
+//       inputData: {
+//         showFilled: false,
+//         size: 'md',
+//       },
+//     })
+//     cy.selectDateTime()
+//     cy.get('.input.left .input-container').should('not.have.class', 'filled')
+//     cy.get('.input.right .input-container').should('not.have.class', 'filled')
+//
+//     cy.get('input#calendar-input--date').click().click()
+//     cy.get('.input.left .input-container').should('not.have.class', 'filled')
+//     cy.get('.input.right .input-container').should('not.have.class', 'filled')
 //   })
 // })
+
+// Функционал Даты
+// 2. Можно выбрать диапазон дат и они корректно отобразится в инпуте + эмит
+// 4. отображение в инпуте корректно для диапазона дат
+// 6. отображение в инпуте корректно диапазона даты + время
+
+describe('Select Date & Time', () => {
+  it('should display selected date in input', () => {
+    //   todo check emit
+    preMount({ ...fixtures.ECalendarProps, timePicker: null })
+
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+
+    cy.get('input#calendar-input--date').click()
+    cy.get('.calendar__days li.--current').click()
+
+    cy.get('#calendar-input--date').should('have.value', currentDate)
+  })
+
+  it('should display selected date and time in input', () => {
+    //   todo check emit
+    preMount(fixtures.ECalendarProps)
+
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+
+    cy.selectDateTime()
+    cy.get('#calendar-input--date').should('have.value', currentDate)
+    cy.get('#calendar-input--time').should('have.value', '12:05 PM')
+  })
+
+  it('should allow to select time in 24hours format', () => {
+    //   todo check emit
+    preMount({
+      ...fixtures.ECalendarProps,
+      locale: 'ru-RU',
+      timePicker: {
+        isAMPM: false,
+      },
+    })
+
+    const currentDate = new Date().toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+
+    cy.get('input#calendar-input--date').click()
+    cy.get('.calendar__days li.--current').click()
+    cy.get('.footer .picker .select.select--date').click()
+    cy.get('.dropdown-items .dropdown-item').eq(1).click()
+
+    cy.get('.footer .picker .select.select--time').click()
+    cy.get('.select.select--time .dropdown-items .dropdown-item').eq(5).click()
+
+    cy.get('#calendar-input--date').should('have.value', currentDate)
+    cy.get('#calendar-input--time').should('have.value', '12:05 PM')
+  })
+  //   it('displays validation error', () => {
+  //     const errorText = 'The field is required'
+  //     const inputText = 'Some text'
+  //     const validator = (value) => {
+  //       return value ? '' : errorText
+  //     }
+  //
+  //     preMount({ ...propsData, validators: [validator] })
+  //
+  //     cy.get('#test-input').type(inputText)
+  //     cy.get('#test-input').clear()
+  //     cy.get('.helper-text.helper-text--error').should('be.visible').should('have.text', errorText)
+  //   })
+  //
+  //   it('renders ClearButton and clears input value', () => {
+  //     preMount({ ...propsData, clearable: true, type: 'text', showArrows: false })
+  //
+  //     const inputText = 'Some text'
+  //     cy.get('#test-input').type(inputText)
+  //     cy.get('.mask-icon-subtract').should('be.visible')
+  //     cy.get('.subtract-button').click()
+  //
+  //     cy.get('#test-input').should('have.value', '')
+  //     cy.get('.mask-icon-subtract').should('not.be.visible')
+  //   })
+  //
+  //   it('has no ClearButton when has a Postfix', () => {
+  //     preMount({ ...propsData, postfix: 'gr' })
+  //     cy.get('.subtract-button').should('not.be.visible')
+  //     cy.get('.icon--right.postfix').should('be.visible')
+  //   })
+  //
+  //   it('has no ClearButton when has a Postfix and set as "clearable"', () => {
+  //     preMount({ ...propsData, postfix: 'gr', clearable: true })
+  //     cy.get('.subtract-button').should('not.be.visible')
+  //     cy.get('.icon--right.postfix').should('be.visible')
+  //   })
+})
 //
 // describe('Number type', () => {
 //   it('has min value limit if type is "number"', () => {

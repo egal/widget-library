@@ -513,6 +513,7 @@ export default defineComponent({
             .map(() => new Date(curMonth))
             .map((el, i) => {
               el.setDate(i + 1)
+
               return el
             })
             .filter((el) => isDateInCurMonth(el, curMonth))

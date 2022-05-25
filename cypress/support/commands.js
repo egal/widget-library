@@ -29,3 +29,16 @@ import fixtures from '../fixtures/fixtures'
 Cypress.Commands.add('openSelect', () => {
   cy.get('.select-container').click()
 })
+
+Cypress.Commands.add('selectDateTime', () => {
+  cy.get('input#calendar-input--date').click()
+  cy.get('.calendar__days li.--current').click()
+  cy.get('.footer .picker .select.select--date').click()
+  cy.get('.dropdown-items .dropdown-item').first().click()
+
+  cy.get('.footer .picker .select.select--time').click()
+  cy.get('.select.select--time .dropdown-items .dropdown-item').eq(5).click()
+
+  cy.get('.footer .picker .select.ampm').click()
+  cy.get('.select.ampm .dropdown-items .dropdown-item').eq(1).click()
+})

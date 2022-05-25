@@ -21,9 +21,9 @@ export default defineComponent({
           size: 'md',
         },
 
-        locale: 'en-US',
+        locale: 'ru-RU',
         timePicker: {
-          isAMPM: true,
+          isAMPM: false,
           label: 'dsfsd',
         },
       },
