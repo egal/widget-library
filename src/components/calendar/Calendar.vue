@@ -545,7 +545,6 @@ export default defineComponent({
         if (tempFormattedDateTimes.length === 1) {
           // сли в дате есть время (т.е. переданы соответсвующие поции) - записать его в правй инпут
           if (options?.hour || options?.hour12 || options?.minute) {
-            console.log(tempFormattedDateTimes[0])
             let [inputDate, inputYear, inputTime] = tempFormattedDateTimes[0].split(', ')
             this.leftInputValue = inputDate + ', ' + inputYear
             this.rightInputValue = inputTime
@@ -689,10 +688,20 @@ export default defineComponent({
 
         border-radius: var(--border-radius);
 
-        ::v-deep(input) {
-          &:focus {
-            outline: none;
-            background-color: var(--filled-input-background-color);
+        ::v-deep(.input-container) {
+          input {
+            &:focus {
+              outline: none;
+            }
+          }
+
+          &.filled {
+            input {
+              &:focus {
+                outline: none;
+                background-color: var(--filled-input-background-color);
+              }
+            }
           }
         }
       }
