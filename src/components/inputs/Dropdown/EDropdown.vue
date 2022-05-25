@@ -148,11 +148,6 @@ export default {
      */
     isActive(option) {
       if (Array.isArray(this.value)) {
-        console.log(this.value)
-        console.log(this.shownKey)
-        console.log(option[this.shownKey])
-
-        console.log(this.value.findIndex((item) => item[this.shownKey] === option[this.shownKey]))
         return this.value.findIndex((item) => item[this.shownKey] === option[this.shownKey]) !== -1
       }
       return this.value[this.shownKey] === option[this.shownKey]

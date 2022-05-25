@@ -107,8 +107,10 @@ describe('Styles + Render', () => {
     cy.get('.footer .picker .select').first().click()
     cy.get('.dropdown-items .dropdown-item').first().click()
 
+    cy.get('.footer .picker .select').first().click()
     cy.get('.footer .picker .select').first().next().next().click()
-    cy.get('.dropdown-items .dropdown-item').first().next().click()
+
+    cy.get('.dropdown-items .dropdown-item').eq(2).click()
   })
 })
 

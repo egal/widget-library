@@ -12,20 +12,22 @@
           placeholder: 12,
           size: 'sm',
         }"
+        class="select--date"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
       <span class="colon" style="margin: 0 5px">:</span>
-      {{ selectedMinutes }}
       <ESelect
         :data="{
           ...mergedSelectData,
           clearable: false,
           options: minutesOptions,
           modelValue: selectedMinutes,
+
           placeholder: 30,
           size: 'sm',
         }"
+        class="select--time"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
@@ -160,8 +162,6 @@ export default defineComponent({
 
         arr.push(obj)
       }
-
-      console.log(arr)
       return arr
     },
 
