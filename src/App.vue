@@ -1,6 +1,17 @@
 <template>
   <div :style="{ width: '700px' }">
-    <Calendar :data="calendarData"></Calendar>
+    <Calendar
+      :data="calendarData"
+      :style-config="{
+        fontFamily: 'Raleway',
+        fontSize: '14px',
+        fontWeight: 'regular',
+        activeColor: '#0066FF',
+        activeBackgroundColor: '#E5F0FF',
+      }"
+      @update:dateValue="(v) => check(v)"
+      @onError:inputValue="(errorMsg) => handleError(errorMsg)"
+    ></Calendar>
   </div>
 </template>
 
@@ -17,19 +28,44 @@ export default defineComponent({
         isDouble: false,
         isRangePicker: false,
         showInput: true,
-        inputData: {
-          size: 'md',
-        },
 
+        localeOptions: {
+          year: '2-digit',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        },
         locale: 'ru-RU',
         timePicker: {
           isAMPM: false,
-          label: 'dsfsd',
+          label: 'Choose time',
+        },
+
+        inputData: {
+          showFilled: false,
+          validators: [this.required],
+        },
+        rightInputData: {
+          showFilled: false,
+        },
+        timeSelectData: {
+          showFilled: false,
         },
       },
     }
   },
-  methods: {},
+  methods: {
+    required(value) {
+      return !value ? 'Обязательное поле' : ''
+    },
+    handleError(error) {
+      console.log(error)
+    },
+    check(v) {
+      // console.log(v)
+    },
+  },
 })
 </script>
 

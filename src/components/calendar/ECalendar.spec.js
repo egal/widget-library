@@ -128,109 +128,144 @@ function preMount(data) {
 //   })
 // })
 
+// describe('Select Single Date & Time', () => {
+//   it('should display selected date in input', () => {
+//     //   todo check emit
+//     preMount({ ...fixtures.ECalendarProps, timePicker: null })
+//
+//     const currentDate = new Date().toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//     })
+//
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.calendar__days li.--current').click()
+//
+//     cy.get('#calendar-input--date').should('have.value', currentDate)
+//   })
+//
+//   it('should display selected date and time in input', () => {
+//     //   todo check emit
+//     preMount(fixtures.ECalendarProps)
+//
+//     const currentDate = new Date().toLocaleDateString('en-US', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//     })
+//
+//     cy.selectDateTime()
+//     cy.get('#calendar-input--date').should('have.value', currentDate)
+//     cy.get('#calendar-input--time').should('have.value', '12:05 PM')
+//   })
+//
+//   it('should allow to select time in 24hours format', () => {
+//     //   todo check emit
+//     preMount({
+//       ...fixtures.ECalendarProps,
+//       locale: 'ru-RU',
+//       timePicker: {
+//         isAMPM: false,
+//       },
+//     })
+//
+//     const currentDate = new Date().toLocaleDateString('ru-RU', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//     })
+//
+//     cy.get('input#calendar-input--date').click()
+//     cy.get('.calendar__days li.--current').click()
+//     cy.get('.footer .picker .select.select--hours').click()
+//     cy.get('.dropdown-items .dropdown-item').eq(1).click()
+//
+//     cy.get('.footer .picker .select.select--minutes').click()
+//     cy.get('.select.select--minutes .dropdown-items .dropdown-item').eq(5).click()
+//
+//     cy.get('#calendar-input--date').should('have.value', currentDate)
+//     cy.get('#calendar-input--time').should('have.value', '01:05')
+//   })
+//
+// })
+
 // Функционал Даты
 // 2. Можно выбрать диапазон дат и они корректно отобразится в инпуте + эмит
 // 4. отображение в инпуте корректно для диапазона дат
 // 6. отображение в инпуте корректно диапазона даты + время
 
-describe('Select Date & Time', () => {
-  it('should display selected date in input', () => {
-    //   todo check emit
-    preMount({ ...fixtures.ECalendarProps, timePicker: null })
+describe('Select Date Range & Time', () => {
+  it('should display selected date range in input', () => {
+    preMount({ ...fixtures.ECalendarProps, timePicker: null, isRange: true })
 
-    const currentDate = new Date().toLocaleDateString('en-US', {
+    const firstOfCurrMonthDate = new Date(new Date().setDate(1)).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     })
+
+    const fifthOfCurrMonthDate = new Date(new Date().setDate(5)).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+
+    console.log(firstOfCurrMonthDate, fifthOfCurrMonthDate)
 
     cy.get('input#calendar-input--date').click()
-    cy.get('.calendar__days li.--current').click()
+    // todo search Month by text
+    cy.get('.calendar__days li').contains('1').click()
+    cy.get('.calendar__days li').contains('5').click()
 
-    cy.get('#calendar-input--date').should('have.value', currentDate)
+    cy.get('#calendar-input--date').should(
+      'have.value',
+      firstOfCurrMonthDate + ' - ' + fifthOfCurrMonthDate,
+    )
   })
 
-  it('should display selected date and time in input', () => {
-    //   todo check emit
-    preMount(fixtures.ECalendarProps)
-
-    const currentDate = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-
-    cy.selectDateTime()
-    cy.get('#calendar-input--date').should('have.value', currentDate)
-    cy.get('#calendar-input--time').should('have.value', '12:05 PM')
-  })
-
-  it('should allow to select time in 24hours format', () => {
-    //   todo check emit
-    preMount({
-      ...fixtures.ECalendarProps,
-      locale: 'ru-RU',
-      timePicker: {
-        isAMPM: false,
-      },
-    })
-
-    const currentDate = new Date().toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    })
-
-    cy.get('input#calendar-input--date').click()
-    cy.get('.calendar__days li.--current').click()
-    cy.get('.footer .picker .select.select--date').click()
-    cy.get('.dropdown-items .dropdown-item').eq(1).click()
-
-    cy.get('.footer .picker .select.select--time').click()
-    cy.get('.select.select--time .dropdown-items .dropdown-item').eq(5).click()
-
-    cy.get('#calendar-input--date').should('have.value', currentDate)
-    cy.get('#calendar-input--time').should('have.value', '12:05 PM')
-  })
-  //   it('displays validation error', () => {
-  //     const errorText = 'The field is required'
-  //     const inputText = 'Some text'
-  //     const validator = (value) => {
-  //       return value ? '' : errorText
-  //     }
+  // it('should display selected date and time in input', () => {
+  //   preMount({...fixtures.ECalendarProps, isRange: true })
   //
-  //     preMount({ ...propsData, validators: [validator] })
-  //
-  //     cy.get('#test-input').type(inputText)
-  //     cy.get('#test-input').clear()
-  //     cy.get('.helper-text.helper-text--error').should('be.visible').should('have.text', errorText)
+  //   const currentDate = new Date().toLocaleDateString('en-US', {
+  //     year: 'numeric',
+  //     month: 'short',
+  //     day: 'numeric',
   //   })
   //
-  //   it('renders ClearButton and clears input value', () => {
-  //     preMount({ ...propsData, clearable: true, type: 'text', showArrows: false })
+  //   cy.selectDateTime()
+  //   cy.get('#calendar-input--date').should('have.value', currentDate)
+  //   cy.get('#calendar-input--time').should('have.value', '12:05 PM')
+  // })
   //
-  //     const inputText = 'Some text'
-  //     cy.get('#test-input').type(inputText)
-  //     cy.get('.mask-icon-subtract').should('be.visible')
-  //     cy.get('.subtract-button').click()
+  // it('should allow to select time in 24hours format', () => {
   //
-  //     cy.get('#test-input').should('have.value', '')
-  //     cy.get('.mask-icon-subtract').should('not.be.visible')
+  //   preMount({
+  //     ...fixtures.ECalendarProps,
+  //     locale: 'ru-RU',
+  //     timePicker: {
+  //       isAMPM: false,
+  //     }, isRange: true
   //   })
   //
-  //   it('has no ClearButton when has a Postfix', () => {
-  //     preMount({ ...propsData, postfix: 'gr' })
-  //     cy.get('.subtract-button').should('not.be.visible')
-  //     cy.get('.icon--right.postfix').should('be.visible')
+  //   const currentDate = new Date().toLocaleDateString('ru-RU', {
+  //     year: 'numeric',
+  //     month: 'short',
+  //     day: 'numeric',
   //   })
   //
-  //   it('has no ClearButton when has a Postfix and set as "clearable"', () => {
-  //     preMount({ ...propsData, postfix: 'gr', clearable: true })
-  //     cy.get('.subtract-button').should('not.be.visible')
-  //     cy.get('.icon--right.postfix').should('be.visible')
-  //   })
+  //   cy.get('input#calendar-input--date').click()
+  //   cy.get('.calendar__days li.--current').click()
+  //   cy.get('.footer .picker .select.select--hours').click()
+  //   cy.get('.dropdown-items .dropdown-item').eq(1).click()
+  //
+  //   cy.get('.footer .picker .select.select--minutes').click()
+  //   cy.get('.select.select--minutes .dropdown-items .dropdown-item').eq(5).click()
+  //
+  //   cy.get('#calendar-input--date').should('have.value', currentDate)
+  //   cy.get('#calendar-input--time').should('have.value', '01:05')
+  // })
 })
-//
 // describe('Number type', () => {
 //   it('has min value limit if type is "number"', () => {
 //     preMount({ ...propsData, type: 'number', min: 2, showArrows: true, clearable: false })

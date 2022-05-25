@@ -12,7 +12,7 @@
           placeholder: 12,
           size: 'sm',
         }"
-        class="select--date"
+        class="select--hours"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
@@ -27,7 +27,7 @@
           placeholder: 30,
           size: 'sm',
         }"
-        class="select--time"
+        class="select--minutes"
         :style-config="mergedStyleConfig"
         @update:modelValue="(value) => setTime(value, 'minutes')"
       />
@@ -217,7 +217,6 @@ export default defineComponent({
     },
 
     minutes(value) {
-      console.log('this.selectedMinutes', value)
       this.selectedMinutes = { name: value }
     },
 

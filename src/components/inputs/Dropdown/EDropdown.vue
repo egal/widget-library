@@ -147,7 +147,6 @@ export default {
      * @param option
      */
     isActive(option) {
-      console.log(this.value)
       if (Array.isArray(this.value)) {
         return this.value.findIndex((item) => item[this.shownKey] === option[this.shownKey]) !== -1
       }
