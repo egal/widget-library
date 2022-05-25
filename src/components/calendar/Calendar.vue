@@ -205,7 +205,6 @@ export default defineComponent({
         {
           id: 'calendar-input--time',
           type: 'text',
-
           size: 'sm',
           clearable: false,
           iconLeft: 'clock',
@@ -368,7 +367,6 @@ export default defineComponent({
       }
 
       if (!this.mergedData?.date?.date_to && !this.mergedData?.date?.date_from) {
-        console.log(1)
         this.renderCalendarDays()
       }
 
@@ -387,9 +385,9 @@ export default defineComponent({
             dateOptions,
           )
 
-          let [date, time] = fromISOToLocaleDate.split(', ')
+          let [date, year, time] = fromISOToLocaleDate.split(', ')
 
-          this.leftInputValue = date
+          this.leftInputValue = date + ', ' + year
           this.rightInputValue = time
         } else {
           this.leftInputValue = new Date(this.mergedData?.date?.date_from).toLocaleString(
@@ -447,8 +445,8 @@ export default defineComponent({
         minute: '2-digit',
       })
 
-      let [date, time] = inputDate.split(', ')
-      this.leftInputValue = date
+      let [date, year, time] = inputDate.split(', ')
+      this.leftInputValue = date + ', ' + year
       this.rightInputValue = time
 
       if (this.mergedData?.isDouble) {
@@ -547,8 +545,8 @@ export default defineComponent({
         if (tempFormattedDateTimes.length === 1) {
           // сли в дате есть время (т.е. переданы соответсвующие поции) - записать его в правй инпут
           if (options?.hour || options?.hour12 || options?.minute) {
-            let [inputDate, inputTime] = tempFormattedDateTimes[0].split(', ')
-            this.leftInputValue = inputDate
+            let [inputDate, inputYear, inputTime] = tempFormattedDateTimes[0].split(', ')
+            this.leftInputValue = inputDate + ', ' + inputYear
             this.rightInputValue = inputTime
           } else {
             this.leftInputValue = tempFormattedDateTimes[0]
@@ -690,10 +688,20 @@ export default defineComponent({
 
         border-radius: var(--border-radius);
 
-        ::v-deep(input) {
-          &:focus {
-            outline: none;
-            background-color: var(--filled-input-background-color);
+        ::v-deep(.input-container) {
+          input {
+            &:focus {
+              outline: none;
+            }
+          }
+
+          &.filled {
+            input {
+              &:focus {
+                outline: none;
+                background-color: var(--filled-input-background-color);
+              }
+            }
           }
         }
       }
