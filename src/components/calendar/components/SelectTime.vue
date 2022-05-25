@@ -22,7 +22,7 @@
           clearable: false,
           options: minutesOptions,
           modelValue: selectedMinutes,
-          shownKey: selectedMinutes.name,
+
           placeholder: 30,
           size: 'sm',
         }"
@@ -41,7 +41,7 @@
               name: 'PM',
             },
           ],
-          shownKey: selectedAmPm.name,
+
           modelValue: selectedAmPm,
           size: 'sm',
         }"
