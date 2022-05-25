@@ -8,7 +8,7 @@
           clearable: false,
           options: hoursOptions,
           modelValue: selectedHours,
-          shownKey: selectedHours.name,
+
           placeholder: 12,
           size: 'sm',
         }"
@@ -16,13 +16,13 @@
         @update:modelValue="(value) => setTime(value, 'hour')"
       />
       <span class="colon" style="margin: 0 5px">:</span>
+      {{ selectedMinutes }}
       <ESelect
         :data="{
           ...mergedSelectData,
           clearable: false,
           options: minutesOptions,
           modelValue: selectedMinutes,
-          shownKey: selectedMinutes.name,
           placeholder: 30,
           size: 'sm',
         }"
@@ -41,7 +41,7 @@
               name: 'PM',
             },
           ],
-          shownKey: selectedAmPm.name,
+
           modelValue: selectedAmPm,
           size: 'sm',
         }"
@@ -160,6 +160,8 @@ export default defineComponent({
 
         arr.push(obj)
       }
+
+      console.log(arr)
       return arr
     },
 

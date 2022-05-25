@@ -1,13 +1,33 @@
-<template></template>
+<template>
+  <div :style="{ width: '700px' }">
+    <Calendar :data="calendarData"></Calendar>
+  </div>
+</template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import Calendar from '@/components/calendar/Calendar.vue'
 
 export default defineComponent({
   name: 'App',
-  components: {},
+  components: { Calendar },
   data() {
-    return {}
+    return {
+      calendarData: {
+        isDouble: false,
+        isRangePicker: false,
+        showInput: true,
+        inputData: {
+          size: 'md',
+        },
+
+        locale: 'en-US',
+        timePicker: {
+          isAMPM: true,
+          label: 'dsfsd',
+        },
+      },
+    }
   },
   methods: {},
 })

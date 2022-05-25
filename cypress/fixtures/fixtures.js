@@ -25,16 +25,22 @@ const ESelectProps = {
 }
 
 const ECalendarProps = {
-  inputData: {}, // common data for both inputs
+  inputData: {
+    // inputData - common data for date & time inputs
+    size: 'md',
+  },
   showInput: true,
   isRange: false,
   isDouble: false,
   locale: 'en-US',
-  timePicker: {},
-  date: {
-    date_from: '',
-    date_to: '',
+  timePicker: {
+    isAMPM: true,
+    label: 'Choose time',
   },
+  // date: {
+  //   date_from: '',
+  //   date_to: '',
+  // },
   minuteIncrement: 1,
 }
 
