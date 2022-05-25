@@ -30,6 +30,7 @@ Cypress.Commands.add('openSelect', () => {
   cy.get('.select-container').click()
 })
 
+// todo разбить на 2 функции
 Cypress.Commands.add('selectDateTime', () => {
   cy.get('input#calendar-input--date').click()
   cy.get('.calendar__days li.--current').click()

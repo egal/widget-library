@@ -26,7 +26,7 @@ export default defineComponent({
     return {
       calendarData: {
         isDouble: false,
-        isRangePicker: false,
+        isRange: true,
         showInput: true,
 
         localeOptions: {
@@ -36,11 +36,7 @@ export default defineComponent({
           hour: 'numeric',
           minute: 'numeric',
         },
-        locale: 'ru-RU',
-        timePicker: {
-          isAMPM: false,
-          label: 'Choose time',
-        },
+        locale: 'en-US',
 
         inputData: {
           showFilled: false,

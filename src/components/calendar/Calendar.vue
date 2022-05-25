@@ -8,6 +8,7 @@
     >
       <EInput
         class="calendar__input left"
+        :class="{ single: !mergedData?.timePicker }"
         :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"
@@ -17,10 +18,15 @@
       />
       <EInput
         class="calendar__input right"
-        :class="{ ampm: this?.mergedData?.timePicker?.isAMPM }"
+        :class="{ ampm: mergedData?.timePicker?.isAMPM }"
         :style-config="mergedInputStyles"
         :data="mergedRightInputData"
-        v-if="mergedData.showInput && mergedData.timePicker && !mergedData.isDouble"
+        v-if="
+          mergedData.showInput &&
+          mergedData.timePicker &&
+          !mergedData.isDouble &&
+          !mergedData.isRange
+        "
         @error="(error) => handleInputError(error, 'time')"
         @keyup.enter="(event) => handleModelUpdate(event.target.value, 'time')"
         @mouseup="open"
@@ -49,7 +55,7 @@
         />
 
         <SelectTime
-          v-if="mergedData?.timePicker && !mergedData.isDouble"
+          v-if="mergedData?.timePicker && !mergedData.isDouble && !mergedData.isRange"
           :config="mergedData?.timePicker"
           :hours="getHoursFromTimestamp(leftSelectTime)?.hours"
           :minutes="
@@ -187,7 +193,7 @@ export default defineComponent({
           type: 'text',
           size: 'sm',
           clearable: false,
-          iconLeft: this.leftInputValue ? 'clock' : '',
+          iconLeft: this.rightInputValue ? 'clock' : '',
           readonly: true,
           showFilled: !!this.leftInputValue,
         },
@@ -802,6 +808,12 @@ export default defineComponent({
         }
       }
     }
+
+    .left.single {
+      ::v-deep(input) {
+        width: auto;
+      }
+    }
   }
 
   .calendar {
@@ -827,6 +839,7 @@ export default defineComponent({
         visibility: hidden;
       }
     }
+
     .right {
       margin-left: 40px;
       ::v-deep(.calendar__controls-left) {
