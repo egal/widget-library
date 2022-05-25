@@ -86,26 +86,6 @@
           @select-date="(date) => selectDate(date)"
           @mouse-enter="(date) => queryHover(date)"
         />
-
-        <!--        <SelectTime-->
-        <!--          v-if="mergedData?.timePicker && !mergedData.isDouble"-->
-        <!--          :config="mergedData?.timePicker"-->
-        <!--          :hours="getHoursFromTimestamp(rightSelectTime)?.hours"-->
-        <!--          :minutes="-->
-        <!--            getHoursFromTimestamp(rightSelectTime)?.hours &&-->
-        <!--            !getMinutesFromTimestamp(rightSelectTime)-->
-        <!--              ? '00'-->
-        <!--              : getMinutesFromTimestamp(rightSelectTime)-->
-        <!--          "-->
-        <!--          :format="getHoursFromTimestamp(rightSelectTime)?.format ?? ''"-->
-        <!--          :is-disabled="isSelectTimeDisabled"-->
-        <!--          :select-style-config="selectStyleConfig"-->
-        <!--          :select-data="mergedSelectData"-->
-        <!--          :clear="isClearTimeSelect"-->
-        <!--          :minutes-step="mergedData?.minuteIncrement"-->
-        <!--          type="to"-->
-        <!--          @select="setTime"-->
-        <!--        />-->
       </div>
     </div>
   </div>
@@ -189,11 +169,11 @@ export default defineComponent({
         {
           id: 'calendar-input--date',
           type: 'text',
-
           size: 'sm',
           clearable: false,
           iconLeft: 'calendar',
           readonly: true,
+          showFilled: this.mergedData?.timePicker ? !!this.rightInputValue : true,
         },
         this.data?.inputData,
         { modelValue: this.leftInputValue },
@@ -207,8 +187,9 @@ export default defineComponent({
           type: 'text',
           size: 'sm',
           clearable: false,
-          iconLeft: 'clock',
+          iconLeft: this.leftInputValue ? 'clock' : '',
           readonly: true,
+          showFilled: !!this.leftInputValue,
         },
         this.data?.inputData,
         { modelValue: this.rightInputValue },
@@ -262,8 +243,10 @@ export default defineComponent({
     getInputFocusStyle() {
       return {
         '--focus-input-border-color': this.mergedInputStyles?.focusBorderColor || '#76ACFB',
-        '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--filled-input-background-color': this.styleConfig?.filledBackgroundColor || '#DEEBFC',
+        '--border-radius': this.mergedInputStyles?.borderRadius || '6px',
+        '--filled-input-background-color':
+          this.mergedInputStyles?.filledBackgroundColor || '#DEEBFC',
+        '--filled-font-color': this.mergedInputStyles?.filledFontColor || '#3385ff',
       }
     },
 
@@ -366,10 +349,13 @@ export default defineComponent({
         delete dateOptions.minute
       }
 
+      // если не передано заранее заданной даты - просто рендерит дни календаря
       if (!this.mergedData?.date?.date_to && !this.mergedData?.date?.date_from) {
         this.renderCalendarDays()
       }
 
+      // подставляет переданную дату в инпуты
+      // подставновка начальной даты (даты и времени):
       if (this.mergedData?.date?.date_from) {
         dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
         this.curMonth = new Date(this.mergedData?.date?.date_from)
@@ -399,6 +385,7 @@ export default defineComponent({
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_from))
       }
 
+      // подставновка конечной даты (даты и времени):
       if (this.mergedData?.date?.date_to) {
         dateOptions.hour12 = this.mergedData?.timePicker?.isAMPM
         this.nextMonth = new Date(this.mergedData?.date?.date_to)
@@ -418,6 +405,7 @@ export default defineComponent({
           )
         this.selectedDays.push(this.getDateFromTimestamp(this.mergedData?.date?.date_to))
       } else {
+        // если конечная дата не передана - считает следущий месяц после date_from и генерирует даты
         let dayCopy = new Date()
         dayCopy.setDate(1)
         dayCopy.setMonth(this.curMonth.getMonth() + 1)
@@ -438,16 +426,17 @@ export default defineComponent({
       day.setDate(1)
       this.curMonth = day
 
-      const inputDate = new Date().toLocaleString(this.mergedData?.locale ?? 'en-US', {
-        ...this.localeOptions,
-        hour12: this.mergedData?.timePicker?.isAMPM,
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-
-      let [date, year, time] = inputDate.split(', ')
-      this.leftInputValue = date + ', ' + year
-      this.rightInputValue = time
+      // ставит текущие дату и время пользователя как дефолтное значение
+      // const inputDate = new Date().toLocaleString(this.mergedData?.locale ?? 'en-US', {
+      //   ...this.localeOptions,
+      //   hour12: this.mergedData?.timePicker?.isAMPM,
+      //   hour: '2-digit',
+      //   minute: '2-digit',
+      // })
+      //
+      // let [date, year, time] = inputDate.split(', ')
+      // this.leftInputValue = date + ', ' + year
+      // this.rightInputValue = time
 
       if (this.mergedData?.isDouble) {
         const newDay = new Date()
@@ -524,6 +513,7 @@ export default defineComponent({
             .map(() => new Date(curMonth))
             .map((el, i) => {
               el.setDate(i + 1)
+
               return el
             })
             .filter((el) => isDateInCurMonth(el, curMonth))
@@ -543,14 +533,15 @@ export default defineComponent({
 
       if (tempFormattedDateTimes.length !== 0) {
         if (tempFormattedDateTimes.length === 1) {
-          // сли в дате есть время (т.е. переданы соответсвующие поции) - записать его в правй инпут
-          if (options?.hour || options?.hour12 || options?.minute) {
+          // если в дате есть время (т.е. переданы соответсвующие опции) - записать его в правый инпут
+          if (this.mergedData?.timePicker && Object.keys(this.mergedData?.timePicker).length > 0) {
             let [inputDate, inputYear, inputTime] = tempFormattedDateTimes[0].split(', ')
             this.leftInputValue = inputDate + ', ' + inputYear
             this.rightInputValue = inputTime
           } else {
             this.leftInputValue = tempFormattedDateTimes[0]
           }
+          //  если выбранных дат больше чем 1 - записать в левый инпут диапазон дат
         } else if (tempFormattedDateTimes.length > 1) {
           this.leftInputValue = tempFormattedDateTimes[0] + ' - ' + tempFormattedDateTimes[1]
         }
@@ -700,6 +691,7 @@ export default defineComponent({
               &:focus {
                 outline: none;
                 background-color: var(--filled-input-background-color);
+                color: var(--filled-font-color);
               }
             }
           }

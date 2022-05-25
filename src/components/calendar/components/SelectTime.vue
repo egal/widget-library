@@ -215,6 +215,7 @@ export default defineComponent({
     },
 
     minutes(value) {
+      console.log('this.selectedMinutes', value)
       this.selectedMinutes = { name: value }
     },
 
