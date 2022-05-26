@@ -842,7 +842,6 @@ export default defineComponent({
         visibility: hidden;
       }
     }
-
     .right {
       margin-left: 40px;
       ::v-deep(.calendar__controls-left) {
