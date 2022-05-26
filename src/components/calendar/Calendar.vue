@@ -3,12 +3,19 @@
     <div
       :class="`date-inputs date-inputs--${mergedData?.inputData?.size ?? 'sm'} ${
         imitateInputsFocus ? 'focused' : ''
-      } ${mergedData.showInput && mergedData.timePicker && !mergedData.isDouble ? 'doubled' : ''}`"
+      } ${
+        mergedData?.showInput &&
+        mergedData?.timePicker &&
+        !mergedData.isDouble &&
+        !mergedData.isRange
+          ? 'doubled'
+          : ''
+      }`"
       :style="getInputFocusStyle"
     >
       <EInput
         class="calendar__input left"
-        :class="{ single: !mergedData?.timePicker }"
+        :class="{ single: !mergedData?.timePicker || mergedData.isRange }"
         :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"

@@ -29,21 +29,16 @@ export default defineComponent({
         isRange: true,
         showInput: true,
 
-        localeOptions: {
-          year: '2-digit',
-          month: 'numeric',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-        },
         locale: 'en-US',
 
         inputData: {
+          size: 'md',
           showFilled: false,
           validators: [this.required],
         },
-        rightInputData: {
-          showFilled: false,
+        timePicker: {
+          isAMPM: false,
+          label: 'Choose time',
         },
         timeSelectData: {
           showFilled: false,
