@@ -26,20 +26,19 @@ export default defineComponent({
     return {
       calendarData: {
         isDouble: false,
-        isRange: true,
+        isRange: false,
         showInput: true,
 
         locale: 'en-US',
-
+        timePicker: {
+          isAMPM: true,
+        },
         inputData: {
           size: 'md',
-          showFilled: false,
+          // showFilled: true,
           validators: [this.required],
         },
-        timePicker: {
-          isAMPM: false,
-          label: 'Choose time',
-        },
+
         timeSelectData: {
           showFilled: false,
         },
@@ -54,7 +53,7 @@ export default defineComponent({
       console.log(error)
     },
     check(v) {
-      // console.log(v)
+      console.log(v)
     },
   },
 })

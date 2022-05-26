@@ -23,17 +23,22 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-// ESelect
-import fixtures from '../fixtures/fixtures'
 
 Cypress.Commands.add('openSelect', () => {
   cy.get('.select-container').click()
 })
 
-// todo разбить на 2 функции
-Cypress.Commands.add('selectDateTime', () => {
+Cypress.Commands.add('calendarSelectDateTime', () => {
+  cy.calendarSelectDate()
+  cy.calendarSelectTime()
+})
+
+Cypress.Commands.add('calendarSelectDate', () => {
   cy.get('input#calendar-input--date').click()
   cy.get('.calendar__days li.--current').click()
+})
+
+Cypress.Commands.add('calendarSelectTime', () => {
   cy.get('.footer .picker .select.select--hours').click()
   cy.get('.dropdown-items .dropdown-item').first().click()
 
@@ -43,3 +48,7 @@ Cypress.Commands.add('selectDateTime', () => {
   cy.get('.footer .picker .select.ampm').click()
   cy.get('.select.ampm .dropdown-items .dropdown-item').eq(1).click()
 })
+
+// Cypress.Commands.add('calendarSelectDateRange', () => {
+
+// })

@@ -37,10 +37,11 @@ const ECalendarProps = {
     isAMPM: true,
     label: 'Choose time',
   },
-  // date: {
-  //   date_from: '',
-  //   date_to: '',
-  // },
+  //save here ?
+  date: {
+    date_from: '',
+    date_to: '',
+  },
   minuteIncrement: 1,
 }
 
