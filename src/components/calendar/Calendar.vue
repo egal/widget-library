@@ -224,7 +224,6 @@ export default defineComponent({
             date_from: '',
             date_to: '',
           },
-          minuteIncrement: 1,
         },
         this.data,
       )
@@ -842,7 +841,6 @@ export default defineComponent({
         visibility: hidden;
       }
     }
-
     .right {
       margin-left: 40px;
       ::v-deep(.calendar__controls-left) {
