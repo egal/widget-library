@@ -26,7 +26,7 @@ const ESelectProps = {
 
 const ECalendarProps = {
   inputData: {
-    // inputData - common data for date & time inputs
+    // inputData = common data for date & time inputs
     size: 'md',
   },
   showInput: true,
@@ -37,7 +37,6 @@ const ECalendarProps = {
     isAMPM: true,
     label: 'Choose time',
   },
-  //save here ?
   date: {
     date_from: '',
     date_to: '',
