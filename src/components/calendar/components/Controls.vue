@@ -16,10 +16,9 @@
   </ul>
 </template>
 
-<script lang="ts">
+<script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import { defineComponent } from 'vue'
-import { ISODate } from '@/components/calendar/Calendar.vue'
 import { capitalize } from '@/assets/calendar/helpers'
 
 export default defineComponent({
@@ -31,7 +30,7 @@ export default defineComponent({
       default: () => {},
     },
     monthToDisplay: {
-      type: Object as () => ISODate | null,
+      type: Object,
       default: null,
     },
   },
@@ -44,7 +43,7 @@ export default defineComponent({
   mounted() {},
   methods: {
     //Отображает только месяц и год, даты хранятся в ISODate
-    displayOnlyMonth(dateString: ISODate): string {
+    displayOnlyMonth(dateString) {
       return new Date(dateString).toLocaleString(this.data?.locale || 'en-US', {
         month: 'long',
         year: 'numeric',

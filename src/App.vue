@@ -2,6 +2,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import Calendar from '@/components/calendar/Calendar.vue'
+
 export default defineComponent({
   name: 'App',
   components: {},
