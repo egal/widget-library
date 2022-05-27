@@ -42,7 +42,6 @@ const ECalendarProps = {
     date_from: '',
     date_to: '',
   },
-  minuteIncrement: 1,
 }
 
 export default {

@@ -227,7 +227,6 @@ export default defineComponent({
             date_from: '',
             date_to: '',
           },
-          minuteIncrement: 1,
         },
         this.data,
       )
