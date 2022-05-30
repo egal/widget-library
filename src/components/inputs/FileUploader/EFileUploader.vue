@@ -1,9 +1,19 @@
 <template>
   <div class="file-uploader" :class="`file-uploader--${mergedData.size}`" :style="getStyleVars">
     <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
-    <div class="upload-zone" :class="{ disabled: mergedData.disabled }">
+    <div
+      class="upload-zone"
+      :class="{ disabled: mergedData.disabled }"
+      v-show="
+        (mergedData.multiple && newFiles.length < mergedData.maxFiles) ||
+        (!mergedData.multiple && !newFiles.length)
+      "
+    >
       <icon icon="upload" />
-      <span class="drop-label">{{ mergedData.innerText }}</span>
+
+      <span class="drop-label" v-if="!isFileLoading">{{ mergedData.innerText }}</span>
+      <span class="loader-label" v-else>Loading...</span>
+
       <file-upload
         :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
         :multiple="mergedData.multiple"
@@ -13,18 +23,18 @@
         :maximum="mergedData.maxFiles"
         :size="mergedData.maxSize"
         @input-file="fileHandler"
-        v-show="mergedData.multiple || !newFiles.length"
       >
-        <span class="browse-label">{{ mergedData.actionInnerText }}</span>
+        <span class="browse-label" v-if="!isFileLoading">{{ mergedData.actionInnerText }}</span>
       </file-upload>
     </div>
-    <div class="file-preview" v-show="newFiles.length">
-      <div class="file" v-for="file in newFiles" :key="file.id" @click="openFile(file.file_url)">
+
+    <div class="file-preview">
+      <div class="file" v-for="file in newFiles" :key="file.id" @click="openFile(file.image_url)">
         <div class="file-icon">
           <icon icon="file-earmark" />
         </div>
         <div class="file-name">{{ file.name || 'No name' }}</div>
-        <div class="file-size">{{ fileSize(file.size) }}</div>
+        <div class="file-size">{{ fileSize(file.size_in_bytes) }}</div>
         <div class="file-delete" @click.stop="deleteFile(file.id)" v-show="mergedData.deletable">
           <icon icon="x-lg" />
         </div>
@@ -61,6 +71,7 @@ export default {
       newFiles: [],
       chunkSize: 5242880, // 5mb
       EgalActionConstructor: null,
+      isFileLoading: false,
     }
   },
   computed: {
@@ -134,14 +145,9 @@ export default {
      * @param fileId
      */
     deleteFile(fileId) {
-      this.EgalActionConstructor.delete(
-        this.mergedData.microservice,
-        this.mergedData.model,
-
-        {
-          id: fileId,
-        },
-      )
+      this.EgalActionConstructor.delete(this.mergedData.microservice, this.mergedData.model, {
+        id: fileId,
+      })
         .call()
         .then(() => {
           this.$emit('on:delete', fileId)
@@ -178,9 +184,8 @@ export default {
           },
         )
           .call()
-          .then((response) => response.json())
           .then((data) => {
-            resolve(data.action_result.data)
+            resolve(data)
           })
           .catch((error) => {
             reject(this.$emit('error:upload', error))
@@ -196,6 +201,21 @@ export default {
         const reader = new FileReader()
         reader.readAsBinaryString(file)
         reader.onload = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+      })
+    },
+
+    /**
+     * Get binary string
+     * @param file
+     */
+    getBase64String(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+
+        reader.onload = () => resolve(reader.result.split(';base64,')[1])
+
         reader.onerror = (error) => reject(error)
       })
     },
@@ -220,7 +240,7 @@ export default {
       })
     },
     /**
-     * Upload full file (without chunks)
+     * Upload full file (without chunks) in base64 format
      * @param file
      * @param fileName
      */
@@ -229,16 +249,15 @@ export default {
         this.EgalActionConstructor.custom(
           this.mergedData.microservice,
           this.mergedData.model,
-          'upload',
+          'uploadBase',
           {
             file_basename: fileName,
             contents: file,
           },
         )
           .call()
-          .then((response) => response.json())
           .then((data) => {
-            resolve(data.action_result.data.path)
+            resolve(data.path)
           })
           .catch((error) => {
             this.$emit('error:upload', error)
@@ -254,9 +273,9 @@ export default {
      */
     uploadChunk(chunks, uploadId, path) {
       return new Promise((resolve, reject) => {
-        upload(this, 0)
+        upload(this, 1)
         function upload(self, index) {
-          this.EgalActionConstructor.custom(
+          self.EgalActionConstructor.custom(
             self.mergedData.microservice,
             self.mergedData.model,
             'uploadPart',
@@ -264,17 +283,16 @@ export default {
               upload_id: uploadId,
               path,
               part_number: index,
-              contents: chunks[index],
+              contents: chunks[index - 1],
             },
           )
             .call()
-            .then((resp) => resp.json())
             .then((response) => {
               if (response.action_error || response.error_message) {
                 reject(response.action_error || response.error_message)
                 return
               }
-              if (index < chunks.length - 1) {
+              if (index < chunks.length) {
                 index++
                 upload(self, index)
                 return
@@ -282,7 +300,7 @@ export default {
               resolve()
             })
             .catch((error) => {
-              this.$emit('error:upload', error)
+              self.$emit('error:upload', error)
               reject(error)
             })
         }
@@ -305,8 +323,7 @@ export default {
           },
         )
           .call()
-          .then((response) => response.json())
-          .then((data) => resolve(data.action_result.data.path))
+          .then((data) => resolve(data.path))
           .catch((error) => {
             this.$emit('error:upload', error)
             reject(error)
@@ -316,22 +333,17 @@ export default {
     /**
      * Create file in data base
      * @param path
+     * @param fileName
      */
-    createFile(path) {
+    createFile(path, fileName) {
       return new Promise((resolve, reject) => {
-        this.EgalActionConstructor.create(
-          this.mergedData.microservice,
-          this.mergedData.model,
-
-          {
-            file_path: path,
-          },
-        )
+        this.EgalActionConstructor.create(this.mergedData.microservice, this.mergedData.model, {
+          image_path: path,
+        })
           .call()
-          .then((response) => response.json())
           .then((data) => {
-            this.$emit('on:upload', data.action_result.data.id)
-            resolve(data.action_result.data.id)
+            this.$emit('on:upload', { ...data, name: fileName })
+            resolve(data.id)
           })
           .catch((error) => {
             this.$emit('error:upload', error)
@@ -344,36 +356,43 @@ export default {
      * @param file
      */
     fileHandler(file) {
+      this.isFileLoading = true
       if (this.mergedData.validators.length) {
         const errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', errorMessage)
         if (errorMessage) {
+          this.isFileLoading = false
           return
         }
       }
 
-      if (file.size < this.chunkSize) {
-        this.getBinaryString(file.file).then((response) => {
-          this.uploadFile(response, file.name).then((path) => {
-            this.createFile(path)
+      // Этот if-else временно закомменчен, пока на api 'uploadPart' нельзя будет отправлять файлы в формате base64
+      // if (file.size < this.chunkSize) {
+      this.getBase64String(file.file).then((response) => {
+        this.uploadFile(response, file.name).then((path) => {
+          this.createFile(path, file?.name).then(() => {
+            this.isFileLoading = false
           })
         })
-      } else {
-        this.createUploadPath(file.name).then((createPathResponse) => {
-          this.createChunks(file).then((chunks) => {
-            this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
-              () => {
-                this.completeChunksUpload(
-                  createPathResponse.upload_id,
-                  createPathResponse.path,
-                ).then((path) => {
-                  this.createFile(path)
-                })
-              },
-            )
-          })
-        })
-      }
+      })
+      // } else {
+      //   this.createUploadPath(file.name).then((createPathResponse) => {
+      //     this.createChunks(file).then((chunks) => {
+      //       this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
+      //         () => {
+      //           this.completeChunksUpload(
+      //             createPathResponse.upload_id,
+      //             createPathResponse.path,
+      //           ).then((path) => {
+      //             this.createFile(path, file?.name).then(() => {
+      //               this.isFileLoading = false
+      //             })
+      //           })
+      //         },
+      //       )
+      //     })
+      //   })
+      // }
     },
   },
   watch: {
@@ -424,8 +443,17 @@ export default {
     .drop-label {
       color: var(--drop-label-color);
     }
+
     .browse-label {
       color: var(--browse-label-color);
+    }
+
+    .loader-label {
+      min-width: 110px;
+      color: var(--drop-label-color);
+      text-align: center;
+      margin-top: 8px;
+      margin-bottom: 11px;
     }
     ::v-deep(label) {
       cursor: pointer;
@@ -443,7 +471,7 @@ export default {
   .file {
     background-color: var(--file-background-color);
     border-radius: var(--file-border-radius);
-    padding: 10px 12px;
+    padding: 10px 11px;
     display: grid;
     grid-template-columns: 12px 1fr auto 8px;
     grid-column-gap: 6px;
@@ -458,11 +486,13 @@ export default {
       font-weight: var(--file-name-font-weight);
       font-size: var(--file-name-font-size);
       color: var(--file-name-color);
-      align-self: center;
+
       max-width: 100px;
       text-overflow: ellipsis;
       overflow-x: hidden;
       white-space: nowrap;
+      align-self: flex-end;
+      margin-bottom: 1px;
     }
     &-size {
       font-size: 10px;
@@ -474,8 +504,10 @@ export default {
       align-self: flex-end;
       cursor: pointer;
       .bi {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
+        vertical-align: bottom;
+        margin-bottom: 2px;
       }
     }
   }
