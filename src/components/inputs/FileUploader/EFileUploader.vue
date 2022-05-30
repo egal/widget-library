@@ -366,33 +366,32 @@ export default {
         }
       }
 
-      // Этот if-else временно закомменчен, пока на api 'uploadPart' нельзя будет отправлять файлы в формате base64
-      // if (file.size < this.chunkSize) {
-      this.getBase64String(file.file).then((response) => {
-        this.uploadFile(response, file.name).then((path) => {
-          this.createFile(path, file?.name).then(() => {
-            this.isFileLoading = false
+      if (file.size < this.chunkSize) {
+        this.getBase64String(file.file).then((response) => {
+          this.uploadFile(response, file.name).then((path) => {
+            this.createFile(path, file?.name).then(() => {
+              this.isFileLoading = false
+            })
           })
         })
-      })
-      // } else {
-      //   this.createUploadPath(file.name).then((createPathResponse) => {
-      //     this.createChunks(file).then((chunks) => {
-      //       this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
-      //         () => {
-      //           this.completeChunksUpload(
-      //             createPathResponse.upload_id,
-      //             createPathResponse.path,
-      //           ).then((path) => {
-      //             this.createFile(path, file?.name).then(() => {
-      //               this.isFileLoading = false
-      //             })
-      //           })
-      //         },
-      //       )
-      //     })
-      //   })
-      // }
+      } else {
+        this.createUploadPath(file.name).then((createPathResponse) => {
+          this.createChunks(file).then((chunks) => {
+            this.uploadChunk(chunks, createPathResponse.upload_id, createPathResponse.path).then(
+              () => {
+                this.completeChunksUpload(
+                  createPathResponse.upload_id,
+                  createPathResponse.path,
+                ).then((path) => {
+                  this.createFile(path, file?.name).then(() => {
+                    this.isFileLoading = false
+                  })
+                })
+              },
+            )
+          })
+        })
+      }
     },
   },
   watch: {
