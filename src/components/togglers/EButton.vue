@@ -5,7 +5,7 @@
       `egal-button--${mergedData.size}`,
       { 'egal-button--soft': mergedData.softColors },
       { 'egal-button--outline': mergedData.outlined },
-      { 'egal-button--clear': mergedData.noBorders },
+      { 'egal-button--clear': mergedData.light },
       { 'egal-button--rounded': mergedData.rounded },
       { 'egal-button--empty': isNoText },
     ]"
@@ -72,7 +72,7 @@ export default {
           size: 'md',
           softColors: false,
           outlined: false,
-          noBorders: false,
+          light: false,
           leftIcon: '',
           rightIcon: '',
         },
