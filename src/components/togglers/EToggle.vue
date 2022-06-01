@@ -172,20 +172,20 @@ export default {
 
   &--sm {
     .e-toggle__text {
-      font-size: 12px;
+      font-size: 10px;
       font-style: $p8-font-style;
     }
   }
 
   &--md {
     .e-toggle__text {
-      font-size: 16px;
+      font-size: 12px;
 
     }
   }
   &--lg {
     .e-toggle__text {
-      font-size: 20px;
+      font-size: 14px;
       font-style: $p5-font-style;
     }
   }

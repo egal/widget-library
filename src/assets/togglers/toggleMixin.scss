@@ -7,10 +7,8 @@
   --input-background-color-disabled: #{$gray-300};
 
   .text::#{$pseudo-element} {
-    //width: 2.7em;
-    //height: 1.3em;
-    width: 1.7em;
-    height: 0.8em;
+    width: 2.5em;
+    height: 1.2em;
     border-color: var(--input-background-color);
     border-radius: $all-sides-pill;
     background-color: var(--input-background-color);
@@ -23,8 +21,6 @@
     border-color: var(--input-border-color-checked);
     background-color: var(--input-background-color-checked);
     background-position-x: right;
-    //background-position-x: 96%;
-    //background-position-y: 21%;
   }
 
   #{$selector-disabled}::#{$pseudo-element} {
@@ -33,7 +29,5 @@
   }
   #{$selector-disabled-checked}::#{$pseudo-element} {
     background-position-x: right;
-    //background-position-y: 21%;
-    //background-position-x: 96%;
   }
 }

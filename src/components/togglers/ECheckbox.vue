@@ -55,7 +55,7 @@ export default {
           checked: false,
           disabled: false,
           size: 'md',
-          checkboxRight: false,
+          checkboxRight: false
         },
         this.data,
       )
