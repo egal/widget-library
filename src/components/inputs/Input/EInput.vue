@@ -8,7 +8,10 @@
   >
     <label
       class="input-label"
-      :class="{ 'input-label--required': mergedData.required }"
+      :class="{
+        'input-label--required': mergedData.required,
+        'input-label--disabled': mergedData.disabled,
+      }"
       :for="mergedData.id"
       v-if="mergedData.label"
       >{{ mergedData.label }}</label
@@ -53,7 +56,9 @@
         :readonly="mergedData.readonly"
         :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
-          mergedData.iconRight || mergedData.clearable ? 'has-icon-right' : '',
+          mergedData.iconRight || mergedData.clearable || mergedData.type === 'password'
+            ? 'has-icon-right'
+            : '',
           mergedData.postfix ? 'has-postfix' : '',
           mergedData.chips ? 'con-chips--input' : '',
         ]"
@@ -79,7 +84,7 @@
         mergedData.postfix
       }}</span>
       <b-icon
-        class="icon icon--password"
+        class="icon icon--right icon--password"
         :icon="passwordShown ? 'eye' : 'eye-fill'"
         v-if="newValue && mergedData.type === 'password'"
         @click.stop="showPassword"
@@ -115,6 +120,7 @@
       :class="[
         'helper-text',
         (errorMessage || mergedData.error) && mergedData.showError ? 'helper-text--error' : '',
+        { 'helper-text--disabled': mergedData.disabled },
       ]"
       v-if="errorMessage || mergedData.error || mergedData.helperText"
     >
@@ -203,23 +209,26 @@ export default {
     },
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#4A5568',
-        '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
-        '--placeholder-color': this.styleConfig?.placeholderColor || '#4A5568',
+        '--font-family': this.styleConfig?.fontFamily || 'Inter',
+        '--value-color': this.styleConfig?.valueColor || '#2D3748',
+        '--value-disabled-color': this.styleConfig?.valueDisabledColor || '#CBD5E0',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 400,
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#A0AEC0',
         '--placeholder-disabled-color': this.styleConfig?.placeholderDisabledColor || '#cbd5e0',
         '--label-color': this.styleConfig?.labelColor || '#a0aec0',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--label-disabled-color': this.styleConfig?.labelDisabledColor || '#CBD5E0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
+        '--helper-text-disabled-color': this.styleConfig?.helperTextDisabledColor || '#CBD5E0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
         '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
         '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
-        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#F7FAFC',
+        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#ffffff',
         '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
-        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#DEEBFC',
-        '--filled-font-color': this.styleConfig?.filledFontColor || '#3385ff',
+        '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#ffffff',
+        '--filled-font-color': this.styleConfig?.filledFontColor || '#2D3748',
         '--search-background-color': this.styleConfig?.searchBackgroundColor || '#f7fafc',
         '--icon-color': this.styleConfig?.iconColor || '#A0AEC0',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
@@ -351,6 +360,15 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+/*Убирает крестик для очистки поля у input[type='search']*/
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
 .input {
   display: flex;
   flex-direction: column;
@@ -371,12 +389,12 @@ input[type='number'] {
 
   &--lg {
     .input-label {
-      font-size: 14px;
-      color: var(--label-color);
+      font-size: 16px;
     }
     input {
-      height: 46px;
+      height: 48px;
       font-size: 16px;
+      padding: 0 18px;
     }
 
     .postfix {
@@ -385,20 +403,28 @@ input[type='number'] {
     }
 
     .subtract-button {
-      bottom: 14px;
+      top: 14px;
+      right: 18px;
     }
 
     .icon {
       top: 14px;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
+
+      &--left {
+        left: 18px;
+      }
+      &--right {
+        right: 18px;
+      }
     }
     .has-icon {
       &-left {
-        padding-left: 40px;
+        padding-left: 44px;
       }
       &-right {
-        padding-right: 40px;
+        padding-right: 44px;
       }
     }
 
@@ -413,14 +439,18 @@ input[type='number'] {
         height: 10px;
       }
     }
+
+    .helper-text {
+      font-size: 14px;
+    }
   }
   &--md {
     .input-label {
-      font-size: 12px;
-      color: var(--label-color);
+      font-size: 14px;
+      padding: 0 16px;
     }
     input {
-      height: 36px;
+      height: 40px;
       font-size: 14px;
     }
 
@@ -430,20 +460,28 @@ input[type='number'] {
     }
 
     .subtract-button {
-      bottom: 10px;
+      top: 12px;
+      right: 16px;
     }
 
     .icon {
-      top: 11px;
-      width: 14px;
-      height: 14px;
+      top: 12px;
+      width: 16px;
+      height: 16px;
+
+      &--left {
+        left: 16px;
+      }
+      &--right {
+        right: 16px;
+      }
     }
     .has-icon {
       &-left {
-        padding-left: 40px;
+        padding-left: 42px;
       }
       &-right {
-        padding-right: 40px;
+        padding-right: 42px;
       }
     }
     .arrow-icons {
@@ -453,15 +491,19 @@ input[type='number'] {
         height: 8px;
       }
     }
+
+    .helper-text {
+      font-size: 12px;
+    }
   }
   &--sm {
     .input-label {
       font-size: 12px;
-      color: var(--label-color);
+      padding: 0 14px;
     }
     input {
-      height: 26px;
-      font-size: 10px;
+      height: 32px;
+      font-size: 12px;
     }
 
     .postfix {
@@ -470,20 +512,28 @@ input[type='number'] {
     }
 
     .subtract-button {
-      bottom: 7px;
+      top: 9px;
+      right: 14px;
     }
 
     .icon {
-      width: 10px;
-      height: 10px;
-      top: 8px;
+      width: 14px;
+      height: 14px;
+      top: 9px;
+
+      &--left {
+        left: 14px;
+      }
+      &--right {
+        right: 14px;
+      }
     }
     .has-icon {
       &-left {
-        padding-left: 30px;
+        padding-left: 35px;
       }
       &-right {
-        padding-right: 30px;
+        padding-right: 35px;
       }
     }
     .arrow-icons {
@@ -493,17 +543,77 @@ input[type='number'] {
         height: 6px;
       }
     }
+
+    .helper-text {
+      font-size: 12px;
+    }
+  }
+  &--xs {
+    .input-label {
+      font-size: 10px;
+      padding: 0 12px;
+    }
+    input {
+      height: 24px;
+      font-size: 10px;
+    }
+
+    .postfix {
+      font-size: 10px;
+      top: 8px;
+    }
+
+    .subtract-button {
+      top: 7px;
+      right: 12px;
+    }
+
+    .icon {
+      width: 10px;
+      height: 10px;
+      top: 7px;
+
+      &--left {
+        left: 12px;
+      }
+      &--right {
+        right: 12px;
+      }
+    }
+    .has-icon {
+      &-left {
+        padding-left: 26px;
+      }
+      &-right {
+        padding-right: 26px;
+      }
+    }
+    .arrow-icons {
+      top: 7px;
+      .bi {
+        width: 6px;
+        height: 6px;
+      }
+    }
+
+    .helper-text {
+      font-size: 10px;
+    }
   }
 }
 .input-label {
   display: block;
   font-weight: var(--label-font-weight);
   color: var(--label-color);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+
   &--required::before {
     content: '*';
     margin-right: 5px;
     color: var(--error-color);
+  }
+  &--disabled {
+    color: var(--label-disabled-color);
   }
 }
 .input-container {
@@ -518,15 +628,18 @@ input[type='number'] {
     box-sizing: border-box;
     border-radius: var(--border-radius);
     font-weight: var(--value-font-weight);
-    padding: 0 16px;
     &::placeholder {
       color: var(--placeholder-color);
     }
-    &:focus {
-      outline: 2px solid var(--focus-border-color);
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      border-color: var(--focus-border-color);
     }
     &:disabled {
       background: var(--background-disabled-color);
+      color: var(--value-disabled-color);
+
       &::placeholder {
         color: var(--placeholder-disabled-color);
       }
@@ -543,17 +656,14 @@ input[type='number'] {
     color: var(--icon-color);
 
     &--left {
-      left: 16px;
       position: absolute;
       color: var(--icon-color);
     }
     &--right {
-      right: 16px;
       position: absolute;
       color: var(--icon-color);
     }
     &--password {
-      right: 16px;
       position: absolute;
       cursor: pointer;
       color: var(--icon-color);
@@ -564,7 +674,6 @@ input[type='number'] {
   }
   .subtract-button {
     position: absolute;
-    right: 17px;
   }
   .arrow-icons {
     right: 7px;
@@ -582,11 +691,14 @@ input[type='number'] {
   font-size: var(--helper-text-font-size);
   color: var(--helper-text-color);
   font-weight: var(--helper-text-font-weight);
-  margin-top: 6px;
+  margin-top: 8px;
   margin-bottom: 0;
   max-width: fit-content;
   &--error {
     color: var(--error-color);
+  }
+  &--disabled {
+    color: var(--helper-text-disabled-color);
   }
 }
 .filled {
