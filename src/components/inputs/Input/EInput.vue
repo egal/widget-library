@@ -428,10 +428,6 @@ input[type='search']::-webkit-search-results-decoration {
       }
     }
 
-    .has-postfix {
-      padding-right: v-bind(postfixWidth);
-    }
-
     .arrow-icons {
       top: 13px;
       .bi {
@@ -442,6 +438,10 @@ input[type='search']::-webkit-search-results-decoration {
 
     .helper-text {
       font-size: 14px;
+    }
+
+    .has-postfix {
+      padding-right: calc(v-bind(postfixWidth) + 10px);
     }
   }
   &--md {
@@ -456,7 +456,7 @@ input[type='search']::-webkit-search-results-decoration {
 
     .postfix {
       font-size: 14px;
-      top: 10px;
+      top: 12px;
     }
 
     .subtract-button {
@@ -495,6 +495,10 @@ input[type='search']::-webkit-search-results-decoration {
     .helper-text {
       font-size: 12px;
     }
+
+    .has-postfix {
+      padding-right: calc(v-bind(postfixWidth) + 5px);
+    }
   }
   &--sm {
     .input-label {
@@ -507,8 +511,8 @@ input[type='search']::-webkit-search-results-decoration {
     }
 
     .postfix {
-      font-size: 10px;
-      top: 8px;
+      font-size: 12px;
+      top: 9px;
     }
 
     .subtract-button {
@@ -547,6 +551,10 @@ input[type='search']::-webkit-search-results-decoration {
     .helper-text {
       font-size: 12px;
     }
+
+    .has-postfix {
+      padding-right: calc(v-bind(postfixWidth) + 5px);
+    }
   }
   &--xs {
     .input-label {
@@ -560,7 +568,7 @@ input[type='search']::-webkit-search-results-decoration {
 
     .postfix {
       font-size: 10px;
-      top: 8px;
+      top: 6px;
     }
 
     .subtract-button {
@@ -598,6 +606,10 @@ input[type='search']::-webkit-search-results-decoration {
 
     .helper-text {
       font-size: 10px;
+    }
+
+    .has-postfix {
+      padding-right: calc(v-bind(postfixWidth));
     }
   }
 }
