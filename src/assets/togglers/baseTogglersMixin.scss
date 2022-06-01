@@ -8,6 +8,7 @@ $selector-active-checked: '.input:not(:disabled):checked + .text:active';
 $selector-checked: '.input:checked + .text';
 $selector-disabled: '.input:disabled + .text';
 $selector-disabled-checked: '.input:checked:disabled + .text';
+$selector-disabled-not-checked: '.input:not(:checked):disabled + .text';
 
 @mixin baseTogglerMixin($pseudo-element: 'before') {
   // CSS переменные используются для кастомизации инпута
@@ -46,13 +47,13 @@ $selector-disabled-checked: '.input:checked:disabled + .text';
     &::#{$pseudo-element} {
       display: inline-block;
       content: '';
-      width: 1.3em;
-      height: 1.3em;
+      width: 1.2em;
+      height: 1.2em;
       transition: 0.1s;
       border: 2px solid var(--input-border-color);
       background-repeat: no-repeat;
       background-position: center;
-      background-size: 70%;
+      background-size: 73%;
 
       @if $pseudo-element == 'before' {
         margin-right: 10px;

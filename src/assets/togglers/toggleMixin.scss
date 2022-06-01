@@ -4,15 +4,17 @@
 @mixin toggle($pseudo-element: 'before') {
   @include baseTogglerMixin($pseudo-element);
   --input-background-color: #{$gray-400};
-  --input-background-color-disabled: #{$gray-200};
+  --input-background-color-disabled: #{$gray-300};
 
   .text::#{$pseudo-element} {
-    width: 2.5em;
-    height: 1.3em;
+    //width: 2.7em;
+    //height: 1.3em;
+    width: 1.7em;
+    height: 0.8em;
     border-color: var(--input-background-color);
     border-radius: $all-sides-pill;
     background-color: var(--input-background-color);
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='17' height='16' viewBox='0 0 17 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8.25' cy='8.00049' r='8' fill='white'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='15' height='16' viewBox='0 0 17 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8.25' cy='8.00049' r='8' fill='white'/%3e%3c/svg%3e");
     background-position-x: left;
     background-size: 50%;
   }
@@ -21,6 +23,8 @@
     border-color: var(--input-border-color-checked);
     background-color: var(--input-background-color-checked);
     background-position-x: right;
+    //background-position-x: 96%;
+    //background-position-y: 21%;
   }
 
   #{$selector-disabled}::#{$pseudo-element} {
@@ -29,5 +33,7 @@
   }
   #{$selector-disabled-checked}::#{$pseudo-element} {
     background-position-x: right;
+    //background-position-y: 21%;
+    //background-position-x: 96%;
   }
 }
