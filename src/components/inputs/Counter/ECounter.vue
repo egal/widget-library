@@ -45,7 +45,7 @@ export default {
     mergedData() {
       return Object.assign(
         {
-          label: 'label',
+          label: '',
           helperText: '',
           modelValue: 0,
           max: null,
@@ -57,16 +57,16 @@ export default {
     },
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#718096',
+        '--font-family': this.styleConfig?.fontFamily || 'Inter',
+        '--value-color': this.styleConfig?.valueColor || '#A0AEC0',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 700,
-        '--label-color': this.styleConfig?.labelColor || '#4a5568',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
-        '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 500,
-        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
-        '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--icon-color': this.styleConfig?.iconColor || '#cbd5e0',
+        '--label-color': this.styleConfig?.labelColor || '#A0AEC0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#A0AEC0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
+        '--border-radius': this.styleConfig?.borderRadius || '8px',
+        '--icon-color': this.styleConfig?.iconColor || '#A0AEC0',
       }
     },
   },
@@ -107,7 +107,7 @@ export default {
   &-label {
     color: var(--label-color);
     font-weight: var(--label-font-weight);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
   &-container {
     display: grid;
@@ -142,16 +142,93 @@ export default {
     font-size: 10px;
     font-weight: var(--helper-text-font-weight);
     color: var(--helper-text-color);
+    margin-top: 8px;
   }
 
   &--lg {
     .counter-label {
+      font-size: 16px;
+    }
+    .counter-container {
+      height: 48px;
+      padding: 1px 18px;
+      grid-column-gap: 22px;
+
+      &__value {
+        font-size: 16px;
+      }
+      &__minus,
+      &__plus {
+        .bi {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+    .helper-text {
+      font-size: 14px;
+    }
+  }
+  &--md {
+    .counter-label {
       font-size: 14px;
     }
     .counter-container {
-      height: 46px;
-      padding: 6px 12px;
-      grid-column-gap: 22px;
+      height: 40px;
+      grid-column-gap: 18px;
+      padding: 1px 16px;
+
+      &__value {
+        font-size: 14px;
+      }
+      &__minus,
+      &__plus {
+        .bi {
+          width: 16px;
+          height: 16px;
+        }
+      }
+      .helper-text {
+        font-size: 12px;
+      }
+    }
+  }
+  &--sm {
+    .counter-label {
+      font-size: 12px;
+    }
+    .counter-container {
+      height: 32px;
+      grid-column-gap: 16px;
+      padding: 1px 14px;
+
+      &__value {
+        font-size: 12px;
+      }
+      &__minus,
+      &__plus {
+        .bi {
+          width: 14px;
+          height: 14px;
+        }
+      }
+      .helper-text {
+        font-size: 12px;
+      }
+    }
+  }
+  &--xs {
+    .counter-label {
+      font-size: 10px;
+    }
+    .counter-container {
+      height: 24px;
+      grid-column-gap: 16px;
+      padding: 1px 12px;
+
+      &__value {
+        font-size: 10px;
+      }
       &__minus,
       &__plus {
         .bi {
@@ -159,45 +236,8 @@ export default {
           height: 10px;
         }
       }
-    }
-  }
-  &--md {
-    .counter-label {
-      font-size: 12px;
-    }
-    .counter-container {
-      height: 36px;
-      grid-column-gap: 18px;
-      padding: 1px 10px;
-
-      &__minus,
-      &__plus {
-        .bi {
-          width: 8px;
-          height: 8px;
-        }
-      }
-    }
-  }
-  &--sm {
-    .counter-label {
-      font-size: 10px;
-    }
-    .counter-container {
-      height: 26px;
-      grid-column-gap: 16px;
-      padding: 1px 10px;
-
-      &__value {
-        font-size: 12px;
-      }
-
-      &__minus,
-      &__plus {
-        .bi {
-          width: 6px;
-          height: 6px;
-        }
+      .helper-text {
+        font-size: 10px;
       }
     }
   }
