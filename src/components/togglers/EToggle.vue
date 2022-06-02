@@ -180,7 +180,6 @@ export default {
   &--md {
     .e-toggle__text {
       font-size: 12px;
-
     }
   }
   &--lg {

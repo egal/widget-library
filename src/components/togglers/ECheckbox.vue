@@ -8,11 +8,13 @@
   >
     <input
       type="checkbox"
+      :indeterminate.prop="isIndeterminate"
       class="e-checkbox__input input"
       :checked="mergedData.checked"
       :disabled="mergedData.disabled"
-      @change="(ev) => $emit('change', ev.target.checked)"
+      @change="onChange"
     />
+
     <span
       class="e-checkbox__text text"
       :class="{ 'e-checkbox__text--empty': hasSlotData }"
@@ -55,7 +57,8 @@ export default {
           checked: false,
           disabled: false,
           size: 'md',
-          checkboxRight: false
+          checkboxRight: false,
+          indeterminate: false,
         },
         this.data,
       )
@@ -76,6 +79,10 @@ export default {
 
     isChecked() {
       return this.mergedData.checked
+    },
+
+    isIndeterminate() {
+      return this.mergedData.indeterminate
     },
 
     /**
@@ -107,31 +114,31 @@ export default {
           {},
           styles,
           this.inputStyleVariables,
-          this.styleConfig.labelStyle.disabled,
+          this.styleConfig?.labelStyle?.disabled,
         )
       } else if (styleProperties.includes('checked') && this.isChecked) {
         return Object.assign(
           {},
           styles,
           this.inputStyleVariables,
-          this.styleConfig.labelStyle.checked,
+          this.styleConfig?.labelStyle?.checked,
         )
       } else if (styleProperties.includes('active') && this.isActive) {
         return Object.assign(
           {},
           styles,
           this.inputStyleVariables,
-          this.styleConfig.labelStyle.active,
+          this.styleConfig?.labelStyle?.active,
         )
       } else if (styleProperties.includes('hover') && this.isHover) {
         return Object.assign(
           {},
           styles,
           this.inputStyleVariables,
-          this.styleConfig.labelStyle.hover,
+          this.styleConfig?.labelStyle?.hover,
         )
       } else {
-        return Object.assign({}, this.styleConfig.labelStyle, this.inputStyleVariables)
+        return Object.assign({}, this.styleConfig?.labelStyle, this.inputStyleVariables)
       }
     },
 
@@ -154,6 +161,12 @@ export default {
       }
     },
   },
+  methods: {
+    onChange(ev) {
+      ev.target.indeterminate = this.isIndeterminate
+      this.$emit('change', ev.target.checked)
+    },
+  },
 }
 </script>
 
@@ -173,6 +186,12 @@ export default {
     .e-checkbox__text {
       font-size: 10px;
       font-style: $p8-font-style;
+
+      &::before,
+      &::after {
+        mask-size: 90% !important;
+        -webkit-mask-size: 90% !important;
+      }
     }
   }
   &--lg {
