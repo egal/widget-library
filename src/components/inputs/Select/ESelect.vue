@@ -533,7 +533,7 @@ export default {
       }
     }
 
-    ::v-deep(.dropdown--top) {
+    :deep(.dropdown--top) {
       bottom: calc(46px + 16px);
     }
 
@@ -553,7 +553,7 @@ export default {
       }
     }
 
-    ::v-deep(.dropdown--top) {
+    :deep(.dropdown--top) {
       bottom: calc(36px + 16px);
     }
   }
@@ -569,7 +569,7 @@ export default {
       }
     }
 
-    ::v-deep(.dropdown--top) {
+    :deep(.dropdown--top) {
       bottom: calc(26px + 16px);
     }
   }

@@ -15,7 +15,7 @@
   font-weight: $h6-font-style;
   color: $base-white;
 
-  .bi, ::v-deep(.bi) {
+  .bi, :deep(.bi) {
     stroke: $base-white;
   }
 
@@ -35,7 +35,7 @@
     cursor: default;
     color: $gray-500;
     background-color: $gray-300;
-    .bi, ::v-deep(.bi) {
+    .bi, :deep(.bi) {
       stroke: $gray-500;
     }
   }
@@ -54,14 +54,14 @@
 @mixin button-soft() {
   color: $default-accent;
   background-color: $default-secondary;
-   .bi, ::v-deep(.bi) {
+   .bi, :deep(.bi) {
       stroke: $default-accent;
     }
 
   &:hover:enabled {
     color: $base-white;
     background-color: $hover-secondary;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $base-white;
     }
   }
@@ -69,7 +69,7 @@
   &:active:enabled {
     color: $base-white;
     background-color: $pressed-secondary;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $base-white;
     }
   }
@@ -79,7 +79,7 @@
   color: $default-accent;
   background-color: $base-white;
   border: 1px solid $default-accent;
-   .bi, ::v-deep(.bi) {
+   .bi, :deep(.bi) {
       stroke: $default-accent;
     }
 
@@ -88,7 +88,7 @@
     color: $hover-accent;
     background-color: $base-white;
     border-color: $hover-accent;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $hover-accent;
     }
   }
@@ -97,7 +97,7 @@
     color: $pressed-accent;
     background-color: $base-white;
     border-color: $pressed-accent;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $pressed-accent;
     }
   }
@@ -107,7 +107,7 @@
     color: $gray-500;
     background-color: $base-white;
     border-color: $gray-300;
-    .bi, ::v-deep(.bi) {
+    .bi, :deep(.bi) {
       stroke: $gray-500;
     }
   }
@@ -116,14 +116,14 @@
 @mixin button-clear() {
   color: $default-accent;
   background-color: $base-white;
-   .bi, ::v-deep(.bi) {
+   .bi, :deep(.bi) {
       stroke: $default-accent;
     }
 
   &:hover:enabled {
     color: $hover-accent;
     background-color: $base-white;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $hover-accent;
     }
 
@@ -132,7 +132,7 @@
   &:active:enabled {
     color: $pressed-accent;
     background-color: $base-white;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $pressed-accent;
     }
 
@@ -142,7 +142,7 @@
     cursor: default;
     color: $gray-500;
     background-color: $base-white;
-     .bi, ::v-deep(.bi) {
+     .bi, :deep(.bi) {
       stroke: $gray-500;
     }
   }
