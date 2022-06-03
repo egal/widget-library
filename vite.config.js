@@ -26,6 +26,8 @@ export default defineConfig({
         'vue',
         '@dvuckovic/vue3-bootstrap-icons',
         'vue-upload-component/dist/vue-upload-component',
+        'vue-css-donut-chart',
+        'vue-ellipse-progress',
       ],
       output: {
         globals: {
@@ -33,6 +35,8 @@ export default defineConfig({
           '@dvuckovic/vue3-bootstrap-icons': '@dvuckovic/vue3-bootstrap-icons',
           'vue-upload-component/dist/vue-upload-component':
             'vue-upload-component/dist/vue-upload-component',
+          'vue-css-donut-chart': 'vue-css-donut-chart',
+          'vue-ellipse-progress': 'vue-ellipse-progress',
         },
       },
       plugins: [typescript({ sourceMap: false })],
