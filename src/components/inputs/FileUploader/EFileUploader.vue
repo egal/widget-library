@@ -1,20 +1,30 @@
 <template>
-  <div class="file-uploader" :class="`file-uploader--${mergedData.size} ${mergedData.disabled ? 'disabled' : ''}`" :style="getStyleVars" >
-    <span class="label" v-if="mergedData.label">{{ mergedData.label }}</span>
-<!--    (mergedData.multiple && newFiles.length < mergedData.maxFiles) ||-->
-    <div
-      class="upload-zone"
-      :class="{ disabled: mergedData.disabled }"
-      v-show="
-            !newFiles.length
-      "
+  <div
+    class="file-uploader"
+    :class="`file-uploader--${mergedData.size} ${mergedData.disabled ? 'disabled' : ''}`"
+    :style="getStyleVars"
+  >
+    <span class="label" v-if="mergedData.label"
+      >{{ mergedData.label }} --- {{ newFiles.length }} \\ {{ isMaximumFilesExceeded }} \\
+      {{ isSizeFilesExceeded }}</span
     >
-      <icon v-if='!isErrorUpload' icon="upload" />
+    <!--    (mergedData.multiple && newFiles.length < mergedData.maxFiles) ||-->
+    <div class="upload-zone" :class="{ disabled: mergedData.disabled }" v-show="!newFiles.length">
+      <icon v-if="!isErrorUpload" icon="upload" />
       <icon v-else icon="arrow-clockwise" />
 
-      <span class="drop-label" v-show="!isFileLoading && !isErrorUpload">{{ mergedData.innerText }}</span>
-      <span class="loader-label" v-show="isFileLoading && !isErrorUpload">{{ mergedData.loadingText }}</span>
-      <span class="drop-label upload-error" v-show="!isFileLoading && isErrorUpload" @click="clear">{{ mergedData.tryAgainText }}</span>
+      <span class="drop-label" v-show="!isFileLoading && !isErrorUpload">{{
+        mergedData.innerText
+      }}</span>
+      <span class="loader-label" v-show="isFileLoading && !isErrorUpload">{{
+        mergedData.loadingText
+      }}</span>
+      <span
+        class="drop-label upload-error"
+        v-show="!isFileLoading && isErrorUpload"
+        @click="clear"
+        >{{ mergedData.tryAgainText }}</span
+      >
 
       <file-upload
         :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
@@ -26,11 +36,13 @@
         :size="mergedData.maxSize"
         @input-file="fileHandler"
       >
-        <span class="browse-label" v-if="!isFileLoading && !isErrorUpload">{{ mergedData.actionInnerText }}</span>
+        <span class="browse-label" v-if="!isFileLoading && !isErrorUpload">{{
+          mergedData.actionInnerText
+        }}</span>
       </file-upload>
     </div>
 
-    <div class="file-preview">
+    <div class="file-preview" v-if="newFiles.length">
       <div class="file" v-for="file in newFiles" :key="file.id" @click="openFile(file.image_url)">
         <div class="file-icon">
           <icon icon="file-earmark" />
@@ -41,10 +53,7 @@
           <icon icon="x-lg" />
         </div>
       </div>
-      <div class="add-more" v-show="
-        (mergedData.multiple && newFiles.length)
-      ">
-
+      <div class="add-more" v-show="mergedData.multiple && newFiles.length">
         <file-upload
           :accept="mergedData.accept.length ? mergedData.accept.join() : ''"
           :multiple="mergedData.multiple"
@@ -54,18 +63,31 @@
           :size="mergedData.maxSize"
           @input-file="fileHandler"
         >
-
-         <!--          todo куда впихнуть текст ошибки -->
+          <!--          todo куда впихнуть текст ошибки -->
           <!--          todo другие тексты ошибок -->
-          <!--          <span class="browse-label" v-if="!isFileLoading">{{ mergedData.actionInnerText }}</span>-->
-          <span class="browse-label" :class="{disabled: newFiles.length > mergedData.maxFiles}" v-if="!isFileLoading"> <icon icon="plus-lg" /> Добавить файл</span>
-            <!--          todo ???? Loading text ? -->
-          <span class="browse-label" :class="{disabled: newFiles.length > mergedData.maxFiles}" v-else> {{ mergedData.loadingText }}</span>
+
+          <!--          :class="{ disabled: newFiles.length >= mergedData.maxFiles }"-->
+          <span class="browse-label" v-if="!isFileLoading">
+            <icon icon="plus-lg" /> Добавить файл {{ newFiles.length }}</span
+          >
+          <!--          todo ???? Loading text ? -->
+          <span
+            class="loader-label"
+            :class="{ disabled: newFiles.length > mergedData.maxFiles }"
+            v-else
+          >
+            {{ mergedData.loadingText }}</span
+          >
         </file-upload>
       </div>
     </div>
 
-    <span class="helper-text" :class="{'--error': isErrorUpload || error}" v-if="mergedData.helperText || isErrorUpload || error">{{ !error ? mergedData.helperText : error}}</span>
+    <span
+      class="helper-text"
+      :class="{ '--error': isErrorUpload || error }"
+      v-if="mergedData.helperText || isErrorUpload || error"
+      >{{ !error ? mergedData.helperText : error }}</span
+    >
   </div>
 </template>
 
@@ -97,7 +119,7 @@ export default {
       chunkSize: 5242880, // 5mb
       EgalActionConstructor: null,
       isFileLoading: false,
-      isErrorUpload: false
+      isErrorUpload: false,
     }
   },
   computed: {
@@ -123,7 +145,7 @@ export default {
           loadingText: 'Loading...',
           tryAgainText: 'Try again',
           // loadErrorText: 'Loading error',
-          errorText: ''
+          errorText: '',
         },
         this.data,
       )
@@ -151,7 +173,8 @@ export default {
         '--drop-label-color': this.styleConfig?.dropLabelColor || '#718096',
         '--browse-label-color': this.styleConfig?.browseLabelColor || '#3385ff',
         '--uploader-labels-font-weight': this.styleConfig?.uploaderLabelsFontWeight || 400,
-        '--uploader-labels-font-size': this.styleConfig?.uploderLabelsFontSize || this.defaultFontSize,
+        '--uploader-labels-font-size':
+          this.styleConfig?.uploderLabelsFontSize || this.defaultFontSize,
       }
     },
     defaultFontSize() {
@@ -160,17 +183,39 @@ export default {
 
     error() {
       return this.mergedData.errorText
-    }
+    },
+    isMaximumFilesExceeded() {
+      console.log('isMaximumFilesExceeded', this.mergedData.maxFiles, this.newFiles.length)
+      return this.mergedData.maxFiles < this.newFiles.length
+    },
+    isSizeFilesExceeded() {
+      let totalSize = 0
+      this.newFiles.map((file) => {
+        totalSize += file?.size_in_bytes
+      })
+      // const totalSize = this.newFiles.reduce((acc, currFile) => {
+      //   return acc + currFile.size
+      // }, 0)
+      console.log(
+        'isSizeFilesExceeded',
+        totalSize,
+        this.mergedData.maxSize,
+        this.mergedData.maxSize < totalSize,
+      )
+      return this.mergedData.maxSize < totalSize
+    },
   },
   mounted() {
     this.newFiles = this.mergedData.modelValue
+    console.log('mounted')
     this.EgalActionConstructor = new ActionConstructor(this.mergedData.domain)
   },
   methods: {
     clear() {
       this.isFileLoading = false
       this.isErrorUpload = false
-      this.newFiles = []
+
+      this.$emit('error:upload', '')
     },
     /**
      * Open file by link
@@ -411,6 +456,7 @@ export default {
       this.isFileLoading = true
       this.isErrorUpload = false
 
+      console.log(file)
       if (this.mergedData.validators.length) {
         const errorMessage = validate(this.mergedData.validators, this.newValue)
         this.$emit('error', errorMessage)
@@ -449,9 +495,10 @@ export default {
     },
   },
   watch: {
-    modelValue: {
+    'mergedData.modelValue': {
       handler(value) {
         this.newFiles = value
+        console.log('watch', value)
       },
       deep: true,
     },
@@ -474,7 +521,6 @@ export default {
     &.--error {
       color: $danger;
     }
-
   }
   .label {
     margin-bottom: 8px;
@@ -516,10 +562,11 @@ export default {
 
     .browse-label {
       color: var(--browse-label-color);
-    }
-    ::v-deep(span.file-uploads) {
-      &:hover {
-        opacity: 0.8;
+
+      ::v-deep(span.file-uploads) {
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
 
@@ -540,7 +587,6 @@ export default {
       padding: 25px 32px;
     }
   }
-
 }
 .file-preview {
   display: flex;
@@ -596,15 +642,16 @@ export default {
   }
   span {
     font-weight: 700;
-    //font-weight: var(--uploader-labels-font-weight);
     font-size: var(--uploader-labels-font-size);
   }
-  .browse-label {
+  .browse-label,
+  .loader-label {
     color: var(--browse-label-color);
     padding: 6px 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    font-size: 10px;
 
     .bi {
       color: var(--browse-label-color);
@@ -614,11 +661,6 @@ export default {
       width: 10px;
       height: 10px;
     }
-
-  }
-  ::v-deep(span.file-uploads):hover > label {
-    opacity: 0.2;
-    cursor: pointer;
   }
 
   .add-more {
@@ -627,9 +669,22 @@ export default {
     align-items: center;
     margin-bottom: 10px;
 
+    ::v-deep(span.file-uploads):hover {
+      .browse-label + label {
+        opacity: 0.2;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.file-uploader.disabled {
+  //todo check styles
+  .add-more {
     .browse-label.disabled {
       pointer-events: none;
       color: $gray-400;
+
       .bi {
         color: $gray-400;
         stroke: $gray-400;
@@ -639,37 +694,32 @@ export default {
       }
     }
 
-    ::v-deep(span.file-uploads):hover {
-      opacity: 1;
-      cursor: default;
-    }
     ::v-deep(span.file-uploads):hover > label {
       opacity: 0;
       cursor: default;
     }
   }
-}
+  .helper-text {
+    color: $gray-400;
+  }
 
-.file-uploader.disabled {
-    .helper-text {
-      color: $gray-400;
+  .upload-zone {
+    //todo ?
+    //background-color: $gray-100;
+
+    ::v-deep(label) {
+      cursor: default;
     }
-
-    .upload-zone {
-      //todo ?
-      //background-color: $gray-100;
-
-      ::v-deep(label) {
-        cursor: default;
-      }
+  }
+  .file-preview {
+    .file {
+      background-color: $gray-100;
     }
-    .file-preview {
-      .file {
-        background-color: $gray-100;
-      }
-    }
+  }
 
-  .file, .browse-label, .drop-label {
+  .file,
+  .browse-label,
+  .drop-label {
     pointer-events: none;
     color: $gray-400;
     .bi {
@@ -681,7 +731,9 @@ export default {
     }
   }
 
-  .file-name, .file-size, .bi {
+  .file-name,
+  .file-size,
+  .bi {
     color: $gray-400;
   }
   ::v-deep(span.file-uploads):hover {

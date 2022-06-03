@@ -1,5 +1,5 @@
 <template>
-  <div :style="{width: '200px'}">
+  <div :style="{ width: '200px' }">
     <div>
       <h2 style="margin-bottom: 10px">Авторизация</h2>
       <div class="login-form">
@@ -18,44 +18,48 @@
       </div>
     </div>
 
-<!--     todo delete cookies package -->
-<!--    todo add readme-->
-<!--    <div>-->
+    <!--     todo delete cookies package -->
+    <!--    todo add readme-->
+    <!--    <div>-->
 
-<!--    <EFileUploader @on:upload='handle' :data="{-->
-<!--      label: 'Изображение',-->
-<!--      helperText: 'Формат png, jpeg, до 4Мб',-->
-<!--      maxFiles: 4,-->
-<!--      multiple: true,-->
-<!--      maxSize: 0,-->
-<!--errorText: error,-->
-<!--      accept: ['image/png', 'image/jpeg'],-->
-<!--      domain: 'http://testing-mr-243.ow-apcs.sputnikfund.ru/api',-->
-<!--      microservice: 'core',-->
-<!--      model: 'Image',-->
+    <!--    <EFileUploader @on:upload='handle' :data="{-->
+    <!--      label: 'Изображение',-->
+    <!--      helperText: 'Формат png, jpeg, до 4Мб',-->
+    <!--      maxFiles: 4,-->
+    <!--      multiple: true,-->
+    <!--      maxSize: 0,-->
+    <!--errorText: error,-->
+    <!--      accept: ['image/png', 'image/jpeg'],-->
+    <!--      domain: 'http://testing-mr-243.ow-apcs.sputnikfund.ru/api',-->
+    <!--      microservice: 'core',-->
+    <!--      model: 'Image',-->
 
-<!--      modelValue: [-->
+    <!--      modelValue: [-->
 
-<!-- ]-->
-<!--    }" />-->
-<!--    </div>-->
+    <!-- ]-->
+    <!--    }" />-->
+    <!--    </div>-->
     <hr />
 
-
-    <EFileUploader @on:upload='handle' @error:upload="error = 'Error upload'" :data="{
-      label: 'Изображение',
-      helperText: 'Формат png, jpeg, до 4Мб',
-      maxFiles: 2,
-      multiple: true,
-      maxSize: 0,
-      size: 'lg',
-      accept: ['image/png', 'image/jpeg'],
-      domain: 'http://testing-mr-243.ow-apcs.sputnikfund.ru/api',
-      microservice: 'core',
-      model: 'Image',
-     errorText: error,
-      modelValue: files
-    }" />
+    <!--    18358  = 1 fox -->
+    <EFileUploader
+      @on:upload="handle"
+      @error:upload="onError"
+      :data="{
+        label: 'Изображение',
+        helperText: 'Формат png, jpeg, до 4Мб',
+        maxFiles: 2,
+        multiple: true,
+        maxSize: 737200,
+        size: 'lg',
+        accept: ['image/png', 'image/jpeg'],
+        domain: 'http://testing-mr-243.ow-apcs.sputnikfund.ru/api',
+        microservice: 'core',
+        model: 'Image',
+        errorText: error,
+        modelValue: files,
+      }"
+    />
     <hr />
   </div>
 </template>
@@ -65,9 +69,10 @@ import { defineComponent } from 'vue'
 import EFileUploader from '@/components/inputs/FileUploader/EFileUploader.vue'
 import { EgalAuthConstructor } from '@egalteam/framework'
 import EInput from '@/components/inputs/Input/EInput.vue'
+import EButton from '@/components/togglers/EButton.vue'
 export default defineComponent({
   name: 'App',
-  components: {EFileUploader,EInput },
+  components: { EFileUploader, EInput, EButton },
   data() {
     return {
       files: [],
@@ -75,7 +80,7 @@ export default defineComponent({
       // email: 'admin@mail.com',
       password: 'admin',
       phone: '81111111111',
-      error: ''
+      error: '',
     }
   },
   mounted() {
@@ -87,11 +92,16 @@ export default defineComponent({
     this.authModel = new EgalAuthConstructor(authInfo)
   },
   methods: {
+    onError(er) {
+      console.log('onError')
+      console.log(er)
+      this.error = er?.message || ''
+    },
     handle(f) {
-
-      if (this.files.length > 1) {
-        this.error = 'O hello Mark!'
-      }
+      // if (this.files.length > 1) {
+      //   this.error = 'O hello Mark!'
+      // }
+      console.log('handle')
       this.files.push(f)
     },
     authUser(): void {
