@@ -14,7 +14,7 @@
     background-color: var(--input-background-color);
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='15' height='16' viewBox='0 0 17 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8.25' cy='8.00049' r='8' fill='white'/%3e%3c/svg%3e");
     background-position-x: left;
-    background-size: 50%;
+    background-size: 48%;
   }
 
   #{$selector-checked}::#{$pseudo-element} {

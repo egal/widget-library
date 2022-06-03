@@ -54,7 +54,7 @@ $selector-disabled-not-checked: '.input:not(:checked):disabled + .text';
       border: 2px solid var(--input-border-color);
       background-repeat: no-repeat;
       background-position: center;
-      background-size: 78%;
+      background-size: 70%;
 
       @if $pseudo-element == 'before' {
         margin-right: 10px;

@@ -170,6 +170,7 @@ export default {
   &--left {
     @include radio($pseudo-element: 'before');
   }
+
   &--right {
     @include radio($pseudo-element: 'after');
   }
