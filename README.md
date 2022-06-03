@@ -5,37 +5,37 @@
 
 - DonatChart - круговая диаграмма с сегментами:
 
-![toasts](src/assets/img/doughnut_bar.png)
+![toasts](src/assets/charts/img/doughnut_bar.png)
 
 - ProgressChart - круговой график для одного значения
 
-![toasts](src/assets/img/half_progress_bar.png)
-![toasts](src/assets/img/progress_bar.png)
+![toasts](src/assets/charts/img/half_progress_bar.png)
+![toasts](src/assets/charts/img/progress_bar.png)
 
 - MultiProgressBar - для двух и более значений
 
-![toasts](src/assets/img/multi_progress_bar.png)
+![toasts](src/assets/charts/img/multi_progress_bar.png)
 
 Линейные графики:
 - VerticalBarChart - вертикальный график
 
-![toasts](src/assets/img/vertical_bar.png)
+![toasts](src/assets/charts/img/vertical_bar.png)
 
 - StackedBarChart - вертикальный график со столбцами, расположенными "друг на друге"
 
-![toasts](src/assets/img/stacked_bar.png)
+![toasts](src/assets/charts/img/stacked_bar.png)
 
 - HorizontalBarChart - график с горизонтальными столбцами
 
-![toasts](src/assets/img/horizontal_bar.png)
+![toasts](src/assets/charts/img/horizontal_bar.png)
 
 - Line Chart
 
-![toasts](src/assets/img/line_chart.png)
+![toasts](src/assets/charts/img/line_chart.png)
 
 - CurvesChart
 
-![toasts](src/assets/img/curves_chart.png)
+![toasts](src/assets/charts/img/curves_chart.png)
 
 ## Общее
 ### Использование
