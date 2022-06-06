@@ -1,0 +1,7 @@
+{
+    "componentFolder": "src",
+    "testFiles": "**/*.spec.js",
+    "viewportWidth": 800,
+    "viewportHeight": 800,
+    "video": false
+}

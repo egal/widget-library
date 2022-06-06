@@ -117,6 +117,7 @@
         :empty-dropdown-text="mergedData.emptyDropdownText"
         :options="filteredOptions"
         :size="mergedData.size"
+        :shown-key="mergedData.shownKey"
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
         :search-placeholder="mergedData.searchPlaceholder"

@@ -29,8 +29,8 @@
           newValue &&
           !mergedData.showSuccess &&
           mergedData.showFilled &&
-          type !== 'search' &&
-          type !== 'number',
+          mergedData.type !== 'search' &&
+          mergedData.type !== 'number',
       }"
     >
       <div class="chips-container">
@@ -89,9 +89,11 @@
         v-if="newValue && mergedData.type === 'password'"
         @click.stop="showPassword"
       />
-      <div class="arrow-icons" v-if="type === 'number' && mergedData.showArrows">
+
+      <div class="arrow-icons" v-if="mergedData.type === 'number' && mergedData.showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
-        <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
+
+        <b-icon class="icon icon--decrease" icon="caret-down-fill" @click="decreaseValue" />
       </div>
       <ClearButton
         class="subtract-button"
@@ -99,9 +101,10 @@
         @delete=";(newValue = ''), $emit('update:modelValue', '')"
         v-show="
           mergedData.clearable &&
+          !mergedData.postfix &&
           newValue &&
-          type !== 'number' &&
-          type !== 'search' &&
+          mergedData.type !== 'number' &&
+          mergedData.type !== 'search' &&
           mergedData.type !== 'password'
         "
         :size="mergedData.size"
@@ -256,7 +259,7 @@ export default {
      * Handle Input data based on Input type
      */
     inputHandler() {
-      if (this.type === 'number') {
+      if (this.mergedData.type === 'number') {
         this.newValue = this.cutLetterSymbols(this.newValue)
         this.checkMinMaxValidity(this.newValue)
       }
@@ -302,7 +305,7 @@ export default {
      * Increases the number by 1
      */
     increaseValue() {
-      if (this.type === 'number' && this.mergedData.showArrows) {
+      if (this.mergedData.type === 'number' && this.mergedData.showArrows) {
         const increasedNumber = Number(this.newValue) + 1
         if (this.mergedData.max !== undefined) {
           if (increasedNumber <= Number(this.mergedData.max)) {
@@ -319,7 +322,7 @@ export default {
      * Decreases the number by 1
      */
     decreaseValue() {
-      if (this.type === 'number' && this.mergedData.showArrows) {
+      if (this.mergedData.type === 'number' && this.mergedData.showArrows) {
         const decreasedNumber = Number(this.newValue) - 1
         if (this.mergedData.min !== undefined) {
           if (decreasedNumber >= Number(this.mergedData.min)) {
