@@ -64,17 +64,24 @@ export default {
 
   &--lg {
     .mask-icon-subtract {
-      width: 17px;
-      height: 16px;
+      width: 20px;
+      height: 19px;
     }
   }
   &--md {
     .mask-icon-subtract {
-      width: 15px;
-      height: 14px;
+      width: 16px;
+      height: 15px;
     }
   }
   &--sm {
+    .mask-icon-subtract {
+      width: 14px;
+      height: 13px;
+      -webkit-mask-size: 10px;
+    }
+  }
+  &--xs {
     .mask-icon-subtract {
       width: 10px;
       height: 10px;

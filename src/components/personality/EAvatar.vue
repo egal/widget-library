@@ -91,23 +91,11 @@ export default {
     background-color: $success;
     outline-color: var(--border-color);
     outline-style: solid;
-    top: 0;
-    right: 0;
     z-index: 1;
   }
 
   &.--online::after {
     display: block;
-  }
-
-  &.--shape-circle {
-    border-radius: 50% !important;
-
-    &::after {
-      top: 29.3%;
-      right: 29.3%;
-      transform: translate(100%, -100%);
-    }
   }
 
   &__name {
@@ -144,31 +132,18 @@ export default {
   }
 
   &.--size {
-    &-xxl {
-      width: 116px;
-      height: 116px;
-      border-radius: 14px;
-
-      &::after {
-        width: 29px;
-        height: 29px;
-        outline-width: 4px;
-      }
-
-      .avatar__name {
-        font-size: $h1-font-size;
-      }
-    }
 
     &-xl {
-      width: 82px;
-      height: 82px;
-      border-radius: 14px;
+      width: 88px;
+      height: 88px;
+      border-radius: 12px;
 
       &::after {
-        width: 20px;
-        height: 20px;
-        outline-width: 4px;
+        width: 22px;
+        height: 22px;
+        top: -3px;
+        right: -3px;
+        outline-width: 3px;
       }
 
       .avatar__name {
@@ -179,11 +154,13 @@ export default {
     &-lg {
       width: 64px;
       height: 64px;
-      border-radius: 12px;
+      border-radius: 10px;
 
       &::after {
-        width: 15px;
-        height: 15px;
+        width: 18px;
+        height: 18px;
+        top: -3px;
+        right: -3px;
         outline-width: 3px;
       }
 
@@ -193,34 +170,38 @@ export default {
     }
 
     &-md {
-      width: 46px;
-      height: 46px;
+      width: 40px;
+      height: 40px;
       border-radius: 8px;
 
       &::after {
-        width: 10px;
-        height: 10px;
-        outline-width: 2px;
-      }
-
-      .avatar__name {
-        font-size: $p2-font-size;
-      }
-    }
-
-    &-sm {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
-
-      &::after {
-        width: 8px;
-        height: 8px;
+        width: 12px;
+        height: 12px;
+        top: -4px;
+        right: -4px;
         outline-width: 2px;
       }
 
       .avatar__name {
         font-size: $p4-font-size;
+      }
+    }
+
+    &-sm {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+
+      &::after {
+        width: 10px;
+        height: 10px;
+        top: -4px;
+        right: -4px;
+        outline-width: 2px;
+      }
+
+      .avatar__name {
+        font-size: $p6-font-size;
       }
     }
 
@@ -232,13 +213,25 @@ export default {
       &::after {
         width: 6px;
         height: 6px;
-        outline-width: 1px;
+        top: -2px;
+        right: -2px;
+        outline-width: 2px;
       }
 
       .avatar__name {
-        font-size: $p8-font-size;
+        font-size: 10px;
       }
     }
   }
+
+  &.--shape-circle {
+    border-radius: 50% !important;
+
+    &::after {
+      top: 0;
+      right: 0;
+    }
+  }
+
 }
 </style>

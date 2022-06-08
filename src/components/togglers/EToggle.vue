@@ -176,9 +176,15 @@ export default {
       font-style: $p8-font-style;
     }
   }
+
+  &--md {
+    .e-toggle__text {
+      font-size: 12px;
+    }
+  }
   &--lg {
     .e-toggle__text {
-      font-size: $p5-font-size;
+      font-size: 14px;
       font-style: $p5-font-style;
     }
   }

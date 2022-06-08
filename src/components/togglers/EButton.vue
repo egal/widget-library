@@ -4,7 +4,10 @@
     :class="[
       `egal-button--${mergedData.size}`,
       { 'egal-button--soft': mergedData.softColors },
+      { 'egal-button--outline': mergedData.outlined },
+      { 'egal-button--clear': mergedData.light },
       { 'egal-button--rounded': mergedData.rounded },
+      { 'egal-button--empty': isNoText },
     ]"
     :style="customStyle"
     :disabled="mergedData.disabled"
@@ -58,6 +61,9 @@ export default {
     isDisabled() {
       return this.mergedData.disabled
     },
+    isNoText() {
+      return this.$slots.default === undefined
+    },
     mergedData() {
       return Object.assign(
         {
@@ -65,6 +71,8 @@ export default {
           rounded: false,
           size: 'md',
           softColors: false,
+          outlined: false,
+          light: false,
           leftIcon: '',
           rightIcon: '',
         },
@@ -106,19 +114,79 @@ export default {
 .egal-button {
   @include button();
 
+  &--xs {
+    @include button($font-size: 10px, $padding: 6px 12px, $radius: $all-sides-small);
+
+    .egal-button--rounded {
+      padding: 7px 8px;
+    }
+  }
+
   &--sm {
-    @include button($font-size: 10px, $padding: 8px 16px, $radius: $all-sides-small);
+    @include button($font-size: 12px, $padding: 9px 14px, $radius: 6px);
+
+    line-height: 120%;
+    .egal-button--rounded {
+      padding: 10px 11px;
+    }
+  }
+
+  &--md {
+    @include button($font-size: $h6-font-size, $padding: 10px 16px, $radius: $all-sides-large);
+    line-height: 150%;
+    .egal-button--rounded {
+      padding: 14px 15px;
+    }
   }
   &--lg {
-    @include button($font-size: $h6-font-size, $padding: 16px 24px, $radius: $all-sides-large);
+    line-height: 19px;
+    @include button($font-size: $h5-font-size, $padding: 14px 18px, $radius: $all-sides-large);
+    .egal-button--rounded {
+      padding: 16px 17px;
+    }
   }
 
   &--soft {
     @include button-soft();
   }
 
+  &--outline {
+    @include button-outline();
+  }
+
+  &--clear {
+    @include button-clear();
+  }
+
   &--rounded {
-    border-radius: $all-sides-pill;
+    border-radius: 64px;
+    //border-radius: $all-sides-pill;
+  }
+
+  &--empty {
+    .egal-button__icon {
+      margin: 0;
+    }
+
+    &.egal-button--xs {
+      padding: 7px;
+    }
+
+    &.egal-button--sm {
+      padding: 10px;
+    }
+
+    &.egal-button--md {
+      padding: 13px;
+    }
+
+    &.egal-button--lg {
+      padding: 16px;
+    }
+  }
+
+  ::v-deep(.bi) {
+    margin-bottom: 0;
   }
 }
 </style>
