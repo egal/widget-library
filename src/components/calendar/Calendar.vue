@@ -640,7 +640,7 @@ export default defineComponent({
   .calendar__input {
     margin-bottom: 8px;
 
-    ::v-deep(input) {
+    :deep(input) {
       &:hover {
         cursor: pointer;
       }
@@ -654,7 +654,7 @@ export default defineComponent({
 
     &--lg {
       .left {
-        ::v-deep(input) {
+        :deep(input) {
           width: 165px;
           padding-right: 0;
         }
@@ -662,7 +662,7 @@ export default defineComponent({
     }
     &--md {
       .left {
-        ::v-deep(input) {
+        :deep(input) {
           width: 144px;
           padding-right: 0;
         }
@@ -670,13 +670,13 @@ export default defineComponent({
     }
     &--sm {
       .left {
-        ::v-deep(input) {
+        :deep(input) {
           width: 99px;
           padding-right: 0;
           padding-left: 23px;
         }
 
-        ::v-deep(.bi.icon.icon--left) {
+        :deep(.bi.icon.icon--left) {
           left: 9px;
         }
       }
@@ -693,7 +693,7 @@ export default defineComponent({
 
         border-radius: var(--border-radius);
 
-        ::v-deep(.input-container) {
+        :deep(.input-container) {
           input {
             &:focus {
               outline: none;
@@ -713,14 +713,14 @@ export default defineComponent({
       }
 
       .left {
-        ::v-deep(input) {
+        :deep(input) {
           border-right: none;
           border-radius: var(--border-radius) 0 0 var(--border-radius);
         }
       }
 
       .right {
-        ::v-deep(input) {
+        :deep(input) {
           border-left: none;
           border-radius: 0 var(--border-radius) var(--border-radius) 0;
         }
@@ -728,25 +728,25 @@ export default defineComponent({
 
       &.date-inputs--lg {
         .left {
-          ::v-deep(input) {
+          :deep(input) {
             width: 153px;
             padding-right: 0;
           }
         }
 
         .right {
-          ::v-deep(input) {
+          :deep(input) {
             width: 84px;
             padding-left: 30px;
             padding-right: 0;
           }
 
-          ::v-deep(.bi.icon.icon--left) {
+          :deep(.bi.icon.icon--left) {
             left: 5px;
           }
 
           &.ampm {
-            ::v-deep(input) {
+            :deep(input) {
               width: 104px;
             }
           }
@@ -754,25 +754,25 @@ export default defineComponent({
       }
       &.date-inputs--md {
         .left {
-          ::v-deep(input) {
+          :deep(input) {
             width: 138px;
             padding-right: 0;
           }
         }
 
         .right {
-          ::v-deep(input) {
+          :deep(input) {
             width: 76px;
             padding-left: 25px;
             padding-right: 0;
           }
 
-          ::v-deep(.bi.icon.icon--left) {
+          :deep(.bi.icon.icon--left) {
             left: 5px;
           }
 
           &.ampm {
-            ::v-deep(input) {
+            :deep(input) {
               width: 100px;
             }
           }
@@ -780,30 +780,30 @@ export default defineComponent({
       }
       &.date-inputs--sm {
         .left {
-          ::v-deep(input) {
+          :deep(input) {
             width: 93px;
             padding-right: 0;
             padding-left: 23px;
           }
 
-          ::v-deep(.bi.icon.icon--left) {
+          :deep(.bi.icon.icon--left) {
             left: 9px;
           }
         }
 
         .right {
-          ::v-deep(input) {
+          :deep(input) {
             width: 56px;
             padding-left: 20px;
             padding-right: 0;
           }
 
-          ::v-deep(.bi.icon.icon--left) {
+          :deep(.bi.icon.icon--left) {
             left: 5px;
           }
 
           &.ampm {
-            ::v-deep(input) {
+            :deep(input) {
               width: 76px;
             }
           }
@@ -812,7 +812,7 @@ export default defineComponent({
     }
 
     .left.single {
-      ::v-deep(input) {
+      :deep(input) {
         width: auto;
       }
     }
@@ -837,17 +837,17 @@ export default defineComponent({
       flex-grow: 0;
     }
     .left {
-      ::v-deep(.calendar__controls-right.hidden) {
+      :deep(.calendar__controls-right.hidden) {
         visibility: hidden;
       }
     }
     .right {
       margin-left: 40px;
-      ::v-deep(.calendar__controls-left) {
+      :deep(.calendar__controls-left) {
         visibility: hidden;
       }
     }
-    ::v-deep(.calendar__controls) {
+    :deep(.calendar__controls) {
       display: flex;
       list-style: none;
       justify-content: space-between;
@@ -883,7 +883,7 @@ export default defineComponent({
         color: $gray-800;
       }
     }
-    ::v-deep(.calendar__weekdays) {
+    :deep(.calendar__weekdays) {
       font-size: calc(var(--font-size) - 2px);
       font-weight: 500;
       line-height: 120%;
@@ -894,8 +894,8 @@ export default defineComponent({
         margin-top: 0;
       }
     }
-    ::v-deep(.calendar__weekdays),
-    ::v-deep(.calendar__days) {
+    :deep(.calendar__weekdays),
+    :deep(.calendar__days) {
       display: grid;
       grid-template: 'a a a a a a a';
       list-style: none;
@@ -922,7 +922,7 @@ export default defineComponent({
         }
       }
     }
-    ::v-deep(.calendar__days) {
+    :deep(.calendar__days) {
       margin-bottom: auto;
 
       li {
@@ -1048,7 +1048,7 @@ export default defineComponent({
       }
     }
 
-    ::v-deep(.footer > .label) {
+    :deep(.footer > .label) {
       font-size: calc(var(--font-size) - 2px);
     }
   }

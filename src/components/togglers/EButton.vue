@@ -185,7 +185,7 @@ export default {
     }
   }
 
-  ::v-deep(.bi) {
+  :deep(.bi) {
     margin-bottom: 0;
   }
 }

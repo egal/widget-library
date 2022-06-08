@@ -246,13 +246,13 @@ export default defineComponent({
   .picker {
     display: flex;
     align-items: center;
-    ::v-deep(.select-label) {
+    :deep(.select-label) {
       display: none;
     }
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
-      ::v-deep(.select-container) {
+      :deep(.select-container) {
         background-color: $gray-100;
       }
       .bi {
@@ -274,13 +274,13 @@ export default defineComponent({
   margin-right: 10px;
   color: $gray-600;
 }
-::v-deep(.select) {
+:deep(.select) {
   width: 70px;
 }
-::v-deep(.select.ampm) {
+:deep(.select.ampm) {
   margin-left: 15px;
 }
-::v-deep(.dropdown) {
+:deep(.dropdown) {
   max-height: 250px;
 }
 </style>

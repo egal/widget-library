@@ -17,6 +17,7 @@ import ETextArea from './components/inputs/TextArea/ETextArea.vue'
 import EWidget from './components/widget/EWidget.vue'
 import ECalendar from './components/calendar/Calendar.vue'
 import EToaster from './components/toaster/ToasterContainer.vue'
+import EChart from './components/charts/Chart.vue'
 export default {
   EButton,
   ECheckbox,
@@ -37,4 +38,5 @@ export default {
   EWidget,
   ECalendar,
   EToaster,
+  EChart,
 }

@@ -566,7 +566,7 @@ export default {
       margin-bottom: 11px;
       font-weight: var(--uploader-labels-font-weight);
     }
-    ::v-deep(label) {
+    :deep(label) {
       cursor: pointer;
     }
   }
