@@ -27,7 +27,8 @@
     "vue-router": "^4.0.0-0",
     "vue-svg-inline-loader": "^2.1.2",
     "vue-svg-inline-plugin": "^2.2.0",
-    "vue-upload-component": "^3.0.50"
+    "vue-upload-component": "^3.0.50",
+    "vue3-cookies": "^1.0.6"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
