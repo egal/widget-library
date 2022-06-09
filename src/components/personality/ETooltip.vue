@@ -13,7 +13,7 @@
     </div>
     <div
       v-if="hasSlotTooltipText"
-      :class="`tooltip__text --position-${mergedData.position || 'top'}`"
+      :class="`tooltip__text --position-${mergedData.position || 'top'} --size-${mergedData.size || 'md'}`"
     >
       <slot></slot>
     </div>
@@ -50,8 +50,8 @@ export default {
     },
     getVars() {
       return {
-        '--font': this.mergedData.font,
-        '--font-weight': this.mergedData.weight,
+        '--font': this.mergedData.font || 'Inter',
+        '--font-weight': this.mergedData.weight || 'bold',
       }
     },
 
@@ -69,12 +69,14 @@ export default {
 @import 'src/assets/variables';
 
 .tooltip {
-  position: relative;
+  position: absolute;
   display: inline-block;
   background-color: $gray-500;
   border-radius: 50%;
   margin-left: 300px;
   z-index: 1;
+  width: 100%;
+  height: 100%;
 
   &__icon {
     color: $base-white;
@@ -86,19 +88,24 @@ export default {
   }
 
   &.--size {
+    &-xs {
+      width: 12px;
+      height: 12px;
+      font-size: 10px;
+    }
     &-sm {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       font-size: $p6-font-size;
     }
     &-md {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       font-size: $p4-font-size;
     }
-    &-xl {
-      width: 24px;
-      height: 24px;
+    &-lg {
+      width: 20px;
+      height: 20px;
       font-size: $p3-font-size;
     }
   }
@@ -110,13 +117,16 @@ export default {
   z-index: 1;
 
   &.--size {
+    &-xs {
+      font-size: 10px;
+    }
     &-sm {
       font-size: $p6-font-size;
     }
     &-md {
       font-size: $p4-font-size;
     }
-    &-xl {
+    &-lg {
       font-size: $p3-font-size;
     }
   }
@@ -134,10 +144,28 @@ export default {
     font-weight: var(--font-weight);
     background-color: $gray-800;
     white-space: nowrap;
-    padding: 8px 12px;
     border-radius: $all-sides-small;
     transition: opacity 0.2s, transform 0.2s;
     z-index: -1;
+
+    &.--size {
+      &-xs {
+        font-size: 10px;
+        padding: 5px 12px;
+      }
+      &-sm {
+        font-size: 12px;
+        padding: 8px 14px;
+      }
+      &-md {
+        font-size: 14px;
+        padding: 10px 16px;
+      }
+      &-lg {
+        font-size: 16px;
+        padding: 13px 18px;
+      }
+    }
 
     &.--position-top {
       bottom: calc(100% + 20px);
@@ -185,5 +213,9 @@ export default {
       transform: translate(0, -50%);
     }
   }
+}
+
+.bi {
+  margin: 0;
 }
 </style>
