@@ -4,6 +4,8 @@
     :class="[
       `select--${mergedData.size}`,
       { 'select--error': mergedData.showError && (mergedData.error || errorMessage) },
+      { 'select--success': mergedData.showSuccess },
+      { disabled: mergedData.disabled },
     ]"
     :style="getStyleVars"
   >
@@ -16,7 +18,7 @@
         filled:
           mergedData.showFilled && filled && !showDropdown && !mergedData.error && !errorMessage,
       }"
-      @click="showDropdown = !showDropdown"
+      @click="toggle"
       v-click-outside="close"
     >
       <div class="select-container__values">
@@ -30,21 +32,23 @@
           :style="chipsStyleConfig"
         >
           <span>{{ option[mergedData.shownKey] }}</span>
+          <!--          todo remove -->
           <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
         </div>
         <div class="selected" v-else-if="!!selectModel.name">{{ selectModel.name }}</div>
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
-      <div class="select-container__clear" v-if="showClearButton">
-        <ClearButton
-          :error="mergedData.showError && (errorMessage || mergedData.error)"
-          :size="mergedData.size"
-          :filled="filled && !mergedData.error && !errorMessage"
-          :style-config="styleConfig"
-          @delete="clearSelected"
-        />
-      </div>
-      <div class="select-container__arrow" v-else>
+      <!--       todo remove??? + remove prop -->
+      <!--      <div class="select-container__clear" v-if="showClearButton">-->
+      <!--        <ClearButton-->
+      <!--          :error="mergedData.showError && (errorMessage || mergedData.error)"-->
+      <!--          :size="mergedData.size"-->
+      <!--          :filled="filled && !mergedData.error && !errorMessage"-->
+      <!--          :style-config="styleConfig"-->
+      <!--          @delete="clearSelected"-->
+      <!--        />-->
+      <!--      </div>-->
+      <div class="select-container__arrow">
         <b-icon icon="caret-down-fill" :style="showDropdown ? 'transform: rotate(180deg)' : ''" />
       </div>
     </div>
@@ -106,10 +110,14 @@
       }"
     />
 
+    <div class="select-helper" v-if="mergedData.helperText || errorMessage">
+      {{ errorMessage ? errorMessage : mergedData.helperText }}
+    </div>
     <div
       class="select-dropdown"
       :class="{ 'search-input': mergedData.searchableInput, grouped: mergedData.grouped }"
     >
+      <!--      todo merge all props into 1 obj -->
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
@@ -124,6 +132,10 @@
         :dropdown-position="mergedData.dropdownPosition"
         :show-more-button-display="isDisplayShowMore"
         :show-more-button-text="mergedData.showMoreButtonText"
+        :icon-left="mergedData.iconLeft"
+        :icon-right="mergedData.iconRight"
+        :shown-key="mergedData.shownKey"
+        :shown-badge-key="mergedData.shownBadgeKey"
         :input-search-style-config="{
           backgroundColor: '#F7FAFC',
           borderColor: '#E2E8F0',
@@ -183,7 +195,7 @@ export default {
   emits: ['update:modelValue', 'error', 'show-more', 'input'],
   data() {
     return {
-      selectModel: [],
+      selectModel: this.data?.modelValue || [],
       showDropdown: false,
       errorMessage: '',
       searchValue: '',
@@ -197,28 +209,32 @@ export default {
         {
           label: '',
           placeholder: 'Select option',
+          helperText: '', // todo added
           size: 'md',
           clearable: true,
           searchable: false,
           multiple: false,
+          disabled: false, // added
           options: [],
           isLocalOptions: true,
           nonLocalOptionsTotalCount: 0,
           modelValue: [],
           shownKey: 'name',
+          shownBadgeKey: '', // todo added
           error: '',
           showError: true,
+          showSuccess: false, // todo added
           validators: [],
           grouped: false,
           searchPlaceholder: 'Search',
           searchableInput: false,
-          emptyDropdownText: 'no data',
+          emptyDropdownText: 'No results found',
           dropdownPosition: 'bottom',
           showMoreButtonDisplay: false,
           showMoreButtonText: 'Show more...',
           closeDropdownAfterSelection: true,
           openDropdown: false,
-          showFilled: true,
+          showFilled: false, // todo changed default value
         },
         this.data,
       )
@@ -248,22 +264,23 @@ export default {
         '--value-font-size': this.styleConfig?.valueFontSize || this.computeDefaultFontSize,
         '--value-color': this.styleConfig?.valueColor || '#2D3748',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 500,
-        '--placeholder-color': this.styleConfig?.placeholderColor || '#cbd5e0',
+        '--placeholder-color': this.styleConfig?.placeholderColor || '#A0AEC0',
         '--placeholder-font-size':
           this.styleConfig?.placeholderFontSize || this.computeDefaultFontSize,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--label-color': this.styleConfig?.labelColor || '#a0aec0',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400, // todo changed
         '--label-font-size': this.styleConfig?.labelFontSize || '12px',
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
         '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
-        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
+        '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
         '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--focus-border-color': this.styleConfig?.focusBorderColor || '#0066ff',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
         '--filled-background-color': this.styleConfig?.filledBackgroundColor || '#0066ff1a',
         '--filled-font-color': this.styleConfig?.filledFontColor || '#0066ff',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
-        '--arrow-color': this.styleConfig?.arrowColor || '#cbd5e0',
+        '--success-color': this.styleConfig?.successColor || '#66cb9f', // added
+        '--arrow-color': this.styleConfig?.arrowColor || '#A0AEC0',
         '--cross-color': this.styleConfig?.crossColor || '#a0aec0',
         '--focus-box-shadow':
           this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
@@ -310,6 +327,13 @@ export default {
     close() {
       this.showDropdown = false
     },
+    toggle() {
+      if (this.showDropdown) {
+        this.close()
+      } else {
+        this.showDropdown = !this.mergedData.disabled
+      }
+    },
     selectOption(option) {
       if (this.mergedData.multiple && !this.mergedData.searchableInput) {
         if (this.deleteOption(option)) {
@@ -327,7 +351,19 @@ export default {
         this.filterOptions('')
         return
       }
-      this.selectModel = option
+
+      // if (this.deleteOption(option)) {
+      //   return
+      // }
+      console.log(this.selectModel)
+
+      //todo find better way to compare
+      if (this.selectModel.name === option.name) {
+        this.selectModel = []
+      } else {
+        this.selectModel = option
+      }
+
       this.$emit('update:modelValue', this.selectModel)
 
       if (this.mergedData.closeDropdownAfterSelection && !this.mergedData.multiple) {
@@ -404,12 +440,12 @@ export default {
   watch: {
     selectModel: {
       handler(value) {
+        console.log(value)
         if (this.mergedData.validators) {
           this.errorMessage = validate(this.mergedData.validators, value)
+          console.log(this.errorMessage)
           this.$emit('error', this.errorMessage)
         }
-
-        // this.$emit('update:modelValue', value)
       },
       deep: true,
     },
@@ -495,11 +531,53 @@ export default {
       }
     }
   }
+  &-helper {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 8px;
+    color: var(--helper-text-color);
+    line-height: 150%;
+  }
+
+  &--error {
+    .select-helper,
+    .selected,
+    .select-container__arrow > .bi {
+      color: var(--error-color);
+    }
+    .select-container {
+      border-color: var(--error-color);
+      color: var(--error-color);
+    }
+  }
+
+  &--success {
+    .select-helper,
+    .selected,
+    .select-container__arrow > .bi {
+      color: var(--success-color);
+    }
+    .select-container {
+      border-color: var(--success-color);
+      color: var(--success-color);
+    }
+  }
 
   .focus {
     border-color: var(--focus-border-color);
-    box-shadow: var(--focus-box-shadow);
+
+    &.select-helper {
+      color: var(--helper-text-color);
+    }
+    .selected {
+      color: var(--value-color);
+    }
+    .select-container__arrow > .bi {
+      color: var(--cross-color);
+    }
   }
+
   .filled {
     background-color: var(--filled-background-color);
     color: var(--filled-font-color);
@@ -510,21 +588,18 @@ export default {
       }
     }
   }
-  &--error {
-    .select-container {
-      border-color: var(--error-color);
-      color: var(--error-color);
-    }
-  }
 
   .input-search {
     width: 100%;
   }
 
+  //todo default text color - grey-500
   &--lg {
     .select-container {
-      height: 46px;
+      height: 48px;
+      font-size: 16px;
 
+      // todo helper text - 14px  in EInput is correct ????
       &__arrow {
         .bi {
           width: 17px;
@@ -534,16 +609,22 @@ export default {
     }
 
     :deep(.dropdown--top) {
-      bottom: calc(46px + 16px);
+      bottom: calc(46px + 8px);
     }
 
-    .select-label {
+    .select-helper {
       font-size: 14px;
+    }
+
+    .select-label,
+    .selected > span {
+      font-size: 16px;
     }
   }
   &--md {
     .select-container {
-      height: 36px;
+      font-size: 14px;
+      height: 40px;
 
       &__arrow {
         .bi {
@@ -554,12 +635,22 @@ export default {
     }
 
     :deep(.dropdown--top) {
-      bottom: calc(36px + 16px);
+      bottom: calc(36px + 8px);
+    }
+
+    .select-helper {
+      font-size: 12px;
+    }
+
+    .select-label,
+    .selected > span {
+      font-size: 14px;
     }
   }
   &--sm {
     .select-container {
-      height: 26px;
+      font-size: 12px;
+      height: 32px;
 
       &__arrow {
         .bi {
@@ -570,7 +661,42 @@ export default {
     }
 
     :deep(.dropdown--top) {
-      bottom: calc(26px + 16px);
+      bottom: calc(26px + 8px);
+    }
+
+    .select-helper {
+      font-size: 12px;
+    }
+
+    .select-label,
+    .selected > span {
+      font-size: 12px;
+    }
+  }
+  &--xs {
+    .select-container {
+      height: 24px;
+      font-size: 10px;
+
+      &__arrow {
+        .bi {
+          width: 23px;
+          height: 10px;
+        }
+      }
+    }
+
+    :deep(.dropdown--top) {
+      bottom: calc(26px + 8px);
+    }
+
+    .select-helper {
+      font-size: 10px;
+    }
+
+    .select-label,
+    .selected > span {
+      font-size: 10px;
     }
   }
 
@@ -596,7 +722,27 @@ export default {
       position: absolute;
       width: 100%;
       z-index: 10;
-      top: 8px;
+    }
+  }
+
+  &.disabled {
+    //todo All text
+    color: $gray-400;
+
+    .select-label {
+      color: $gray-400;
+    }
+
+    .select-container {
+      border-color: $gray-300;
+
+      .placeholder {
+        color: $gray-400;
+      }
+
+      &__arrow > .bi {
+        color: $gray-400;
+      }
     }
   }
 }

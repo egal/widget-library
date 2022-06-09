@@ -65,7 +65,7 @@ export default {
   &--lg {
     .mask-icon-subtract {
       width: 20px;
-      height: 19px;
+      height: 17px;
     }
   }
   &--md {
