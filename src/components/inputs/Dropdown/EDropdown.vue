@@ -30,7 +30,7 @@
             :icon-right="iconRight"
             :icon-left="iconLeft"
             :filtered-options="group.options"
-            :style-config="styleConfig"
+            :computed-styles="getStyleVars"
             @select="(option) => $emit('select', option)"
           />
         </div>
@@ -51,7 +51,7 @@
         :icon-right="iconRight"
         :icon-left="iconLeft"
         :filtered-options="filteredOptions"
-        :style-config="styleConfig"
+        :computed-styles="getStyleVars"
         @select="(option) => $emit('select', option)"
       />
 
@@ -150,10 +150,16 @@ export default {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
-          this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
+          this.styleConfig?.optionHoverBackgroundColor || '#E2E8F0',
+        '--option-press-background-color':
+          this.styleConfig?.optionPressBackgroundColor || '#cbd5e0',
         '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
         '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
+        '--active-hover-background-color':
+          this.styleConfig?.activeHoverBackgroundColor || '#3385ff', // todo added
+        '--active-press-background-color':
+          this.styleConfig?.activePressBackgroundColor || '#005ce4', // todo added
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
@@ -211,10 +217,13 @@ export default {
   box-shadow: var(--box-shadow);
   max-height: 450px;
   overflow-y: auto;
-
-  //todo ??? width min ? max ?
-  min-width: max-content;
-  width: 280px;
+  min-width: 100%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  .bi {
+    margin-bottom: 0;
+  }
 
   &--top {
     top: initial;
@@ -236,10 +245,7 @@ export default {
       outline: none;
       border: none;
       background-color: transparent;
-      //todo color ?
       color: $gray-500;
-      //color: var(--active-background-color);
-      font-family: var(--font-family);
       font-weight: var(--option-font-weight);
       line-height: 150%;
 
@@ -272,10 +278,11 @@ export default {
     max-height: 230px;
 
     .dropdown-items {
-      padding: 8px 12px;
+      padding: 8px;
     }
 
-    .show-more-btn {
+    .show-more-btn,
+    .dropdown-item--empty {
       font-size: 16px;
     }
     .group {
@@ -288,10 +295,11 @@ export default {
   &--md {
     max-height: 220px;
     .dropdown-items {
-      padding: 8px 16px;
+      padding: 6px;
     }
 
-    .show-more-btn {
+    .show-more-btn,
+    .dropdown-item--empty {
       font-size: 14px;
     }
     .group {
@@ -305,10 +313,11 @@ export default {
     max-height: 180px;
 
     .dropdown-items {
-      padding: 8px 14px;
+      padding: 6px;
     }
 
-    .show-more-btn {
+    .show-more-btn,
+    .dropdown-item--empty {
       font-size: 12px;
     }
     .group {
@@ -319,14 +328,14 @@ export default {
     }
   }
 
-  // todo check styles XS
   &--xs {
     max-height: 150px;
     .dropdown-items {
-      padding: 8px 12px;
+      padding: 4px;
     }
 
-    .show-more-btn {
+    .show-more-btn,
+    .dropdown-item--empty {
       font-size: 10px;
     }
     .group {
@@ -335,6 +344,19 @@ export default {
         font-size: 12px;
       }
     }
+  }
+}
+
+.dropdown-item--empty {
+  align-items: center;
+  justify-content: center;
+  color: $gray-500;
+  padding: 8px 18px;
+  cursor: default;
+  font-weight: 400;
+
+  &:hover {
+    background-color: initial;
   }
 }
 </style>

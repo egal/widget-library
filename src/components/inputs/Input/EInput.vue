@@ -447,11 +447,11 @@ input[type='search']::-webkit-search-results-decoration {
   &--md {
     .input-label {
       font-size: 14px;
-      padding: 0 16px;
     }
     input {
       height: 40px;
       font-size: 14px;
+      padding: 0 16px;
     }
 
     .postfix {
@@ -503,11 +503,11 @@ input[type='search']::-webkit-search-results-decoration {
   &--sm {
     .input-label {
       font-size: 12px;
-      padding: 0 14px;
     }
     input {
       height: 32px;
       font-size: 12px;
+      padding: 0 14px;
     }
 
     .postfix {
@@ -559,11 +559,11 @@ input[type='search']::-webkit-search-results-decoration {
   &--xs {
     .input-label {
       font-size: 10px;
-      padding: 0 12px;
     }
     input {
       height: 24px;
       font-size: 10px;
+      padding: 0 12px;
     }
 
     .postfix {

@@ -1,7 +1,6 @@
 <template>
   <div
     class="dropdown-item"
-    :style="getStyleVars"
     :class="[{ active: isActive(option) }, `dropdown-item--${size}`]"
     v-for="option in filteredOptions"
     @click.stop="$emit('select', option)"
@@ -60,32 +59,17 @@ export default {
       type: String,
       default: 'md',
     },
+
+    computedStyles: {
+      type: Object,
+      default: () => {},
+    },
   },
   emits: ['select', ''],
   data() {
     return {}
   },
-  computed: {
-    getStyleVars() {
-      return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--option-color': this.styleConfig?.optionColor || '#2d3748',
-        '--option-hover-background-color':
-          this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
-        '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
-        '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
-        '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
-        '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
-        '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
-        '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
-        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
-        '--border-radius': this.styleConfig?.borderRadius || '6px',
-        '--box-shadow':
-          this.styleConfig?.boxShadow ||
-          '0px 0px 1px rgba(12, 26, 75, 0.24), 0px 3px 8px -1px rgba(50, 50, 71, 0.05)',
-      }
-    },
-  },
+  computed: {},
   mounted() {},
   beforeDestroy() {},
   methods: {
@@ -121,11 +105,12 @@ export default {
   font-weight: var(--option-font-weight);
   margin-bottom: 4px;
 
-  // ? todo
-  //font-family: var(--font-family);
-
   &:hover {
     background-color: var(--option-hover-background-color);
+  }
+
+  &:active {
+    background-color: var(--option-press-background-color);
   }
 
   .icon {
@@ -147,22 +132,20 @@ export default {
     font-weight: 400;
   }
 
-  &--empty {
-    cursor: default;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background-color: initial;
-    }
-  }
-
   &.active {
     background-color: var(--active-background-color);
     color: var(--active-option-color);
 
     .icon {
       color: var(--active-option-color);
+    }
+
+    &:hover {
+      background-color: var(--active-hover-background-color);
+    }
+
+    &:active {
+      background-color: var(--active-press-background-color);
     }
   }
 
@@ -193,7 +176,6 @@ export default {
     }
   }
 
-  // todo check styles XS
   &--xs {
     font-size: 10px;
 

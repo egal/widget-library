@@ -28,26 +28,26 @@
         <div
           class="selected"
           v-if="mergedData.multiple"
-          v-for="option in selectModel"
-          :style="chipsStyleConfig"
+          :style="{
+            ...chipsStyleConfig,
+          }"
         >
-          <span>{{ option[mergedData.shownKey] }}</span>
-          <!--          todo remove -->
-          <b-icon icon="x-lg" @click.stop="deleteOption(option)" />
+          <span> {{ selectModel.map((item) => item[mergedData.shownKey]).join(', ') }}</span>
+          <!--          <span v-for="(option, idx) in selectModel"-->
+          <!--            >{{ option[mergedData.shownKey] }}{{ idx < selectModel.length - 1 ? ',' : '' }}</span-->
+          <!--          >-->
         </div>
-        <div class="selected" v-else-if="!!selectModel.name">{{ selectModel.name }}</div>
         <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
       </div>
-      <!--       todo remove??? + remove prop -->
-      <!--      <div class="select-container__clear" v-if="showClearButton">-->
-      <!--        <ClearButton-->
-      <!--          :error="mergedData.showError && (errorMessage || mergedData.error)"-->
-      <!--          :size="mergedData.size"-->
-      <!--          :filled="filled && !mergedData.error && !errorMessage"-->
-      <!--          :style-config="styleConfig"-->
-      <!--          @delete="clearSelected"-->
-      <!--        />-->
-      <!--      </div>-->
+
+      <div
+        class="select-container__clear"
+        v-if="mergedData.multiple && selectModel.length > 0"
+        @click="clearSelected"
+      >
+        <span>{{ selectModel.length }}</span
+        ><b-icon icon="x" />
+      </div>
       <div class="select-container__arrow">
         <b-icon icon="caret-down-fill" :style="showDropdown ? 'transform: rotate(180deg)' : ''" />
       </div>
@@ -63,23 +63,24 @@
         @update:modelValue="filterOptions"
         :chipsModel="selectModel"
         :data="{
-          clearable: mergedData.clearable,
-          placeholder: mergedData.searchPlaceholder,
+          clearable: mergedData.inputConfig?.clearable || true,
+          placeholder: mergedData.inputConfig?.searchPlaceholder || 'Search',
           showFilled: false,
           type: 'search',
-          iconLeft: mergedData.iconLeft,
-          iconRight: mergedData.iconRight,
+          iconLeft: mergedData.inputConfig?.iconLeft || 'search',
+          iconRight: mergedData.inputConfig?.iconRight || '',
           size: mergedData.size,
           modelValue: chipInputValue,
           chips: mergedData.multiple && mergedData.searchableInput,
           shownKey: mergedData.shownKey,
+          ...mergedData.inputConfig,
         }"
         :style-config="{
           backgroundColor: '#F7FAFC',
           borderColor: '#E2E8F0',
           iconColor: '#CBD5E0',
           placeholderColor: '#CBD5E0',
-          ...inputSearchStyleConfig,
+          ...mergedData.inputSearchStyleConfig,
         }"
         :chips-inline-style="chipsStyleConfig"
       />
@@ -92,32 +93,30 @@
       v-click-outside="close"
       @update:modelValue="filterOptions"
       :data="{
-        clearable: mergedData.clearable,
-        placeholder: mergedData.searchPlaceholder,
+        clearable: mergedData.inputConfig?.clearable || true,
+        placeholder: mergedData.inputConfig?.searchPlaceholder || 'Search',
         showFilled: false,
         type: 'search',
-        iconLeft: mergedData.iconLeft,
-        iconRight: mergedData.iconRight,
+        iconLeft: mergedData.inputConfig?.iconLeft || 'search',
+        iconRight: mergedData.inputConfig?.iconRight || '',
         size: mergedData.size,
         modelValue: selectModel[mergedData.shownKey],
+        ...mergedData.inputConfig,
       }"
       :style-config="{
         backgroundColor: '#F7FAFC',
         borderColor: '#E2E8F0',
         iconColor: '#CBD5E0',
         placeholderColor: '#CBD5E0',
-        ...inputSearchStyleConfig,
+        ...mergedData.inputSearchStyleConfig,
       }"
     />
 
     <div class="select-helper" v-if="mergedData.helperText || errorMessage">
       {{ errorMessage ? errorMessage : mergedData.helperText }}
     </div>
-    <div
-      class="select-dropdown"
-      :class="{ 'search-input': mergedData.searchableInput, grouped: mergedData.grouped }"
-    >
-      <!--      todo merge all props into 1 obj -->
+
+    <div class="select-dropdown" :class="{ grouped: mergedData.grouped }">
       <EDropdown
         class="dropdown-component"
         v-show="showDropdown"
@@ -128,7 +127,11 @@
         :searchable="mergedData.searchable"
         :grouped="mergedData.grouped"
         :search-placeholder="mergedData.searchPlaceholder"
-        :style-config="{ ...dropdownStyleConfig, optionColor: this.styleConfig?.valueColor }"
+        :style-config="{
+          ...styleConfig,
+          ...mergedData.dropdownStyleConfig,
+          optionColor: this.styleConfig?.valueColor,
+        }"
         :dropdown-position="mergedData.dropdownPosition"
         :show-more-button-display="isDisplayShowMore"
         :show-more-button-text="mergedData.showMoreButtonText"
@@ -141,7 +144,7 @@
           borderColor: '#E2E8F0',
           iconColor: '#CBD5E0',
           placeholderColor: '#CBD5E0',
-          ...inputSearchStyleConfig,
+          ...mergedData.inputSearchStyleConfig,
         }"
         @select="selectOption"
         @show-more="$emit('show-more')"
@@ -179,14 +182,14 @@ export default {
       type: Object,
       default: () => {},
     },
-    dropdownStyleConfig: {
-      type: Object,
-      default: () => {},
-    },
-    inputSearchStyleConfig: {
-      type: Object,
-      default: () => {},
-    },
+    // dropdownStyleConfig: {
+    //   type: Object,
+    //   default: () => {},
+    // },
+    // inputSearchStyleConfig: {
+    //   type: Object,
+    //   default: () => {},
+    // },
     chipsStyleConfig: {
       type: Object,
       default: () => {},
@@ -209,7 +212,7 @@ export default {
         {
           label: '',
           placeholder: 'Select option',
-          helperText: '', // todo added
+          helperText: '',
           size: 'md',
           clearable: true,
           searchable: false,
@@ -220,10 +223,10 @@ export default {
           nonLocalOptionsTotalCount: 0,
           modelValue: [],
           shownKey: 'name',
-          shownBadgeKey: '', // todo added
+          shownBadgeKey: '',
           error: '',
           showError: true,
-          showSuccess: false, // todo added
+          showSuccess: false,
           validators: [],
           grouped: false,
           searchPlaceholder: 'Search',
@@ -234,23 +237,27 @@ export default {
           showMoreButtonText: 'Show more...',
           closeDropdownAfterSelection: true,
           openDropdown: false,
-          showFilled: false, // todo changed default value
+          showFilled: false,
+          dropdownStyleConfig: {},
+          inputSearchStyleConfig: {},
+          inputConfig: {},
         },
         this.data,
       )
     },
-    openDropdown() {
-      return this.mergedData.openDropdown
-    },
+    // openDropdown() {
+    //
+    //   return this.mergedData.openDropdown
+    // },
     filled() {
       if (this.mergedData.multiple) {
         return !!this.selectModel.length
       }
       return !!Object.keys(this.selectModel).length
     },
-    showClearButton() {
-      return this.filled && this.mergedData.clearable && !this.showDropdown
-    },
+    // showClearButton() {
+    //   return this.filled && this.mergedData.clearable && !this.showDropdown
+    // },
     computeDefaultFontSize() {
       return this.mergedData.size === 'lg'
         ? '14px'
@@ -269,7 +276,7 @@ export default {
           this.styleConfig?.placeholderFontSize || this.computeDefaultFontSize,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
         '--label-color': this.styleConfig?.labelColor || '#a0aec0',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 400, // todo changed
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
         '--label-font-size': this.styleConfig?.labelFontSize || '12px',
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
         '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
@@ -285,7 +292,7 @@ export default {
         '--focus-box-shadow':
           this.styleConfig?.focusBoxShadow || '0px 0px 0px 2px rgba(76, 111, 255, 0.3)',
         '--search-background-color':
-          this.inputSearchStyleConfig?.searchBackgroundColor || '#f7fafc',
+          this.mergedData?.inputSearchStyleConfig?.searchBackgroundColor || '#f7fafc',
       }
     },
 
@@ -302,6 +309,7 @@ export default {
   },
   mounted() {
     this.selectModel = this.mergedData.modelValue
+    this.showDropdown = this.mergedData.openDropdown
   },
   methods: {
     onEnter(event) {
@@ -335,36 +343,25 @@ export default {
       }
     },
     selectOption(option) {
-      if (this.mergedData.multiple && !this.mergedData.searchableInput) {
+      if (this.mergedData.multiple) {
         if (this.deleteOption(option)) {
           return
         }
         this.selectModel.push(option)
         this.$emit('update:modelValue', this.selectModel)
-        return
-      } else if (this.mergedData.searchableInput && this.mergedData.multiple) {
-        if (this.deleteOption(option)) {
-          return
+
+        if (this.mergedData.searchableInput) {
+          this.filterOptions('')
         }
-        this.selectModel.push(option)
-        this.$emit('update:modelValue', this.selectModel)
-        this.filterOptions('')
         return
-      }
-
-      // if (this.deleteOption(option)) {
-      //   return
-      // }
-      console.log(this.selectModel)
-
-      //todo find better way to compare
-      if (this.selectModel.name === option.name) {
-        this.selectModel = []
       } else {
-        this.selectModel = option
+        if (this.deleteOption(option)) {
+          return
+        } else {
+          this.selectModel = [option]
+          this.$emit('update:modelValue', this.selectModel)
+        }
       }
-
-      this.$emit('update:modelValue', this.selectModel)
 
       if (this.mergedData.closeDropdownAfterSelection && !this.mergedData.multiple) {
         this.showDropdown = false
@@ -440,20 +437,15 @@ export default {
   watch: {
     selectModel: {
       handler(value) {
-        console.log(value)
         if (this.mergedData.validators) {
           this.errorMessage = validate(this.mergedData.validators, value)
-          console.log(this.errorMessage)
+
           this.$emit('error', this.errorMessage)
         }
       },
       deep: true,
     },
-    closeDropDown() {
-      if (!this.mergedData.openDropdown) {
-        this.showDropdown = false
-      }
-    },
+
     'mergedData.openDropdown'(value) {
       this.showDropdown = !value
     },
@@ -482,13 +474,11 @@ export default {
     font-weight: var(--label-font-weight);
     color: var(--label-color);
     font-size: var(--label-font-size);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   &-container {
     width: 100%;
-    display: grid;
-    grid-template-columns: auto 16px;
-    grid-column-gap: 6px;
+    display: flex;
     align-items: center;
     padding: 0 12px;
     box-sizing: border-box;
@@ -497,7 +487,13 @@ export default {
     border-radius: var(--border-radius);
     &__values {
       display: flex;
-      overflow-x: hidden;
+      flex-grow: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-right: auto;
+
+      text-overflow: ellipsis;
+
       .placeholder {
         color: var(--placeholder-color);
         font-size: var(--placeholder-font-size);
@@ -507,9 +503,13 @@ export default {
         align-items: center;
         margin-right: 10px;
         color: var(--value-color);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         span {
-          margin-right: 8px;
+          overflow: hidden;
           white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .bi {
           width: 8px;
@@ -521,9 +521,26 @@ export default {
       }
     }
     &__clear {
-      height: fit-content;
-      align-self: center;
+      background: $gray-200;
+      padding: 0 6px;
+      border-radius: 24px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 150%;
+      color: $gray-800;
+      margin-right: 5px;
+      text-align: center;
+      cursor: pointer;
+      min-width: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .bi {
+        width: 18px;
+      }
     }
+
     &__arrow {
       .bi {
         transition: 0.2s;
@@ -593,13 +610,19 @@ export default {
     width: 100%;
   }
 
-  //todo default text color - grey-500
+  .placeholder {
+    font-size: var(--placeholder-font-size);
+  }
+
+  .selected {
+    font-size: var(--value-font-size);
+  }
+
   &--lg {
     .select-container {
       height: 48px;
       font-size: 16px;
 
-      // todo helper text - 14px  in EInput is correct ????
       &__arrow {
         .bi {
           width: 17px;
@@ -617,8 +640,14 @@ export default {
     }
 
     .select-label,
-    .selected > span {
+    .selected > span,
+    .placeholder,
+    .select-container__clear {
       font-size: 16px;
+    }
+
+    .select-container__clear {
+      min-width: 35px;
     }
   }
   &--md {
@@ -643,8 +672,14 @@ export default {
     }
 
     .select-label,
-    .selected > span {
+    .selected > span,
+    .placeholder,
+    .select-container__clear {
       font-size: 14px;
+    }
+
+    .select-container__clear {
+      min-width: 25px;
     }
   }
   &--sm {
@@ -669,8 +704,14 @@ export default {
     }
 
     .select-label,
-    .selected > span {
+    .selected > span,
+    .placeholder,
+    .select-container__clear {
       font-size: 12px;
+    }
+
+    .select-container__clear {
+      min-width: 20px;
     }
   }
   &--xs {
@@ -695,23 +736,21 @@ export default {
     }
 
     .select-label,
-    .selected > span {
+    .selected > span,
+    .placeholder,
+    .select-container__clear {
       font-size: 10px;
     }
-  }
 
-  .placeholder {
-    font-size: var(--placeholder-font-size);
-  }
-
-  .selected {
-    font-size: var(--value-font-size);
+    .select-container__clear {
+      min-width: 15px;
+    }
   }
 
   &-dropdown {
     position: relative;
     z-index: 2;
-    width: calc(100% + 14%);
+    width: 100%;
 
     &.search-input {
       width: inherit;
@@ -720,13 +759,12 @@ export default {
 
     .dropdown-component {
       position: absolute;
-      width: 100%;
+      //width: 100%;
       z-index: 10;
     }
   }
 
   &.disabled {
-    //todo All text
     color: $gray-400;
 
     .select-label {
