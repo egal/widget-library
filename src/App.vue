@@ -29,7 +29,7 @@ export default defineComponent({
     return {
       calendarData: {
         isDouble: false,
-        isRangePicker: false,
+        isRange: true,
         showInput: true,
 
         localeOptions: {

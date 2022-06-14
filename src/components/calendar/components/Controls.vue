@@ -3,7 +3,6 @@
     <li class="calendar__controls-left" @click="$emit('change-month', data?.isDouble ? -2 : -1)">
       <b-icon icon="chevron-left" />
     </li>
-<!--    todo вынести в компонент SelectCalendar -->
     <li class="calendar__controls-month">
       <SelectControls class='select--month' @select-control='selectMonth' :value='monthValue' :options='allMonths' />
       <SelectControls class='select--year' @select-control='selectYear' :value='yearValue' :options='allYears' />

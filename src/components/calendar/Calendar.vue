@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar-wrapper" v-click-outside="close">
+  <div class="calendar-wrapper" v-click-outside="close"   :class="{ 'stretch-input': !mergedData?.timePicker || mergedData.isRange || mergedData.isDouble }">
     <div
       :class="`date-inputs date-inputs--${mergedData?.inputData?.size ?? 'sm'} ${
         imitateInputsFocus ? 'focused' : ''
@@ -12,7 +12,7 @@
     >
       <EInput
         class="calendar__input left"
-        :class="{ single: !mergedData?.timePicker || mergedData.isRange }"
+
         :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"
@@ -528,16 +528,14 @@ export default defineComponent({
       this.dates = this.generateDates(this.curMonth)
     },
 
-    // todo
+    // todo repeated
     selectYear(year) {
       this.curMonth.setYear(year)
       this.dates = this.generateDates(this.curMonth)
     },
 
-    // todo
     selectNextYear(year) {
       this.nextMonth.setYear(year)
-
       this.nextMonthDates = this.generateDates(this.nextMonth)
     },
 
@@ -663,11 +661,12 @@ export default defineComponent({
 .calendar-wrapper {
   position: relative;
   width: fit-content;
+
   font-feature-settings: 'pnum' on, 'lnum' on;
+
 
   .calendar__input {
     margin-bottom: 8px;
-
     :deep(input) {
       &:hover {
         cursor: pointer;
@@ -711,6 +710,7 @@ export default defineComponent({
     }
 
     &.doubled {
+
       &.focused {
         outline: 2px solid var(--focus-input-border-color);
       }
@@ -824,7 +824,7 @@ export default defineComponent({
 
         .right {
           :deep(input) {
-            width: 65px;
+            width: 70px;
             padding-left: 25px;
             padding-right: 0;
           }
@@ -842,11 +842,7 @@ export default defineComponent({
       }
     }
 
-    .left.single {
-      :deep(input) {
-        width: auto;
-      }
-    }
+
   }
 
   .calendar {
@@ -1055,31 +1051,32 @@ export default defineComponent({
         }
       }
 
-      &.single {
-        li.--in-range {
-          &.--not-cur-month {
-            color: $gray-400;
-            background-color: #edf2f7;
-
-            &:hover {
-              cursor: pointer;
-              color: white;
-              background-color: var(--active-color);
-            }
-            &::before,
-            &::after {
-              background-color: #edf2f7;
-            }
-          }
-        }
-
-        li.--active {
-          &.--not-cur-month {
-            color: white;
-            background-color: var(--active-color);
-          }
-        }
-      }
+      // todo ???
+      //&.single {
+      //  li.--in-range {
+      //    &.--not-cur-month {
+      //      color: $gray-400;
+      //      background-color: #edf2f7;
+      //
+      //      &:hover {
+      //        cursor: pointer;
+      //        color: white;
+      //        background-color: var(--active-color);
+      //      }
+      //      &::before,
+      //      &::after {
+      //        background-color: #edf2f7;
+      //      }
+      //    }
+      //  }
+      //
+      //  li.--active {
+      //    &.--not-cur-month {
+      //      color: white;
+      //      background-color: var(--active-color);
+      //    }
+      //  }
+      //}
     }
 
     :deep(.footer > .label) {
@@ -1087,4 +1084,15 @@ export default defineComponent({
     }
   }
 }
+
+.calendar-wrapper.stretch-input {
+    width: 100%;
+
+    .left {
+      width: 100%;
+      :deep(input) {
+        width: 100%;
+      }
+    }
+  }
 </style>

@@ -94,13 +94,8 @@ export default defineComponent({
       .selected {
         display: flex;
         align-items: center;
-        // todo add var ?
         font-weight: 500;
-        // todo add var ?
-        //font-size: var(--value-font-size);
         font-size: 14px;
-        // todo var ?
-        //color: var(--value-color);
         color: $gray-800;
         span {
           margin-right: 2px;
