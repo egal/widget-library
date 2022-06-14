@@ -42,7 +42,9 @@
         <Controls
           :data="data"
           :month-to-display="curMonth"
-          @change-month="(value) => changeMonth(value)"
+          @change-month="changeMonth"
+          @update:month="selectMonth"
+          @update:year="selectYear"
         />
         <ul class="calendar__weekdays">
           <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
@@ -78,10 +80,13 @@
       </div>
 
       <div class="right" v-if="mergedData?.isDouble">
+        <!--        todo handle events -->
         <Controls
           :data="data"
           :month-to-display="nextMonth"
-          @change-month="(value) => changeMonth(value)"
+          @change-month="changeMonth"
+          @update:month="selectNextMonth"
+          @update:year="selectNextYear"
         />
         <ul class="calendar__weekdays">
           <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
@@ -513,6 +518,29 @@ export default defineComponent({
       }
     },
 
+    selectNextMonth(month) {
+      this.nextMonth.setMonth(month.index, 1)
+      this.nextMonthDates = this.generateDates(this.nextMonth)
+    },
+
+    selectMonth(month) {
+      this.curMonth.setMonth(month.index, 1)
+      this.dates = this.generateDates(this.curMonth)
+    },
+
+    // todo
+    selectYear(year) {
+      this.curMonth.setYear(year)
+      this.dates = this.generateDates(this.curMonth)
+    },
+
+    // todo
+    selectNextYear(year) {
+      this.nextMonth.setYear(year)
+
+      this.nextMonthDates = this.generateDates(this.nextMonth)
+    },
+
     //Генерация массива дат на месяц
     generateDates(curMonth) {
       return Array.from(
@@ -690,20 +718,23 @@ export default defineComponent({
       .left,
       .right {
         margin-bottom: 0;
-
         border-radius: var(--border-radius);
 
         :deep(.input-container) {
           input {
             &:focus {
               outline: none;
+              // todo --border-color var from EInput
+              border-color: #e2e8f0;
             }
           }
 
+          //todo filled ! check
           &.filled {
             input {
               &:focus {
                 outline: none;
+                border: none;
                 background-color: var(--filled-input-background-color);
                 color: var(--filled-font-color);
               }
@@ -781,9 +812,9 @@ export default defineComponent({
       &.date-inputs--sm {
         .left {
           :deep(input) {
-            width: 93px;
+            width: 110px;
             padding-right: 0;
-            padding-left: 23px;
+            padding-left: 28px;
           }
 
           :deep(.bi.icon.icon--left) {
@@ -793,8 +824,8 @@ export default defineComponent({
 
         .right {
           :deep(input) {
-            width: 56px;
-            padding-left: 20px;
+            width: 65px;
+            padding-left: 25px;
             padding-right: 0;
           }
 
@@ -881,6 +912,9 @@ export default defineComponent({
         font-size: var(--font-size);
         line-height: 125%;
         color: $gray-800;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
     :deep(.calendar__weekdays) {

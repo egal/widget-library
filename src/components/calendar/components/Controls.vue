@@ -4,7 +4,18 @@
       <BootstrapIcon icon="chevron-left" />
     </li>
     <li class="calendar__controls-month">
-      {{ capitalize(displayOnlyMonth(monthToDisplay)) }}
+      <select v-model="monthValue">
+        <option v-for="y in allMonths" :key="y.name" :value="y.name" :label="y.name"></option>
+      </select>
+
+      <!--      todo imported Ecounter from branch TO PR? not merged into master yet -->
+      <!--      <ECounter-->
+
+      <!--       todo с какого по какой год  -->
+
+      <select v-model="yearValue">
+        <option v-for="y in allYears" :key="y.name" :value="y.name" :label="y.name"></option>
+      </select>
     </li>
     <li
       class="calendar__controls-right"
@@ -34,24 +45,84 @@ export default defineComponent({
       default: null,
     },
   },
+  emits: ['update:moth', 'update:year'],
   data() {
     return {
       capitalize,
+      monthValue: '',
+      yearValue: '',
     }
   },
-  computed: {},
-  mounted() {},
-  methods: {
-    //Отображает только месяц и год, даты хранятся в ISODate
-    displayOnlyMonth(dateString) {
-      return new Date(dateString).toLocaleString(this.data?.locale || 'en-US', {
-        month: 'long',
-        year: 'numeric',
-      })
+  computed: {
+    allMonths() {
+      const months = []
+      for (let i = 0; i < 12; i++) {
+        const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
+          this.data?.locale || 'en-US',
+          {
+            month: 'long',
+          },
+        )
+
+        months.push({ name: newMonth, index: i })
+      }
+
+      return months
+    },
+
+    allYears() {
+      const years = []
+      //todo pass as props or calclulate somehow
+      const min = 1940
+      const max = 2040
+      for (let i = min; i <= max; i++) {
+        years.push({ name: i })
+      }
+
+      return years
+    },
+
+    currentMonth() {
+      if (!this.allMonths.length) {
+        return
+      }
+      const currMonthIndex = new Date(this.monthToDisplay).getMonth()
+      return this.allMonths[currMonthIndex]
     },
   },
-  watch: {},
+  mounted() {
+    this.yearValue = new Date(this.monthToDisplay).getFullYear()
+    this.monthValue = new Date(this.monthToDisplay).toLocaleString(this.data?.locale || 'en-US', {
+      month: 'long',
+    })
+  },
+  methods: {
+    // //Отображает только месяц, даты хранятся в ISODate
+    // displayOnlyMonth(dateString) {
+    //   return new Date(dateString).toLocaleString(this.data?.locale || 'en-US', {
+    //     month: 'long',
+    //   })
+    // },
+  },
+  watch: {
+    monthValue(newValue, oldValue) {
+      if (!!oldValue) {
+        this.$emit(
+          'update:month',
+          this.allMonths.find((i) => i.name === newValue),
+        )
+      }
+    },
+
+    yearValue(newValue, oldValue) {
+      if (!!oldValue) {
+        this.$emit('update:year', newValue)
+      }
+    },
+  },
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+//todo style selects
+</style>
