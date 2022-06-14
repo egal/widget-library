@@ -1,27 +1,39 @@
 <template>
-  <div class="counter" :class="`counter--${mergedData.size}`" :style="getStyleVars">
-    <div class="counter-label" v-if="mergedData.label">{{ mergedData.label }}</div>
+  <div class="counter" :class="`counter--${data.size}`" :style="styleVars">
+    <div
+      class="counter-label"
+      v-if="data.label"
+      :class="{ disabled: data.disabled }"
+    >
+      {{ data.label }}
+    </div>
     <div class="counter-container">
       <input
-        v-model="newValue"
         class="counter-container__input"
-        v-if="false"
-        :disabled="mergedData.disabled"
+        type="number"
+        :value="modelValue"
+        @input="$emit('update:modelValue', Number($event.target.value))"
+        :disabled="data.disabled"
       />
-      <div class="counter-container__value" v-if="true" :class="{ disabled: mergedData.disabled }">
-        {{ newValue }}
-      </div>
-      <div class="counter-container__arrows" :class="{ disabled: mergedData.disabled }">
-        <b-icon icon="caret-up-fill" @click="increaseValue" />
+      <div class="counter-container__arrows">
+        <b-icon
+          icon="caret-up-fill"
+          @click="$emit('increaseValue')"
+          :class="{ disabled: data.disabled }"
+        />
         <b-icon
           icon="caret-down-fill"
-          @click="decreaseValue"
-          :class="{ disabled: mergedData.disabled || newValue === 0 }"
+          @click="$emit('decreaseValue')"
+          :class="{ disabled: data.disabled || modelValue === 0 }"
         />
       </div>
     </div>
-    <div class="counter-helper-text" v-if="mergedData.helperText">
-      {{ mergedData.helperText }}
+    <div
+      class="counter-helper-text"
+      v-if="data.helperText"
+      :class="{ disabled: data.disabled }"
+    >
+      {{ data.helperText }}
     </div>
   </div>
 </template>
@@ -34,8 +46,13 @@ export default {
   components: {
     BIcon: BootstrapIcon,
   },
+  emits: ['update:modelValue', 'increaseValue', 'decreaseValue'],
   props: {
     data: {
+      type: Object,
+      default: () => {},
+    },
+    styleVars: {
       type: Object,
       default: () => {},
     },
@@ -43,70 +60,15 @@ export default {
       type: Object,
       default: () => {},
     },
+    modelValue: {
+      type: Number,
+      default: () => {},
+    }
   },
   data() {
     return {
       newValue: 0,
     }
-  },
-  computed: {
-    mergedData() {
-      return Object.assign(
-        {
-          label: '',
-          helperText: '',
-          modelValue: 0,
-          max: null,
-          min: null,
-          size: 'md',
-          disabled: false,
-        },
-        this.data,
-      )
-    },
-    getStyleVars() {
-      return {
-        '--font-family': this.styleConfig?.fontFamily || 'Inter',
-        '--value-font-size-text': this.styleConfig?.valueFontSizeText || '16px',
-        '--value-color': this.styleConfig?.valueColor || '#A0AEC0',
-        '--value-font-weight': this.styleConfig?.valueFontWeight || 700,
-        '--label-color': this.styleConfig?.labelColor || '#A0AEC0',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
-        '--helper-text-color': this.styleConfig?.helperTextColor || '#A0AEC0',
-        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
-        '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
-        '--border-radius': this.styleConfig?.borderRadius || '8px',
-        '--icon-color': this.styleConfig?.iconColor || '#A0AEC0',
-        '--icon-color-hover': this.styleConfig?.iconColorHover || '#2D3748',
-        '--icon-color-disabled': this.styleConfig?.iconColorDisabled || '#CBD5E0',
-        '--text-color-disabled': this.styleConfig?.textColorDisabled || '#CBD5E0',
-      }
-    },
-  },
-  methods: {
-    increaseValue() {
-      if (
-        (!this.mergedData.max && !this.mergedData.disabled) ||
-        (this.mergedData.max && !this.mergedData.disabled && this.newValue < this.mergedData.max)
-      ) {
-        this.newValue++
-      }
-      this.$emit('update:modelValue', this.newValue)
-    },
-    decreaseValue() {
-      if (
-        (!this.mergedData.min && !this.mergedData.disabled && this.newValue > 0) ||
-        (this.mergedData.min && this.newValue > this.mergedData.min)
-      ) {
-        this.newValue--
-      }
-      this.$emit('update:modelValue', this.newValue)
-    },
-  },
-  watch: {
-    value(value) {
-      this.newValue = value
-    },
   },
 }
 </script>
@@ -124,6 +86,9 @@ export default {
     color: var(--label-color);
     font-weight: var(--label-font-weight);
     margin-bottom: 8px;
+    &.disabled {
+      color: var(--label-color-disabled);
+    }
   }
   &-container {
     display: grid;
@@ -142,26 +107,25 @@ export default {
         &:hover {
           color: var(--icon-color-hover);
         }
+        &.disabled {
+          color: var(--icon-color-disabled);
+        }
       }
     }
-
     &__value {
       font-weight: var(--value-font-weight);
       color: var(--value-color);
       font-size: 14px;
       line-height: 17px;
     }
-
     &__arrows {
       height: fit-content;
       align-self: center;
-    }
-    .disabled {
-      color: var(--text-color-disabled);
-      cursor: default;
-      .bi {
+      &.disabled {
+        .bi {
         color: var(--icon-color-disabled);
         cursor: default;
+        }
       }
     }
     &__input {
@@ -170,8 +134,12 @@ export default {
       line-height: 17px;
       color: var(--value-color);
       &:focus {
+        border-color: var(--border-focus-color);
         outline: none;
-        color: var(--placeholder-color);
+      }
+      &:disabled {
+        background: none;
+        color: var(--value-color-disabled)
       }
     }
   }
@@ -180,8 +148,10 @@ export default {
     font-weight: var(--helper-text-font-weight);
     color: var(--helper-text-color);
     margin-top: 8px;
+    &.disabled {
+      color: var(--helper-text-color-disabled);
+    }
   }
-
   &--lg {
     .counter-label {
       font-size: 16px;
@@ -189,13 +159,12 @@ export default {
     .counter-container {
       height: 48px;
       padding: 1px 18px;
-      grid-column-gap: 22px;
+      grid-column-gap: 12px;
       min-width: 120px;
-
       &__arrows {
         .bi {
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
         }
       }
       &__input {
@@ -213,18 +182,17 @@ export default {
     }
     .counter-container {
       height: 40px;
-      grid-column-gap: 18px;
+      grid-column-gap: 10px;
       padding: 1px 16px;
       min-width: 103px;
-
       &__input {
         font-size: 14px;
-        width: 40px;
+        width: 41px;
       }
       &__arrows {
         .bi {
-          width: 16px;
-          height: 16px;
+          width: 14px;
+          height: 14px;
         }
       }
       .helper-text {
@@ -238,18 +206,18 @@ export default {
     }
     .counter-container {
       height: 32px;
-      grid-column-gap: 16px;
+      grid-column-gap: 8px;
       padding: 1px 14px;
       min-width: 90px;
-
+      border-radius: 6px;
       &__input {
         font-size: 12px;
         width: 34px;
       }
       &__arrows {
         .bi {
-          width: 14px;
-          height: 14px;
+          width: 12px;
+          height: 12px;
         }
       }
       .helper-text {
@@ -263,13 +231,13 @@ export default {
     }
     .counter-container {
       height: 24px;
-      grid-column-gap: 16px;
+      grid-column-gap: 6px;
       padding: 1px 12px;
       min-width: 73px;
-
+      border-radius: 4px;
       &__input {
         font-size: 10px;
-        width: 28px;
+        width: 27px;
       }
       &__arrows {
         .bi {
@@ -282,5 +250,15 @@ export default {
       }
     }
   }
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type='number'],
+input[type="number"]:hover,
+input[type="number"]:focus {
+  appearance: none;
+  -moz-appearance: textfield;
 }
 </style>

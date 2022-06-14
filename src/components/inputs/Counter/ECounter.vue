@@ -1,14 +1,21 @@
 <template>
-  {{ newValue}}
   <ECounterPrimary
     v-if="mergedData.type === 'primary'"
     :data="mergedData"
-    @update:modelValue="newValue"
+    :style-vars="getStyleVars"
+    :style-config="styleConfig"
+    :value="newValue"
+    @increase-value="increaseValue"
+    @decrease-value="decreaseValue"
   />
   <ECounterSecondary
     v-if="mergedData.type === 'secondary'"
+    v-model="newValue"
     :data="mergedData"
+    :style-vars="getStyleVars"
     :style-config="styleConfig"
+    @increase-value="increaseValue"
+    @decrease-value="decreaseValue"
   />
 </template>
 
@@ -55,6 +62,27 @@ export default {
         this.data,
       )
     },
+    getStyleVars() {
+      return {
+        '--font-family': this.styleConfig?.fontFamily || 'Inter',
+        '--value-font-size': this.styleConfig?.valueFontSize || '16px',
+        '--value-font-weight': this.styleConfig?.valueFontWeight || 700,
+        '--value-color': this.styleConfig?.valueColor || '#A0AEC0',
+        '--value-color-disabled': this.styleConfig?.valueColorDisabled || '#CBD5E0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
+        '--label-color': this.styleConfig?.labelColor || '#A0AEC0',
+        '--label-color-disabled': this.styleConfig?.labelColorDisabled || '#CBD5E0',
+        '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
+        '--helper-text-color': this.styleConfig?.helperTextColor || '#A0AEC0',
+        '--helper-text-color-disabled': this.styleConfig?.helperTextColorDisabled || '#CBD5E0',
+        '--border-color': this.styleConfig?.borderColor || '#E2E8F0',
+        '--border-focus-color': this.styleConfig?.borderFocusColor || '#76ACFB',
+        '--border-radius': this.styleConfig?.borderRadius || '8px',
+        '--icon-color': this.styleConfig?.iconColor || '#A0AEC0',
+        '--icon-color-hover': this.styleConfig?.iconColorHover || '#2D3748',
+        '--icon-color-disabled': this.styleConfig?.iconColorDisabled || '#EDF2F7',
+      }
+    },
   },
   mounted() {
     this.newValue = this.mergedData.modelValue
@@ -65,7 +93,6 @@ export default {
         (!this.mergedData.max && !this.mergedData.disabled) ||
         (this.mergedData.max && !this.mergedData.disabled && this.newValue < this.mergedData.max)
       ) {
-        console.log(this.newValue)
         this.newValue++
       }
       this.$emit('update:modelValue', this.newValue)
@@ -87,5 +114,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss"></style>
