@@ -5,7 +5,6 @@
     :style-vars="getStyleVars"
     :style-config="styleConfig"
     :value="newValue"
-    @keydown.enter="onEnter"
     @increase-value="increaseValue"
     @decrease-value="decreaseValue"
   />
@@ -15,7 +14,6 @@
     :data="mergedData"
     :style-vars="getStyleVars"
     :style-config="styleConfig"
-    @keydown.enter="onEnter"
     @increase-value="increaseValue"
     @decrease-value="decreaseValue"
   />
@@ -90,10 +88,6 @@ export default {
     this.newValue = this.mergedData.modelValue
   },
   methods: {
-    onEnter() {
-      this.$emit('update:modelValue', this.newValue)
-    },
-
     increaseValue() {
       if (
         (!this.mergedData.max && !this.mergedData.disabled) ||

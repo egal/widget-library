@@ -1,28 +1,19 @@
 <template>
   <ul class="calendar__controls">
     <li class="calendar__controls-left" @click="$emit('change-month', data?.isDouble ? -2 : -1)">
-      <BootstrapIcon icon="chevron-left" />
+      <b-icon icon="chevron-left" />
     </li>
+<!--    todo вынести в компонент SelectCalendar -->
     <li class="calendar__controls-month">
-      <select v-model="monthValue">
-        <option v-for="y in allMonths" :key="y.name" :value="y.name" :label="y.name"></option>
-      </select>
-
-      <!--      todo imported Ecounter from branch TO PR? not merged into master yet -->
-      <!--      <ECounter-->
-
-      <!--       todo с какого по какой год  -->
-
-      <select v-model="yearValue">
-        <option v-for="y in allYears" :key="y.name" :value="y.name" :label="y.name"></option>
-      </select>
+      <SelectControls class='select--month' @select-control='selectMonth' :value='monthValue' :options='allMonths' />
+      <SelectControls class='select--year' @select-control='selectYear' :value='yearValue' :options='allYears' />
     </li>
     <li
       class="calendar__controls-right"
       :class="{ hidden: data?.isDouble }"
       @click="$emit('change-month', data?.isDouble ? 2 : 1)"
     >
-      <BootstrapIcon icon="chevron-right" />
+      <b-icon icon="chevron-right" />
     </li>
   </ul>
 </template>
@@ -31,10 +22,16 @@
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import { defineComponent } from 'vue'
 import { capitalize } from '@/assets/calendar/helpers'
+import EDropdown from '@/components/inputs/Dropdown/EDropdown'
+import vClickOutside from 'click-outside-vue3'
+import SelectControls from '@/components/calendar/components/SelectControls'
 
 export default defineComponent({
   name: 'Controls',
-  components: { BootstrapIcon },
+  components: { SelectControls, EDropdown, BIcon: BootstrapIcon, },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   props: {
     data: {
       type: Object,
@@ -45,7 +42,7 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['update:moth', 'update:year'],
+  emits: ['update:month', 'update:year'],
   data() {
     return {
       capitalize,
@@ -103,6 +100,18 @@ export default defineComponent({
     //     month: 'long',
     //   })
     // },
+
+    //todo repeat
+    selectYear(option) {
+      this.yearValue = option.name
+      this.$emit('update:year', option)
+    },
+
+    selectMonth(option) {
+      this.monthValue = option.name
+      this.$emit('update:month', option)
+    },
+
   },
   watch: {
     monthValue(newValue, oldValue) {
@@ -124,5 +133,15 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-//todo style selects
+.select--year {
+  ::v-deep(.select-container) {
+    padding-left: 0;
+  }
+}
+
+.select--month {
+  ::v-deep(.selected) {
+    margin-left: auto;
+  }
+}
 </style>

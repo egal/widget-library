@@ -15,7 +15,6 @@
 
     <br />
 
-    <input type="date" />
   </div>
 </template>
 

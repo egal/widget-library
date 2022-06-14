@@ -80,7 +80,7 @@
       </div>
 
       <div class="right" v-if="mergedData?.isDouble">
-        <!--        todo handle events -->
+
         <Controls
           :data="data"
           :month-to-display="nextMonth"
