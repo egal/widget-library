@@ -4,8 +4,18 @@
       <b-icon icon="chevron-left" />
     </li>
     <li class="calendar__controls-month">
-      <SelectControls class='select--month' @select-control='selectMonth' :value='monthValue' :options='allMonths' />
-      <SelectControls class='select--year' @select-control='selectYear' :value='yearValue' :options='allYears' />
+      <SelectControls
+        class="select--month"
+        @select-control="selectMonth"
+        :value="monthValue"
+        :options="allMonths"
+      />
+      <SelectControls
+        class="select--year"
+        @select-control="selectYear"
+        :value="yearValue"
+        :options="allYears"
+      />
     </li>
     <li
       class="calendar__controls-right"
@@ -27,7 +37,7 @@ import SelectControls from '@/components/calendar/components/SelectControls'
 
 export default defineComponent({
   name: 'Controls',
-  components: { SelectControls, EDropdown, BIcon: BootstrapIcon, },
+  components: { SelectControls, EDropdown, BIcon: BootstrapIcon },
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -39,6 +49,11 @@ export default defineComponent({
     monthToDisplay: {
       type: Object,
       default: null,
+    },
+
+    yearSelectRange: {
+      type: Object,
+      default: () => {},
     },
   },
   emits: ['update:month', 'update:year'],
@@ -52,14 +67,33 @@ export default defineComponent({
   computed: {
     allMonths() {
       const months = []
-      for (let i = 0; i < 12; i++) {
+      // for (let i = 0; i < 12; i++) {
+      //   const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
+      //     this.data?.locale || 'en-US',
+      //     {
+      //       month: 'long',
+      //     },
+      //   )
+      //
+      //   months.push({ name: newMonth, index: i })
+      // }
+      const currMonthIndex = new Date(this.monthToDisplay).getMonth()
+      for (let i = currMonthIndex; i < 12; i++) {
         const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
           this.data?.locale || 'en-US',
           {
             month: 'long',
           },
         )
-
+        months.push({ name: newMonth, index: i })
+      }
+      for (let i = 0; i < currMonthIndex; i++) {
+        const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
+          this.data?.locale || 'en-US',
+          {
+            month: 'long',
+          },
+        )
         months.push({ name: newMonth, index: i })
       }
 
@@ -68,9 +102,10 @@ export default defineComponent({
 
     allYears() {
       const years = []
-      //todo pass as props or calclulate somehow
-      const min = 1940
-      const max = 2040
+
+      const min = this.yearSelectRange.min ?? new Date(this.monthToDisplay).getFullYear()
+      const max = this.yearSelectRange.max
+
       for (let i = min; i <= max; i++) {
         years.push({ name: i })
       }
@@ -93,14 +128,6 @@ export default defineComponent({
     })
   },
   methods: {
-    // //Отображает только месяц, даты хранятся в ISODate
-    // displayOnlyMonth(dateString) {
-    //   return new Date(dateString).toLocaleString(this.data?.locale || 'en-US', {
-    //     month: 'long',
-    //   })
-    // },
-
-    //todo repeat
     selectYear(option) {
       this.yearValue = option.name
       this.$emit('update:year', option)
@@ -110,7 +137,6 @@ export default defineComponent({
       this.monthValue = option.name
       this.$emit('update:month', option)
     },
-
   },
   watch: {
     monthValue(newValue, oldValue) {

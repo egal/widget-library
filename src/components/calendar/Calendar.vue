@@ -1,5 +1,11 @@
 <template>
-  <div class="calendar-wrapper" v-click-outside="close"   :class="{ 'stretch-input': !mergedData?.timePicker || mergedData.isRange || mergedData.isDouble }">
+  <div
+    class="calendar-wrapper"
+    v-click-outside="close"
+    :class="{
+      'stretch-input': !mergedData?.timePicker || mergedData.isRange || mergedData.isDouble,
+    }"
+  >
     <div
       :class="`date-inputs date-inputs--${mergedData?.inputData?.size ?? 'sm'} ${
         imitateInputsFocus ? 'focused' : ''
@@ -12,7 +18,6 @@
     >
       <EInput
         class="calendar__input left"
-
         :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"
@@ -42,6 +47,7 @@
         <Controls
           :data="data"
           :month-to-display="curMonth"
+          :year-select-range="mergedData.yearSelectRange"
           @change-month="changeMonth"
           @update:month="selectMonth"
           @update:year="selectYear"
@@ -80,10 +86,10 @@
       </div>
 
       <div class="right" v-if="mergedData?.isDouble">
-
         <Controls
           :data="data"
           :month-to-display="nextMonth"
+          :year-select-range="mergedData.yearSelectRange"
           @change-month="changeMonth"
           @update:month="selectNextMonth"
           @update:year="selectNextYear"
@@ -132,7 +138,6 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
-
     styleConfig: {
       type: Object,
       default: () => {},
@@ -225,6 +230,7 @@ export default defineComponent({
           //   day: 'numeric',
           // },
           timePicker: undefined,
+          yearSelectRange: { min: undefined, max: 2100 },
           date: {
             date_from: '',
             date_to: '',
@@ -528,7 +534,6 @@ export default defineComponent({
       this.dates = this.generateDates(this.curMonth)
     },
 
-    // todo repeated
     selectYear(year) {
       this.curMonth.setYear(year)
       this.dates = this.generateDates(this.curMonth)
@@ -664,7 +669,6 @@ export default defineComponent({
 
   font-feature-settings: 'pnum' on, 'lnum' on;
 
-
   .calendar__input {
     margin-bottom: 8px;
     :deep(input) {
@@ -700,7 +704,7 @@ export default defineComponent({
         :deep(input) {
           width: 99px;
           padding-right: 0;
-          padding-left: 23px;
+          padding-left: 30px;
         }
 
         :deep(.bi.icon.icon--left) {
@@ -710,7 +714,6 @@ export default defineComponent({
     }
 
     &.doubled {
-
       &.focused {
         outline: 2px solid var(--focus-input-border-color);
       }
@@ -724,12 +727,10 @@ export default defineComponent({
           input {
             &:focus {
               outline: none;
-              // todo --border-color var from EInput
               border-color: #e2e8f0;
             }
           }
 
-          //todo filled ! check
           &.filled {
             input {
               &:focus {
@@ -841,8 +842,6 @@ export default defineComponent({
         }
       }
     }
-
-
   }
 
   .calendar {
@@ -1050,33 +1049,6 @@ export default defineComponent({
           }
         }
       }
-
-      // todo ???
-      //&.single {
-      //  li.--in-range {
-      //    &.--not-cur-month {
-      //      color: $gray-400;
-      //      background-color: #edf2f7;
-      //
-      //      &:hover {
-      //        cursor: pointer;
-      //        color: white;
-      //        background-color: var(--active-color);
-      //      }
-      //      &::before,
-      //      &::after {
-      //        background-color: #edf2f7;
-      //      }
-      //    }
-      //  }
-      //
-      //  li.--active {
-      //    &.--not-cur-month {
-      //      color: white;
-      //      background-color: var(--active-color);
-      //    }
-      //  }
-      //}
     }
 
     :deep(.footer > .label) {
@@ -1086,13 +1058,13 @@ export default defineComponent({
 }
 
 .calendar-wrapper.stretch-input {
-    width: 100%;
+  width: 100%;
 
-    .left {
+  .left {
+    width: 100%;
+    :deep(input) {
       width: 100%;
-      :deep(input) {
-        width: 100%;
-      }
     }
   }
+}
 </style>

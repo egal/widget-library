@@ -249,6 +249,9 @@ export default defineComponent({
     :deep(.select-label) {
       display: none;
     }
+    :deep(.select-container) {
+      height: 32px;
+    }
     &.disabled {
       opacity: 0.5;
       pointer-events: none;
@@ -275,7 +278,7 @@ export default defineComponent({
   color: $gray-600;
 }
 :deep(.select) {
-  width: 70px;
+  width: 65px;
 }
 :deep(.select.ampm) {
   margin-left: 15px;

@@ -578,7 +578,6 @@ export default {
     font-size: var(--placeholder-font-size);
   }
 
-  // todo ?
   .selected {
     font-size: var(--value-font-size);
   }
