@@ -16,6 +16,7 @@
     :style-config="styleConfig"
     @increase-value="increaseValue"
     @decrease-value="decreaseValue"
+    @update:modelValue="$emit('update:modelValue', newValue)"
   />
 </template>
 
