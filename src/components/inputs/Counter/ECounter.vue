@@ -152,7 +152,6 @@ export default {
       height: 46px;
       padding: 6px 12px;
       grid-column-gap: 22px;
-
       &__minus,
       &__plus {
         .bi {
