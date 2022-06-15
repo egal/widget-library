@@ -3,7 +3,7 @@
     <div
       :class="`pagination --size-${mergedData.size || 'md'} --style-${
         mergedData.componentStyle || 'normal'
-      } ${minimalisticVersion ? '--select' : ''}`"
+      } ${mergedData.isPerPageSelect ? '--select' : ''}`"
     >
       <TransitionGroup name="pagination">
         <div
@@ -54,7 +54,29 @@
     </div>
 
     <div
-      v-if="minimalisticVersion"
+      class="page-search"
+      v-if="mergedData.isPageSearch"
+      :class="`--size-${mergedData.size || 'md'}`"
+    >
+      <!--      todo label text + data -->
+      <EInput
+        class="page-search--input"
+        :data="{
+          label: 'Перейти на страницу',
+          size: mergedData.size,
+        }"
+      />
+      <!--      todo text -->
+      <EButton
+        class="page-search--button"
+        :data="{
+          size: mergedData.size,
+        }"
+        >Search TExt</EButton
+      >
+    </div>
+    <div
+      v-if="mergedData.isPerPageSelect"
       class="per-page"
       :class="`--size-${mergedData.size || 'md'} --style-${mergedData.componentStyle || 'normal'}`"
     >
@@ -69,6 +91,7 @@
           options: mergedData.selectOptions,
           dropdownPosition: mergedData.dropdownPosition,
           modelValue: { name: mergedData.perPage },
+          size: mergedData.size,
         }"
         :style-config="{
           placeholderFontSize:
@@ -85,10 +108,12 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import ESelect from '@/components/inputs/Select/ESelect'
+import EInput from '@/components/inputs/Input/EInput'
+import EButton from '@/components/togglers/EButton'
 
 export default {
   name: 'EPagination',
-  components: { BootstrapIcon, ESelect },
+  components: { BootstrapIcon, ESelect, EInput, EButton },
   data() {
     return {
       currentPage: null,
@@ -150,6 +175,9 @@ export default {
             },
           ],
           dropdownPosition: 'bottom',
+          isPerPageSelect: false, // todo added
+          isPageSearch: false, // todo added
+          // todo check\fix  minimalistiv prop ?
         },
         this.data,
       )
@@ -448,6 +476,21 @@ export default {
         }
       }
     }
+  }
+}
+
+.page-search {
+  display: flex;
+  margin-left: auto;
+
+  align-items: center;
+
+  &--input {
+  }
+  &--button {
+    margin-top: auto;
+    margin-right: 8px;
+    margin-left: 8px;
   }
 }
 
