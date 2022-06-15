@@ -316,7 +316,7 @@ export default {
           return
         }
         this.selectModel.push(option)
-        this.$emit('' + '', this.selectModel)
+        this.$emit('update:modelValue', this.selectModel)
         return
       } else if (this.mergedData.searchableInput && this.mergedData.multiple) {
         if (this.deleteOption(option)) {

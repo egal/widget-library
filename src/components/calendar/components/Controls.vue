@@ -67,16 +67,7 @@ export default defineComponent({
   computed: {
     allMonths() {
       const months = []
-      // for (let i = 0; i < 12; i++) {
-      //   const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
-      //     this.data?.locale || 'en-US',
-      //     {
-      //       month: 'long',
-      //     },
-      //   )
-      //
-      //   months.push({ name: newMonth, index: i })
-      // }
+
       const currMonthIndex = new Date(this.monthToDisplay).getMonth()
       for (let i = currMonthIndex; i < 12; i++) {
         const newMonth = new Date(new Date(this.monthToDisplay).setMonth(i)).toLocaleString(
