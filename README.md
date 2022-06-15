@@ -1,71 +1,79 @@
-<p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
-<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
-<p align="center">
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://badge.fury.io/js/%40egalteam%2Fwidget-library.svg"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/dt/@egalteam/widget-library"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/l/@egalteam/widget-library"></a>
-</p>
+# Изменения
+1. Объект `data`. Добавлен проп `position: 'right'` (right, left) + добавлен размер `'xs'`:
+
+| Параметр	  |  Тип	  | По умолчанию	 | Возможные значения       | Описание                                                                                       |
+|:-----------|:------:|:-------------:|:-------------------------|:-----------------------------------------------------------------------------------------------|
+| `size`     | String |    `'md'`     | `xs`, `'sm'`, `md`, `lg` | Размер меню                                                                                    |
+| `position` | String |   `'right'`   | `'left'`, `'right'`      | Расположение выпадающего меню (внизу слева или внизу справа относительно кнопки открытия меню) |
+
+2. Объект в массиве `data.items`. Добавлен проп `iconRight: 'archive'`: 
+
+## Передача параметров для отрисовки списка элементов в выпадающем меню
+
+| Параметр	         |    Тип    | Обязательный | Возможные значения	                     | Описание                                                                      |
+|:------------------|:---------:|:------------:|:----------------------------------------|:------------------------------------------------------------------------------|
+| `label`           |  String   |      да      | Любая строка                            | Текст элемента списка                                                         | 
+| `icon`            |  String   |    нет 	     | Строка с названием иконки из Bootstrap  | Иконка элемента слева от текста                                               |
+| `iconRight`       |  String   |    нет 	     | Строка с названием иконки из Bootstrap  | Иконка элемента справа от текста                                              |
+| `onClickHandler`	 | Function	 |     нет      | Функция	                                | Функция, определяющая что должно проийзоти после клика на этот элемент списка |
 
 
-## Новости
 
-Следить за обновлениями можно в нашем телеграм канале:
+### Обновленый пример использования 
+````vue
+<template>
+  <EDotMenu
+      :data="{
+       items: [
+          {
+            label: 'Archive',
+            icon: 'archive',
+            iconRight: 'archive',
+            onClickHandler: () => {
+              console.log('example')
+            },
+          },
+          {
+            label: 'divider',
+          },
+          { label: 'Trash', icon: 'trash', isDisabled: true },
+        ],
+      vertical: false,
+      disabled: false,
+      isOpen: false,
+      size: 'lg',
+    }"
+      :style-config="{
+          fontFamily: 'Raleway',
+          iconColor: '#000000',
+          disabled: {
+            iconColor: '#4A5568',
+            backgroundColor: 'grey'
+          },
+      }"
+  />
+</template>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import EDotMenu from '@/components/navigation/EDotMenu.vue'
+export default defineComponent({
+  name: 'App',
+  components: { EDotMenu },
+  data() {
+    return {
 
-[![](https://img.shields.io/badge/Channel%20on-Telegram-informational)](https://t.me/egalbox)
+    }
+  },
+  methods: {
+    openDeleteModal() {
+      // opening Modal Window
+    },
+    setEditMode() {
+      // setting Edit Mode...
+    },
+  },
+})
+</script>
+````
 
 
-## Документация
-
-С подробной документацией по продукту можно ознакомиться
-[здесь](https://docs.egal.pro/#/).
-
-
-## Поддержка
-
-Нам важно Ваше мнение и обратная связь.
-
-Задать вопрос:
-
-[![](https://img.shields.io/badge/Chat%20on-Telegram-blue)](https://t.me/joinchat/n175xzBrCUswMWU6)
-[![](https://img.shields.io/badge/Mail%20to-egal%40sputnikfund.ru-red)](mailto:egal@sputnikfund.ru)
-
-
-## Экосистема
-
-| Проект                       |                                    Статус                                     | Описание                                                                       |
-|:-----------------------------|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
-| [Docs]                       |                       [![Docs Status]][Docs Status URL]                       | Документация проекта Egal                                                      |
-| [Egal/Framework PHP Package] | [![Egal/Framework PHP Package Status]][Egal/Framework PHP Package Status URL] | Egal/Framework PHP библиотека                                                  |
-| [Egal/Framework NPM Package] | [![Egal/Framework NPM Package Status]][Egal/Framework NPM Package Status URL] | Egal/Framework NPM библиотека                                                  |
-| [Egal/Egal PHP Project]      |      [![Egal/Egal PHP Project Status]][Egal/Egal PHP Project Status URL]      | PHP проект (шаблон) сервиса для Egal экосистемы                                |
-| [Web Service]                |                [![Web Service Status]][Web Service Status URL]                | Сервис Egal экосистемы, реализующий адаптацию HTTP запросов к сервисам         |
-| [Auth Service]               |               [![Auth Service Status]][Auth Service Status URL]               | Сервис Egal экосистемы, реализующий базовые функции авторизации                |
-| [Interface Service]          |          [![Interface Service Status]][Interface Service Status URL]          | Сервис Egal экосистемы, предназначенный для управления метаданными интерфейсов |
-| [Postgres]                   |                   [![Postgres Status]][Postgres Status URL]                   | Надстроенная Система управления базами данных PostgreSQL для Egal экосистемы   |
-
-[Docs]: https://github.com/egal/egal-docs
-[Egal/Framework PHP Package]: https://github.com/egal/egal-framework-php-package
-[Egal/Framework NPM Package]:https://github.com/egal/egal-framework-npm-package
-[Egal/Egal PHP Project]:https://github.com/egal/egal-egal-php-project
-[Web Service]:https://github.com/egal/egal-web-service
-[Auth Service]:https://github.com/egal/egal-auth-service
-[Interface Service]: https://github.com/egal/egal-interface-service
-[Postgres]: https://github.com/egal/postgres
-
-[Docs Status]: https://img.shields.io/website?url=https%3A%2F%2Fegal.github.io%2Fegal-docs%2F%23%2F
-[Egal/Framework PHP Package Status]: https://img.shields.io/packagist/v/egal/framework?include_prereleases
-[Egal/Framework NPM Package Status]: https://img.shields.io/npm/v/@egalteam/framework
-[Egal/Egal PHP Project Status]: https://img.shields.io/packagist/v/egal/egal?include_prereleases
-[Web Service Status]: https://img.shields.io/docker/v/egalbox/web-service?label=dockerhub
-[Auth Service Status]: https://img.shields.io/docker/v/egalbox/auth-service?label=dockerhub
-[Interface Service Status]: https://img.shields.io/docker/v/egalbox/interface-service?label=dockerhub
-[Postgres Status]: https://img.shields.io/docker/v/egalbox/postgres?label=dockerhub
-
-[Docs Status URL]: https://egal.github.io/egal-docs/
-[Egal/Framework PHP Package Status URL]: https://packagist.org/packages/egal/framework
-[Egal/Framework NPM Package Status URL]: https://www.npmjs.com/package/@egalteam/framework
-[Egal/Egal PHP Project Status URL]: https://packagist.org/packages/egal/egal
-[Web Service Status URL]: https://hub.docker.com/r/egalbox/web-service
-[Auth Service Status URL]: https://hub.docker.com/r/egalbox/auth-service
-[Interface Service Status URL]: https://hub.docker.com/r/egalbox/interface-service
-[Postgres Status URL]: https://hub.docker.com/r/egalbox/postgres
