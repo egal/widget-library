@@ -39,7 +39,7 @@ export default {
   components: {
     BIcon: BootstrapIcon,
   },
-  emits: ['update:modelValue', 'increaseValue', 'decreaseValue'],
+  emits: ['increaseValue', 'decreaseValue'],
   props: {
     data: {
       type: Object,
