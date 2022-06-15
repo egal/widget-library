@@ -106,6 +106,7 @@ export default defineComponent({
         '--dots-icon-color': this.styleConfig?.iconColor || '#2D3748',
         '--dots-icon-disabled-color': this.styleConfig?.disabled?.iconColor || '#CBD5E0',
         '--menu-item-background-hover': this.styleConfig?.backgroundHover || '#E2E8F0',
+        '--menu-item-background-pressed': this.styleConfig?.backgroundPressed || '#cbd5e0',
       }
     },
   },
@@ -257,9 +258,7 @@ export default defineComponent({
   transition: all 0.2s;
 
   &:hover {
-    // todo ?
     background-color: $gray-300;
-
     cursor: pointer;
   }
 
@@ -283,9 +282,8 @@ export default defineComponent({
     background-color: #fff;
 
     .three-dots {
-      //todo var ??
-      //color: var(--dots-icon-disabled-color);
-      color: $gray-400;
+      color: var(--dots-icon-disabled-color);
+
       &:hover {
         cursor: default;
       }
@@ -349,8 +347,7 @@ export default defineComponent({
     }
 
     &:active {
-      // todo add var ?
-      background-color: #cbd5e0;
+      background-color: var(--menu-item-background-pressed);
     }
 
     &.disabled {
