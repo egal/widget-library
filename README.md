@@ -21,4 +21,4 @@
 |     `selectOptions`      | Массив их объектов типа `{ name: 5 }`. Отвечает за опции, которые можно выбрать в дропдауне (количество элементов на страницу). | object                                    | `[{ name: 5 }, { name: 10 }, { name: 25 }, { name: 50 }]` |
 |        `variant`         | Стиль компонента                                                                                                                | `primary`, `clear`                        |                         `primary`                         |
  
-2. `minimalisticVersion` - deprecated, но оставлен для совместимости. Вместо него можно использовать `isPerPageSelect`
+2. `minimalisticVersion` - теперь ненужный проп, но оставлен для совместимости. Вместо него можно использовать `isPerPageSelect`
