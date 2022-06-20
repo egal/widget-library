@@ -1,71 +1,111 @@
-<p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
-<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
-<p align="center">
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://badge.fury.io/js/%40egalteam%2Fwidget-library.svg"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/dt/@egalteam/widget-library"></a>
-<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/l/@egalteam/widget-library"></a>
-</p>
+## Изменения в параметрах
+
+- Опции стилей вынесены styleConfig и добавились новые параметры. Теперь набор параметров выглядит следующим образом:
+
+| Параметр    |  Тип   | Возможные значения                                                                  |    Описание    |
+|:------------|:------:|:------------------------------------------------------------------------------------|:--------------:|
+| `size`      | string | `xs`, `sm`, `md`, `lg`                                                              | Размер виджета |
+| `leftIcon`  | string | Любое имя иконки, которое есть в Bootstrap (`circle-fill`, `chevron-right`, и т.д.) |  Иконка слева  |
+| `rightIcon` | string | Любое имя иконки, которое есть в Bootstrap (`circle-fill`, `chevron-right`, и т.д.) | Иконка справа  |
+
+````javascript
+const styleConfig = {
+  chevronColor: '#a0aec0',
+  color: '#a0aec0',
+  hoverColor: '#718096',
+  activeColor: '#2D3748',
+  font: 'Inter',
+  weight: 500,
+}
+````
 
 
-## Новости
+## Использование
+Хлебные крошки генерируются автоматически. Они так же обрабатывают вложенные и динамические пути.
+Если хлебных крошек больше 4, то лишние крошки скрываются за тремя точками. При наведении на них появляется дропдаун со скрытыми маршрутами.
 
-Следить за обновлениями можно в нашем телеграм канале:
+#### Пример:
+`router/index.ts`:
+````javascript
+const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    name: 'Home',
+    component: HomePage,
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutPage,
+    meta: {
+      breadcrumb: 'Page about ${about_title}',
+    },
+  },
+  {
+    path: '/about/more',
+    name: 'More',
+    component: MorePage,
+    children: [
+      {
+        name: 'Links',
+        path: 'links',
+        component: LinksPage,
+      },
+      {
+        name: 'Media',
+        path: 'media/:name',
+        component: MediaPage,
+        meta: {
+          breadcrumb: '${name}',
+        },
+      },
+    ],
+  },
+]
+````
 
-[![](https://img.shields.io/badge/Channel%20on-Telegram-informational)](https://t.me/egalbox)
+Компонент:
+````vue
+<template>
+  <div>
+    <router-link :to="{ name: 'About', params: { about_title: 'Some title'} }">
+      About
+    </router-link>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'Home',
+})
+</script>
+````
 
 
-## Документация
+Хлебные крошки на роутах:  
+``/``: Home  
+``/about``: Page about Some title  
+``/about/more``: Page about some title / More  
+``/about/more/links``: Page about some title / More / Links  
+``/about/more/media/twitter``: Page about some title / More / Twitter 
 
-С подробной документацией по продукту можно ознакомиться
-[здесь](https://docs.egal.pro/#/).
+#### Как работает
 
+На основе пути текущего роута определяются все предыдущие роуты. Если, допустим, ``/about/more/links`` это текущий роут, то ``/about/more`` будет предыдущим и т.д.
 
-## Поддержка
+Хлебные крошки без настроек отображают имя маршрута в качестве текста, но так же можно и указать в ``meta`` свойство ``breadcrumb``. Если указано ``breadcrumb``,
+то компонент будет брать значение оттуда.  
+Так же в ``breadcrumb`` можно указать простой шаблон в виде ``breadcrumb: 'Page number ${page_number}'``. ``${page_number}`` - это имя передаваемого через роутер параметра. При отрисовке
+эта часть заменится на значение параметра ``page_number``.
 
-Нам важно Ваше мнение и обратная связь.
+## Ограничения
 
-Задать вопрос:
+Ввиду особенностей Vue Router есть некоторые ограничения при использовании компонента. В основном они связаны с шаблонами и динамическими путями:
 
-[![](https://img.shields.io/badge/Chat%20on-Telegram-blue)](https://t.me/joinchat/n175xzBrCUswMWU6)
-[![](https://img.shields.io/badge/Mail%20to-egal%40sputnikfund.ru-red)](mailto:egal@sputnikfund.ru)
-
-
-## Экосистема
-
-| Проект                       |                                    Статус                                     | Описание                                                                       |
-|:-----------------------------|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
-| [Docs]                       |                       [![Docs Status]][Docs Status URL]                       | Документация проекта Egal                                                      |
-| [Egal/Framework PHP Package] | [![Egal/Framework PHP Package Status]][Egal/Framework PHP Package Status URL] | Egal/Framework PHP библиотека                                                  |
-| [Egal/Framework NPM Package] | [![Egal/Framework NPM Package Status]][Egal/Framework NPM Package Status URL] | Egal/Framework NPM библиотека                                                  |
-| [Egal/Egal PHP Project]      |      [![Egal/Egal PHP Project Status]][Egal/Egal PHP Project Status URL]      | PHP проект (шаблон) сервиса для Egal экосистемы                                |
-| [Web Service]                |                [![Web Service Status]][Web Service Status URL]                | Сервис Egal экосистемы, реализующий адаптацию HTTP запросов к сервисам         |
-| [Auth Service]               |               [![Auth Service Status]][Auth Service Status URL]               | Сервис Egal экосистемы, реализующий базовые функции авторизации                |
-| [Interface Service]          |          [![Interface Service Status]][Interface Service Status URL]          | Сервис Egal экосистемы, предназначенный для управления метаданными интерфейсов |
-| [Postgres]                   |                   [![Postgres Status]][Postgres Status URL]                   | Надстроенная Система управления базами данных PostgreSQL для Egal экосистемы   |
-
-[Docs]: https://github.com/egal/egal-docs
-[Egal/Framework PHP Package]: https://github.com/egal/egal-framework-php-package
-[Egal/Framework NPM Package]:https://github.com/egal/egal-framework-npm-package
-[Egal/Egal PHP Project]:https://github.com/egal/egal-egal-php-project
-[Web Service]:https://github.com/egal/egal-web-service
-[Auth Service]:https://github.com/egal/egal-auth-service
-[Interface Service]: https://github.com/egal/egal-interface-service
-[Postgres]: https://github.com/egal/postgres
-
-[Docs Status]: https://img.shields.io/website?url=https%3A%2F%2Fegal.github.io%2Fegal-docs%2F%23%2F
-[Egal/Framework PHP Package Status]: https://img.shields.io/packagist/v/egal/framework?include_prereleases
-[Egal/Framework NPM Package Status]: https://img.shields.io/npm/v/@egalteam/framework
-[Egal/Egal PHP Project Status]: https://img.shields.io/packagist/v/egal/egal?include_prereleases
-[Web Service Status]: https://img.shields.io/docker/v/egalbox/web-service?label=dockerhub
-[Auth Service Status]: https://img.shields.io/docker/v/egalbox/auth-service?label=dockerhub
-[Interface Service Status]: https://img.shields.io/docker/v/egalbox/interface-service?label=dockerhub
-[Postgres Status]: https://img.shields.io/docker/v/egalbox/postgres?label=dockerhub
-
-[Docs Status URL]: https://egal.github.io/egal-docs/
-[Egal/Framework PHP Package Status URL]: https://packagist.org/packages/egal/framework
-[Egal/Framework NPM Package Status URL]: https://www.npmjs.com/package/@egalteam/framework
-[Egal/Egal PHP Project Status URL]: https://packagist.org/packages/egal/egal
-[Web Service Status URL]: https://hub.docker.com/r/egalbox/web-service
-[Auth Service Status URL]: https://hub.docker.com/r/egalbox/auth-service
-[Interface Service Status URL]: https://hub.docker.com/r/egalbox/interface-service
-[Postgres Status URL]: https://hub.docker.com/r/egalbox/postgres
+- Роут **ОБЯЗАТЕЛЬНО** должен содержать имя. Вся навигация происходит по имени маршрута. Сделано это из-за возможности передавать параметры и обработки динамических путей.
+- Чтобы хлебные крошки правильно отображали путь, каждый последующий роут должен содержать путь предыдущего. То есть, ``/about/more`` / ``/about/more/links`` / ``/about/more/links/10`` и т.д. (**ЭТО НЕ КАСАЕТСЯ ВЛОЖЕННЫХ ПУТЕЙ**)
+- Если роут содержит динамический шаблон и это **НЕ ДОЧЕРНИЙ** роут, то необходимо передавать ему указанный параметр. То есть, если происходит перенаправление со страницы ``/about/more``, содержащий шаблон ``Page about ${about_title}``, на ``/about/more/links``,
+то **ВСЁ РАВНО** нужно передавать параметр ``about_title``, иначе хлебная крошка отобразит ``Page about undefined``
+- При перезагрузке страницы текст динамической крошки **СЛЕТАЕТ** и вместо текста отображается ``undefined``. Это происходит из-за того, что параметры нигде не хранятся и при перезагрузке просто очищаются.
