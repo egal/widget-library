@@ -157,9 +157,9 @@ export default {
         '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
         '--active-hover-background-color':
-          this.styleConfig?.activeHoverBackgroundColor || '#3385ff', // todo added
+          this.styleConfig?.activeHoverBackgroundColor || '#3385ff',
         '--active-press-background-color':
-          this.styleConfig?.activePressBackgroundColor || '#005ce4', // todo added
+          this.styleConfig?.activePressBackgroundColor || '#005ce4',
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',

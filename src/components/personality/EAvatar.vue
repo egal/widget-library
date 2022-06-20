@@ -18,15 +18,23 @@
     >
       {{ getShortName }}
     </p>
+
+    <EDropdown
+      v-if="mergedData.dropdownOptions.length > 0 && mergedData.isDropdownOpen"
+      :options="mergedData.dropdownOptions"
+      :size="mergedData.size"
+      :icon-left="'trash'"
+    />
   </div>
 </template>
 
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import EDropdown from '@/components/inputs/Dropdown/EDropdown'
 
 export default {
   name: 'EAvatar',
-  components: { BootstrapIcon },
+  components: { EDropdown, BootstrapIcon },
   props: {
     data: {
       type: Object,
@@ -49,6 +57,8 @@ export default {
           borderColor: '#ffffff',
           isOnline: false,
           isNameRequired: false,
+          isDropdownOpen: false,
+          dropdownOptions: [],
         },
         this.data,
       )
@@ -132,7 +142,6 @@ export default {
   }
 
   &.--size {
-
     &-xl {
       width: 88px;
       height: 88px;
@@ -232,6 +241,13 @@ export default {
       right: 0;
     }
   }
+}
 
+.dropdown {
+  width: max-content;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
 }
 </style>
