@@ -1,21 +1,23 @@
 <template>
-  <div class="counter" :class="`counter--${mergedData.size}`" :style="getStyleVars">
-    <div class="counter-label" v-if="mergedData.label">{{ mergedData.label }}</div>
-    <div class="counter-container">
-      <div class="counter-container__minus">
-        <b-icon icon="dash-lg" @click="decreaseValue" />
-      </div>
-      <div class="counter-container__value">
-        {{ newValue }}
-      </div>
-      <div class="counter-container__plus">
-        <b-icon icon="plus-lg" @click="increaseValue" />
-      </div>
-    </div>
-    <div class="counter-helper-text" v-if="mergedData.helperText">
-      {{ mergedData.helperText }}
-    </div>
-  </div>
+  <ECounterPrimary
+      v-if="mergedData.type === 'primary'"
+      :data="mergedData"
+      :style-vars="getStyleVars"
+      :style-config="styleConfig"
+      :value="newValue"
+      @increase-value="increaseValue"
+      @decrease-value="decreaseValue"
+  />
+  <ECounterSecondary
+      v-if="mergedData.type === 'secondary'"
+      v-model="newValue"
+      :data="mergedData"
+      :style-vars="getStyleVars"
+      :style-config="styleConfig"
+      @increase-value="increaseValue"
+      @decrease-value="decreaseValue"
+      @update:modelValue="$emit('update:modelValue', newValue)"
+  />
 </template>
 
 <script>
