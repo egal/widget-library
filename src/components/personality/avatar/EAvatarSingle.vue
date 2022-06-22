@@ -156,9 +156,6 @@ export default {
   }
 
   &:hover {
-    //:deep(.avatar) {
-    //  filter: brightness(50%);
-    //}
     .avatar__name > span {
       display: none;
     }

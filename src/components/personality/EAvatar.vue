@@ -21,9 +21,6 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {}
-  },
   computed: {
     mergedData() {
       return Object.assign(
@@ -51,7 +48,6 @@ export default {
       )
     },
   },
-  methods: {},
 }
 </script>
 
