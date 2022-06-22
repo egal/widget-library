@@ -75,7 +75,7 @@ export default defineComponent({
     getStyleVars() {
       return {
         '--tabs-gap': this.styleConfig?.tabsGap || `${this.tabsGap}px`,
-        '--font': this.styleConfig?.font || `Inter`,
+        '--font-family': this.styleConfig?.fontFamily || `Inter`,
         '--color': this.styleConfig?.color || `#A0AEC0`,
         '--hover-color': this.styleConfig?.hoverColor || `#718096`,
         '--active-color': this.styleConfig?.activeColor || `#0066FF`,
@@ -206,7 +206,7 @@ export default defineComponent({
       }
 
       &__name {
-        font-family: var(--font);
+        font-family: var(--font-family);
         font-weight: $medium-font-weight;
         color: var(--color);
         transition: 0.1s ease-in-out;
