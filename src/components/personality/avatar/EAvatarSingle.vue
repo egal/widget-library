@@ -156,14 +156,17 @@ export default {
   }
 
   &:hover {
+    //:deep(.avatar) {
+    //  filter: brightness(50%);
+    //}
     .avatar__name > span {
       display: none;
     }
-    &:before {
+    .avatar-wrapper:before {
       opacity: 1;
     }
 
-    &:after {
+    .avatar-wrapper:after {
       opacity: 1;
     }
   }
