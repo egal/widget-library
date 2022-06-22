@@ -1,14 +1,24 @@
 @import 'src/assets/variables';
 @import 'baseTogglersMixin';
 
-// Нужно передавать только код цвета (т.е. без решётки в начале)!
-// Это из-за того, что решётка уже прописана в URL и закодирована как "%23" для совместимости с FireFox
-@mixin colored-background-circle($color) {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='8' fill='%23#{$color}'/%3e%3c/svg%3e ");
-}
-
 @mixin radio($pseudo-element: 'before') {
   @include baseTogglerMixin($pseudo-element);
+
+  --input-dot-color: #{$info};
+  --input-background-color: #{$base-white};
+
+  --input-dot-color-hover: #{$info};
+  --input-background-color-hover: #{$base-white};
+
+  --input-dot-color-active: #{$pressed-accent};
+  --input-background-color-active: #{$base-white};
+
+  --input-dot-color-checked: #{$primary-accent};
+  --input-background-color-checked: #{$base-white};
+
+
+  --input-dot-color-disabled: #{$gray-300};
+  --input-background-color-disabled: #{$base-white};
 
   .text::#{$pseudo-element} {
     border-radius: 100%;
@@ -40,7 +50,8 @@
 
   #{$selector-checked}::#{$pseudo-element} {
     border-color: var(--input-border-color-checked);
-    @include colored-background-circle('3385FF');
+    background-color: var(--input-dot-color-checked);
+    box-shadow: inset 0 0 0 2px var(--input-background-color-checked);
   }
 
   #{$selector-active}::#{$pseudo-element} {
@@ -48,14 +59,16 @@
   }
   #{$selector-active-checked}::#{$pseudo-element} {
     border-color: var(--input-border-color-active);
-    @include colored-background-circle('005CE4');
+    background-color: var(--input-dot-color-active);
+    box-shadow: inset 0 0 0 2px var(--input-background-color-active);
   }
 
   #{$selector-disabled-checked}::#{$pseudo-element} {
     border-color: var(--input-border-color-disabled);
   }
   #{$selector-disabled}::#{$pseudo-element} {
-    @include colored-background-circle('E2E8F0');
+    background-color: var(--input-dot-color-disabled);
+    box-shadow: inset 0 0 0 2px var(--input-background-color-disabled);
   }
   #{$selector-disabled-not-checked}::#{$pseudo-element} {
     background-image: none;
