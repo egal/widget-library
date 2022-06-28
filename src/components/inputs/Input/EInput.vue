@@ -1,25 +1,25 @@
 <template>
   <div
-    class="input"
-    :class="`input--${mergedData.size} ${
+      class="input"
+      :class="`input--${mergedData.size} ${
       mergedData.chips && chipsModel.length === 0 ? 'no-items' : ''
     } ${mergedData.chips && chipsModel.length ? 'con-chips' : ''}`"
-    :style="getStyleVars"
+      :style="getStyleVars"
   >
     <label
-      class="input-label"
-      :class="{
+        class="input-label"
+        :class="{
         'input-label--required': mergedData.required,
         'input-label--disabled': mergedData.disabled,
       }"
-      :for="mergedData.id"
-      v-if="mergedData.label"
-      >{{ mergedData.label }}</label
+        :for="mergedData.id"
+        v-if="mergedData.label"
+    >{{ mergedData.label }}</label
     >
 
     <div
-      class="input-container"
-      :class="{
+        class="input-container"
+        :class="{
         search: mergedData.type === 'search',
         success: !mergedData.error && !errorMessage && newValue && mergedData.showSuccess,
         error: (errorMessage || mergedData.error) && mergedData.showError,
@@ -35,26 +35,26 @@
     >
       <div class="chips-container">
         <div
-          v-for="selected in chipsModel"
-          class="con-chip"
-          :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
+            v-for="selected in chipsModel"
+            class="con-chip"
+            :style="{ display: 'flex', alignItems: 'center', ...chipsInlineStyle }"
         >
           <span class="text-chip chip--text selected">
             {{ truncateString(selected[mergedData.shownKey]) }}
           </span>
-          <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)" />
+          <b-icon icon="x-lg" class="chip--close" @click.stop="$emit('delete-option', selected)"/>
         </div>
       </div>
 
       <input
-        :id="mergedData.id"
-        :type="mergedData.type === 'search' ? 'text' : newType"
-        :placeholder="mergedData.placeholder"
-        :value="newValue"
-        :maxlength="mergedData.inputMaxLength"
-        :disabled="mergedData.disabled"
-        :readonly="mergedData.readonly"
-        :class="[
+          :id="mergedData.id"
+          :type="mergedData.type === 'search' ? 'text' : newType"
+          :placeholder="mergedData.placeholder"
+          :value="newValue"
+          :maxlength="mergedData.inputMaxLength"
+          :disabled="mergedData.disabled"
+          :readonly="mergedData.readonly"
+          :class="[
           mergedData.iconLeft ? 'has-icon-left' : '',
           mergedData.iconRight || mergedData.clearable || mergedData.type === 'password'
             ? 'has-icon-right'
@@ -62,72 +62,79 @@
           mergedData.postfix ? 'has-postfix' : '',
           mergedData.chips ? 'con-chips--input' : '',
         ]"
-        v-model="newValue"
-        @input="inputHandler"
-        autocomplete="off"
-        @keydown="(event) => $emit('keydown', event)"
-        @keydown.up="increaseValue"
-        @keydown.down="decreaseValue"
+          v-model="newValue"
+          @input="inputHandler"
+          autocomplete="off"
+          @keydown="(event) => $emit('keydown', event)"
+          @keydown.up="increaseValue"
+          @keydown.down="decreaseValue"
       />
       <b-icon
-        :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
-        :icon="mergedData.iconLeft"
-        v-if="mergedData.iconLeft"
+          :class="['icon', 'icon--left', errorMessage ? 'icon--error' : '']"
+          :icon="mergedData.iconLeft"
+          v-if="mergedData.iconLeft"
       />
       <b-icon
-        :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
-        :icon="mergedData.iconRight"
-        v-if="mergedData.iconRight"
+          :class="['icon', 'icon--right', errorMessage ? 'icon--error' : '']"
+          :icon="mergedData.iconRight"
+          v-if="mergedData.iconRight"
       />
-
+      <b-icon
+          class="successIcon"
+          icon="check"
+          v-if="mergedData.showSuccessIcon && !mergedData.error &&
+          !errorMessage &&
+          newValue &&
+          mergedData.showSuccess"
+      />
       <span :class="['icon--right', 'postfix']" v-else-if="mergedData.postfix">{{
-        mergedData.postfix
-      }}</span>
+          mergedData.postfix
+        }}</span>
       <b-icon
-        class="icon icon--right icon--password"
-        :icon="passwordShown ? 'eye' : 'eye-fill'"
-        v-if="newValue && mergedData.type === 'password'"
-        @click.stop="showPassword"
+          class="icon icon--right icon--password"
+          :icon="passwordShown ? 'eye' : 'eye-fill'"
+          v-if="newValue && mergedData.type === 'password'"
+          @click.stop="showPassword"
       />
       <div class="arrow-icons" v-if="type === 'number' && mergedData.showArrows">
-        <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue" />
-        <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue" />
+        <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue"/>
+        <b-icon class="icon icon--increase" icon="caret-down-fill" @click="decreaseValue"/>
       </div>
       <ClearButton
-        class="subtract-button"
-        :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
-        @delete=";(newValue = ''), $emit('update:modelValue', '')"
-        v-show="
+          class="subtract-button"
+          :error="(!!mergedData.error || !!errorMessage) && mergedData.showError"
+          @delete=";(newValue = ''), $emit('update:modelValue', '')"
+          v-show="
           mergedData.clearable &&
           newValue &&
           type !== 'number' &&
           type !== 'search' &&
           mergedData.type !== 'password'
         "
-        :size="mergedData.size"
-        :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
-        :filled="
+          :size="mergedData.size"
+          :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
+          :filled="
           !mergedData.error &&
           !errorMessage &&
           newValue &&
           !mergedData.showSuccess &&
           mergedData.showFilled
         "
-        :style-config="styleConfig"
+          :style-config="styleConfig"
       />
     </div>
     <p
-      :class="[
+        :class="[
         'helper-text',
         (errorMessage || mergedData.error) && mergedData.showError ? 'helper-text--error' : '',
         { 'helper-text--disabled': mergedData.disabled },
       ]"
-      v-if="errorMessage || mergedData.error || mergedData.helperText"
+        v-if="errorMessage || mergedData.error || mergedData.helperText"
     >
       {{
         mergedData.showError
-          ? errorMessage || mergedData.error || mergedData.helperText
-          : mergedData.helperText
+            ? errorMessage || mergedData.error || mergedData.helperText
+            : mergedData.helperText
       }}
     </p>
   </div>
@@ -136,7 +143,8 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import ClearButton from '@/components/inputs/ClearButton/ClearButton'
-import { validate } from '@/helpers/validators'
+import {validate} from '@/helpers/validators'
+
 export default {
   name: 'EInput',
   components: {
@@ -146,11 +154,13 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     styleConfig: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     chipsModel: {
       type: Array,
@@ -158,7 +168,8 @@ export default {
     },
     chipsInlineStyle: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
   },
   data() {
@@ -177,34 +188,35 @@ export default {
     },
     mergedData() {
       return Object.assign(
-        {
-          id: 'input-text',
-          type: 'text',
-          placeholder: '',
-          label: '',
-          error: '',
-          showSuccess: false,
-          showFilled: true,
-          modelValue: null,
-          disabled: false,
-          validators: [],
-          helperText: null,
-          iconLeft: null,
-          iconRight: null,
-          postfix: '',
-          size: 'md',
-          showError: true,
-          required: false,
-          showArrows: true,
-          min: undefined,
-          max: undefined,
-          inputMaxLength: undefined,
-          readonly: false,
-          clearable: true,
-          chips: false,
-          shownKey: 'name',
-        },
-        this.data,
+          {
+            id: 'input-text',
+            type: 'text',
+            placeholder: '',
+            label: '',
+            error: '',
+            showSuccess: false,
+            showFilled: true,
+            modelValue: null,
+            disabled: false,
+            validators: [],
+            helperText: null,
+            iconLeft: null,
+            iconRight: null,
+            postfix: '',
+            size: 'md',
+            showError: true,
+            required: false,
+            showArrows: true,
+            min: undefined,
+            max: undefined,
+            inputMaxLength: undefined,
+            readonly: false,
+            clearable: true,
+            chips: false,
+            shownKey: 'name',
+            showSuccessIcon: false
+          },
+          this.data,
       )
     },
     getStyleVars() {
@@ -281,10 +293,10 @@ export default {
     cutLetterSymbols(word) {
       word = word.replace(',', '.')
       return word
-        .replace(/[^0-9.]/g, '')
-        .replace('.', 'x')
-        .replace(/\./g, '')
-        .replace('x', '.')
+          .replace(/[^0-9.]/g, '')
+          .replace('.', 'x')
+          .replace(/\./g, '')
+          .replace('x', '.')
     },
     checkMinMaxValidity(value) {
       if (this.mergedData.max) {
@@ -356,6 +368,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
@@ -391,6 +404,7 @@ input[type='search']::-webkit-search-results-decoration {
     .input-label {
       font-size: 16px;
     }
+
     input {
       height: 48px;
       font-size: 16px;
@@ -415,14 +429,17 @@ input[type='search']::-webkit-search-results-decoration {
       &--left {
         left: 18px;
       }
+
       &--right {
         right: 18px;
       }
     }
+
     .has-icon {
       &-left {
         padding-left: 44px;
       }
+
       &-right {
         padding-right: 44px;
       }
@@ -430,6 +447,7 @@ input[type='search']::-webkit-search-results-decoration {
 
     .arrow-icons {
       top: 13px;
+
       .bi {
         width: 10px;
         height: 10px;
@@ -444,10 +462,12 @@ input[type='search']::-webkit-search-results-decoration {
       padding-right: calc(v-bind(postfixWidth) + 10px);
     }
   }
+
   &--md {
     .input-label {
       font-size: 14px;
     }
+
     input {
       height: 40px;
       font-size: 14px;
@@ -472,20 +492,25 @@ input[type='search']::-webkit-search-results-decoration {
       &--left {
         left: 16px;
       }
+
       &--right {
         right: 16px;
       }
     }
+
     .has-icon {
       &-left {
         padding-left: 42px;
       }
+
       &-right {
         padding-right: 42px;
       }
     }
+
     .arrow-icons {
       top: 10px;
+
       .bi {
         width: 8px;
         height: 8px;
@@ -500,10 +525,12 @@ input[type='search']::-webkit-search-results-decoration {
       padding-right: calc(v-bind(postfixWidth) + 5px);
     }
   }
+
   &--sm {
     .input-label {
       font-size: 12px;
     }
+
     input {
       height: 32px;
       font-size: 12px;
@@ -528,20 +555,25 @@ input[type='search']::-webkit-search-results-decoration {
       &--left {
         left: 14px;
       }
+
       &--right {
         right: 14px;
       }
     }
+
     .has-icon {
       &-left {
         padding-left: 35px;
       }
+
       &-right {
         padding-right: 35px;
       }
     }
+
     .arrow-icons {
       top: 7px;
+
       .bi {
         width: 6px;
         height: 6px;
@@ -556,10 +588,12 @@ input[type='search']::-webkit-search-results-decoration {
       padding-right: calc(v-bind(postfixWidth) + 5px);
     }
   }
+
   &--xs {
     .input-label {
       font-size: 10px;
     }
+
     input {
       height: 24px;
       font-size: 10px;
@@ -584,20 +618,25 @@ input[type='search']::-webkit-search-results-decoration {
       &--left {
         left: 12px;
       }
+
       &--right {
         right: 12px;
       }
     }
+
     .has-icon {
       &-left {
         padding-left: 26px;
       }
+
       &-right {
         padding-right: 26px;
       }
     }
+
     .arrow-icons {
       top: 7px;
+
       .bi {
         width: 6px;
         height: 6px;
@@ -613,6 +652,7 @@ input[type='search']::-webkit-search-results-decoration {
     }
   }
 }
+
 .input-label {
   display: block;
   font-weight: var(--label-font-weight);
@@ -624,13 +664,16 @@ input[type='search']::-webkit-search-results-decoration {
     margin-right: 5px;
     color: var(--error-color);
   }
+
   &--disabled {
     color: var(--label-disabled-color);
   }
 }
+
 .input-container {
   position: relative;
   width: 100%;
+
   input {
     font-family: inherit;
     color: var(--value-color);
@@ -640,14 +683,17 @@ input[type='search']::-webkit-search-results-decoration {
     box-sizing: border-box;
     border-radius: var(--border-radius);
     font-weight: var(--value-font-weight);
+
     &::placeholder {
       color: var(--placeholder-color);
     }
+
     &:focus,
     &:focus-visible {
       outline: none;
       border-color: var(--focus-border-color);
     }
+
     &:disabled {
       background: var(--background-disabled-color);
       color: var(--value-disabled-color);
@@ -655,15 +701,18 @@ input[type='search']::-webkit-search-results-decoration {
       &::placeholder {
         color: var(--placeholder-disabled-color);
       }
+
       & + .postfix {
         background: var(--background-disabled-color);
       }
     }
+
     &:disabled + .icon,
     &:disabled + .icon + .icon {
       color: var(--icon-color);
     }
   }
+
   .icon {
     color: var(--icon-color);
 
@@ -671,34 +720,41 @@ input[type='search']::-webkit-search-results-decoration {
       position: absolute;
       color: var(--icon-color);
     }
+
     &--right {
       position: absolute;
       color: var(--icon-color);
     }
+
     &--password {
       position: absolute;
       cursor: pointer;
       color: var(--icon-color);
     }
+
     &--error {
       color: var(--icon-color);
     }
   }
+
   .subtract-button {
     position: absolute;
   }
+
   .arrow-icons {
     right: 7px;
     display: flex;
     flex-flow: column nowrap;
     position: absolute;
     user-select: none;
+
     .icon {
       cursor: pointer;
       color: var(--icon-color);
     }
   }
 }
+
 .helper-text {
   font-size: var(--helper-text-font-size);
   color: var(--helper-text-color);
@@ -706,17 +762,21 @@ input[type='search']::-webkit-search-results-decoration {
   margin-top: 8px;
   margin-bottom: 0;
   max-width: fit-content;
+
   &--error {
     color: var(--error-color);
   }
+
   &--disabled {
     color: var(--helper-text-disabled-color);
   }
 }
+
 .filled {
   input {
     background-color: var(--filled-background-color);
     color: var(--filled-font-color);
+
     &:focus {
       background-color: var(--background-color);
       color: var(--value-color);
@@ -727,63 +787,79 @@ input[type='search']::-webkit-search-results-decoration {
       }
     }
   }
+
   .bi {
     color: var(--filled-font-color);
   }
+
   .postfix {
     color: var(--filled-font-color);
     background-color: var(--filled-background-color);
   }
 }
+
 .search {
   input {
     background-color: var(--search-background-color);
+
     &:focus {
       background-color: var(--background-color);
     }
   }
 }
+
 .error {
   input {
     border-color: var(--error-color);
     color: var(--error-color);
+
     &:focus {
       border-color: var(--error-color);
       outline: none;
     }
   }
+
   .bi {
     color: var(--error-color);
   }
+
   .helper-text {
     color: var(--error-color);
   }
+
   .postfix {
     color: var(--error-color);
   }
 }
+
 .error + .helper-text {
   color: var(--error-color);
 }
+
 .success {
   input {
     border-color: var(--success-color);
     color: var(--success-color);
+
     &:focus {
       border-color: var(--success-color);
       outline: none;
     }
   }
+
   .bi {
     color: var(--success-color);
   }
+
   .helper-text {
     color: var(--success-color);
   }
+
   .postfix {
     color: var(--success-color);
   }
 }
+
 .success + .helper-text {
   color: var(--success-color);
 }
@@ -797,6 +873,7 @@ input[type='search']::-webkit-search-results-decoration {
   box-sizing: border-box;
   border-radius: var(--border-radius);
   font-weight: var(--value-font-weight);
+
   .input-container {
     width: 100%;
     position: relative;
@@ -884,6 +961,7 @@ input[type='search']::-webkit-search-results-decoration {
       display: flex;
       align-items: center;
       margin-right: 9px;
+
       span {
         margin-right: 8px;
         white-space: nowrap;
@@ -898,4 +976,11 @@ input[type='search']::-webkit-search-results-decoration {
     margin-bottom: 0;
   }
 }
+.successIcon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 13px;
+}
+
 </style>
