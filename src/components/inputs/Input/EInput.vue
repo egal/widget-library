@@ -21,12 +21,12 @@
         class="input-container"
         :class="{
         search: mergedData.type === 'search',
-        success: !mergedData.error && !errorMessage && newValue && mergedData.showSuccess,
+        success: !mergedData.error && !errorMessage && newValue.toString() && mergedData.showSuccess,
         error: (errorMessage || mergedData.error) && mergedData.showError,
         filled:
           !mergedData.error &&
           !errorMessage &&
-          newValue &&
+          newValue.toString() &&
           !mergedData.showSuccess &&
           mergedData.showFilled &&
           type !== 'search' &&
@@ -91,10 +91,10 @@
           mergedData.postfix
         }}</span>
       <b-icon
-          class="icon icon--right icon--password"
-          :icon="passwordShown ? 'eye' : 'eye-fill'"
-          v-if="newValue && mergedData.type === 'password'"
-          @click.stop="showPassword"
+        class="icon icon--right icon--password"
+        :icon="passwordShown ? 'eye' : 'eye-fill'"
+        v-if="newValue.toString() && mergedData.type === 'password'"
+        @click.stop="showPassword"
       />
       <div class="arrow-icons" v-if="type === 'number' && mergedData.showArrows">
         <b-icon class="icon icon--increase" icon="caret-up-fill" @click="increaseValue"/>
@@ -106,17 +106,17 @@
           @delete=";(newValue = ''), $emit('update:modelValue', '')"
           v-show="
           mergedData.clearable &&
-          newValue &&
+          newValue.toString() &&
           type !== 'number' &&
           type !== 'search' &&
           mergedData.type !== 'password'
         "
-          :size="mergedData.size"
-          :success="!mergedData.error && !errorMessage && newValue && mergedData.showSuccess"
-          :filled="
+        :size="mergedData.size"
+        :success="!mergedData.error && !errorMessage && newValue.toString() && mergedData.showSuccess"
+        :filled="
           !mergedData.error &&
           !errorMessage &&
-          newValue &&
+          newValue.toString() &&
           !mergedData.showSuccess &&
           mergedData.showFilled
         "
