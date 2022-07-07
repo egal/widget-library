@@ -1,103 +1,71 @@
-# Изменения
-1. Комопнент EAvatar - добавлены новые свойства в объект `data`:  
-2. Изменено значение свойства `borderColor`, т.к. цвет рамки вокргу online индикаторв всегда будет белый
-3. Также достыпны **5** размеров - `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`
+<p align="center"><img src="https://raw.githubusercontent.com/egal/art/main/logo.svg" height="150"></p>
+<h1 align="center">Egal | Egal/Framework Reusable Widget Set</h1>
+<p align="center">
+<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://badge.fury.io/js/%40egalteam%2Fwidget-library.svg"></a>
+<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/dt/@egalteam/widget-library"></a>
+<a href="https://www.npmjs.com/package/@egalteam/widget-library"><img src="https://img.shields.io/npm/l/@egalteam/widget-library"></a>
+</p>
 
-| Параметр          | Что делает                                                                                                                         | Доступные значения | По умолчанию  |
-|:------------------|:-----------------------------------------------------------------------------------------------------------------------------------|:-------------------|:--------------|
-| `isDropdownOpen`  | Определяет открытие/хакрытие дродауна                                                                                              | boolean            | false         |
-| `dropdownOptions` | Содержимое дродауна. принимает массив объектов вида `{name: 'First option, leftIcon: 'iconName', rightIcon: 'iconName'}`           | array              | []            |
-| `editable`        | Определяет можно ли загружать новое изображение                                                                                    | boolean            | false         |
-| `isLoading`       | Определяет показывать ли текст `'Loading...'` (по умолчанию) во время загрузки изображения                                         | boolean            | false         |
-| `loadingText`     | Текст во время загрузки изображения                                                                                                | string             | `'isLoading'` |
-| `multipleAvatars` | Массив с данными для отображения группы аваторок. Может содержать список объектов такими уникальными параметры как имя, цвет фона  | array              | []            |
-| `borderColor`     | Цвет рамки каждой аватраки в группе автарок                                                                                        | string             | `#ffffff`     |
 
-3. В компонент EDropdown исправлено отображение иконок, чтобы можно было для каждого элемента передавать свою. Название иконки теперь берется из каждого объекта из массива options (option.iconLeft или option.iconRight)
-# События
-4. Добавлены 2 эмита (Эмиты вызываются при загрузке нового изображения)
+## Новости
 
-| Название | Тип Параметров | Описание                                                                                      |
-|:---------|:--------------:|:----------------------------------------------------------------------------------------------|
-| `upload` |     Object     | Возвращает информацию о загруженном изображении. Изображение не преобразовано в формат base64 |
-| `error`  |     Error      | Возвращает ошибку, если формат данных - не `.pmg`/`.jpg`/`.jpeg`                              |
+Следить за обновлениями можно в нашем телеграм канале:
 
-## Пример использования
-````vue
- <template>
-  <div>
-    <!--  Пример вызова компонента с дропдауном -->
-    <EAvatar
-        :data="{
-        name: 'John Doe1',
-        dropdownOptions: [{ name: 'First option' }, { name: 'Second option' }],
-      }"
-        @select="handleSelect"
-    />
+[![](https://img.shields.io/badge/Channel%20on-Telegram-informational)](https://t.me/egalbox)
 
-    <br />
-    <!--  Пример вызова компонента с возможностью загрузки нового изображения -->
-    <EAvatar
-        :data="{ name: 'John Doe2', editable: true, isLoading: load }"
-        @upload="uploadImage"
-        @error="logError"
-    />
-    <br />
 
-    <!--  Пример вызова компонента с группой автарок -->
-    <EAvatar
-        :data="{
-        size: 'lg',
-        multipleAvatars: [
-          { name: 'One One' },
-          { name: 'Two Two', bgColor: 'pink' },
-          {
-            name: 'Three Three',
-            imgUrl:
-              'data:image/jpeg;base64,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',
-          },
-        ],
-      }"
-    />
-    <br />
-    <button @click="load = !load">Toggle Loading status</button>
-  </div>
-</template>
+## Документация
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import EAvatar from '@/components/personality/EAvatar.vue'
-import EAvatarGroup from '@/components/personality/avatar/EAvatarGroup.vue'
+С подробной документацией по продукту можно ознакомиться
+[здесь](https://docs.egal.pro/#/).
 
-export default defineComponent({
-  name: 'App',
-  components: { EAvatarGroup, EAvatar },
-  data() {
-    return {
-      load: false,
-    }
-  },
-  methods: {
-    handleSelect(option) {
-      // option = {name: 'First option'}
-    },
 
-    uploadImage(file) {
-      // file = new File object
-      
-      // additional checks
-      // format to base64 or any other type
-      // send POST request
-      console.log('success upload')
-    },
+## Поддержка
 
-    logError(error) {
-      // error = 'Only .png and .jpg files can be uploaded to the field'
-    },
-  },
-})
-</script>
+Нам важно Ваше мнение и обратная связь.
 
-<style lang="scss">
-</style>
-````
+Задать вопрос:
+
+[![](https://img.shields.io/badge/Chat%20on-Telegram-blue)](https://t.me/joinchat/n175xzBrCUswMWU6)
+[![](https://img.shields.io/badge/Mail%20to-egal%40sputnikfund.ru-red)](mailto:egal@sputnikfund.ru)
+
+
+## Экосистема
+
+| Проект                       |                                    Статус                                     | Описание                                                                       |
+|:-----------------------------|:-----------------------------------------------------------------------------:|:-------------------------------------------------------------------------------|
+| [Docs]                       |                       [![Docs Status]][Docs Status URL]                       | Документация проекта Egal                                                      |
+| [Egal/Framework PHP Package] | [![Egal/Framework PHP Package Status]][Egal/Framework PHP Package Status URL] | Egal/Framework PHP библиотека                                                  |
+| [Egal/Framework NPM Package] | [![Egal/Framework NPM Package Status]][Egal/Framework NPM Package Status URL] | Egal/Framework NPM библиотека                                                  |
+| [Egal/Egal PHP Project]      |      [![Egal/Egal PHP Project Status]][Egal/Egal PHP Project Status URL]      | PHP проект (шаблон) сервиса для Egal экосистемы                                |
+| [Web Service]                |                [![Web Service Status]][Web Service Status URL]                | Сервис Egal экосистемы, реализующий адаптацию HTTP запросов к сервисам         |
+| [Auth Service]               |               [![Auth Service Status]][Auth Service Status URL]               | Сервис Egal экосистемы, реализующий базовые функции авторизации                |
+| [Interface Service]          |          [![Interface Service Status]][Interface Service Status URL]          | Сервис Egal экосистемы, предназначенный для управления метаданными интерфейсов |
+| [Postgres]                   |                   [![Postgres Status]][Postgres Status URL]                   | Надстроенная Система управления базами данных PostgreSQL для Egal экосистемы   |
+
+[Docs]: https://github.com/egal/egal-docs
+[Egal/Framework PHP Package]: https://github.com/egal/egal-framework-php-package
+[Egal/Framework NPM Package]:https://github.com/egal/egal-framework-npm-package
+[Egal/Egal PHP Project]:https://github.com/egal/egal-egal-php-project
+[Web Service]:https://github.com/egal/egal-web-service
+[Auth Service]:https://github.com/egal/egal-auth-service
+[Interface Service]: https://github.com/egal/egal-interface-service
+[Postgres]: https://github.com/egal/postgres
+
+[Docs Status]: https://img.shields.io/website?url=https%3A%2F%2Fegal.github.io%2Fegal-docs%2F%23%2F
+[Egal/Framework PHP Package Status]: https://img.shields.io/packagist/v/egal/framework?include_prereleases
+[Egal/Framework NPM Package Status]: https://img.shields.io/npm/v/@egalteam/framework
+[Egal/Egal PHP Project Status]: https://img.shields.io/packagist/v/egal/egal?include_prereleases
+[Web Service Status]: https://img.shields.io/docker/v/egalbox/web-service?label=dockerhub
+[Auth Service Status]: https://img.shields.io/docker/v/egalbox/auth-service?label=dockerhub
+[Interface Service Status]: https://img.shields.io/docker/v/egalbox/interface-service?label=dockerhub
+[Postgres Status]: https://img.shields.io/docker/v/egalbox/postgres?label=dockerhub
+
+[Docs Status URL]: https://egal.github.io/egal-docs/
+[Egal/Framework PHP Package Status URL]: https://packagist.org/packages/egal/framework
+[Egal/Framework NPM Package Status URL]: https://www.npmjs.com/package/@egalteam/framework
+[Egal/Egal PHP Project Status URL]: https://packagist.org/packages/egal/egal
+[Web Service Status URL]: https://hub.docker.com/r/egalbox/web-service
+[Auth Service Status URL]: https://hub.docker.com/r/egalbox/auth-service
+[Interface Service Status URL]: https://hub.docker.com/r/egalbox/interface-service
+[Postgres Status URL]: https://hub.docker.com/r/egalbox/postgres
