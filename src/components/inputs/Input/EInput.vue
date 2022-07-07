@@ -29,8 +29,8 @@
           newValue &&
           !mergedData.showSuccess &&
           mergedData.showFilled &&
-          type !== 'search' &&
-          type !== 'number',
+          mergedData.type !== 'search' &&
+          mergedData.type !== 'number',
       }"
     >
       <div class="chips-container">
@@ -107,8 +107,8 @@
           v-show="
           mergedData.clearable &&
           newValue &&
-          type !== 'number' &&
-          type !== 'search' &&
+          mergedData.type !== 'number' &&
+          mergedData.type !== 'search' &&
           mergedData.type !== 'password'
         "
           :size="mergedData.size"
@@ -268,9 +268,13 @@ export default {
      * Handle Input data based on Input type
      */
     inputHandler() {
-      if (this.type === 'number') {
+      if (this.mergedData.type === 'number') {
         this.newValue = this.cutLetterSymbols(this.newValue)
         this.checkMinMaxValidity(this.newValue)
+
+        if (this.newValue.length >= this.mergedData.inputMaxLength) {
+          this.newValue = this.newValue.slice(0, this.mergedData.inputMaxLength)
+        }
       }
       if (this.mergedData.validators?.length) {
         this.errorMessage = validate(this.mergedData.validators, this.newValue)
@@ -314,7 +318,7 @@ export default {
      * Increases the number by 1
      */
     increaseValue() {
-      if (this.type === 'number' && this.mergedData.showArrows) {
+      if (this.mergedData.type === 'number' && this.mergedData.showArrows) {
         const increasedNumber = Number(this.newValue) + 1
         if (this.mergedData.max !== undefined) {
           if (increasedNumber <= Number(this.mergedData.max)) {
@@ -331,7 +335,7 @@ export default {
      * Decreases the number by 1
      */
     decreaseValue() {
-      if (this.type === 'number' && this.mergedData.showArrows) {
+      if (this.mergedData.type === 'number' && this.mergedData.showArrows) {
         const decreasedNumber = Number(this.newValue) - 1
         if (this.mergedData.min !== undefined) {
           if (decreasedNumber >= Number(this.mergedData.min)) {
