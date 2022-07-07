@@ -37,7 +37,8 @@
           <!--            >{{ option[mergedData.shownKey] }}{{ idx < selectModel.length - 1 ? ',' : '' }}</span-->
           <!--          >-->
         </div>
-        <div class="selected" v-else>{{ selectModel[mergedData.shownKey] }}</div>
+
+        <div class="selected" v-else>{{ selectModel[0][mergedData.shownKey] }}</div>
       </div>
 
       <div
@@ -373,6 +374,7 @@ export default {
      * @return {boolean}
      */
     deleteOption(option) {
+      console.log(this.selectModel)
       let index = this.selectModel.findIndex(
         (item) => item[this.mergedData.shownKey] === option[this.mergedData.shownKey],
       )
