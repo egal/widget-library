@@ -7,12 +7,12 @@
     @touchstart.prevent="$emit('select', option)"
   >
     <div class="start">
-      <b-icon :class="['icon', 'icon--left']" :icon="iconLeft" v-if="iconLeft" />
+      <b-icon :class="['icon', 'icon--left']" :icon="option.iconLeft" v-if="option?.iconLeft" />
       <span>{{ option[shownKey] }}</span>
     </div>
 
     <div class="end">
-      <b-icon :class="['icon', 'icon--right']" :icon="iconRight" v-if="iconRight" />
+      <b-icon :class="['icon', 'icon--right']" :icon="option.iconRight" v-if="option?.iconRight" />
       <span class="badge" v-if="option[shownBadgeKey]">{{ option[shownBadgeKey] }}</span>
     </div>
   </div>
