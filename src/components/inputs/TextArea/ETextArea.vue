@@ -4,10 +4,15 @@
     :class="[
       `textarea--${mergedData.size}`,
       { 'textarea--error': errorMessage || mergedData.error },
+      { 'textarea--success': !mergedData.error && !errorMessage && newValue && mergedData.showSuccess },
     ]"
     :style="getStyleVars"
   >
-    <div class="textarea-label" v-if="mergedData.label">{{ mergedData.label }}</div>
+    <div
+      class="textarea-label"
+      :class="{ 'textarea-label--disabled': mergedData.disabled }"
+      v-if="mergedData.label"
+    >{{ mergedData.label }}</div>
     <textarea
       @input="inputHandler"
       v-model="newValue"
@@ -16,6 +21,7 @@
     />
     <div
       class="textarea-helper-text"
+      :class="{ 'textarea-helper-text--disabled': mergedData.disabled }"
       v-if="mergedData.helperText || mergedData.error || errorMessage"
     >
       {{ mergedData.error || errorMessage || mergedData.helperText }}
@@ -50,25 +56,33 @@ export default {
           size: 'md',
           validators: [],
           error: '',
+          showSuccess: false,
         },
         this.data,
       )
     },
     getStyleVars() {
       return {
-        '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
-        '--value-color': this.styleConfig?.valueColor || '#a0aec0',
+        '--font-family': this.styleConfig?.fontFamily || 'Inter',
+        '--value-color': this.styleConfig?.valueColor || '#2d3748',
         '--value-font-weight': this.styleConfig?.valueFontWeight || 400,
+        '--value-disabled-color': this.styleConfig?.valueDisabledColor || '#CBD5E0',
         '--placeholder-color': this.styleConfig?.placeholderColor || '#a0aec0',
+        '--placeholder-disabled-color': this.styleConfig?.placeholderDisabledColor || '#CBD5E0',
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
-        '--label-color': this.styleConfig?.labelColor || '#2d3748',
-        '--label-font-weight': this.styleConfig?.labelFontWeight || 500,
+        '--background-disabled-color': this.styleConfig?.backgroundDisabledColor || '#ffffff',
+        '--label-color': this.styleConfig?.labelColor || '#a0aec0',
+        '--label-disabled-color': this.styleConfig?.labelDisabledColor || '#CBD5E0',
+        '--label-font-weight': this.styleConfig?.labelFontWeight || 400,
         '--helper-text-color': this.styleConfig?.helperTextColor || '#a0aec0',
+        '--helper-text-disabled-color': this.styleConfig?.helperTextDisabledColor || '#CBD5E0',
         '--helper-text-font-weight': this.styleConfig?.helperTextFontWeight || 400,
-        '--border-color': this.styleConfig?.borderColor || '#edf2f7',
+        '--helper-text-font-size': this.styleConfig?.helperTextFontSize || '12px',
+        '--border-color': this.styleConfig?.borderColor || '#e2e8f0',
         '--border-radius': this.styleConfig?.borderRadius || '8px',
-        '--focus-border-color': this.styleConfig?.focusBorderColor || '#76ACFB',
+        '--focus-border-color': this.styleConfig?.focusBorderColor || '#76acfb',
         '--error-color': this.styleConfig?.errorColor || '#f16063',
+        '--success-color': this.styleConfig?.successColor || '#66CB9F',
       }
     },
   },
@@ -109,12 +123,15 @@ export default {
     color: var(--label-color);
     font-weight: var(--label-font-weight);
     margin-bottom: 8px;
+    &--disabled {
+      color: var(--label-disabled-color);
+    }
   }
   textarea {
     font-family: var(--font-family);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    padding: 12px;
+    line-height: 150%;
     color: var(--value-color);
     font-weight: var(--value-font-weight);
     &::placeholder {
@@ -124,14 +141,25 @@ export default {
       border-color: var(--focus-border-color);
     }
     &:focus-visible:enabled {
-      border: 2px solid var(--focus-border-color);
+      border: 1px solid var(--focus-border-color);
       outline: none;
+    }
+    &:disabled {
+      background-color: var(--background-disabled-color);
+      color: var(--value-disabled-color);
+      &::placeholder {
+        color: var(--placeholder-disabled-color);
+      }
     }
   }
   &-helper-text {
     color: var(--helper-text-color);
+    font-size: var(--helper-text-font-size);
     font-weight: var(--helper-text-font-weight);
     margin-top: 8px;
+    &--disabled {
+      color: var(--helper-text-disabled-color);
+    }
   }
   &--error {
     textarea {
@@ -143,22 +171,44 @@ export default {
       &:focus-visible:enabled {
         border-color: var(--error-color);
       }
+      &::placeholder {
+        color: var(--error-color);
+      }
     }
     .textarea-helper-text {
       color: var(--error-color);
     }
   }
+  &--success {
+    textarea {
+      border-color: var(--success-color);
+      color: var(--success-color);
+      &:focus:enabled {
+        border-color: var(--success-color);
+      }
+      &:focus-visible:enabled {
+        border-color: var(--success-color);
+      }
+      &::placeholder {
+        color: var(--success-color);
+      }
+    }
+    .textarea-helper-text {
+      color: var(--success-color);
+    }
+  }
   &--lg {
     .textarea-label {
-      font-size: 14px;
+      font-size: 16px;
     }
     textarea {
-      min-width: 304px;
-      min-height: 160px;
-      font-size: 14px;
-      line-height: 21px;
+      min-width: 452px;
+      min-height: 107px;
+      padding: 18px;
+      border-radius: 8px;
+      font-size: 16px;
       &::placeholder {
-        font-size: 14px;
+        font-size: 16px;
       }
     }
     .textarea-helper-text {
@@ -167,15 +217,16 @@ export default {
   }
   &--md {
     .textarea-label {
-      font-size: 12px;
+      font-size: 14px;
     }
     textarea {
-      min-width: 250px;
-      min-height: 110px;
-      font-size: 12px;
-      line-height: 14px;
+      min-width: 400px;
+      min-height: 85px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
       &::placeholder {
-        font-size: 12px;
+        font-size: 14px;
       }
     }
     .textarea-helper-text {
@@ -188,10 +239,32 @@ export default {
       margin-bottom: 4px;
     }
     textarea {
-      min-width: 158px;
-      min-height: 74px;
+      min-width: 320px;
+      min-height: 76px;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      &::placeholder {
+        font-size: 12px;
+      }
+    }
+    .textarea-helper-text {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+  &--xs {
+    .textarea-label {
       font-size: 10px;
-      line-height: 12px;
+      margin-bottom: 4px;
+    }
+    textarea {
+      min-width: 280px;
+      min-height: 70px;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 10px;
+
       &::placeholder {
         font-size: 10px;
       }

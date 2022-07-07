@@ -1,5 +1,11 @@
 <template>
-  <div class="calendar-wrapper" v-click-outside="close">
+  <div
+    class="calendar-wrapper"
+    v-click-outside="close"
+    :class="{
+      'stretch-input': !mergedData?.timePicker || mergedData.isRange || mergedData.isDouble,
+    }"
+  >
     <div
       :class="`date-inputs date-inputs--${mergedData?.inputData?.size ?? 'sm'} ${
         imitateInputsFocus ? 'focused' : ''
@@ -12,7 +18,6 @@
     >
       <EInput
         class="calendar__input left"
-        :class="{ single: !mergedData?.timePicker || mergedData.isRange }"
         :style-config="mergedInputStyles"
         :data="mergedLeftInputData"
         v-if="mergedData.showInput"
@@ -42,7 +47,10 @@
         <Controls
           :data="data"
           :month-to-display="curMonth"
-          @change-month="(value) => changeMonth(value)"
+          :year-select-range="mergedData.yearSelectRange"
+          @change-month="changeMonth"
+          @update:month="selectMonth"
+          @update:year="selectYear"
         />
         <ul class="calendar__weekdays">
           <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
@@ -81,7 +89,10 @@
         <Controls
           :data="data"
           :month-to-display="nextMonth"
-          @change-month="(value) => changeMonth(value)"
+          :year-select-range="mergedData.yearSelectRange"
+          @change-month="changeMonth"
+          @update:month="selectNextMonth"
+          @update:year="selectNextYear"
         />
         <ul class="calendar__weekdays">
           <li v-for="weekday in weekdays" :key="weekday">{{ weekday }}</li>
@@ -127,7 +138,6 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
-
     styleConfig: {
       type: Object,
       default: () => {},
@@ -220,6 +230,7 @@ export default defineComponent({
           //   day: 'numeric',
           // },
           timePicker: undefined,
+          yearSelectRange: { min: undefined, max: 2100 },
           date: {
             date_from: '',
             date_to: '',
@@ -513,6 +524,26 @@ export default defineComponent({
       }
     },
 
+    selectNextMonth(month) {
+      this.nextMonth.setMonth(month.index, 1)
+      this.nextMonthDates = this.generateDates(this.nextMonth)
+    },
+
+    selectMonth(month) {
+      this.curMonth.setMonth(month.index, 1)
+      this.dates = this.generateDates(this.curMonth)
+    },
+
+    selectYear(year) {
+      this.curMonth.setYear(year)
+      this.dates = this.generateDates(this.curMonth)
+    },
+
+    selectNextYear(year) {
+      this.nextMonth.setYear(year)
+      this.nextMonthDates = this.generateDates(this.nextMonth)
+    },
+
     //Генерация массива дат на месяц
     generateDates(curMonth) {
       return Array.from(
@@ -635,11 +666,11 @@ export default defineComponent({
 .calendar-wrapper {
   position: relative;
   width: fit-content;
+
   font-feature-settings: 'pnum' on, 'lnum' on;
 
   .calendar__input {
     margin-bottom: 8px;
-
     :deep(input) {
       &:hover {
         cursor: pointer;
@@ -673,7 +704,7 @@ export default defineComponent({
         :deep(input) {
           width: 99px;
           padding-right: 0;
-          padding-left: 23px;
+          padding-left: 30px;
         }
 
         :deep(.bi.icon.icon--left) {
@@ -690,13 +721,13 @@ export default defineComponent({
       .left,
       .right {
         margin-bottom: 0;
-
         border-radius: var(--border-radius);
 
         :deep(.input-container) {
           input {
             &:focus {
               outline: none;
+              border-color: #e2e8f0;
             }
           }
 
@@ -704,6 +735,7 @@ export default defineComponent({
             input {
               &:focus {
                 outline: none;
+                border: none;
                 background-color: var(--filled-input-background-color);
                 color: var(--filled-font-color);
               }
@@ -781,9 +813,9 @@ export default defineComponent({
       &.date-inputs--sm {
         .left {
           :deep(input) {
-            width: 93px;
+            width: 110px;
             padding-right: 0;
-            padding-left: 23px;
+            padding-left: 28px;
           }
 
           :deep(.bi.icon.icon--left) {
@@ -793,8 +825,8 @@ export default defineComponent({
 
         .right {
           :deep(input) {
-            width: 56px;
-            padding-left: 20px;
+            width: 70px;
+            padding-left: 25px;
             padding-right: 0;
           }
 
@@ -808,12 +840,6 @@ export default defineComponent({
             }
           }
         }
-      }
-    }
-
-    .left.single {
-      :deep(input) {
-        width: auto;
       }
     }
   }
@@ -881,6 +907,9 @@ export default defineComponent({
         font-size: var(--font-size);
         line-height: 125%;
         color: $gray-800;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
     :deep(.calendar__weekdays) {
@@ -1020,36 +1049,21 @@ export default defineComponent({
           }
         }
       }
-
-      &.single {
-        li.--in-range {
-          &.--not-cur-month {
-            color: $gray-400;
-            background-color: #edf2f7;
-
-            &:hover {
-              cursor: pointer;
-              color: white;
-              background-color: var(--active-color);
-            }
-            &::before,
-            &::after {
-              background-color: #edf2f7;
-            }
-          }
-        }
-
-        li.--active {
-          &.--not-cur-month {
-            color: white;
-            background-color: var(--active-color);
-          }
-        }
-      }
     }
 
     :deep(.footer > .label) {
       font-size: calc(var(--font-size) - 2px);
+    }
+  }
+}
+
+.calendar-wrapper.stretch-input {
+  width: 100%;
+
+  .left {
+    width: 100%;
+    :deep(input) {
+      width: 100%;
     }
   }
 }

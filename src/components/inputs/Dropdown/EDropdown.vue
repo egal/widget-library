@@ -21,15 +21,18 @@
       <div class="dropdown-groups" v-if="grouped">
         <div class="group" v-for="group in options">
           <span>{{ group.groupName }}</span>
-          <div
-            class="dropdown-item"
-            :class="{ active: isActive(option) }"
-            v-for="option in group.options"
-            @click.stop="$emit('select', option)"
-            @touchstart.prevent="$emit('select', option)"
-          >
-            {{ option[shownKey] }}
-          </div>
+
+          <EDropdownItem
+            :value="value"
+            :size="size"
+            :shown-key="shownKey"
+            :shown-badge-key="shownBadgeKey"
+            :icon-right="iconRight"
+            :icon-left="iconLeft"
+            :filtered-options="group.options"
+            :computed-styles="getStyleVars"
+            @select="(option) => $emit('select', option)"
+          />
         </div>
       </div>
       <div
@@ -38,16 +41,20 @@
       >
         {{ emptyDropdownText }}
       </div>
-      <div
-        class="dropdown-item"
+
+      <EDropdownItem
         v-else
-        :class="{ active: isActive(option) }"
-        v-for="option in filteredOptions"
-        @click.stop="$emit('select', option)"
-        @touchstart.prevent="$emit('select', option)"
-      >
-        {{ option[shownKey] }}
-      </div>
+        :value="value"
+        :shown-key="shownKey"
+        :size="size"
+        :shown-badge-key="shownBadgeKey"
+        :icon-right="iconRight"
+        :icon-left="iconLeft"
+        :filtered-options="filteredOptions"
+        :computed-styles="getStyleVars"
+        @select="(option) => $emit('select', option)"
+      />
+
       <div v-if="showMoreButtonDisplay" class="dropdown-button">
         <button @click="$emit('show-more')" class="show-more-btn">{{ showMoreButtonText }}</button>
       </div>
@@ -57,9 +64,15 @@
 
 <script>
 import Input from '../Input/EInput'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+import EDropdownItem from '@/components/inputs/Dropdown/EDropdownItem'
 export default {
   name: 'EDropdown',
-  components: { Input },
+  components: {
+    EDropdownItem,
+    Input,
+    BIcon: BootstrapIcon,
+  },
   props: {
     size: {
       type: String,
@@ -81,6 +94,10 @@ export default {
       type: String,
       default: 'name',
     },
+    shownBadgeKey: {
+      type: String,
+      default: '',
+    },
     grouped: {
       type: Boolean,
       default: false,
@@ -99,7 +116,7 @@ export default {
     },
     emptyDropdownText: {
       type: String,
-      default: 'no data',
+      default: 'No results found',
     },
     dropdownPosition: {
       type: String,
@@ -110,6 +127,14 @@ export default {
       default: false,
     },
     showMoreButtonText: {
+      type: String,
+      default: 'Show more...',
+    },
+    iconLeft: {
+      type: String,
+      default: '',
+    },
+    iconRight: {
       type: String,
       default: '',
     },
@@ -125,10 +150,16 @@ export default {
         '--font-family': this.styleConfig?.fontFamily || 'Open Sans',
         '--option-color': this.styleConfig?.optionColor || '#2d3748',
         '--option-hover-background-color':
-          this.styleConfig?.optionHoverBackgroundColor || '#edf2f7',
+          this.styleConfig?.optionHoverBackgroundColor || '#E2E8F0',
+        '--option-press-background-color':
+          this.styleConfig?.optionPressBackgroundColor || '#cbd5e0',
         '--option-font-weight': this.styleConfig?.optionFontWeight || 400,
         '--active-background-color': this.styleConfig?.activeBackgroundColor || '#3385ff',
         '--active-option-color': this.styleConfig?.activeOptionColor || '#ffffff',
+        '--active-hover-background-color':
+          this.styleConfig?.activeHoverBackgroundColor || '#3385ff', // todo added
+        '--active-press-background-color':
+          this.styleConfig?.activePressBackgroundColor || '#005ce4', // todo added
         '--group-name-color': this.styleConfig?.groupNameColor || '#a0aec0',
         '--group-name-font-weight': this.styleConfig?.groupNameFontWeight || 700,
         '--background-color': this.styleConfig?.backgroundColor || '#ffffff',
@@ -142,17 +173,6 @@ export default {
   },
   mounted() {},
   methods: {
-    /**
-     * Return true if option is selected
-     * @param option
-     */
-    isActive(option) {
-      if (Array.isArray(this.value)) {
-        return this.value.findIndex((item) => item[this.shownKey] === option[this.shownKey]) !== -1
-      }
-      return this.value[this.shownKey] === option[this.shownKey]
-    },
-
     /**
      * Filer options by search value
      * @param value
@@ -197,52 +217,43 @@ export default {
   box-shadow: var(--box-shadow);
   max-height: 450px;
   overflow-y: auto;
-  min-width: max-content;
+  min-width: 100%;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  .bi {
+    margin-bottom: 0;
+  }
+
+  &--top {
+    top: initial;
+    bottom: 15px;
+  }
+  &--bottom {
+    top: 8px;
+  }
 
   &-search {
     margin-bottom: 10px;
   }
 
-  &-item {
-    padding: 8px 12px;
-    display: flex;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.2s;
-    color: var(--option-color);
-    width: 100%;
-    box-sizing: border-box;
-    font-weight: var(--option-font-weight);
-
-    &:hover {
-      background-color: var(--option-hover-background-color);
-    }
-
-    &--empty {
-      cursor: default;
-      align-items: center;
-      justify-content: center;
-
-      &:hover {
-        background-color: initial;
-      }
-    }
-  }
-
   &-button {
+    margin-top: 4px;
+
     .show-more-btn {
+      padding: 8px;
       outline: none;
       border: none;
       background-color: transparent;
-      color: var(--active-background-color);
-      font-family: var(--font-family);
+      color: $gray-500;
       font-weight: var(--option-font-weight);
+      line-height: 150%;
 
       &:hover {
         cursor: pointer;
+        color: $gray-600;
       }
     }
-    padding-bottom: 10px;
   }
 
   &-groups {
@@ -262,20 +273,17 @@ export default {
       }
     }
   }
-  .active {
-    background-color: var(--active-background-color);
-    color: var(--active-option-color);
-  }
+
   &--lg {
+    max-height: 230px;
+
     .dropdown-items {
-      padding: 14px 12px;
+      padding: 8px;
     }
-    .dropdown-item {
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-    .show-more-btn {
-      font-size: 14px;
+
+    .show-more-btn,
+    .dropdown-item--empty {
+      font-size: 16px;
     }
     .group {
       margin-bottom: 16px;
@@ -285,15 +293,14 @@ export default {
     }
   }
   &--md {
+    max-height: 220px;
     .dropdown-items {
-      padding: 12px 10px;
+      padding: 6px;
     }
-    .dropdown-item {
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
-    .show-more-btn {
-      font-size: 12px;
+
+    .show-more-btn,
+    .dropdown-item--empty {
+      font-size: 14px;
     }
     .group {
       margin-bottom: 12px;
@@ -303,13 +310,32 @@ export default {
     }
   }
   &--sm {
+    max-height: 180px;
+
     .dropdown-items {
-      padding: 10px 8px;
+      padding: 6px;
     }
-    .dropdown-item {
-      font-size: 10px;
+
+    .show-more-btn,
+    .dropdown-item--empty {
+      font-size: 12px;
     }
-    .show-more-btn {
+    .group {
+      margin-bottom: 10px;
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+
+  &--xs {
+    max-height: 150px;
+    .dropdown-items {
+      padding: 4px;
+    }
+
+    .show-more-btn,
+    .dropdown-item--empty {
       font-size: 10px;
     }
     .group {
@@ -318,6 +344,19 @@ export default {
         font-size: 12px;
       }
     }
+  }
+}
+
+.dropdown-item--empty {
+  align-items: center;
+  justify-content: center;
+  color: $gray-500;
+  padding: 8px 18px;
+  cursor: default;
+  font-weight: 400;
+
+  &:hover {
+    background-color: initial;
   }
 }
 </style>

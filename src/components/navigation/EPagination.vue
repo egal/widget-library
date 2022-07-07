@@ -1,22 +1,15 @@
 <template>
   <div class="wrapper-pagination" :style="getVars">
-    <div
-      :class="`pagination --size-${mergedData.size || 'md'} --style-${
-        mergedData.componentStyle || 'normal'
-      } ${minimalisticVersion ? '--select' : ''}`"
-    >
+    <div :class="`pagination --size-${mergedData.size || 'md'} --style-${mergedData.variant}`">
       <TransitionGroup name="pagination">
         <div
           class="pagination__left-arrow"
-          v-if="currentPage > 1"
+          :class="{ disabled: currentPage === 1 }"
+          v-if="mergedData.numberOfPages > 10"
           @click="toPrevPage"
           key="left-arrow"
         >
-          <BootstrapIcon
-            :icon="minimalisticVersion ? 'caret-left-fill' : 'chevron-left'"
-            class="pagination__left-arrow-icon"
-          />
-          <p v-if="!minimalisticVersion">{{ mergedData.leftArrowLabel }}</p>
+          <BootstrapIcon icon="chevron-left" class="pagination__left-arrow-icon" />
         </div>
 
         <ul class="pagination__num-pages" key="pages">
@@ -40,25 +33,22 @@
 
         <div
           class="pagination__right-arrow"
+          :class="{ disabled: currentPage === mergedData.numberOfPages }"
           key="right-arrow"
-          v-if="currentPage < mergedData.numberOfPages"
+          v-if="mergedData.numberOfPages > 10"
           @click="toNextPage"
         >
-          <p v-if="!minimalisticVersion">{{ mergedData.rightArrowLabel }}</p>
-          <BootstrapIcon
-            :icon="minimalisticVersion ? 'caret-right-fill' : 'chevron-right'"
-            class="pagination__right-arrow-icon"
-          />
+          <BootstrapIcon icon="chevron-right" class="pagination__right-arrow-icon" />
         </div>
       </TransitionGroup>
     </div>
 
     <div
-      v-if="minimalisticVersion"
+      v-if="mergedData.isPerPageSelect || minimalisticVersion"
       class="per-page"
-      :class="`--size-${mergedData.size || 'md'} --style-${mergedData.componentStyle || 'normal'}`"
+      :class="`--size-${mergedData.size || 'md'}`"
     >
-      <p class="per-page__text">Show:</p>
+      <p class="per-page__text" v-if="mergedData.perPageLabel">{{ mergedData.perPageLabel }}</p>
       <ESelect
         @update:modelValue="setPerPage"
         :data="{
@@ -69,6 +59,8 @@
           options: mergedData.selectOptions,
           dropdownPosition: mergedData.dropdownPosition,
           modelValue: { name: mergedData.perPage },
+          size: mergedData.size,
+          showFilled: false,
         }"
         :style-config="{
           placeholderFontSize:
@@ -85,10 +77,12 @@
 <script>
 import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
 import ESelect from '@/components/inputs/Select/ESelect'
+import EInput from '@/components/inputs/Input/EInput'
+import EButton from '@/components/togglers/EButton'
 
 export default {
   name: 'EPagination',
-  components: { BootstrapIcon, ESelect },
+  components: { BootstrapIcon, ESelect, EInput, EButton },
   data() {
     return {
       currentPage: null,
@@ -107,7 +101,7 @@ export default {
       type: Object,
       default: () => {},
     },
-
+    // оставлено для совместимости со старой версией
     minimalisticVersion: {
       type: Boolean,
       default: false,
@@ -124,15 +118,14 @@ export default {
         {
           numberOfPages: 10,
           modelValue: 1,
-          leftArrowLabel: '',
-          rightArrowLabel: '',
           size: 'md',
-          componentStyle: 'normal',
           font: 'Open Sans',
           weight: '500',
-          color: this.minimalisticVersion ? '#A0AEC0' : '#718096',
+          color: '#2D3748',
           activeColor: '#0066ff',
-          activeBackgroundColor: '#e5f0ff',
+          activeBackgroundColor: '#DEEBFC',
+          hoverBackgroundColor: '#A6C8FA',
+          pressedBackgroundColor: '#76ACFB',
           borderColor: '#e2e8f0',
           perPage: 10,
           selectOptions: [
@@ -150,6 +143,9 @@ export default {
             },
           ],
           dropdownPosition: 'bottom',
+          isPerPageSelect: false,
+          variant: 'primary',
+          perPageLabel: 'Show:',
         },
         this.data,
       )
@@ -160,12 +156,16 @@ export default {
         '--color': this.mergedData.color,
         '--active-color': this.mergedData.activeColor,
         '--active-background-color': this.mergedData.activeBackgroundColor,
+        '--hover-background-color': this.mergedData.hoverBackgroundColor,
+        '--pressed-background-color': this.mergedData.pressedBackgroundColor,
         '--font': this.mergedData.font,
         '--font-weight': this.mergedData.weight,
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.currentPage = this.mergedData.modelValue
+  },
   watch: {
     modelValueCurrentPage(value) {
       this.currentPage = value
@@ -199,11 +199,24 @@ export default {
     },
 
     isInPageGroup(page) {
+      const pagesNearCurrent = [
+        this.currentPage - 2,
+        this.currentPage - 1,
+        this.currentPage,
+        this.currentPage + 1,
+        this.currentPage + 2,
+      ].includes(page)
+
+      const maxPagesAmount = this.currentPage < 7 && page <= 7
+
+      const lastPages =
+        this.currentPage > this.mergedData.numberOfPages - 6 &&
+        page >= this.mergedData.numberOfPages - 6
+
       return (
-        [this.currentPage - 1, this.currentPage, this.currentPage + 1].includes(page) ||
-        (this.currentPage < 4 && page <= 4) ||
-        (this.currentPage > this.mergedData.numberOfPages - 3 &&
-          page >= this.mergedData.numberOfPages - 3) ||
+        pagesNearCurrent ||
+        maxPagesAmount ||
+        lastPages ||
         page === 1 ||
         page === this.mergedData.numberOfPages
       )
@@ -224,11 +237,10 @@ export default {
 .pagination {
   display: flex;
   width: fit-content;
-  border: 1px solid var(--border-color);
   color: var(--color);
   font-weight: var(--font-weight);
-  padding: 9px 10px;
-  border-radius: $all-sides-small;
+  border-radius: 8px;
+  line-height: 120%;
 
   &__num-pages {
     margin: 0;
@@ -236,27 +248,35 @@ export default {
     display: flex;
     align-content: center;
     list-style: none;
-    gap: 6px;
+    gap: 4px;
+    transition: 0.2s all ease;
 
     li {
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: 0.2s;
       cursor: pointer;
       user-select: none;
       color: var(--color);
       font-weight: var(--font-weight);
+      border-radius: 4px;
 
       &.--dots {
+        color: var(--color);
+      }
+
+      &.--active {
+        background: var(--active-background-color);
         color: var(--active-color);
       }
 
-      &.--active,
       &:hover {
-        background: var(--active-background-color);
-        border-radius: 2px;
-        color: var(--active-color);
+        background: var(--hover-background-color);
+        color: var(--color);
+      }
+
+      &:active {
+        background-color: var(--pressed-background-color);
       }
     }
   }
@@ -267,14 +287,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 4px;
 
     &-icon {
       margin-bottom: 0;
-    }
-
-    p {
-      padding: 0;
-      margin: 0;
     }
 
     &::after {
@@ -288,163 +304,180 @@ export default {
     }
 
     &:hover {
+      background: var(--hover-background-color);
+      color: var(--color);
       cursor: pointer;
-      opacity: 1.5;
+    }
+
+    &:active {
+      background-color: var(--pressed-background-color);
+    }
+
+    &.disabled > svg {
+      color: #cbd5e0;
+      cursor: default;
     }
   }
 
   &__left-arrow {
-    p {
-      margin-left: 4px;
-    }
-
     &::after {
       right: 0;
     }
   }
 
   &__right-arrow {
-    p {
-      margin-right: 4px;
-    }
-
     &::after {
       left: 0;
     }
   }
 
+  &.--style-primary {
+    border: 1px solid var(--border-color);
+  }
+  &.--style-clear {
+  }
+
   &.--size {
     &-lg {
-      padding: 8px 10px;
-      font-size: 14px;
-      line-height: 12px;
+      padding: 8px 18px;
+      font-size: 16px;
 
-      .pagination__left-arrow {
-        padding-right: 12px;
-        margin-right: 12px;
-
+      .pagination__left-arrow,
+      .pagination__right-arrow {
+        width: 32px;
+        height: 32px;
         &::after {
-          height: 11px;
+          height: 20px;
         }
       }
 
-      .pagination__right-arrow {
-        padding-left: 12px;
-        margin-left: 12px;
-
+      .pagination__left-arrow {
+        margin-right: 16px;
         &::after {
-          height: 11px;
+          right: -8px;
+        }
+      }
+      .pagination__right-arrow {
+        margin-left: 16px;
+        &::after {
+          left: -8px;
         }
       }
 
       .pagination__num-pages {
         li {
-          height: 18px;
+          height: 32px;
+          min-width: 20px;
           padding: 0 6px;
         }
       }
     }
 
     &-md {
-      padding: 8px 10px;
-      font-size: 12px;
-      line-height: 12px;
+      padding: 6px 16px;
+      font-size: 14px;
 
-      .pagination__left-arrow {
-        padding-right: 12px;
-        margin-right: 12px;
-
+      .pagination__left-arrow,
+      .pagination__right-arrow {
+        width: 28px;
+        height: 28px;
         &::after {
-          height: 11px;
+          height: 16px;
         }
       }
 
-      .pagination__right-arrow {
-        padding-left: 12px;
-        margin-left: 12px;
-
+      .pagination__left-arrow {
+        margin-right: 16px;
         &::after {
-          height: 11px;
+          right: -8px;
+        }
+      }
+      .pagination__right-arrow {
+        margin-left: 16px;
+        &::after {
+          left: -8px;
         }
       }
 
       .pagination__num-pages {
         li {
-          height: 18px;
-          padding: 0 6px;
+          height: 28px;
+          min-width: 18px;
+          padding: 0 5px;
         }
       }
     }
 
     &-sm {
-      padding: 6px 8px;
-      font-size: 10px;
-      line-height: 10px;
+      padding: 4px 14px;
+      font-size: 12px;
 
-      .pagination__left-arrow {
-        padding-right: 8px;
-        margin-right: 8px;
-
+      .pagination__left-arrow,
+      .pagination__right-arrow {
+        height: 24px;
+        width: 24px;
+        border-radius: 3px;
         &::after {
-          height: 11px;
+          height: 14px;
         }
       }
 
-      .pagination__right-arrow {
-        padding-left: 8px;
-        margin-left: 8px;
-
+      .pagination__left-arrow {
+        margin-right: 12px;
         &::after {
-          height: 11px;
+          right: -6px;
+        }
+      }
+      .pagination__right-arrow {
+        margin-left: 12px;
+        &::after {
+          left: -6px;
+        }
+      }
+
+      .pagination__num-pages {
+        li {
+          height: 24px;
+          min-width: 16px;
+          padding: 0 4px;
+          border-radius: 3px;
+        }
+      }
+    }
+
+    &-xs {
+      padding: 4px 10px;
+      font-size: 10px;
+
+      .pagination__left-arrow,
+      .pagination__right-arrow {
+        height: 16px;
+        width: 16px;
+        border-radius: 2px;
+        &::after {
+          height: 10px;
+        }
+      }
+
+      .pagination__left-arrow {
+        margin-right: 8px;
+        &::after {
+          right: -4px;
+        }
+      }
+      .pagination__right-arrow {
+        margin-left: 8px;
+        &::after {
+          left: -4px;
         }
       }
 
       .pagination__num-pages {
         li {
           height: 16px;
-          padding: 0 5px;
-        }
-      }
-    }
-  }
-
-  &.--select {
-    border: none;
-
-    .pagination__right-arrow {
-      padding-left: 5px;
-      margin-left: 5px;
-    }
-
-    .pagination__left-arrow {
-      padding-right: 5px;
-      margin-right: 5px;
-    }
-
-    .pagination__right-arrow,
-    .pagination__left-arrow {
-      padding-bottom: 2px;
-
-      &::after {
-        display: none;
-      }
-
-      &-icon {
-        color: var(--color);
-        opacity: 0.7;
-      }
-    }
-
-    .pagination__num-pages {
-      li {
-        border-radius: 0;
-        padding: 0;
-        margin: 0 6px;
-
-        &.--active,
-        &:hover {
-          background-color: transparent;
-          border-bottom: 1.5px solid var(--active-color);
+          min-width: 12px;
+          padding: 0 2px;
+          border-radius: 2px;
         }
       }
     }
@@ -483,6 +516,12 @@ export default {
         width: 61px;
       }
     }
+  }
+}
+
+:deep(.select-container) {
+  &:hover {
+    cursor: pointer;
   }
 }
 
