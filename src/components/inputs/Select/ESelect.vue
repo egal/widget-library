@@ -374,7 +374,6 @@ export default {
      * @return {boolean}
      */
     deleteOption(option) {
-      console.log(this.selectModel)
       let index = this.selectModel.findIndex(
         (item) => item[this.mergedData.shownKey] === option[this.mergedData.shownKey],
       )
